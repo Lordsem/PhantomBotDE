@@ -574,29 +574,29 @@
      * @function generateDefaultGroupPoints
      */
     function generateDefaultGroupPoints() {
-        $.getSetIniDbString('grouppoints', 'Caster', '-1');
-        $.getSetIniDbString('grouppointsoffline', 'Caster', '-1');
+        $.getSetIniDbString('grouppoints', 'Streamer', '-1');
+        $.getSetIniDbString('grouppointsoffline', 'Streamer', '-1');
         $.getSetIniDbString('grouppoints', 'Administrator', '-1');
         $.getSetIniDbString('grouppointsoffline', 'Administrator', '-1');
         $.getSetIniDbString('grouppoints', 'Moderator', '-1');
         $.getSetIniDbString('grouppointsoffline', 'Moderator', '-1');
-        $.getSetIniDbString('grouppoints', 'Subscriber', '-1');
-        $.getSetIniDbString('grouppointsoffline', 'Subscriber', '-1');
-        $.getSetIniDbString('grouppoints', 'Donator', '-1');
-        $.getSetIniDbString('grouppointsoffline', 'Donator', '-1');
+        $.getSetIniDbString('grouppoints', 'Abonennt', '-1');
+        $.getSetIniDbString('grouppointsoffline', 'Abonennt', '-1');
+        $.getSetIniDbString('grouppoints', 'Spender', '-1');
+        $.getSetIniDbString('grouppointsoffline', 'Spender', '-1');
         $.getSetIniDbString('grouppoints', 'VIP', '-1');
         $.getSetIniDbString('grouppointsoffline', 'VIP', '-1');
-        $.getSetIniDbString('grouppoints', 'Regular', '-1');
-        $.getSetIniDbString('grouppointsoffline', 'Regular', '-1');
-        $.getSetIniDbString('grouppoints', 'Viewer', '-1');
-        $.getSetIniDbString('grouppointsoffline', 'Viewer', '-1');
+        $.getSetIniDbString('grouppoints', 'Stammzuschauer', '-1');
+        $.getSetIniDbString('grouppointsoffline', 'Stamzuschauer', '-1');
+        $.getSetIniDbString('grouppoints', 'Zuschauer', '-1');
+        $.getSetIniDbString('grouppointsoffline', 'Zuschauer', '-1');
     }
 
     /**
      * @function generateDefaultGroups
      */
     function generateDefaultGroups() {
-        if (!userGroups[0] || userGroups[0] != 'Caster') {
+        if (!userGroups[0] || userGroups[0] != 'Stremer') {
             userGroups[0] = 'Caster';
             $.inidb.set('groups', '0', 'Caster');
         }
@@ -608,25 +608,25 @@
             userGroups[2] = 'Moderator';
             $.inidb.set('groups', '2', 'Moderator');
         }
-        if (!userGroups[3] || userGroups[3] != 'Subscriber') {
-            userGroups[3] = 'Subscriber';
-            $.inidb.set('groups', '3', 'Subscriber');
+        if (!userGroups[3] || userGroups[3] != 'Abonnent') {
+            userGroups[3] = 'Abonnent';
+            $.inidb.set('groups', '3', 'Abonnent');
         }
-        if (!userGroups[4] || userGroups[4] != 'Donator') {
-            userGroups[4] = 'Donator';
-            $.inidb.set('groups', '4', 'Donator');
+        if (!userGroups[4] || userGroups[4] != 'Spender') {
+            userGroups[4] = 'Spender';
+            $.inidb.set('groups', '4', 'Spender');
         }
         if (!userGroups[5] || userGroups[5] != 'VIP') {
             userGroups[5] = 'VIP';
             $.inidb.set('groups', '5', 'VIP');
         }
-        if (!userGroups[6] || userGroups[6] != 'Regular') {
-            userGroups[6] = 'Regular';
-            $.inidb.set('groups', '6', 'Regular');
+        if (!userGroups[6] || userGroups[6] != 'Stammzuschauer') {
+            userGroups[6] = 'Stammzuschauer';
+            $.inidb.set('groups', '6', 'Stammzuschauer');
         }
-        if (!userGroups[7] || userGroups[7] != 'Viewer') {
-            userGroups[7] = 'Viewer';
-            $.inidb.set('groups', '7', 'Viewer');
+        if (!userGroups[7] || userGroups[7] != 'Zuschauer') {
+            userGroups[7] = 'Zuschauer';
+            $.inidb.set('groups', '7', 'Zuschauer');
         }
         $.inidb.set('group', $.ownerName.toLowerCase(), 0);
         $.inidb.set('group', $.botName.toLowerCase(), 0);

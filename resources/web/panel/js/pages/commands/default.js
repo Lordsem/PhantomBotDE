@@ -155,7 +155,7 @@ $(function() {
                         .append(helpers.getInputGroup('command-name', 'text', 'Befehl', '', '!' + command, 'Name des Befehls. Dieser kann nicht bearbeitet werden.', true))
                         // Append a select option for the command permission.
                         .append(helpers.getDropdownGroup('command-permission', 'Benutzerlevel', helpers.getGroupNameById(e.permcom),
-                            ['Caster', 'Administrators', 'Moderators', 'Subscribers', 'Donators', 'VIPs', 'Regulars', 'Viewers']))
+                            ['Streamer', 'Administrator', 'Moderator', 'Abonnent', 'Spender', 'VIP', 'Stammzuschauer', 'Zuschauer']))
                         // Add an advance section that can be opened with a button toggle.
                         .append($('<div/>', {
                             'class': 'collapse',

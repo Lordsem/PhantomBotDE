@@ -27,7 +27,7 @@ $(function() {
             // Commands toggle.
             $('#twitch-command-log').val((e['customCommandLogs'] === 'true' ? 'Ja' : 'Nein'));
             // Log channels
-            $('#twitch-mod-channel, #twitch-command-channel').val((e['modLogChannel'] == null ? '' : e['modLogChannel']));        });
+            $('#twitch-mod-channel, #twitch-command-channel').val((e['modLogChannel'] == null ? '' : e['modLogChannel']));
     });
 });
 

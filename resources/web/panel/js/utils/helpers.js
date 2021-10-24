@@ -170,7 +170,7 @@ $(function() {
      */
     helpers.handleInputString = function(obj) {
         if (obj.length === 0) {
-            helpers.logError('Failed to handle string due to the object being null.', helpers.LOG_TYPE.FORCE);
+            helpers.logError('Fehler beim Verarbeiten der Zeichenfolge, da das Objekt null ist.', helpers.LOG_TYPE.FORCE);
             return;
         }
 
@@ -189,7 +189,7 @@ $(function() {
                     // Disable the button
                     obj.closest('form').find('button').prop('disabled', true).addClass('disabled');
                 }
-                toastr.error('Missing data in input field.');
+                toastr.error('Fehlende Daten im Eingabefeld.');
                 return false;
             }
         } else {
@@ -216,7 +216,7 @@ $(function() {
      */
     helpers.handleInputNumber = function(obj, min, max) {
         if (obj.length === 0) {
-            helpers.logError('Failed to handle number due to the object being null.', helpers.LOG_TYPE.FORCE);
+            helpers.logError('Nummer konnte nicht verarbeitet werden, da das Objekt null ist.', helpers.LOG_TYPE.FORCE);
             return;
         }
 
@@ -238,7 +238,7 @@ $(function() {
                     // Disable the button
                     obj.closest('form').find('button').prop('disabled', true).addClass('disabled');
                 }
-                toastr.error('Missing data in input field.');
+                toastr.error('Fehlende Daten im Eingabefeld.');
                 return false;
             }
         } else {
@@ -266,7 +266,7 @@ $(function() {
      */
     helpers.handleInputDate = function(obj) {
         if (obj.length === 0) {
-            helpers.logError('Failed to handle date due to the object being null.', helpers.LOG_TYPE.FORCE);
+            helpers.logError('Das Datum konnte nicht verarbeitet werden, da das Objekt null ist.', helpers.LOG_TYPE.FORCE);
             return;
         }
 
@@ -287,7 +287,7 @@ $(function() {
                     // Disable the button
                     obj.closest('form').find('button').prop('disabled', true).addClass('disabled');
                 }
-                toastr.error('Bad date in field.');
+                toastr.error('Ungültiges Datum im Feld.');
                 return false;
             }
         } else {
@@ -907,26 +907,26 @@ $(function() {
      */
     helpers.getGroupIdByName = function(name, asString) {
         switch (name.toLowerCase()) {
-            case 'casters':
-            case 'caster':
+            case 'streamer':
+            case 'streamer':
                 return (asString ? '0' : 0);
-            case 'administrators':
+            case 'aministratoren':
             case 'administrator':
                 return (asString ? '1' : 1);
-            case 'moderators':
+            case 'moderatoren':
             case 'moderator':
                 return (asString ? '2' : 2);
-            case 'subscribers':
-            case 'subscriber':
+            case 'abonnenten':
+            case 'abonnent':
                 return (asString ? '3' : 3);
-            case 'donators':
-            case 'donator':
+            case 'spender':
+            case 'spender':
                 return (asString ? '4' : 4);
             case 'vips':
             case 'vip':
                 return (asString ? '5' : 5);
-            case 'regulars':
-            case 'regular':
+            case 'stammzuschauer':
+            case 'stammzuschauer':
                 return (asString ? '6' : 6);
             default:
                 return (asString ? '7' : 7);
@@ -961,21 +961,21 @@ $(function() {
     helpers.getGroupNameById = function(id) {
         switch (id.toString()) {
             case '0':
-                return 'Caster';
+                return 'Streamer';
             case '1':
-                return 'Administrators';
+                return 'Administrator';
             case '2':
-                return 'Moderators';
+                return 'Moderator';
             case '3':
-                return 'Subscribers';
+                return 'Abonnent';
             case '4':
-                return 'Donators';
+                return 'Spender';
             case '5':
-                return 'vips';
+                return 'VIP';
             case '6':
-                return 'Regulars';
+                return 'Stammzuschauer';
             default:
-                return 'Viewers';
+                return 'Zuschauer';
         }
     };
 

@@ -100,7 +100,7 @@ $(function() {
                 { 'title': 'Letzter Raid', 'orderData': [1] },
                 { 'title': 'Zuschauer' },
                 { 'title': 'Gesamte Raids' },
-                { 'title': 'Gesamte Viewers' }
+                { 'title': 'Gesamte Zuschauer' }
             ]
         });
     });

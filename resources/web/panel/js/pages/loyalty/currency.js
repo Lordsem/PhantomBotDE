@@ -282,7 +282,7 @@ $(function() {
             // Update the DB.
             socket.updateDBValues('update_group_payout_online', {
                 tables: ['grouppoints', 'grouppoints', 'grouppoints', 'grouppoints', 'grouppoints', 'grouppoints', 'grouppoints'],
-                keys: ['Caster', 'Administrator', 'Moderator', 'Subscriber', 'Donator', 'Regular', 'Viewer'],
+                keys: ['Streamer', 'Administrator', 'Moderator', 'Abonnent', 'Spender', 'Stammzuschauer', 'Zuschauer'],
                 values: temp
             }, function() {
                 temp = [];
@@ -295,7 +295,7 @@ $(function() {
                 // Update the DB.
                 socket.updateDBValues('update_group_payout_offline', {
                     tables: ['grouppointsoffline', 'grouppointsoffline', 'grouppointsoffline', 'grouppointsoffline', 'grouppointsoffline', 'grouppointsoffline', 'grouppointsoffline'],
-                    keys: ['Caster', 'Administrator', 'Moderator', 'Subscriber', 'Donator', 'Regular', 'Viewer'],
+                    keys: ['Streamer', 'Administrator', 'Moderator', 'Abonnent', 'Spender', 'Stammzuschauer', 'Zuschauer'],
                     values: temp
                 }, function() {
                     toastr.success('Erweiterte Punkte-Einstellungen erfolgreich aktualisiert!');

@@ -214,8 +214,8 @@ $(run = function() {
                     // Append input box for the command audio. This one is disabled.
                     .append(helpers.getInputGroup('command-audio', 'text', 'Audio Hook', '', e.audioCommands, 'Audio der abgespielt werden soll. Dieser kann nicht bearbeitet werden.', true))
                     // Append a select option for the command permission.
-                    .append(helpers.getDropdownGroup('command-permission', 'User Level', helpers.getGroupNameById(e.permcom),
-                        ['Caster', 'Administrators', 'Moderators', 'Subscribers', 'Donators', 'VIPs', 'Regulars', 'Viewers']))
+                    .append(helpers.getDropdownGroup('command-permission', 'Benutzerlevel', helpers.getGroupNameById(e.permcom),
+                        ['Streamer', 'Administratoren', 'Moderatoren', 'Abonnenten', 'Spender', 'VIPs', 'Stammzuschauer', 'Zuschauer']))
                     // Add an advance section that can be opened with a button toggle.
                     .append($('<div/>', {
                         'class': 'collapse',
@@ -393,8 +393,8 @@ $(function() {
             // All audio hooks in a list.
             .append(helpers.getDropdownGroup('command-audio', 'Audio Hook', 'Auswählen eines Audio-Hooks', audioNames, 'Audio-Hook, der abgespielt werden soll, wenn der Befehl ausgeführt wird.'))
             // Append a select option for the command permission.
-            .append(helpers.getDropdownGroup('command-permission', 'User Level', 'Viewers',
-                ['Caster', 'Administrators', 'Moderators', 'Subscribers', 'Donators', 'VIPs', 'Regulars', 'Viewers'], 'Benutzer, die den Befehl ausführen können.'))
+            .append(helpers.getDropdownGroup('command-permission', 'Benuterlevel', 'Zuschauer',
+                ['Streamer', 'Administratoren', 'Moderatoren', 'Abonnenten', 'Spender', 'VIPs', 'Stammzuschauer', 'Zuschauer'], 'Benutzer, die den Befehl ausführen können.'))
             // Add an advance section that can be opened with a button toggle.
             .append($('<div/>', {
                 'class': 'collapse',
