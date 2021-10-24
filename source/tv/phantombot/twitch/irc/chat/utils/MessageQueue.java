@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,9 +19,8 @@ package tv.phantombot.twitch.irc.chat.utils;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 import org.java_websocket.exceptions.WebsocketNotConnectedException;
-
-import tv.phantombot.twitch.irc.TwitchSession;
 import tv.phantombot.PhantomBot;
+import tv.phantombot.twitch.irc.TwitchSession;
 
 public class MessageQueue implements Runnable {
     private final BlockingDeque<Message> queue = new LinkedBlockingDeque<>();
@@ -95,7 +94,11 @@ public class MessageQueue implements Runnable {
      * @param {String} message
      */
     public void say(String message) {
-        queue.add(new Message(message));
+        message = message.replace('\r', ' ');
+        String[] spl = message.split("\n");
+        for (String str : spl) {
+            queue.add(new Message(str));
+        }
     }
 
     /**
@@ -104,7 +107,11 @@ public class MessageQueue implements Runnable {
      * @param {String} message
      */
     public void sayNow(String message) {
-        queue.addFirst(new Message(message, message.startsWith(".")));
+        message = message.replace('\r', ' ');
+        String[] spl = message.split("\n");
+        for (int i = spl.length; i > 0; i--) {
+            queue.addFirst(new Message(spl[i - 1], spl[i - 1].startsWith(".")));
+        }
     }
 
     /**
@@ -129,7 +136,7 @@ public class MessageQueue implements Runnable {
                     if (lastWrite > time) {
                         if (writes >= limit && !message.hasPriority()) {
                             nextWrite = (time + (lastWrite - time));
-                            com.gmt2001.Console.warn.println("Das Nachrichtenlimit von (" + limit + ") wurde erreicht. Die Nachrichten werden in " + (nextWrite - time) + "ms wieder gesendet.");
+                            com.gmt2001.Console.warn.println("Message limit of (" + limit + ") has been reached. Messages will be sent again in " + (nextWrite - time) + "ms");
                             continue;
                         }
                         writes++;
@@ -143,7 +150,7 @@ public class MessageQueue implements Runnable {
                     com.gmt2001.Console.out.println("[CHAT] " + message.getMessage());
                 }
             } catch (WebsocketNotConnectedException ex) {
-                com.gmt2001.Console.err.println("Die Nachricht konnte nicht gesendet werden, da die Verbindung zum Twitch IRC getrennt wurde.");
+                com.gmt2001.Console.err.println("Failed to send message due to being disconnected from Twitch IRC.");
                 this.setAllowSendMessages(false);
                 session.reconnect();
             } catch (InterruptedException ex) {

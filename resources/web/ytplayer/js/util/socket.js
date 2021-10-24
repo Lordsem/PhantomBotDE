@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ $(function() {
         try {
             socket.send(JSON.stringify(data));
         } catch (ex) {
-            console.error('Failed to send message to socket: ' + ex.message);
+            console.error('Nachricht konnte nicht an Socket gesendet werden: ' + ex.message);
         }
     };
 
@@ -307,7 +307,7 @@ $(function() {
      * @function is called when the socket opens.
      */
     socket.onopen = (e) => {
-        console.info('Connection established with the websocket.');
+        console.info('Verbindung mit dem Websocket hergestellt.');
 
         // Send the auth to the bot.
         sendToSocket({
@@ -324,11 +324,12 @@ $(function() {
      * @function the socket calls when it closes
      */
     socket.onclose = (e) => {
-        console.error('Connection lost with the websocket.');
+        console.error('Verbindung mit dem Websocket verloren.');
+
         if (secondConnection) {
-            toastr.error('PhantomBot has closed the WebSocket.', '', {timeOut: 0});
+            toastr.error('PhantomBot hat das WebSocket geschlossen.', '', {timeOut: 0});
         } else {
-            toastr.error('Connection with WebSocket was lost. Refresh once reestablished.', '', {timeOut: 0});
+            toastr.error('Die Verbindung mit WebSocket wurde unterbrochen. Nach der Wiederherstellung aktualisieren.', '', {timeOut: 0});
         }
     };
 
@@ -350,9 +351,9 @@ $(function() {
             if (message.secondconnection !== undefined) {
                 if (message.secondconnection === true) {
                     secondConnection = true;
-                    toastr.error('PhantomBot rejected the connection due to a player window already being open.', '',
+                    toastr.error('PhantomBot hat die Verbindung abgelehnt, da bereits ein Player-Fenster geöffnet war.', '',
                                  {timeOut: 0, extendedTimeOut: 0});
-                    console.error('Only one instance allowed.');
+                    console.error('Nur eine Instanz zulässig.');
                 }
                 return;
             }
@@ -360,7 +361,7 @@ $(function() {
             // Check this message here before doing anything else.
             if (message.authresult !== undefined) {
                 if (message.authresult === false) {
-                    console.error('Failed to auth with the socket.');
+                    console.error('Fehler bei der Authentifizierung mit dem Socket.');
                 }
                 return;
             }
@@ -369,10 +370,10 @@ $(function() {
             if (message.ytkeycheck !== undefined) {
                 if (message.ytkeycheck === false) {
                     hasAPIKey = false;
-                    console.error("Missing YouTube API Key.");
+                    console.error("Fehlender YouTube-API-Schlüssel.");
                     toastr.error('A YouTube API key has not been configured. Please review the instructions ' +
-                                 '<a href="https://phantombot.github.io/PhantomBot/guides/#guide=content/youtubesetup">here' +
-                                 '</a> on the PhantomBot Community Forum.', 'Missing YouTube API Key',
+                                 '<a href="https://phantombot.github.io/PhantomBot/guides/#guide=content/integrations/youtubesetup">here' +
+                                 '</a> on the PhantomBot Community Forum.', 'Fehlender YouTube-API-Schlüssel',
                                  {timeOut: 0, extendedTimeOut: 0});
                 }
                 return;
@@ -409,7 +410,7 @@ $(function() {
                 }
             }
         } catch (ex) {
-            console.error('Failed to parse message from socket: ' + ex.message);
+            console.error('Fehler beim analysieren der Nachricht vom Socket: ' + ex.message);
         }
     }
 

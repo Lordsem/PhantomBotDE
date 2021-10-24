@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -81,6 +81,10 @@ public class WsPanelHandler implements WsFrameHandler {
             } catch (JSONException ex) {
                 com.gmt2001.Console.err.logStackTrace(ex);
                 return;
+            }
+
+            if (PhantomBot.instance().getProperties().getProperty("wsdebug", "false").equalsIgnoreCase("true")) {
+                com.gmt2001.Console.debug.println(jso.toString());
             }
 
             if (!ctx.channel().attr(WsSharedRWTokenAuthenticationHandler.ATTR_IS_READ_ONLY).get()) {

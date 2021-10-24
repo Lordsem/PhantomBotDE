@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -469,7 +469,7 @@
             userInput = event.getUserInput(),
             fulfillmentStatus = event.getFulfillmentStatus();
 
-        com.gmt2001.Console.debug.println("Channel point event " + rewardTitle + " parsed to javascript." + " ID is: " + rewardID);
+        com.gmt2001.Console.debug.println("Kanalpunktereignis " + rewardTitle + " in Javascript geparst." + " ID ist: " + rewardID);
 
         /*
          * reward ID config
@@ -537,7 +537,7 @@
                     pointName = $.pointNameMultiple;
                 }
                 $.inidb.incr('points', username, transferAmount);
-                $.say($.whisperPrefix(displayName) + ' you have been awarded ' + transferAmount + ' ' + pointName + ' by redeeming ' + rewardTitle);
+                $.say($.whisperPrefix(displayName) + ' dir wurden ' + transferAmount + ' ' + pointName + ' verliehen, durch einlösen von ' + rewardTitle);
                 return;
             }
         }
@@ -573,7 +573,7 @@
                 com.gmt2001.Console.debug.println("timeoutRunStart");
                 userInput = $.user.sanitize(userInput);
                 $.say('/timeout ' + userInput + ' ' + timeoutDuration);
-                $.say(userInput + ' has been timed out for ' + timeoutDuration + ' seconds by ' + displayName);
+                $.say(userInput + ' hat einen Timeout über ' + timeoutDuration + ' Sekunden bekommen, durch ' + displayName);
                 //TODO add check to ensure user is in chat
                 return;
             }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,9 +67,6 @@ $(run = function() {
             // Create table.
             let table = $('#timersTable').DataTable({
                 'searching': true,
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/German.json"
-                },
                 'autoWidth': false,
                 'lengthChange': false,
                 'data': tableData,
@@ -78,9 +75,9 @@ $(run = function() {
                     { 'width': '3%', 'targets': 0 }
                 ],
                 'columns': [
-                    { 'title': 'ID' },
-                    { 'title': 'Nachricht' },
-                    { 'title': 'Aktionen' }
+                    { 'title': 'Id' },
+                    { 'title': 'Message' },
+                    { 'title': 'Actions' }
                 ]
             });
 
@@ -89,7 +86,7 @@ $(run = function() {
                 let timerId = $(this).data('notice');
 
                 // Ask the user if he want to remove the timer.
-                helpers.getConfirmDeleteModal('timer_modal_remove', 'Bist du sicher, dass Du den Timer mit der ID ' + timerId + ' entfernen möchten?', true,
+                helpers.getConfirmDeleteModal('timer_modal_remove', 'Bist du sicher, dass Du den Timer mit der ID ' + timerId + ' entfernen möchtest?', true,
                     'Du hast den Timer mit der ID ' + timerId + ' erfolgreich entfernt!', function() {
                     // Remove the timer
                     socket.sendCommand('notice_remove_cmd', 'notice removesilent ' + timerId, function() {
@@ -146,7 +143,7 @@ $(function() {
 
     // Add timer button.
     $('#add-timer-button').on('click', function() {
-        helpers.getModal('add-timer', 'Timer hinzufügen', 'Speichern', $('<form/>', {
+        helpers.getModal('add-timer', 'Add Timer', 'Save', $('<form/>', {
             'role': 'form'
         })
         // Append timer text.
@@ -194,8 +191,8 @@ $(function() {
             function() {// Callback once we click the save button.
                 let noticeInterval = $('#notice-interval'),
                     noticeReqMsg = $('#notice-reqmsg'),
-                    noticeToggle = $('#notice-toggle').find(':selected').text() === 'Ja',
-                    noticeOfflineToggle = $('#notice-offline-toggle').find(':selected').text() === 'Ja';
+                    noticeToggle = $('#notice-toggle').find(':selected').text() === 'Yes',
+                    noticeOfflineToggle = $('#notice-offline-toggle').find(':selected').text() === 'Yes';
 
                 // Handle each input to make sure they have a value.
                 switch (false) {

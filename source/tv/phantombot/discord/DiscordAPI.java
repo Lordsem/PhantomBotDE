@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@
 package tv.phantombot.discord;
 
 import discord4j.common.close.CloseStatus;
-import discord4j.common.retry.ReconnectOptions;
 import discord4j.core.DiscordClient;
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
@@ -41,6 +40,7 @@ import discord4j.core.object.entity.channel.GuildMessageChannel;
 import discord4j.core.object.entity.channel.PrivateChannel;
 import discord4j.gateway.intent.Intent;
 import discord4j.gateway.intent.IntentSet;
+import discord4j.rest.request.RouterOptions;
 import discord4j.rest.util.Snowflake;
 import java.time.Duration;
 import java.util.List;
@@ -80,7 +80,7 @@ public class DiscordAPI extends DiscordUtil {
     private static GatewayDiscordClient gateway;
     private static Guild guild;
     private static ConnectionState reconnectState = ConnectionState.DISCONNECTED;
-    private static DiscordClientBuilder builder;
+    private static DiscordClientBuilder<DiscordClient, RouterOptions> builder;
     private boolean ready;
     private static Optional<Snowflake> selfId = Optional.empty();
     private IntentSet connectIntents = IntentSet.of(Intent.GUILDS, Intent.GUILD_MEMBERS, Intent.GUILD_VOICE_STATES, Intent.GUILD_MESSAGES, Intent.GUILD_MESSAGE_REACTIONS, Intent.GUILD_PRESENCES, Intent.DIRECT_MESSAGES);
@@ -125,7 +125,7 @@ public class DiscordAPI extends DiscordUtil {
     public void connect(String token) {
         if (DiscordAPI.builder == null) {
             DiscordAPI.builder = DiscordClientBuilder.create(token);
-            DiscordAPI.client = (DiscordClient) DiscordAPI.builder.build();
+            DiscordAPI.client = DiscordAPI.builder.build();
         }
 
         this.connect();
@@ -346,33 +346,37 @@ public class DiscordAPI extends DiscordUtil {
                 User iUser = event.getMember().isPresent() ? event.getMember().get() : ((PrivateChannel) iChannel).getRecipients().take(1).singleOrEmpty().block(Duration.ofMillis(500));
 
                 if (iUser == null || (DiscordAPI.selfId.isPresent() && iUser.getId().equals(DiscordAPI.selfId.get()))) {
-                return;
-            }
+                    return;
+                }
 
-            String username = iUser.getUsername().toLowerCase();
+                String username = iUser.getUsername().toLowerCase();
                 String message = iMessage.getContent();
-            String channel;
+                String channel;
                 Mono<Boolean> isAdmin = DiscordAPI.instance().isAdministratorAsync(iUser);
 
-            processedMessages.add(iMessage.getId().asLong());
-            listTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    processedMessages.remove(iMessage.getId().asLong());
+                processedMessages.add(iMessage.getId().asLong());
+                listTimer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        processedMessages.remove(iMessage.getId().asLong());
+                    }
+                }, 5000);
+
+                if (iChannel.getType() == Channel.Type.DM) {
+                    channel = "DM";
+                } else {
+                    channel = "#" + ((GuildMessageChannel) iChannel).getName();
                 }
-            }, 5000);
 
-            if (iChannel.getType() == Channel.Type.DM) {
-                channel = "DM";
-            } else {
-                channel = "#" + ((GuildMessageChannel) iChannel).getName();
-            }
+                if (message == null || message.isEmpty()) {
+                    return;
+                }
 
-            com.gmt2001.Console.out.println("[DISCORD] [" + channel + "] " + username + ": " + message);
+                com.gmt2001.Console.out.println("[DISCORD] [" + channel + "] " + username + ": " + message);
 
-            if (message.charAt(0) == '!') {
+                if (message.charAt(0) == '!') {
                     DiscordAPI.instance().parseCommand(iUser, iChannel, iMessage, isAdmin.block(Duration.ofMillis(500)));
-            }
+                }
 
                 EventBus.instance().postAsync(new DiscordChannelMessageEvent(iUser, iChannel, iMessage, isAdmin.block(Duration.ofMillis(500))));
             }).doOnError(e -> com.gmt2001.Console.debug.printStackTrace(e)).subscribe();

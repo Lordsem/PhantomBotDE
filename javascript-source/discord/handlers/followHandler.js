@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
  */
 (function() {
     var toggle = $.getSetIniDbBoolean('discordSettings', 'followToggle', false),
-        message = $.getSetIniDbString('discordSettings', 'followMessage', '(name) just followed!'),
+        message = $.getSetIniDbString('discordSettings', 'followMessage', '(name) folgt jetzt!'),
         channelName = $.getSetIniDbString('discordSettings', 'followChannel', ''),
         announce = false;
 
@@ -30,7 +30,7 @@
     $.bind('webPanelSocketUpdate', function(event) {
         if (event.getScript().equalsIgnoreCase('./discord/handlers/followHandler.js')) {
             toggle = $.getIniDbBoolean('discordSettings', 'followToggle', false);
-            message = $.getIniDbString('discordSettings', 'followMessage', '(name) just followed!');
+            message = $.getIniDbString('discordSettings', 'followMessage', '(name) folgt jetzt!');
             channelName = $.getIniDbString('discordSettings', 'followChannel', '');
         }
     });

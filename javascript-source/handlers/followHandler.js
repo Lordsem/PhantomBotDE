@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,14 +27,14 @@
  * anymore to reduce spam. Unless the 5 minutes have past, then it will start over.
  *
  */
-(function() {
+(function () {
     var followToggle = $.getSetIniDbBoolean('settings', 'followToggle', false),
-        followReward = $.getSetIniDbNumber('settings', 'followReward', 0),
-        followMessage = $.getSetIniDbString('settings', 'followMessage', $.lang.get('followhandler.follow.message')),
-        followDelay = $.getSetIniDbNumber('settings', 'followDelay', 5),
-        followQueue = new java.util.concurrent.ConcurrentLinkedQueue,
-        lastFollow = $.systemTime(),
-        announceFollows = false;
+            followReward = $.getSetIniDbNumber('settings', 'followReward', 0),
+            followMessage = $.getSetIniDbString('settings', 'followMessage', $.lang.get('followhandler.follow.message')),
+            followDelay = $.getSetIniDbNumber('settings', 'followDelay', 5),
+            followQueue = new java.util.concurrent.ConcurrentLinkedQueue,
+            lastFollow = $.systemTime(),
+            announceFollows = false;
 
     /*
      * @function updateFollowConfig
@@ -54,16 +54,16 @@
             var s = followQueue.poll();
             if (s.match(/\(alert [,.\w\W]+\)/g)) {
                 var filename = s.match(/\(alert ([,.\w\W]+)\)/)[1];
-                $.panelsocketserver.alertImage(filename);
+                $.alertspollssocket.alertImage(filename);
                 s = (s + '').replace(/\(alert [,.\w\W]+\)/, '');
             }
 
             if (s.match(/\(playsound\s([a-zA-Z1-9_]+)\)/g)) {
                 if (!$.audioHookExists(s.match(/\(playsound\s([a-zA-Z1-9_]+)\)/)[1])) {
-                    $.log.error('Could not play audio hook: Audio hook does not exist.');
+                    $.log.error('Audio-Hook konnte nicht wiedergegeben werden: Audio-Hook existiert nicht.');
                     return null;
                 }
-                $.panelsocketserver.triggerAudioPanel(s.match(/\(playsound\s([a-zA-Z1-9_]+)\)/)[1]);
+                $.alertspollssocket.triggerAudioPanel(s.match(/\(playsound\s([a-zA-Z1-9_]+)\)/)[1]);
                 s = $.replace(s, s.match(/\(playsound\s([a-zA-Z1-9_]+)\)/)[0], '');
             }
 
@@ -77,8 +77,8 @@
     /*
      * @event twitchFollowsInitialized
      */
-    $.bind('twitchFollowsInitialized', function() {
-        $.consoleLn('>> Enabling follower announcements');
+    $.bind('twitchFollowsInitialized', function () {
+        $.consoleLn('>> Follower-Ankündigungen aktiviert');
 
         announceFollows = true;
     });
@@ -86,9 +86,9 @@
     /*
      * @event twitchFollow
      */
-    $.bind('twitchFollow', function(event) {
+    $.bind('twitchFollow', function (event) {
         var follower = event.getFollower(),
-            s = followMessage;
+                s = followMessage;
 
         if (announceFollows === true && followToggle === true) {
             if (s.match(/\(name\)/)) {
@@ -117,11 +117,11 @@
     /*
      * @event command
      */
-    $.bind('command', function(event) {
+    $.bind('command', function (event) {
         var sender = event.getSender(),
-            command = event.getCommand(),
-            args = event.getArgs(),
-            action = args[0];
+                command = event.getCommand(),
+                args = event.getArgs(),
+                action = args[0];
 
         /*
          * @commandpath followreward [amount] - Set the points reward for following
@@ -202,9 +202,9 @@
             }
 
             var streamer = $.user.sanitize(args[0]),
-                streamerDisplay = $.username.resolve(streamer),
-                streamerGame = $.getGame(streamer),
-                streamerURL = 'https://twitch.tv/' + streamer;
+                    streamerDisplay = $.username.resolve(streamer),
+                    streamerGame = $.getGame(streamer),
+                    streamerURL = 'https://twitch.tv/' + streamer;
 
             if (streamerGame == null || streamerGame.length === 0) {
                 $.say($.lang.get('followhandler.shoutout.no.game', streamerDisplay, streamerURL));
@@ -222,7 +222,7 @@
     /*
      * @event initReady
      */
-    $.bind('initReady', function() {
+    $.bind('initReady', function () {
         $.registerChatCommand('./handlers/followHandler.js', 'followreward', 1);
         $.registerChatCommand('./handlers/followHandler.js', 'followtoggle', 1);
         $.registerChatCommand('./handlers/followHandler.js', 'followdelay', 1);

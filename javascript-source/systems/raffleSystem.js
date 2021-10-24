@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@
         sendMessages = $.getSetIniDbBoolean('raffleSettings', 'raffleMSGToggle', false),
         whisperWinner = $.getSetIniDbBoolean('raffleSettings', 'raffleWhisperWinner', false),
         allowRepick = $.getSetIniDbBoolean('raffleSettings', 'noRepickSame', true),
-        raffleMessage = $.getSetIniDbString('raffleSettings', 'raffleMessage', 'Eine Verlosung ist noch offen! Geben Sie (keyword) ein, um mit zu machen. (entries), die Benutzer bisher eingegeben haben.'),
+        raffleMessage = $.getSetIniDbString('raffleSettings', 'raffleMessage', 'Eine Verlosung ist noch offen! Geben Sie (keyword) ein, um teilzunehmen. Bisher haben sich (entries) Benutzer:innen angemeldet.'),
         messageInterval = $.getSetIniDbNumber('raffleSettings', 'raffleMessageInterval', 0),
         subscriberBonus = $.getSetIniDbNumber('raffleSettings', 'subscriberBonusRaffle', 1),
         regularBonus = $.getSetIniDbNumber('raffleSettings', 'regularBonusRaffle', 1),
@@ -356,7 +356,7 @@
              */
             if (action.equalsIgnoreCase('open')) {
                 open(sender, arguments);
-                $.log.event('A raffle was opened by: ' + sender + '. Arguments (' + arguments + ')');
+                $.log.event('Ein Gewinnspiel wurde eröffnet von ' + sender + '. Parameter (' + arguments + ')');
                 return;
             }
 
@@ -365,7 +365,7 @@
              */
             if (action.equalsIgnoreCase('close')) {
                 close(sender);
-                $.log.event('A raffle was closed by: ' + sender + '.');
+                $.log.event('Ein Gewinnspiel wurde geschlossen von ' + sender + '.');
                 return;
             }
 
@@ -441,7 +441,7 @@
             if (action.equalsIgnoreCase('togglewarningmessages')) {
                 sendMessages = !sendMessages;
                 $.inidb.set('raffleSettings', 'raffleMSGToggle', sendMessages);
-                $.say($.whisperPrefix(sender) + 'Raffle warning messages have been ' + (sendMessages ? $.lang.get('common.enabled') : $.lang.get('common.disabled')) + '.');
+                $.say($.whisperPrefix(sender) + 'Verlosungs-Warnmeldungen wurden ' + (sendMessages ? $.lang.get('common.enabled') : $.lang.get('common.disabled')) + '.');
                 return;
             }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
         offlineToggle = $.getSetIniDbBoolean('discordSettings', 'offlineToggle', false),
         offlineMessage = $.getSetIniDbString('discordSettings', 'offlineMessage', '(name) ist jetzt offline.'),
         gameToggle = $.getSetIniDbBoolean('discordSettings', 'gameToggle', false),
-        gameMessage = $.getSetIniDbString('discordSettings', 'gameMessage', '(name) hat das Spiel auf Twitch gewechselt!'),
+        gameMessage = $.getSetIniDbString('discordSettings', 'gameMessage', '(name) hat die Kategorie auf Twitch gewechselt!'),
         botGameToggle = $.getSetIniDbBoolean('discordSettings', 'botGameToggle', true),
         channelName = $.getSetIniDbString('discordSettings', 'onlineChannel', ''),
         deleteMessageToggle = $.getSetIniDbBoolean('discordSettings', 'deleteMessageToggle', true),
@@ -44,7 +44,7 @@
             offlineToggle = $.getIniDbBoolean('discordSettings', 'offlineToggle', false);
             offlineMessage = $.getIniDbString('discordSettings', 'offlineMessage', '(name) ist jetzt offline.');
             gameToggle = $.getIniDbBoolean('discordSettings', 'gameToggle', false);
-            gameMessage = $.getIniDbString('discordSettings', 'gameMessage', '(name) hat das Spiel auf Twitch gewechselt!');
+            gameMessage = $.getIniDbString('discordSettings', 'gameMessage', '(name) hat die Kategorie auf Twitch gewechselt!');
             botGameToggle = $.getIniDbBoolean('discordSettings', 'botGameToggle', true);
             channelName = $.getIniDbString('discordSettings', 'onlineChannel', '');
             deleteMessageToggle = $.getSetIniDbBoolean('discordSettings', 'deleteMessageToggle', true);
@@ -168,8 +168,8 @@
         // Wait a minute for Twitch to generate a real thumbnail and make sure again that we are online.
         setTimeout(function() {
             if ($.isOnline($.channelName) && ($.systemTime() - $.getIniDbNumber('discordSettings', 'lastOnlineEvent', 0) >= timeout)) {
-            	// Remove old stats, if any.
-            	$.inidb.RemoveFile('discordStreamStats');
+                // Remove old stats, if any.
+                $.inidb.RemoveFile('discordStreamStats');
 
                 // Delete offline messages if any.
                 if (deleteMessageToggle && offlineMessages.length > 0) {

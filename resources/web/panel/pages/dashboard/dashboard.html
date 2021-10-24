@@ -1,5 +1,5 @@
 <!--
-    Copyright (C) 2016-2020 phantom.bot
+    Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -131,8 +131,8 @@
 
                             <!-- Stream Game Input -->
                             <div class="form-group">
-                                <label>Spiel</label>
-                                <input type="text" class="form-control" id="stream-game" placeholder="Nach einem Spiel oder einer Kategorie suchen" data-str="text" data-toggle="tooltip" title="Das aktuelle Stream-Spiele">
+                                <label>Kategorie</label>
+                                <input type="text" class="form-control" id="stream-game" placeholder="Nach einem Spiel oder einer Kategorie suchen" data-str="text" data-toggle="tooltip" title="Das aktuelle Stream-Kategorie">
                             </div>
                         </div>
                         <!-- Footer of the box -->
@@ -155,8 +155,8 @@
                                 <label>Benutzeraktion</label>
                                 <div class="input-group input-group-md">
                                     <input type="text" class="form-control" id="user-action-user" placeholder="Benutzername" data-toggle="tooltip" title="Gib einen Benutzernamen ein.">
-                                    <span class="input-group-btn">
-                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Aktionen
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Aktionen
                                             <span class="fa fa-caret-down"></span>
                                         </button>
                                         <ul class="dropdown-menu pull-right">
@@ -165,18 +165,18 @@
                                             <li class="user-action"><a href="#">Raid</a></li>
                                             <li class="user-action"><a href="#">Host</a></li>
                                         </ul>
-                                    </span>
+                                    </div>
                                 </div>
                             </div>
 
                             <!-- Run command -->
                             <div class="form-group">
-                                <label>Befehl Ausführen</label>
+                                <label for="custom-command-run">Befehl ausführen</label>
                                 <select class="form-control select2 select2-hidden-accessible" id="custom-command-run" style="width: 100%;" aria-hidden="true">
                                     <option></option>
                                 </select>
                             </div>
-
+                            
                             <!-- Run commercial -->
                             <div class="form-group" id="grp-instant-commercial">
                                 <label>Werbespot abspielen</label>
@@ -191,16 +191,16 @@
                                         <option>180</option>
                                     </select>
                                     <span class="input-group-addon" style="border: 0;">
-                                        <div class="pretty p-icon">
+                                        <span class="pretty p-icon">
                                             <input id="instant-commercial-silent" type="checkbox" data-toggle="tooltip" title="Wenn diese Option aktiviert ist, wird der Bot den Werbespot nicht im Chat ankündigen.">
-                                            <div class="state p-default">
+                                            <span class="state p-default">
                                                 <i class="icon fa fa-check"></i>
                                                 <label>Still</label>
-                                            </div>
-                                        </div>
+                                            </span>
+                                        </span>
                                     </span>
                                     <span class="input-group-btn">
-                                        <button type="button" class="btn btn-primary pull-right" id="dashboard-btn-instant-commercial" data-candisable="true">Ausführen</button>
+                                        <button type="button" class="btn btn-primary pull-right" id="dashboard-btn-instant-commercial" data-candisable="true">Run</button>
                                     </span>
                                 </div>
                             </div>

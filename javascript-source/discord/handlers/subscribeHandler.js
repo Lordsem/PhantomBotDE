@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,10 +19,10 @@
  * This module is to handle subscriber notifications.
  */
 (function() {
-    var subMessage = $.getSetIniDbString('discordSettings', 'subMessage', '(name) hat dich abonniert!'),
-        primeMessage = $.getSetIniDbString('discordSettings', 'primeMessage', '(name) hat dich über Twitch Prime abonniert!'),
-        resubMessage = $.getSetIniDbString('discordSettings', 'resubMessage', '(name) hat dich für (months) Monate hintereinander abonniert!'),
-        giftsubMessage = $.getSetIniDbString('discordSettings', 'giftsubMessage', '(name) just gifted (recipient) a subscription!'),
+    var subMessage = $.getSetIniDbString('discordSettings', 'subMessage', '(name) hat abonniert!'),
+        primeMessage = $.getSetIniDbString('discordSettings', 'primeMessage', '(name) hat mit Prime abonniert!'),
+        resubMessage = $.getSetIniDbString('discordSettings', 'resubMessage', '(name) hat (months) Monate hintereinander abonniert!'),
+        giftsubMessage = $.getSetIniDbString('discordSettings', 'giftsubMessage', '(name) hat (recipient) ein Abo geschenkt!'),
         subToggle = $.getSetIniDbBoolean('discordSettings', 'subToggle', false),
         primeToggle = $.getSetIniDbBoolean('discordSettings', 'primeToggle', false),
         resubToggle = $.getSetIniDbBoolean('discordSettings', 'resubToggle', false),
@@ -35,10 +35,10 @@
      */
     $.bind('webPanelSocketUpdate', function(event) {
         if (event.getScript().equalsIgnoreCase('./discord/handlers/subscribeHandler.js')) {
-            subMessage = $.getIniDbString('discordSettings', 'subMessage', '(name) hat dich abonniert!');
-            primeMessage = $.getIniDbString('discordSettings', 'primeMessage', '(name) hat dich über Twitch Prime abonniert!');
-            resubMessage = $.getIniDbString('discordSettings', 'resubMessage', '(name) hat dich für (months) Monate hintereinander abonniert!');
-            giftsubMessage = $.getSetIniDbString('discordSettings', 'giftsubMessage', '(name) just gifted (recipient) a subscription!');
+            subMessage = $.getIniDbString('discordSettings', 'subMessage', '(name) hat abonniert!');
+            primeMessage = $.getIniDbString('discordSettings', 'primeMessage', '(name) hat mit Prime abonniert!');
+            resubMessage = $.getIniDbString('discordSettings', 'resubMessage', '(name) hat (months) Monate hintereinander abonniert!');
+            giftsubMessage = $.getSetIniDbString('discordSettings', 'giftsubMessage', '(name) verschenkt an (recipient) ein Abo!');
             subToggle = $.getIniDbBoolean('discordSettings', 'subToggle', false);
             primeToggle = $.getIniDbBoolean('discordSettings', 'primeToggle', false);
             resubToggle = $.getIniDbBoolean('discordSettings', 'resubToggle', false);

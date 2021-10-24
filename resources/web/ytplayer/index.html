@@ -1,5 +1,5 @@
 <!--
-  Copyright (C) 2016-2020 phantom.bot
+  Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@
     <div id="main" style="display: none;">
         <!-- Header -->
         <div class="header">
-            <img class="logo-header" src="/common/images/logo.png">
+            <img class="logo-header" alt="Logo" src="/common/images/logo.png">
         </div>
         <!-- Container div -->
         <div class="container-fluid">
@@ -88,7 +88,7 @@
                                 <div class="progress-slider">
                                     <input type="text" id="progress-slider" />
                                     <!-- Progress slider value -->
-                                    <span id="progress-slider-value">0:00</span>
+                                    <label for="progress-slider" id="progress-slider-value">0:00</label>
                                 </div>
                             </div>
 
@@ -105,7 +105,7 @@
                                 <div class="volume-slider">
                                     <input type="text" id="volume-slider" />
                                     <!-- Volume slider value -->
-                                    <span id="volume-slider-value">0%</span>
+                                    <label for="volume-slider" id="volume-slider-value">0%</label>
                                 </div>
                             </div>
                         </div>
@@ -197,10 +197,10 @@
 
         <!-- Copyright bar -->
         <footer class="copyright">
-            YouTube Player von:
-            <a href="https://phantombot.github.io/PhantomBot">phantom.bot</a>&emsp;|&emsp;
-            Deutsche Übersetzung von:
-            <a href="https://github.com/PhantomBotDE/PhantomBotDE" target="_blank">PhantomBotDE</a>
+            <a href="https://phantombot.github.io/PhantomBot">PhantomBot</a> &copy; 2016 -
+            <script>
+            	document.write(new Date().getFullYear());
+            </script>
         </footer>
     </div>
 

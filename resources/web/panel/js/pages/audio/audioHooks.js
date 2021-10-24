@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -277,7 +277,7 @@ $(run = function() {
         // Welcome the user to the new page.
         socket.getDBValue('get_audio_hook_warning', 'panelData', 'audioHookNewUser', function(e) {
             if (e.panelData !== 'true') {
-                alert('Hallo, hallo! \nWillkommen auf der Audio-Hook-Seite von PhantomBot! Auf dieser Seite können Sie Audiobefehle testen, hören und hinzufügen. \n' +
+                alert('Hallo! \nWillkommen auf der Audio-Hook-Seite von PhantomBot! Auf dieser Seite können Sie Audiobefehle testen, hören und hinzufügen. \n' +
                     'Wenn Sie das alte Bedienfeld schon einmal verwendet haben, wurden Audiohooks auf dieser Seite wiedergegeben, wenn ein Benutzer einen Audiobefehl ausgeführt hat. ' +
                     'Dies funktioniert nicht mehr. Jetzt werden alle Audio-Hooks über die Benachrichtigungsseite von PhantomBot gesendet, die als Browser-Quelle in OBS verwendet werden kann. \n' +
                     'Klicken Sie auf die Schaltfläche Einstellungen, um auf die URL der Browser-Quelle zuzugreifen.');
@@ -328,7 +328,7 @@ $(function() {
             'class': 'form-control',
             'id': 'audio-url',
             'readonly': 'readonly',
-            'value': window.location.protocol + '//' + window.location.host + '/alerts?allow-audio-hooks=true&allow-alerts=false&audio-hook-volume=0.8',
+            'value': 'http://' + window.location.host + '/alerts?allow-audio-hooks=true&allow-alerts=false&audio-hook-volume=0.8',
             'style': 'color: transparent !important; text-shadow: 0 0 5px hsla(0, 0%, 100%, .5);',
             'data-toggle': 'tooltip',
             'title': 'Wenn du auf dieses Feld klickst, wird der Link angezeigt.',
@@ -370,8 +370,7 @@ $(function() {
                 'role': 'form'
             })
             // Append command name.
-            .append(helpers.getInputGroup('cooldown-hooks', 'number', 'Master Abklingzeit (Sekunden)', '30', '',
-                'Setzen Sie eine Master-Coldown für Audio-Hooks, diese Abklingzeit wird auf alle Befehle angewendet, wenn ein Befehl gesendet wird, ein anderer kann erst nach dieser Abklingzeit gesendet werden.')), function() {
+            .append(helpers.getInputGroup('cooldown-hooks', 'number', 'Master Abklingzeit (Sekunden)', '30', '', 'Setzen Sie eine Master-Coldown für Audio-Hooks, diese Abklingzeit wird auf alle Befehle angewendet, wenn ein Befehl gesendet wird, ein anderer kann erst nach dieser Abklingzeit gesendet werden.')), function() {
 
             // Code.
         }).modal('toggle');

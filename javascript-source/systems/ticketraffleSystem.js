@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
         followers = false,
         raffleStatus = false,
         msgToggle = $.getSetIniDbBoolean('settings', 'tRaffleMSGToggle', false),
-        raffleMessage = $.getSetIniDbString('settings', 'traffleMessage', 'Eine Verlosung ist noch offen! Geben Sie !tickets (amount) ein, um teilzunehmen. Bisher haben sich (entries) Benutzer angemeldet.'),
+        raffleMessage = $.getSetIniDbString('settings', 'traffleMessage', 'Eine Verlosung ist noch offen! Geben Sie !tickets (amount) ein, um teilzunehmen. Bisher haben sich (entries) Benutzer:innen angemeldet.'),
         messageInterval = $.getSetIniDbNumber('settings', 'traffleMessageInterval', 0),
         totalEntries = 0,
         lastTotalEntries = 0,
@@ -136,7 +136,7 @@
 
         $.say($.lang.get('ticketrafflesystem.winner', $.username.resolve(Winner), followMsg));
         $.inidb.set('traffleresults', 'winner', $.username.resolve(Winner) + ' ' + followMsg);
-        $.log.event('Winner of the ticket raffle was ' + Winner);
+        $.log.event('Gewinner:in der Ticketverlosung war ' + Winner);
     };
 
     function enterRaffle(user, tags, times) {
@@ -145,6 +145,13 @@
                 $.say($.whisperPrefix(user) + $.lang.get('ticketrafflesystem.err.raffle.not.opened'));
             }
             return;
+        }
+
+        var otimes = times;
+        if (tags.getTags().containsKey('subscriber') && tags.getTags().get('subscriber').equals('1')) {
+            times *= subTMulti;
+        } else if ($.isReg(user)) {
+            times *= regTMulti;
         }
 
         if (times > maxEntries || times == 0 || times < 0) {
@@ -167,7 +174,7 @@
         }
 
         if (cost > 0) {
-            if ((times * cost) > $.getUserPoints(user)) {
+            if ((otimes * cost) > $.getUserPoints(user)) {
                 if (msgToggle) {
                     $.say($.whisperPrefix(user) + $.lang.get('ticketrafflesystem.err.points', $.pointNameMultiple));
                 }
@@ -178,15 +185,9 @@
         if (!$.inidb.exists('entered', user.toLowerCase())) {
             totalEntries++;
         }
-	price = times;
-        if (tags.getTags().containsKey('subscriber') && tags.getTags().get('subscriber').equals('1')) {
-            times *= subTMulti;
-        } else if ($.isReg(user)) {
-            times *= regTMulti;
-        }
 
         totalTickets += times;
-        $.inidb.decr('points', user, (price * cost));
+        $.inidb.decr('points', user, (otimes * cost));
         incr(user.toLowerCase(), times);
 
         for (var i = 0; i < times; i++) {

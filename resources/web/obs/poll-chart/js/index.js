@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
 
 // Main stuff.
 $(function() {
-    var webSocket = new ReconnectingWebSocket((getProtocol() === 'https://' || window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + '/ws/panel', null, { reconnectInterval: 500 }),
+    var webSocket = new ReconnectingWebSocket((window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + '/ws/alertspolls', null, { reconnectInterval: 500 }),
         localConfigs = getQueryMap(),
         chart;
 
@@ -59,7 +59,7 @@ $(function() {
                 logSuccess('sendToSocket:: ' + json);
             }
         } catch (e) {
-            logError('Failed to send message to socket: ' + e.message);
+            logError('Fehler beim Senden der Nachricht zum Socket: ' + e.message);
         }
     };
 
@@ -246,7 +246,7 @@ $(function() {
      * @function Called when the socket opens.
      */
     webSocket.onopen = function() {
-        logSuccess('Connection established with the websocket.');
+        logSuccess('Verbindung mit dem Websocket hergestellt.');
 
         // Auth with the socket.
         sendToSocket({
@@ -258,7 +258,7 @@ $(function() {
      * @function Socket calls when it closes
      */
     webSocket.onclose = function() {
-        logError('Connection lost with the websocket.');
+        logError('Verbindung mit dem Websocket verloren.');
     };
 
     /*
@@ -283,7 +283,7 @@ $(function() {
                     if (message.authresult === 'true') {
                         logSuccess('Successfully authenticated with the socket.');
                     } else {
-                        logError('Failed to authenticate with the socket.');
+                        logError('Fehler beim Authentifizieren mit dem Socket.');
                     }
                 } else {
                     // Handle our stats.
@@ -299,8 +299,8 @@ $(function() {
                 }
             }
         } catch (ex) {
-            logError('Error while parsing socket message: ' + ex.message);
-            logError('Message: ' + e.data);
+            logError('Fehler beim Analysieren der Socket-Nachricht: ' + ex.message);
+            logError('Nachricht: ' + e.data);
         }
     };
 });

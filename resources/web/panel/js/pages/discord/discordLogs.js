@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,17 +17,17 @@
 
 // Function that querys all of the data we need.
 $(function() {
-    // Get Discord logging settings.
-    socket.getDBValues('get_discord_logging_settings', {
-        tables: ['discordSettings', 'discordSettings', 'discordSettings'],
-        keys: ['modLogs', 'customCommandLogs', 'modLogChannel']
-    }, true, function(e) {
-        // Mod toggle.
-        $('#twitch-mod-log').val((e['modLogs'] === 'true' ? 'Ja' : 'Nein'));
-        // Commands toggle.
-        $('#twitch-command-log').val((e['customCommandLogs'] === 'true' ? 'Ja' : 'Nein'));
-        // Log channels
-        $('#twitch-mod-channel, #twitch-command-channel').val((e['modLogChannel'] == null ? '' : e['modLogChannel']));
+        // Get Discord logging settings.
+        socket.getDBValues('get_discord_logging_settings', {
+            tables: ['discordSettings', 'discordSettings', 'discordSettings'],
+            keys: ['modLogs', 'customCommandLogs', 'modLogChannel']
+        }, true, function(e) {
+            // Mod toggle.
+            $('#twitch-mod-log').val((e['modLogs'] === 'true' ? 'Ja' : 'Nein'));
+            // Commands toggle.
+            $('#twitch-command-log').val((e['customCommandLogs'] === 'true' ? 'Ja' : 'Nein'));
+            // Log channels
+            $('#twitch-mod-channel, #twitch-command-channel').val((e['modLogChannel'] == null ? '' : e['modLogChannel']));        });
     });
 });
 

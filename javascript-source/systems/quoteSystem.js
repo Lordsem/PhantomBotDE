@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -164,7 +164,7 @@
                 $.say($.whisperPrefix(sender) + $.lang.get('quotesystem.edit.404'));
             }
 
-            $.log.event(sender + ' edited quote #' + quote);
+            $.log.event(sender + ' bearbeitete Zitat #' + quote);
         }
 
         /**
@@ -248,7 +248,7 @@
                 $.say($.whisperPrefix(sender) + $.lang.get('quotesystem.del.404', args[0]));
             }
 
-            $.log.event(sender + ' removed quote with id: ' + args[0]);
+            $.log.event(sender + ' entfernte Zitat mit der ID: ' + args[0]);
         }
 
         /**

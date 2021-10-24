@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,22 +24,29 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingDeque;
-
 import org.java_websocket.WebSocket;
-
-import tv.phantombot.script.ScriptEventManager;
 import tv.phantombot.PhantomBot;
 import tv.phantombot.cache.UsernameCache;
-
 import tv.phantombot.event.EventBus;
 import tv.phantombot.event.command.CommandEvent;
-import tv.phantombot.event.irc.channel.*;
+import tv.phantombot.event.irc.channel.IrcChannelJoinEvent;
+import tv.phantombot.event.irc.channel.IrcChannelLeaveEvent;
+import tv.phantombot.event.irc.channel.IrcChannelUserModeEvent;
 import tv.phantombot.event.irc.clearchat.IrcClearchatEvent;
 import tv.phantombot.event.irc.complete.IrcJoinCompleteEvent;
-import tv.phantombot.event.irc.message.*;
+import tv.phantombot.event.irc.message.IrcChannelMessageEvent;
+import tv.phantombot.event.irc.message.IrcModerationEvent;
+import tv.phantombot.event.irc.message.IrcPrivateMessageEvent;
 import tv.phantombot.event.twitch.bits.TwitchBitsEvent;
 import tv.phantombot.event.twitch.raid.TwitchRaidEvent;
-import tv.phantombot.event.twitch.subscriber.*;
+import tv.phantombot.event.twitch.subscriber.TwitchAnonymousSubscriptionGiftEvent;
+import tv.phantombot.event.twitch.subscriber.TwitchMassAnonymousSubscriptionGiftedEvent;
+import tv.phantombot.event.twitch.subscriber.TwitchMassSubscriptionGiftedEvent;
+import tv.phantombot.event.twitch.subscriber.TwitchPrimeSubscriberEvent;
+import tv.phantombot.event.twitch.subscriber.TwitchReSubscriberEvent;
+import tv.phantombot.event.twitch.subscriber.TwitchSubscriberEvent;
+import tv.phantombot.event.twitch.subscriber.TwitchSubscriptionGiftEvent;
+import tv.phantombot.script.ScriptEventManager;
 import tv.phantombot.twitch.irc.chat.utils.SubscriberBulkGifter;
 
 // Create an interface that is used to create event handling methods.
@@ -70,10 +77,10 @@ public class TwitchWSIRCParser implements Runnable {
         } else {
             instance.setWebSocket(webSocket);
         }
-
+        
         return instance;
     }
-
+    
     /**
      * Class constructor.
      *
@@ -118,7 +125,7 @@ public class TwitchWSIRCParser implements Runnable {
         this.runThread = new Thread(this);
         this.runThread.start();
     }
-
+    
     private void setWebSocket(WebSocket webSocket) {
         this.webSocket = webSocket;
     }
@@ -246,6 +253,10 @@ public class TwitchWSIRCParser implements Runnable {
 
         if (rawMessage.startsWith("PING")) {
             return;
+        }
+
+        if (PhantomBot.instance().getProperties().getProperty("ircdebug", "false").equalsIgnoreCase("true")) {
+            com.gmt2001.Console.debug.println(rawMessage);
         }
 
         // Get tags from the messages.
@@ -586,9 +597,9 @@ public class TwitchWSIRCParser implements Runnable {
                 } else if (tags.containsKey("display-name") && !tags.get("display-name").equalsIgnoreCase(username)) {
                     com.gmt2001.Console.out.println();
                     com.gmt2001.Console.out.println("[FEHLER] oAuth Token stimmt nicht mit dem Benutzernamen des Twitch Bots überein.");
-                    com.gmt2001.Console.out.println("[FEHLER] Bitte besuchen Sie https://phantombot.github.io/PhantomBot/oauth/ und generieren Sie einen neuen Token.");
-                    com.gmt2001.Console.out.println("[FEHLER] Achten Sie darauf, dass Sie auf twitch.tv gehen und sich als Bot anmelden, bevor Sie das Token beziehen.");
-                    com.gmt2001.Console.out.println("[FEHLER] Öffnen Sie anschließend die Datei botlogin.txt und ersetzen Sie den Wert von oauth= durch den Token.");
+                    com.gmt2001.Console.out.println("[FEHLER] Bitte besuche https://phantombot.github.io/PhantomBot/oauth/ und generiere einen neuen Token.");
+                    com.gmt2001.Console.out.println("[FEHLER] Achte darauf, dass du auf twitch.tv gehst und dich als Bot anmeldest, bevor du den Token beziehst.");
+                    com.gmt2001.Console.out.println("[FEHLER] Öffnen Sie anschließend die Datei botlogin.txt und ersetze den oauth= Wertd urch den Token.");
                     com.gmt2001.Console.out.println();
                 } else {
                     // Since the "user-type" tag in deprecated and Twitch wants us to reply on badges
@@ -602,19 +613,19 @@ public class TwitchWSIRCParser implements Runnable {
                     com.gmt2001.Console.out.println();
                     com.gmt2001.Console.out.println("[FEHLER] " + username + " wurde nicht als Moderator erkannt!");
                     com.gmt2001.Console.out.println("[FEHLER] Du musst " + username + " als Channel-Moderator hinzufügen, damit er den Chat moderieren kann.");
-                    com.gmt2001.Console.out.println("[FEHLER] Geben Sie /mod " + username + " ein, um " + username + " als Channel-Moderator hinzuzufügen.");
+                    com.gmt2001.Console.out.println("[FEHLER] Gebe /mod " + username + " ein, um " + username + " als Channel-Moderator hinzuzufügen.");
                     com.gmt2001.Console.out.println();
 
-                    // We're not a mod thus we cannot send messages.
-                    session.setAllowSendMessages(false);
-                    // Remove the bot from the moderators list.
-                    if (moderators.contains(username)) {
-                        moderators.remove(username);
-                        eventBus.postAsync(new IrcChannelUserModeEvent(session, username, "O", false));
+                        // We're not a mod thus we cannot send messages.
+                        session.setAllowSendMessages(false);
+                        // Remove the bot from the moderators list.
+                        if (moderators.contains(username)) {
+                            moderators.remove(username);
+                            eventBus.postAsync(new IrcChannelUserModeEvent(session, username, "O", false));
+                        }
                     }
                 }
             }
         }
     }
-}
 }

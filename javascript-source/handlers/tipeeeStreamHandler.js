@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -102,11 +102,11 @@
             }
 
             if (s.match(/\(amount\)/)) {
-                s = $.replace(s, '(amount)', parseInt(donationAmount.toFixed(2)));
+                s = $.replace(s, '(amount)', donationAmount.toFixed(2));
             }
 
             if (s.match(/\(amount\.toFixed\(0\)\)/)) {
-                s = $.replace(s, '(amount.toFixed(0))', parseInt(donationAmount.toFixed(0)));
+                s = $.replace(s, '(amount.toFixed(0))', donationAmount.toFixed(0));
             }
 
             if (s.match(/\(message\)/)) {
@@ -123,7 +123,7 @@
 
             if (s.match(/\(alert [,.\w\W]+\)/g)) {
                 var filename = s.match(/\(alert ([,.\w\W]+)\)/)[1];
-                $.panelsocketserver.alertImage(filename);
+                $.alertspollssocket.alertImage(filename);
                 s = (s + '').replace(/\(alert [,.\w\W]+\)/, '');
                 if (s == '') {
                     return null;
@@ -132,10 +132,10 @@
 
             if (s.match(/\(playsound\s([a-zA-Z1-9_]+)\)/g)) {
                 if (!$.audioHookExists(s.match(/\(playsound\s([a-zA-Z1-9_]+)\)/)[1])) {
-                    $.log.error('Could not play audio hook: Audio hook does not exist.');
+                    $.log.error('Audio-Hook konnte nicht wiedergegeben werden: Audio-Hook existiert nicht.');
                     return null;
                 }
-                $.panelsocketserver.triggerAudioPanel(s.match(/\(playsound\s([a-zA-Z1-9_]+)\)/)[1]);
+                $.alertspollssocket.triggerAudioPanel(s.match(/\(playsound\s([a-zA-Z1-9_]+)\)/)[1]);
                 s = $.replace(s, s.match(/\(playsound\s([a-zA-Z1-9_]+)\)/)[0], '');
                 if (s == '') {
                     return null;
@@ -143,8 +143,8 @@
             }
 
             if (s != '') {
-            $.say(s);
-        }
+                $.say(s);
+            }
         }
 
         if (reward > 0) {

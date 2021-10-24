@@ -1,0 +1,528 @@
+<!--
+    Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>PhantomBot | OAuth Setup</title>
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <!-- Favicon -->
+        <link rel="icon" href="../favicon.ico" type="image/x-icon">
+        <!-- Bootstrap 3.3.7 css -->
+        <link rel="stylesheet" href="/common/css/bootstrap.min.css" />
+        <!-- Google font -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+        <!-- Fontawesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
+        <link rel="stylesheet" href="/common/css/AdminLTE.dark.min.css" />
+        <link rel="stylesheet" href="/common/css/skin-purple.dark.min.css" />
+        <link rel="stylesheet" href="/common/css/pace.min.css" />
+        <style>
+            .twitchbtn {
+                display:inline-block;
+                height:48px;
+                line-height:46px;
+                font-size:14px;
+                border:1px solid transparent;
+                border-radius:24px;
+                padding:0 30px;
+                margin:10px 8px 10px 0;
+                cursor:pointer;
+                background-image:none;
+                white-space:nowrap;
+                -ms-user-select:none;
+                user-select:none;
+                -webkit-transition:color 0.3s ease-out,background-color 0.3s ease-out;
+                -o-transition:color 0.3s ease-out,background-color 0.3s ease-out;
+                transition:color 0.3s ease-out,background-color 0.3s ease-out;
+                background-color:#6441a5;
+            }
+            .twitchbtn:hover {
+                background-color:#3a2560;
+                text-decoration:none;
+                outline:0
+            }
+            .twitchbtn:focus {
+                outline:0
+            }
+        </style>
+    </head>
+
+    <body class="skin-purple layout-top-nav">
+        <div class="wrapper">
+            <!-- Header -->
+            <header class="main-header">
+                <nav class="navbar navbar-static-top">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <a href=".."><img class="navbar-brand" alt="PhantomBot" src="/common/images/logo.png" /> <span class="navbar-brand logo-lg"><b>Phantom</b>Bot</span></a>
+                        </div>
+
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="collapse navbar-collapse" id="navbar-collapse">
+                            <ul class="nav navbar-nav navbar-right">
+                                <li><a data-toggle="tooltip" data-placement="bottom" title="GitHub" href="https://github.com/PhantomBot/PhantomBot"><i class="fab fa-github fa-lg"></i></a></li>
+                                <li><a data-toggle="tooltip" data-placement="bottom" title="Website" href="https://phantombot.github.io/PhantomBot"><i class="fas fa-globe fa-lg"></i></a></li>
+                                <li><a data-toggle="tooltip" data-placement="bottom" title="Discord" href="https://discord.gg/YKvMd78"><i class="fab fa-discord fa-lg"></i></a></li>
+                            </ul>
+                        </div>
+                        <!-- /.navbar-collapse -->
+                    </div>
+                    <!-- /.container-fluid -->
+                </nav>
+            </header>
+
+            <!-- Main content -->
+            <aside class="content-wrapper">
+                <div id="page-content">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <i class="fas fa-key"></i>
+                            <h3 class="box-title">PhantomBot OAuth Setup</h3>
+                            <!-- /.box-tools -->
+                        </div>
+                        <div class="box-body" id="content-pane">
+                            <div class="alert-info text-center page-header hide" id="info-box"></div>
+                            <div class="alert-success text-center page-header hide" id="success-box"></div>
+                            <div class="alert-error text-center page-header hide" id="error-box"></div>
+                            <br id="success-error-br" class="hide" />
+
+                            <div>
+                                Auf dieser Seite wird der Bot so eingerichtet, dass die OAuth-Token des Bots automatisch aktualisiert werden. Bitte befolge alle Anweisungen unten, um dies richtig einzurichten.
+                            </div>
+                            <div id="instructions">
+                                <ol>
+                                    <li>Erstelle eine neue Twitch-Anwendung, falls noch nicht geschehen<br />
+                                        <ol>
+                                            <li>Gehe zum <a href="https://dev.twitch.tv/" target="_blank">Twitch Developer Portal</a> und melde dich an</li>
+                                            <li>Klicke auf <i>Your Console</i> in der oberen rechten Ecke</li>
+                                            <li>Klicke auf den <i>Anwendungen</i> Tab</li>
+                                            <li>Klicke auf <i>Deine Anwendung registrieren</i></li>
+                                            <li>Gib in der <i>Name</i> Box am besten den Namen deines Bots ein oder irgendeinen andren Namen</li>
+                                            <li>Gib in der <i>OAuth Redirect URLs</i> Box folgendes ein: <input type="text" id="selfurl" class="form-control" readonly="readonly"></li> und klicke auf <i>Hinzuf&uuml;gen</i>
+                                            <li>Selektiere die <i>Kategorie</i> Dropdown-List und w&auml;hle <i>Chat Bot</i> aus</li>
+                                            <li>Klicke auf <i>Erstellen</i></li>
+                                        </ol>
+                                    </li>
+                                    <li>&Ouml;ffne die <i>Verwalten</i> Seite deiner neuen Twitch Anwendung, wenn noch nicht offen<br />
+                                        <ol>
+                                            <li>Gehe zum <a href="https://dev.twitch.tv/" target="_blank">Twitch Developer Portal</a> und melde dich an</li>
+                                            <li>Klicke auf  <i>Your Console</i> in der oberen rechten Ecke</li>
+                                            <li>Klicke auf den <i>Anwendungen</i> Tab</li>
+                                            <li>Klicke auf <i>Verwalten</i> neben der passenden Anwendung</li>
+                                        </ol>
+                                    </li>
+                                    <li>
+                                        Gib die Client-ID hier ein: <input type="text" id="clientid" class="form-control" placeholder="Client-ID">
+                                    </li>
+                                    <li>
+                                        Get the Client-Geheimnis
+                                        <ol>
+                                            <li>Klicke auf <i>Neues Geheimnis</i></li>
+                                            <li>Klicke auf <i>Ok</i> wenn du aufgefordert wirst, um ein neues Geheimnis zu generieren </li>
+                                            <li>Gib das Client-Geheimnis hier ein: <input type="text" id="clientsecret" class="form-control" placeholder="Client-Geheimnis"></li>
+                                            <li id="secretmsg" class="hide"><em>Hinweis:</em> <i>Wenn du ein Geheimnis bereits gespeichert hast, wird es aus Sicherheitsgr&uuml;nden nicht angezeigt. Wenn du das Geheimnis nicht aktualisieren musst, springe weiter zu den Autorisierungsschaltfl&auml;chen</i></li>
+                                        </ol>
+                                    </li>
+                                    <li>
+                                        Klicke hier, umd die Client-ID und das Client-Geheimnis zu speichern: <i id="saveclient" class="fas fa-save"></i>
+                                    </li>
+                                    <li>
+                                        Re-Autorisiere den Bot und Broadcaster mit den Schaltfl&auml;chen unten
+                                    </li>
+                                    <li>
+                                        Lasse den Broadcaster sein OAuth durchf&uuml;hren
+                                        <ol>
+                                            <li>Gehe zurück zum <a href="https://dev.twitch.tv/" target="_blank">Twitch Developer Portal</a> und melde dich an</li>
+                                            <li>Klicke auf <i>Your Console</i> in der oberen rechten Ecke</li>
+                                            <li>Klicke auf den <i>Anwendungen</i> Tab</li>
+                                            <li>Klicke auf <i>Verwalten</i> neben der passenden Anwendung</li>
+                                            <li>Klicke neben der bestehenden <i>OAuth Redirect URLs</i> Box auf die <i>Hinzuf&uuml;gen</i> Schaltfläche</li>
+                                            <li>F&uuml;ge diese URL in das neue leere Feld ein, das angezeigt wird <input type="text" id="selfurlbroadcaster" class="form-control" readonly="readonly"></li>
+                                            <li>Klicke auf <i>Hinzuf&uuml;gen</i></li>
+                                            <li>Klicke dann unten auf <i>Speichern</i></li>
+                                            <li>Klicke hier, um ein Sendepasswort f&uuml;r diese Seite zu generieren: <i id="resetbroadcastertoken" class="fas fa-sync"></i></li>
+                                            <li>Lasse den Broadcaster diesen Link besuchen <input type="text" id="selfurlbroadcastervisit" class="form-control" readonly="readonly"></li>
+                                            <li>Gib dem Sender diesen Benutzernamen <input type="text" value="broadcaster" class="form-control" readonly="readonly"> und dieses Passwort <input type="text" id="broadcastertoken" class="form-control" readonly="readonly"></li>
+                                            <li>Nachdem sich der Broadcaster angemeldet hat, muss er nur auf die Schaltfl&auml;che <i>Verbinde mit Twitch Broadcaster</i> klicken und sich autorisieren</li>
+                                        </ol>
+                                    </li>
+                                    <li>
+                                        Nachdem beide OAuths erfolgreich erneut autorisiert wurden, starte den Bot neu
+                                    </li>
+                                </ol>
+                            </div>
+
+                            <div id="connect" class="hide">
+                                <br />
+                                <br />
+                                <div>
+                                    Klicke unten auf <span id="connectone">eine der </span> <div class="text-bold" style="display: inline;">Verbinde mit Twitch</div> Schaltfl&auml;che<span id="connectplural">n</span> und du wirst zu Twitch.tv weitergeleitet, um den Bot zu autorisieren, um in deinem Namen Anfragen zu stellen.
+                                    <br />
+                                    <div style="padding-left: 25px;">
+                                        <ul>
+                                            <li id="connectbotinstruction"><div class="text-bold" style="display: inline;">Verbinde mit Twitch Bot</div> - vergewissere dich, bevor du auf die Schaltfl&auml;che klickst, dass du mit dem Twitch-Konto deines Bots eingeloggt bist, wenn nicht, klicke auf <div class="text-bold" style="display: inline;">"Das bist nicht du? Abmelden."</div> oben auf der Twitch-Seite.</li>
+                                            <li><div class="text-bold" style="display: inline;">Verbinde mit Twitch Broadcaster</div> - vergewissere dich, bevor du auf die Schaltfl&auml;che klickst, dass du mit dem Twitch-Konto des Broadcasters eingeloggt bist, wenn nicht, klicke auf <div class="text-bold" style="display: inline;">"Das bist nicht du? Abmelden."</div> oben auf der Twitch-Seite.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <br />
+                                <br />
+                                <div id="connectbotscope">
+                                    Die folgenden Berechtigungen werden f&uuml;r das <div class="text-bold" style="display: inline;">Bot</div> Twitch Konto angefordert (Twitch zeigt auch diese Liste an. F&uuml;r weitere Informationen schau mal <a href="https://dev.twitch.tv/docs/authentication/" target="devdoc">hier</a>):
+                                    <br />
+                                    <div style="padding-left: 25px;">
+                                        <ul id="scopes-bot">
+                                        </ul>
+                                    </div>
+                                </div>
+                                <br />
+                                <br />
+                                <div>
+                                    Die folgenden Berechtigungen werden f&uuml;r das <div class="text-bold" style="display: inline;">Broadcaster</div> Twitch Konto angefordert (Twitch zeigt auch diese Liste an. F&uuml;r weitere Informationen schau mal <a href="https://dev.twitch.tv/docs/authentication/" target="devdoc">hier</a>):
+                                    <br />
+                                    <div style="padding-left: 25px;">
+                                        <ul id="scopes-broadcaster">
+                                        </ul>
+                                    </div>
+                                </div>
+                                <br />
+                                <br />
+                                <a id="connect-bot" class="btn btn-primary twitchbtn">
+                                    <i class="fab fa-twitch"></i>
+                                    Verbinde mit Twitch Bot
+                                </a>&nbsp;<a id="connect-caster" class="btn btn-primary twitchbtn">
+                                    <i class="fab fa-twitch"></i>
+                                    Verbinde mit Twitch Broadcaster
+                                </a>
+                            </div>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+            </aside>
+            <footer class="main-footer">
+                <strong>Copyright &copy; 2016 - <script>document.write(new Date().getFullYear());</script> <a href="https://github.com/PhantomBot/PhantomBot" style="color: #6441a5;">PhantomBot</a></strong>
+            </footer>
+        </div>
+
+        <!-- Load jQuery -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <!-- Load Bootsrap 3.3.7 -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.4.0/js/adminlte.min.js"></script>
+        <script>
+                    'use strict';
+                    $(function () {
+                        var scopesBot = {
+                            "channel:manage:broadcast": {
+                                "desc": "Verwalte die Übertragungskonfiguration deines Kanals einschließlich der Aktualisierung der Kanalkonfiguration und der Verwaltung von Stream-Markierungen und -Tags.",
+                                "tooltip": "Wird von benutzerdefinierten Skripten verwendet, um Raids zu starten."
+                            },
+                            "channel:moderate": {
+                                "desc": "Moderationsaktionen in einem Kanal ausführen.",
+                                "tooltip": "Wird verwendet, um Moderationsaktionen durchzuführen (Purge, Timeout, Bann)."
+                            },
+                            "chat:edit": {
+                                "desc": "Live-Nachrichten im Stream-Chat und in Räumen senden.",
+                                "tooltip": "Wird verwendet, um Antworten im Chat zu senden."
+                            },
+                            "chat:read": {
+                                "desc": "Live-Nachrichten im Stream-Chat und in Räumen ansehen.",
+                                "tooltip": "Wird verwendet, um sich im Chat anzumelden und zum lesen von Nachrichten."
+                            },
+                            "whispers:edit": {
+                                "desc": "Flüsternachrichten senden.",
+                                "tooltip": "Wird zum Senden von Flüsternachrichten vom Bot verwendet."
+                            },
+                            "whispers:read": {
+                                "desc": "Deine Flüsternachrichten ansehen.",
+                                "tooltip": "Wird zum erhalten von Flüsternachrichten vom Bot verwendet."
+                            }
+                        };
+
+                        var scopesBroadcaster = {
+                            "channel:manage:broadcast": {
+                                "desc": "Verwalte die Übertragungskonfiguration deines Kanals einschließlich der Aktualisierung der Kanalkonfiguration und der Verwaltung von Stream-Markierungen und -Tags.",
+                                "tooltip": "Wird verwendet, um den Titel/die Kategorie zu ändern."
+                            },
+                            "channel:edit:commercial": {
+                                "desc": "Werbung in einem Kanal schalten",
+                                "tooltip": "Wird verwendet, um Werbespots zu schalten."
+                            },
+                            "channel:moderate": {
+                                "desc": "Moderationsaktionen in einem Kanal ausführen.",
+                                "tooltip": "Wird verwendet, um in PubSub auf Moderationsaktionen zu achten."
+                            },
+                            "channel:read:redemptions": {
+                                "desc": "Sieh dir benutzerdefinierte Belohnungen, für die du deine Kanalpunkte einlösen kannst, auf deinem Kanal an.",
+                                "tooltip": "Wird verwendet, um die Einlösung von benutzerdefinierten Channel Points-Prämien in PubSub zu beobachten."
+                            },
+                            "channel:read:subscriptions": {
+                                "desc": "Hol dir eine Liste aller Abonnenten deines Kanals und überprüfe, ob ein bestimmter Benutzer deinen Kanal abonniert hat",
+                                "tooltip": "Wird verwendet, um nach neuen Abonnenten zu suchen, die nicht mit dem Chat geteilt haben."
+                            },
+                            "chat:read": {
+                                "desc": "Live-Nachrichten im Stream-Chat und in Räumen ansehen",
+                                "tooltip": "Wird von der zweiten Chat-Verbindung verwendet, um nach Host-Benachrichtigungen zu suchen."
+                            }
+                        };
+
+                        function addScopeItem(type, scope, description) {
+                            $('#scopes-' + type).append(
+                                    $('<li/>', {
+                                        'html': $('<div/>', {
+                                            'class': 'text-bold',
+                                            'style': 'display: inline;',
+                                            'text': scope
+                                        })
+                                    }).append(' - ' + description.desc + ' ')
+                                    .append($('<i/>', {
+                                        'class': 'fas fa-question-circle',
+                                        'aria-hidden': 'true',
+                                        'data-toggle': 'tooltip',
+                                        'title': description.tooltip
+                                    }))
+                                    );
+                        }
+
+                        var x;
+                        for (x in scopesBot) {
+                            addScopeItem('bot', x, scopesBot[x]);
+                        }
+
+                        for (x in scopesBroadcaster) {
+                            addScopeItem('broadcaster', x, scopesBroadcaster[x]);
+                        }
+
+                        var queryString = window.location.search, // Query string that starts with ?
+                                queryParts = queryString.substr(1).split(/#|&/), // Split at each &, which is a new query.
+                                queryMap = new Map(), // Create a new map for save our keys and values.
+                                baseAPIUri = 'https://id.twitch.tv/oauth2/authorize',
+                                redirectURI = window.location.origin + window.location.pathname,
+                                redirectURIBroadcaster = redirectURI + "/broadcaster",
+                                broadcaster = "",
+                                clientID,
+                                state;
+
+                        if (redirectURI.includes("/broadcaster")) {
+                            broadcaster = "/broadcaster";
+                        }
+
+                        for (var i = 0; i < queryParts.length; i++) {
+                            var key = queryParts[i].substr(0, queryParts[i].indexOf('=')),
+                                    value = queryParts[i].substr(queryParts[i].indexOf('=') + 1, queryParts[i].length);
+
+                            if (key.length > 0 && value.length > 0) {
+                                queryMap.set(key.toLowerCase(), value);
+                            }
+                        }
+
+                        $('#selfurl').val(redirectURI);
+                        $('#selfurlbroadcaster').val(redirectURIBroadcaster);
+                        $('#selfurlbroadcastervisit').val(redirectURIBroadcaster);
+
+                        $('#saveclient').click(function () {
+                            $('#success-box').addClass('hide');
+                            $('#error-box').addClass('hide');
+                            $('#success-error-br').addClass('hide');
+                            $.ajax({
+                                cache: false,
+                                dataType: 'text',
+                                url: '/oauth/saveidsecret',
+                                method: 'PUT',
+                                data: {
+                                    clientid: $('#clientid').val(),
+                                    clientsecret: $('#clientsecret').val()
+                                },
+                                success: function (data) {
+                                    if (data === 'false') {
+                                        $('#error-box').removeClass('hide');
+                                        $('#success-error-br').removeClass('hide');
+                                        $('#error-box').html('Client-ID und Client-Geheimnis konnten nicht gespeichert werden: ungültige Eingabe');
+                                    } else if (data === 'true') {
+                                        $('#error-box').removeClass('hide');
+                                        $('#success-error-br').removeClass('hide');
+                                        $('#error-box').html('Fehler beim Speichern der Client-ID und des Client-Geheimnisses: Das Schreiben von botlogin.txt ist fehlgeschlagen');
+                                    } else {
+                                        clientID = data;
+                                        $('#success-box').removeClass('hide');
+                                        $('#success-error-br').removeClass('hide');
+                                        $('#success-box').html('Die Client-ID und das Client-Geheimnis wurden gespeichert.);
+                                        $('#connect').removeClass('hide');
+                                    }
+                                },
+                                error: function (err) {
+                                    $('#error-box').removeClass('hide');
+                                    $('#success-error-br').removeClass('hide');
+                                    $('#error-box').html('Fehler beim speichern der Client-ID und des Client-Geheimnis: ' + err.statusText + ' ' + err.responseText + '!!');
+                                }
+                            });
+                        });
+                        $('#saveclient').css('cursor', 'pointer');
+
+                        $('#resetbroadcastertoken').click(function () {
+                            $('#success-box').addClass('hide');
+                            $('#error-box').addClass('hide');
+                            $('#success-error-br').addClass('hide');
+                            $.ajax({
+                                cache: false,
+                                dataType: 'text',
+                                url: '/oauth/resetbroadcastertoken',
+                                method: 'GET',
+                                success: function (data) {
+                                    $('#success-box').removeClass('hide');
+                                    $('#success-error-br').removeClass('hide');
+                                    $('#success-box').html('Neuen Broadcaster Token generiert');
+                                    $('#broadcastertoken').val(data);
+                                },
+                                error: function (err) {
+                                    $('#error-box').removeClass('hide');
+                                    $('#success-error-br').removeClass('hide');
+                                    $('#error-box').html('Fehler beim generieren des Broadcaster Passwortes: ' + err.statusText + ' ' + err.responseText + '!!');
+                                }
+                            });
+                        });
+                        $('#resetbroadcastertoken').css('cursor', 'pointer');
+
+                        if (queryMap.size > 0) {
+                            if (queryMap.has('code') && queryMap.has('state')) {
+                                // Get the state.
+                                state = window.sessionStorage.getItem('state');
+
+                                if (queryMap.get('state') === state) {
+                                    $('#info-box').removeClass('hide');
+                                    $('#success-error-br').removeClass('hide');
+                                    $('#info-box').html('Bitte warte, autorisiere den ' + window.sessionStorage.getItem('state-type') + ' Token...');
+                                    $.ajax({
+                                        cache: false,
+                                        dataType: 'text',
+                                        url: '/oauth' + broadcaster + '/authorize',
+                                        method: 'POST',
+                                        data: {
+                                            code: queryMap.get('code'),
+                                            type: window.sessionStorage.getItem('statetype'),
+                                            redirect_uri: redirectURI
+                                        },
+                                        success: function (data) {
+                                            $('#info-box').addClass('hide');
+                                            if (data.startsWith('false')) {
+                                                $('#error-box').removeClass('hide');
+                                                $('#success-error-br').removeClass('hide');
+                                                $('#error-box').html('Fehler bim autorisieren und speichern vom ' + window.sessionStorage.getItem('statetype') + ' Token: ' + data.substring(6));
+                                            } else if (data === 'true') {
+                                                $('#error-box').removeClass('hide');
+                                                $('#success-error-br').removeClass('hide');
+                                                $('#error-box').html('Fehler beim ' + window.sessionStorage.getItem('statetype') + ' Token: Das Schreiben von botlogin.txt ist fehlgeschlagen');
+                                            } else {
+                                                clientID = data;
+                                                $('#success-box').removeClass('hide');
+                                                $('#success-error-br').removeClass('hide');
+                                                $('#success-box').html('Autorisierte und speicherte den ' + window.sessionStorage.getItem('statetype') + ' Token');
+                                            }
+                                            window.sessionStorage.removeItem('statetype');
+                                        },
+                                        error: function (err) {
+                                            $('#info-box').addClass('hide');
+                                            $('#error-box').removeClass('hide');
+                                            $('#success-error-br').removeClass('hide');
+                                            $('#error-box').html('Fehler bei der Autorisierung ' + window.sessionStorage.getItem('statetype') + ': ' + err.statusText + ' ' + err.responseText + '!!');
+                                            window.sessionStorage.removeItem('statetype');
+                                        }
+                                    });
+
+                                    // Remove the state.
+                                    window.sessionStorage.removeItem('state');
+                                }
+                            }
+                        }
+                        // Generates the state.
+                        function generateState(type) {
+                            var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
+                                    state = '';
+
+                            for (var i = 0; i < 40; i++) {
+                                state += possible.charAt(Math.floor(Math.random() * possible.length));
+                            }
+
+                            // Save the state.
+                            window.sessionStorage.setItem('state', state);
+                            window.sessionStorage.setItem('statetype', type);
+
+                            return state;
+                        }
+
+                        // Connect with Twitch button bot.
+                        $('#connect-bot').on('click', function () {
+                            var scopes = '';
+                            for (var x in scopesBot) {
+                                if (scopes.length > 0) {
+                                    scopes = scopes + '+';
+                                }
+
+                                scopes = scopes + x;
+                            }
+
+                            window.location = baseAPIUri + '?response_type=code&client_id=' + clientID + '&redirect_uri=' + redirectURI + '&force_verify=true&scope=' + scopes + '&state=' + generateState('bot');
+                        });
+
+                        // Connect with Twitch button caster.
+                        $('#connect-caster').on('click', function () {
+                            var scopes = '';
+                            for (var x in scopesBroadcaster) {
+                                if (scopes.length > 0) {
+                                    scopes = scopes + '+';
+                                }
+
+                                scopes = scopes + x;
+                            }
+
+                            window.location = baseAPIUri + '?response_type=code&client_id=' + clientID + '&redirect_uri=' + redirectURI + '&force_verify=true&scope=' + scopes + '&state=' + generateState('broadcaster');
+                        });
+
+                        $.ajax({
+                            cache: false,
+                            dataType: 'text',
+                            url: '/oauth' + broadcaster + '/checkidsecret',
+                            success: function (data) {
+                                if (data !== 'false') {
+                                    $('#clientid').val(data);
+                                    clientID = data;
+                                    $("#clientsecret")[0].placeholder = " -- Hidden -- ";
+                                    $('#secretmsg').removeClass('hide');
+                                    $('#connect').removeClass('hide');
+                                } else if (redirectURI.includes("/broadcaster")) {
+                                    $('#info-box').addClass('hide');
+                                    $('#error-box').removeClass('hide');
+                                    $('#success-error-br').removeClass('hide');
+                                    $('#error-box').html('Client-ID und Geheimnis sind nicht eingerichtet. Bitte den Bot-Besitzer, dies einzurichten.');
+                                }
+                            }
+                        });
+
+                        if (redirectURI.includes("/broadcaster")) {
+                            $('#instructions').addClass('hide');
+                            $('#connectbotinstruction').addClass('hide');
+                            $('#connectbotscope').addClass('hide');
+                            $('#connect-bot').addClass('hide');
+                        }
+
+                        $('[data-toggle="tooltip"]').tooltip();
+                    });
+        </script>
+    </body>
+</html>

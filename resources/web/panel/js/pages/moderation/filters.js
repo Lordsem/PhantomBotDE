@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -101,7 +101,7 @@ $(function() {
                     'Wenn Stammzuschauer erlaubt sein soll, diesen Filter zu umgehen.'))
                 // Tooltip to toggle for subs to bypass this filter.
                 .append(helpers.getCheckBox('exclude-subscribers', e.subscribersModerateLinks !== 'true', 'Abonnenten ausschließen',
-                    'Wenn es den Abonnenten erlaubt sein soll, diesen Filter zu umgehen.')))
+                    'Wenn es den Abonnenten erlaubt sein soll, diesen Filter zu umgehen.'))
             // Callback function to be called once we hit the save button on the modal.
             })), function() {
                 let timeoutMessage = $('#timeout-message'),
@@ -191,7 +191,7 @@ $(function() {
                     'Wenn Stammzuschauer erlaubt sein soll, diesen Filter zu umgehen.'))
                 // Tooltip to toggle for subs to bypass this filter.
                 .append(helpers.getCheckBox('exclude-subscribers', e.subscribersModerateCaps !== 'true', 'Abonnenten ausschließen',
-                    'Wenn es den Abonnenten erlaubt sein soll, diesen Filter zu umgehen.')))
+                    'Wenn es den Abonnenten erlaubt sein soll, diesen Filter zu umgehen.'))
             // Callback function to be called once we hit the save button on the modal.
             })), function() {
                 let timeoutMessage = $('#timeout-message'),

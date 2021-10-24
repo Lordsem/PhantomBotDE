@@ -1,5 +1,5 @@
 <!--
-    Copyright (C) 2016-2020 phantom.bot
+    Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@
                 <div class="tab-pane active" id="cmd_settings_messages">
                     <div class="form-group">
                         <!-- Pricecom toggle. -->
-                        <lable>Kostenmeldungen aktivieren</lable>
+                        <label for="cmd-cost-messages">Kostenmeldungen aktivieren</label>
                         <div class="dropdown">
                             <select class="form-control" id="cmd-cost-messages" style="cursor: pointer;" data-toggle="tooltip"
                                 title="Wenn eine Nachricht in einen Chat gesendet werden soll, wenn ein Benutzer versucht, einen Befehl zu verwenden, für den er keine Punkte hat.">
@@ -52,7 +52,7 @@
 
                     <div class="form-group">
                         <!-- Permcom toggle. -->
-                        <lable>Berechtigungsmeldungen aktivieren</lable>
+                        <label for="cmd-perm-messages">Berechtigungsmeldungen aktivieren</label>
                         <div class="dropdown">
                             <select class="form-control" id="cmd-perm-messages" style="cursor: pointer;" data-toggle="tooltip"
                                 title="Wenn eine Nachricht in einen Chat gesendet werden soll, wenn ein Benutzer versucht, einen Befehl zu verwenden, für den er keine Berechtigung hat.">
@@ -64,7 +64,7 @@
 
                     <div class="form-group">
                         <!-- Permcom toggle. -->
-                        <lable>Abkling-Meldungen aktivieren</lable>
+                        <label for="cmd-cooldown-messages">Abkling-Meldungen aktivieren</label>
                         <div class="dropdown">
                             <select class="form-control" id="cmd-cooldown-messages" style="cursor: pointer;" data-toggle="tooltip"
                                 title="Wenn eine Nachricht in einen Chat gesendet werden soll, wenn ein Benutzer versucht, einen Befehl zu verwenden, der noch in der Abklingzeit ist.">
@@ -79,7 +79,7 @@
                 <div class="tab-pane" id="cmd_settings_mods">
                     <div class="form-group">
                         <!-- Pricecom mods toggle. -->
-                        <lable>Moderatoren von den Kommandokosten ausnehmen</lable>
+                        <label for="pricecom-mods">Moderatoren von den Kommandokosten ausnehmen</label>
                         <div class="dropdown">
                             <select class="form-control" id="pricecom-mods" style="cursor: pointer;" data-toggle="tooltip"
                                 title="Wenn Moderatoren auch für kostenpflichtige Befehle bezahlen sollten. Bot-Administratoren werden immer ignoriert.">
@@ -91,7 +91,7 @@
 
                     <div class="form-group">
                         <!-- Cooldown for mods. -->
-                        <lable>Befreien Sie Moderatoren von der Abklingzeit der Befehle.</lable>
+                        <label for="cooldown-mods">Befreien Sie Moderatoren von der Abklingzeit der Befehle</label>
                         <div class="dropdown">
                             <select class="form-control" id="cooldown-mods" style="cursor: pointer;" data-toggle="tooltip"
                                 title="Wenn Moderatoren auch Befehlsabklingzeiten haben sollten.">
@@ -106,14 +106,14 @@
                 <div class="tab-pane" id="cmd_settings_cooldown">
                     <!-- Logs keep days. -->
                     <div class="form-group">
-                        <lable>Globale Abklingzeit (Sekunden)</lable>
+                        <label for="global-cooldown">Globale Abklingzeit (Sekunden)</label>
                         <input type="number" class="form-control" id="global-cooldown" data-toggle="tooltip"
                             title="Die Abklingzeit wird an Befehle vergeben, die keine individuelle Abklingzeit haben. Das Minimum beträgt 5 Sekunden."/>
                     </div>
                 </div>
 
                 <!-- Box footer -->
-                <div class="box-footer" style="padding-right: 0px; padding-bottom: 0px;">
+                <div class="box-footer" style="padding-right: 0; padding-bottom: 0;">
                     <button type="button" class="btn btn-primary pull-right" id="cmd-save-btn"> Speichern</button>
                 </div>
             </div>

@@ -1,5 +1,5 @@
 <!--
-    Copyright (C) 2016-2020 phantom.bot
+    Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -41,14 +41,14 @@
                               <!-- Box content -->
                                 <div class="box-body">
                                     <div class="form-group">
-                                        <lable>Zeitzone konfigurieren (<a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones" target="_blank">Liste</a>)</lable>
+                                        <label>Zeitzone konfigurieren (<a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones" target="_blank">Liste</a>)</label>
                                         <input type="text" class="form-control" id="loyalty-timezone" data-toggle="tooltip"
                                             title="Zeitzone, die der Bot für die Berechnung der Zeit verwenden soll."/>
                                     </div>
 
                                     <!-- Add offline time to user -->
                                     <div class="form-group">
-                                        <lable>Benutzerzeit offline sammeln</lable>
+                                        <label for="time-offline">Benutzerzeit offline sammeln</label>
                                         <div class="dropdown">
                                             <select class="form-control" id="time-offline" style="cursor: pointer;">
                                                 <option>Ja</option>
@@ -61,7 +61,7 @@
                                         <!-- Auto add users to regulars -->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <lable>Automatische Beförderung zu Stammzuschauern</lable>
+                                                <label for="time-promote">Automatische Beförderung zu Stammzuschauern</label>
                                                 <div class="dropdown">
                                                     <select class="form-control" id="time-promote" style="cursor: pointer;">
                                                         <option>Ja</option>
@@ -74,7 +74,7 @@
                                         <!-- Say something in chat when auto promoted. -->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <lable>Ankündigung im Chat bei automatischer Promotion</lable>
+                                                <label for="time-promote-notice">Ankündigung im Chat bei automatischer Promotion</label>
                                                 <div class="dropdown">
                                                     <select class="form-control" id="time-promote-notice" style="cursor: pointer;">
                                                         <option>Ja</option>
@@ -89,7 +89,7 @@
                                         <!-- Regular promotion hours -->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <lable>Stammzuschauer Beförderung (Stunden)</lable>
+                                                <label>Stammzuschauer Beförderung (Stunden)</label>
                                                 <input type="number" class="form-control" id="loyalty-promotion" placeholder="15" data-toggle="tooltip"
                                                     title="Wie viele Stunden es dauert, bis ein Benutzer zu einem Stammzuschauer befördert wird."/>
                                             </div>
@@ -98,7 +98,7 @@
                                         <!-- Top list.-->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <lable>Top-Zeitlisten-Betrag</lable>
+                                                <label>Top-Zeitlisten-Betrag</label>
                                                 <input type="number" class="form-control" id="loyalty-top" max="15" data-toggle="tooltip"
                                                     title="Wie viele Benutzer werden im Befehl !toptime angezeigt. Max ist 15 Benutzer."/>
                                             </div>
@@ -135,7 +135,7 @@
 
                                     <!-- Number of points -->
                                     <div class="form-group">
-                                        <lable>Zeit (Sekunden)</lable>
+                                        <label>Zeit (Sekunden)</label>
                                         <div class="input-group input-group-md">
                                             <input type="number" class="form-control" id="time-username-time" placeholder="0" data-toggle="tooltip" title="Zeit, die der Benutzer hat.">
                                             <span class="input-group-btn">

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,9 +56,6 @@ $(run = function() {
         // Create table.
         let table = $('#whitelistTable').DataTable({
             'searching': true,
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/German.json"
-            },
             'autoWidth': false,
             'lengthChange': false,
             'data': tableData,
@@ -135,7 +132,7 @@ $(function() {
             'role': 'form'
         })
         // Append box for the whitelist.
-        .append(helpers.getInputGroup('whitelist-name', 'text', 'URL', 'https://phantombot.dev', '', 'URL, die auf die Whitelist gesetzt werden soll.')), function() {
+        .append(helpers.getInputGroup('whitelist-name', 'text', 'URL', 'https://phantombot.github.io/PhantomBot', '', 'URL, die auf die Whitelist gesetzt werden soll.')), function() {
             let whitelist = $('#whitelist-name');
 
             // Handle each input to make sure they have a value.

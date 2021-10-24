@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@
     /** New setup */
     if ($.changed == true && $.changed != null && $.changed != undefined && !$.inidb.exists('updates', 'installedNewBot') && $.inidb.get('updates', 'installedNewBot') != 'true') {
         $.consoleLn('');
-        $.consoleLn('Initialisiere PhantomBot Version ' + $.version + ' das erste mal...');
+        $.consoleLn('Initialisiere PhantomBotDE-Version ' + $.version + ' zum ersten Mal...');
 
         modules = [
             './commands/topCommand.js',
@@ -105,10 +105,10 @@
             $.inidb.set('modules', modules[i], 'false');
         }
 
-        $.consoleLn('Füge standart benutzerdefinierte Befehle hinzu...');
-        $.inidb.set('command', 'uptime', '(pointtouser) (channelname) war schon für (uptime) online.');
+        $.consoleLn('Füge benutzerdefinierte Standardbefehle hinzu...');
+        $.inidb.set('command', 'uptime', '(pointtouser) (channelname) ist online seit (uptime)');
         $.inidb.set('command', 'followage', '(followage)');
-        $.inidb.set('command', 'playtime', '(pointtouser) (channelname) spielt (game) schon für (playtime)');
+        $.inidb.set('command', 'playtime', '(pointtouser) (channelname) ist in der Kategorie (game) seit (playtime)');
         $.inidb.set('command', 'title', '(pointtouser) (titleinfo)');
         $.inidb.set('command', 'game', '(pointtouser) (gameinfo)');
         $.inidb.set('command', 'age', '(age)');
@@ -118,7 +118,7 @@
             'installedv2.0.8', 'installedv2.0.9', 'installedv2.1.0', 'installedv2.1.1', 'installedv2.2.1', 'installedv2.3s',
             'installedv2.3.3ss', 'installedv2.3.5ss', 'installedv2.3.5.1', 'installedv2.3.5.2', 'installedv2.3.5.3', 'installedv2.3.6',
             'installedv2.3.6ss', 'installedv2.3.6b', 'installedv2.3.7', 'installedv2.3.7b', 'installedv2.3.9', 'installedv2.3.9.1', 'installedv2.3.9.1b',
-            'installedv2.4.0', 'installedv2.4.1'
+            'installedv2.4.0', 'installedv2.4.1', 'installedv3.3.0', 'installedv3.3.6',
         ];
         for (i in versions) {
             $.inidb.set('updates', versions[i], 'true');
@@ -155,6 +155,7 @@
                 './handlers/donationHandler.js',
                 './systems/cleanupSystem.js',
                 './systems/greetingSystem.js',
+                './systems/welcomeSystem.js',
                 './systems/pointSystem.js',
                 './systems/noticeSystem.js',
                 './systems/pollSystem.js',
@@ -213,7 +214,7 @@
 
         $.consoleLn('Starte PhantomBot Version 2.0.5 Updates...');
 
-        $.consoleLn('Deaktiviere neue standart Module...');
+        $.consoleLn('Deaktiviere neue Standard Module...');
         for (i in newDefaultDisabledModules) {
             $.inidb.set('modules', newDefaultDisabledModules[i], 'false');
         }
@@ -806,38 +807,38 @@
 
     /* version 2.4.1 updates */
     if (!$.inidb.exists('updates', 'installedv2.4.1') || $.inidb.get('updates', 'installedv2.4.1') != 'true') {
-        $.consoleLn('Starting PhantomBot update 2.4.1 updates...');
+        $.consoleLn('Starte PhantomBot Update 2.4.1 Updates...');
 
         $.inidb.del('modules', './systems/raidSystem.js');
 
         // Remove old raids for the new format.
         $.inidb.RemoveFile('outgoing_raids');
 
-        $.consoleLn('PhantomBot update 2.4.1 completed!');
+        $.consoleLn('PhantomBot Update 2.4.1 abgeschlossen!');
         $.inidb.set('updates', 'installedv2.4.1', 'true');
     }
 
     /* version 2.4.2.1 updates */
     if (!$.inidb.exists('updates', 'installedv2.4.2.1') || $.inidb.get('updates', 'installedv2.4.2.1') != 'true') {
-        $.consoleLn('Starting PhantomBot update 2.4.2.1 updates...');
+        $.consoleLn('Starte PhantomBot Update 2.4.2.1 Updates...');
 
         $.inidb.del('modules', './discord/handlers/gamewispHandler.js');
         $.inidb.del('modules', './handlers/gameWispHandler.js');
 
-        $.consoleLn('PhantomBot update 2.4.2.1 completed!');
+        $.consoleLn('PhantomBot Update 2.4.2.1 abgeschlossen!');
         $.inidb.set('updates', 'installedv2.4.2.1', 'true');
     }
 
     /* version 3.0.1 updates */
     if (!$.inidb.exists('updates', 'installedv3.0.1') || $.inidb.get('updates', 'installedv3.0.1') != 'true') {
-        $.consoleLn('Starting PhantomBot update 3.0.1 updates...');
+        $.consoleLn('Starte PhantomBot Update 3.0.1 Updates...');
 
         if (!$.hasDiscordToken) {
             while (!$.inidb.exists('discordPermsObj', 'obj')) {
                 try {
                     java.lang.Thread.sleep(1000);
                 } catch (ex) {
-                    $.log.error('Failed to run update as Discord is not yet connected, please restart PhantomBot...');
+                    $.log.error('Fehler beim Ausführen des Updates, da Discord noch nicht verbunden ist, starten Sie PhantomBot bitte neu ...');
                     return;
                 }
             }
@@ -873,15 +874,15 @@
             }
         }
 
-        $.consoleLn('PhantomBot update 3.0.1 completed!');
+        $.consoleLn('PhantomBot Update 3.0.1 abgeschlossen!');
         $.inidb.set('updates', 'installedv3.0.1', 'true');
     }
 
     /* version 3.3.0 updates */
     if (!$.inidb.exists('updates', 'installedv3.3.0') || $.inidb.get('updates', 'installedv3.3.0') != 'true') {
-        $.consoleLn('Starting PhantomBot update 3.3.0 updates...');
+        $.consoleLn('Starte PhantomBotDE Update 3.3.0 Updates...');
 
-        $.consoleLn('Updating keywords...');
+        $.consoleLn('Aktualisieren der Schlüsselwörter...');
         var keys = $.inidb.GetKeyList('keywords', ''),
             newKeywords = [],
             key,
@@ -900,9 +901,9 @@
                 json.isCaseSensitive = false;
             }
             if (strippedKeys.hasOwnProperty(key)) {
-                throw 'Could not update keywords list. The keyword "' +  key +
-                      '" exists both as regex and as plain keyword. ' +
-                      "Please resolve the conflict and restart phantombot.";
+                throw 'Die Schlüsselwortliste konnte nicht aktualisiert werden. Das Schlüsselwort "' +  key +
+                      '" existiert sowohl als Regex als auch als einfaches Schlüsselwort. ' +
+                      "Bitte lösen Sie den Konflikt und starten Sie PhantombotDE neu.";
             }
             strippedKeys[key] = true;
             newKeywords.push({
@@ -917,7 +918,7 @@
             $.inidb.set('keywords', newKeywords[i].key, JSON.stringify(newKeywords[i].json));
         }
 
-        $.consoleLn('PhantomBot update 3.3.0 completed!');
+        $.consoleLn('PhantomBotDE Update 3.3.0 abgeschlossen!');
         $.inidb.set('updates', 'installedv3.3.0', 'true');
     }
 

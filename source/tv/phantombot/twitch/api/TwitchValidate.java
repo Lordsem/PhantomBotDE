@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,14 +49,17 @@ public class TwitchValidate {
     private String clientidC = "";
     private String loginC = "";
     private String useridC = "";
+    private Thread validateC = null;
     private final List<String> scopesA = new ArrayList<>();
     private String clientidA = "";
     private String loginA = "";
     private String useridA = "";
+    private Thread validateA = null;
     private final List<String> scopesT = new ArrayList<>();
     private String clientidT = "";
     private String loginT = "";
     private String useridT = "";
+    private Thread validateT = null;
 
     /**
      * This class constructor.
@@ -119,7 +122,7 @@ public class TwitchValidate {
     }
 
     /**
-     * Method that handles data for Vaidation.
+     * Method that handles data for Validation.
      *
      * @param type
      * @param data
@@ -189,7 +192,8 @@ public class TwitchValidate {
         try {
             scopesA.clear();
             ValidateRunnable validateRunnable = new ValidateRunnable(oAuthToken, type, 0);
-            new Thread(validateRunnable, "tv.phantombot.twitch.api.TwitchValidate::ValidateRunnable").start();
+            validateA = new Thread(validateRunnable, "tv.phantombot.twitch.api.TwitchValidate::ValidateRunnable");
+            validateA.start();
         } catch (Exception ex) {
             com.gmt2001.Console.out.println("Unable to validate Twitch " + type + " OAUTH Token.");
         }
@@ -199,7 +203,8 @@ public class TwitchValidate {
         try {
             scopesC.clear();
             ValidateRunnable validateRunnable = new ValidateRunnable(oAuthToken, type, 1);
-            new Thread(validateRunnable, "tv.phantombot.twitch.api.TwitchValidate::ValidateRunnable").start();
+            validateC = new Thread(validateRunnable, "tv.phantombot.twitch.api.TwitchValidate::ValidateRunnable");
+            validateC.start();
         } catch (Exception ex) {
             com.gmt2001.Console.out.println("Unable to validate Twitch " + type + " OAUTH Token.");
         }
@@ -209,7 +214,8 @@ public class TwitchValidate {
         try {
             scopesT.clear();
             ValidateRunnable validateRunnable = new ValidateRunnable(oAuthToken, type, 2);
-            new Thread(validateRunnable, "tv.phantombot.twitch.api.TwitchValidate::ValidateRunnable").start();
+            validateT = new Thread(validateRunnable, "tv.phantombot.twitch.api.TwitchValidate::ValidateRunnable");
+            validateT.start();
         } catch (Exception ex) {
             com.gmt2001.Console.out.println("Unable to validate Twitch " + type + " OAUTH Token.");
         }
@@ -275,6 +281,38 @@ public class TwitchValidate {
         return this.useridT;
     }
 
+    public void checkOAuthInconsistencies(String botName) {
+        if (validateA != null && validateA.isAlive()) {
+            try {
+                validateA.join(TIMEOUT_TIME);
+            } catch (InterruptedException ex) {
+                com.gmt2001.Console.err.logStackTrace(ex);
+            }
+        }
+
+        if (validateC != null && validateC.isAlive()) {
+            try {
+                validateC.join(TIMEOUT_TIME);
+            } catch (InterruptedException ex) {
+                com.gmt2001.Console.err.logStackTrace(ex);
+            }
+        }
+
+        if (this.hasAPIScope("chat:edit") && !this.hasChatScope("chat:edit")) {
+            com.gmt2001.Console.warn.println("CHAT (oauth) does not have chat:edit but API (apioauth) does. OAuth tokens may be reversed");
+        } else if (!this.hasChatScope("chat:edit")) {
+            com.gmt2001.Console.warn.println("CHAT (oauth) does not have chat:edit. Bot may be unable to respond");
+        } else if (!this.hasChatScope("channel:moderate")) {
+            com.gmt2001.Console.warn.println("CHAT (oauth) does not have channel:moderate. Bot may be unable to purge/timeout/ban");
+        }
+
+        if (this.getAPILogin().equalsIgnoreCase(botName) && !this.getChatLogin().equalsIgnoreCase(botName)) {
+            com.gmt2001.Console.warn.println("CHAT (oauth) is not logged in as " + botName + " but API (apioauth) is. OAuth tokens may be reversed");
+        } else if (!this.getChatLogin().equalsIgnoreCase(botName)) {
+            com.gmt2001.Console.warn.println("CHAT (oauth) is not logged in as " + botName + ". OAuth token may be under the wrong login");
+        }
+    }
+
     /**
      * Runnable to push the validation checks to the background so as not to block the operation of the bot at start up.
      */
@@ -294,17 +332,18 @@ public class TwitchValidate {
         public void run() {
             try {
                 JSONObject requestObj = handleRequest(oAuthToken);
-                com.gmt2001.Console.debug.println(requestObj.toString());
+                com.gmt2001.Console.debug.println(type + requestObj.toString(4));
 
                 if (requestObj.has("message") && requestObj.getString("message").equals("invalid access token")) {
                     com.gmt2001.Console.err.println("Twitch reports your " + type + " OAUTH token as invalid. It may have expired, "
                             + "been disabled, or the Twitch API is experiencing issues.");
+                    com.gmt2001.Console.debug.println(requestObj.toString(4));
                     return;
                 }
 
                 if (!requestObj.getBoolean("_success")) {
                     com.gmt2001.Console.err.println("Attempt to validate " + type + " OAUTH token failed.");
-                    com.gmt2001.Console.err.println("http=" + requestObj.getInt("_http") + "; exception=" + requestObj.getString("_exception") + "; exceptionMessage=" + requestObj.getString("_exceptionMessage"));
+                    com.gmt2001.Console.debug.println(requestObj.toString(4));
                     return;
                 }
 

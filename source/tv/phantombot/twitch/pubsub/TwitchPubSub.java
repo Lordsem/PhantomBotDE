@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,11 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
+ /*
  * TwitchPubSub.java
  * @author ScaniaTV
  */
-
 package tv.phantombot.twitch.pubsub;
 
 import com.gmt2001.ExponentialBackoff;
@@ -45,7 +44,11 @@ import tv.phantombot.PhantomBot;
 import tv.phantombot.event.EventBus;
 import tv.phantombot.event.irc.message.IrcChannelMessageEvent;
 import tv.phantombot.event.pubsub.channelpoints.PubSubChannelPointsEvent;
-import tv.phantombot.event.pubsub.moderation.*;
+import tv.phantombot.event.pubsub.moderation.PubSubModerationBanEvent;
+import tv.phantombot.event.pubsub.moderation.PubSubModerationDeleteEvent;
+import tv.phantombot.event.pubsub.moderation.PubSubModerationTimeoutEvent;
+import tv.phantombot.event.pubsub.moderation.PubSubModerationUnBanEvent;
+import tv.phantombot.event.pubsub.moderation.PubSubModerationUnTimeoutEvent;
 import tv.phantombot.twitch.api.TwitchValidate;
 
 public class TwitchPubSub {
@@ -65,10 +68,10 @@ public class TwitchPubSub {
     /**
      * This starts the PubSub instance.
      *
-     * @param {string}  channel    Name of the channel to start the instance on. As of right now you can onyl start one instance.
-     * @param {int}     channelId  The channel user id.
-     * @param {int}     botId      The bot user id.
-     * @param {string}  oauth      The bots tmi oauth token.
+     * @param {string} channel Name of the channel to start the instance on. As of right now you can onyl start one instance.
+     * @param {int} channelId The channel user id.
+     * @param {int} botId The bot user id.
+     * @param {string} oauth The bots tmi oauth token.
      */
     public static TwitchPubSub instance(String channel, int channelId, int botId, String oAuth) {
         TwitchPubSub instance = instances.get(channel);
@@ -90,10 +93,10 @@ public class TwitchPubSub {
     /**
      * Constructor for the PubSub class.
      *
-     * @param {string}  channel    Name of the channel to start the instance on. As of right now you can onyl start one instance.
-     * @param {int}     channelId  The channel user id.
-     * @param {int}     botId      The bot user id.
-     * @param {string}  oauth      The bots tmi oauth token.
+     * @param {string} channel Name of the channel to start the instance on. As of right now you can onyl start one instance.
+     * @param {int} channelId The channel user id.
+     * @param {int} botId The bot user id.
+     * @param {string} oauth The bots tmi oauth token.
      */
     private TwitchPubSub(String channel, int channelId, int botId, String oAuth) {
         this.channel = channel;
@@ -108,6 +111,10 @@ public class TwitchPubSub {
             com.gmt2001.Console.err.println("TwitchPubSub Verbindungsfehler: " + ex.getMessage());
             PhantomBot.exitError();
         }
+    }
+
+    public void setOAuth(String oAuth) {
+        this.twitchPubSubWS.setOAuth(oAuth);
     }
 
     /**
@@ -130,7 +137,7 @@ public class TwitchPubSub {
 
         lock.lock();
         try {
-            new Thread( () -> {
+            new Thread(() -> {
                 if (!isRequested) {
                     if ((Calendar.getInstance().getTimeInMillis() - this.lastConnectAttempt) >= BACKOFF_RESET_MS) {
                         this.backoff.Reset();
@@ -145,7 +152,7 @@ public class TwitchPubSub {
                         TwitchPubSub.instance(channel).doReconnect();
                     });
                 } else {
-                TwitchPubSub.instance(channel).doReconnect();
+                    TwitchPubSub.instance(channel).doReconnect();
                 }
             }).start();
         } finally {
@@ -173,10 +180,11 @@ public class TwitchPubSub {
      * Private class for the websocket.
      */
     private class TwitchPubSubWS extends WebSocketClient {
+
         private final TwitchPubSub twitchPubSub;
         private final Timer timer = new Timer("tv.phantombot.twitchwsirc.TwitchPubSub");
         private final int channelId;
-        private final String oAuth;
+        private String oAuth;
         private final int botId;
         private boolean hasModerator = false;
         private boolean hasRedemptions = false;
@@ -184,10 +192,10 @@ public class TwitchPubSub {
         /**
          * Constructor for the PubSubWS class.
          *
-         * @param {string}  channel    Name of the channel to start the instance on. As of right now you can onyl start one instance.
-         * @param {int}     channelId  The channel user id.
-         * @param {int}     botId      The bot user id.
-         * @param {string}  oauth      The bots tmi oauth token.
+         * @param {string} channel Name of the channel to start the instance on. As of right now you can onyl start one instance.
+         * @param {int} channelId The channel user id.
+         * @param {int} botId The bot user id.
+         * @param {string} oauth The bots tmi oauth token.
          */
         private TwitchPubSubWS(URI uri, TwitchPubSub twitchPubSub, int channelId, int botId, String oAuth) {
             super(uri, new Draft_6455(), null, 5000);
@@ -209,6 +217,10 @@ public class TwitchPubSub {
             }
         }
 
+        public void setOAuth(String oAuth) {
+            this.oAuth = oAuth;
+        }
+
         /**
          * Closes this class.
          */
@@ -219,7 +231,7 @@ public class TwitchPubSub {
         /**
          * Creates a connection with the PubSub websocket.
          *
-         * @param {boolean}  reconnect  Changes the console log message from connection to reconnecting.
+         * @param {boolean} reconnect Changes the console log message from connection to reconnecting.
          * @return {Boolean}
          */
         public Boolean connectWSS(Boolean reconnect) {
@@ -257,7 +269,7 @@ public class TwitchPubSub {
         /**
          * This function parses the message we get from PubSub. Since everything is sent in a jsonObject there is a bit of checks to do.
          *
-         * @param {jsonObject}  message  Message we get from PubSub.
+         * @param {jsonObject} message Message we get from PubSub.
          */
         private void parse(JSONObject message) throws JSONException {
             JSONObject dataObj;
@@ -268,7 +280,7 @@ public class TwitchPubSub {
                 dataObj = message.getJSONObject("data");
                 if (dataObj.has("message")) {
                     messageObj = new JSONObject(dataObj.getString("message"));
-                        data = messageObj.getJSONObject("data");
+                    data = messageObj.getJSONObject("data");
                     if (dataObj.getString("topic").startsWith("channel-points-channel-v1")) {
                         data = data.getJSONObject("redemption");
                         com.gmt2001.Console.out.println("Channel points redeemed by " + data.getJSONObject("user").getString("login") + " for reward " + data.getJSONObject("reward").getString("title"));
@@ -292,41 +304,41 @@ public class TwitchPubSub {
 
                             timeoutCache.put(data.getString("target_user_id"), System.currentTimeMillis() + 1500);
                             switch (action) {
-                            case "delete":
-                                this.log(args1 + "'s message was deleted by " + creator);
-                                EventBus.instance().postAsync(new PubSubModerationDeleteEvent(args1, creator, args2));
-                                break;
-                            case "timeout":
-                                this.log(args1 + " has been timed out by " + creator + " for " + args2 + " seconds. " + (args3.length() == 0 ? "" : "Reason: " + args3));
-                                EventBus.instance().postAsync(new PubSubModerationTimeoutEvent(args1, creator, (messageCache.containsKey(args1.toLowerCase()) ? messageCache.get(args1.toLowerCase()) : ""), args3, args2));
-                                break;
-                            case "untimeout":
-                                this.log(args1 + " has been un-timed out by " + creator + ".");
-                                EventBus.instance().postAsync(new PubSubModerationUnTimeoutEvent(args1, creator));
-                                break;
-                            case "ban":
-                                this.log(args1 + " has been banned by " + creator + ". " + (args2.length() == 0 ? "" : "Reason: " + args2));
-                                EventBus.instance().postAsync(new PubSubModerationBanEvent(args1, creator, (messageCache.containsKey(args1.toLowerCase()) ? messageCache.get(args1.toLowerCase()) : ""), args2));
-                                break;
-                            case "unban":
-                                this.log(args1 + " has been un-banned by " + creator + ".");
-                                EventBus.instance().postAsync(new PubSubModerationUnBanEvent(args1, creator));
-                                break;
-                            case "mod":
-                                this.log(args1 + " has been modded by " + creator + ".");
-                                break;
-                            case "unmod":
-                                this.log(args1 + " has been un-modded by " + creator + ".");
-                                break;
-                            case "twitchbot_rejected":
-                                this.log("Message (" + args2 + ") from " + args1 + " has been rejected by AutoMod.");
-                                break;
-                            case "denied_twitchbot_message":
-                                this.log(creator + " denied a message from " + args1 + ". Message id: " + data.getString("msg_id") + ".");
-                                break;
-                            case "approved_twitchbot_message":
-                                this.log(creator + " allowed a message from " + args1 + ". Message id: " + data.getString("msg_id") + ".");
-                                break;
+                                case "delete":
+                                    this.log(args1 + "'s message was deleted by " + creator);
+                                    EventBus.instance().postAsync(new PubSubModerationDeleteEvent(args1, creator, args2));
+                                    break;
+                                case "timeout":
+                                    this.log(args1 + " has been timed out by " + creator + " for " + args2 + " seconds. " + (args3.length() == 0 ? "" : "Reason: " + args3));
+                                    EventBus.instance().postAsync(new PubSubModerationTimeoutEvent(args1, creator, (messageCache.containsKey(args1.toLowerCase()) ? messageCache.get(args1.toLowerCase()) : ""), args3, args2));
+                                    break;
+                                case "untimeout":
+                                    this.log(args1 + " has been un-timed out by " + creator + ".");
+                                    EventBus.instance().postAsync(new PubSubModerationUnTimeoutEvent(args1, creator));
+                                    break;
+                                case "ban":
+                                    this.log(args1 + " has been banned by " + creator + ". " + (args2.length() == 0 ? "" : "Reason: " + args2));
+                                    EventBus.instance().postAsync(new PubSubModerationBanEvent(args1, creator, (messageCache.containsKey(args1.toLowerCase()) ? messageCache.get(args1.toLowerCase()) : ""), args2));
+                                    break;
+                                case "unban":
+                                    this.log(args1 + " has been un-banned by " + creator + ".");
+                                    EventBus.instance().postAsync(new PubSubModerationUnBanEvent(args1, creator));
+                                    break;
+                                case "mod":
+                                    this.log(args1 + " has been modded by " + creator + ".");
+                                    break;
+                                case "unmod":
+                                    this.log(args1 + " has been un-modded by " + creator + ".");
+                                    break;
+                                case "twitchbot_rejected":
+                                    this.log("Message (" + args2 + ") from " + args1 + " has been rejected by AutoMod.");
+                                    break;
+                                case "denied_twitchbot_message":
+                                    this.log(creator + " denied a message from " + args1 + ". Message id: " + data.getString("msg_id") + ".");
+                                    break;
+                                case "approved_twitchbot_message":
+                                    this.log(creator + " allowed a message from " + args1 + ". Message id: " + data.getString("msg_id") + ".");
+                                    break;
                             }
                         }
                     }
@@ -337,7 +349,7 @@ public class TwitchPubSub {
         /**
          * Logs the messages we get from PubSub.
          *
-         * @param {String}  message  Message that we will log.
+         * @param {String} message Message that we will log.
          */
         private void log(String message) {
             if (PhantomBot.instance().getDataStore().GetString("chatModerator", "", "moderationLogs").equals("true")) {
@@ -355,16 +367,16 @@ public class TwitchPubSub {
 
                 if (TwitchValidate.instance().hasAPIScope("channel:moderate")) {
                     String[] type = new String[]{"chat_moderator_actions." + (TwitchValidate.instance().getAPIUserID().equalsIgnoreCase("" + this.channelId) ? "" : this.botId + ".") + this.channelId};
-                JSONObject jsonObject = new JSONObject();
-                JSONObject topics = new JSONObject();
+                    JSONObject jsonObject = new JSONObject();
+                    JSONObject topics = new JSONObject();
 
-                topics.put("topics", type);
+                    topics.put("topics", type);
                     topics.put("auth_token", this.oAuth.replace("oauth:", ""));
-                jsonObject.put("type", "LISTEN");
+                    jsonObject.put("type", "LISTEN");
                     jsonObject.put("nonce", "moderator");
-                jsonObject.put("data", topics);
+                    jsonObject.put("data", topics);
 
-                send(jsonObject.toString());
+                    send(jsonObject.toString());
                     com.gmt2001.Console.out.println("Connected to Twitch Moderation Data Feed");
                 }
 
@@ -390,9 +402,9 @@ public class TwitchPubSub {
         /**
          * Handles the event of when the socket closes, this will also attempt to reonnect to PubSub when it happens.
          *
-         * @param {int}      code    The code of why the socket closed.
-         * @param {string}   reason  The reasons as why the socket closed.
-         * @param {boolean}  remote  Says if its a remote issue or not.
+         * @param {int} code The code of why the socket closed.
+         * @param {string} reason The reasons as why the socket closed.
+         * @param {boolean} remote Says if its a remote issue or not.
          */
         @Override
         public void onClose(int code, String reason, boolean remote) {
@@ -411,7 +423,7 @@ public class TwitchPubSub {
         /**
          * Handles the error event we can get from the socket. It will also print it in the console.
          *
-         * @param {Exception}  ex  Exception message that the socket sent.
+         * @param {Exception} ex Exception message that the socket sent.
          */
         @Override
         public void onError(Exception ex) {
@@ -423,7 +435,7 @@ public class TwitchPubSub {
         /**
          * Handles the event of when we get messages from the socket.
          *
-         * @param {String}  message  Message the socket sent.
+         * @param {String} message Message the socket sent.
          */
         @Override
         public void onMessage(String message) {
@@ -440,13 +452,21 @@ public class TwitchPubSub {
                     if (messageObj.getString("nonce").equalsIgnoreCase("moderator")) {
                         this.hasModerator = !(messageObj.has("error") && messageObj.getString("error").length() > 0);
                         com.gmt2001.Console.debug.println("Got chat_moderator_actions response " + this.hasModerator);
+                        if (!this.hasModerator) {
+                            com.gmt2001.Console.err.println("WARNING: This APIOauth token was rejected for Moderation Feed (You can ignore the error if you aren't using this feature)");
+                            com.gmt2001.Console.debug.println("TwitchPubSubWS Error: " + messageObj.getString("error"));
+                            return;
+                        }
                     } else if (messageObj.getString("nonce").equalsIgnoreCase("redemptions")) {
                         this.hasRedemptions = !(messageObj.has("error") && messageObj.getString("error").length() > 0);
                         com.gmt2001.Console.debug.println("Got channel-points-channel-v1 response " + this.hasRedemptions);
+                        if (!this.hasRedemptions) {
+                            com.gmt2001.Console.err.println("WARNING: This APIOauth token was rejected for Channel Points (You can ignore the error if you aren't using this feature)");
+                            com.gmt2001.Console.debug.println("TwitchPubSubWS Error: " + messageObj.getString("error"));
+                            return;
+                        }
                     }
-                }
-
-                if (messageObj.has("error") && messageObj.getString("error").length() > 0) {
+                } else if (messageObj.has("error") && messageObj.getString("error").length() > 0) {
                     com.gmt2001.Console.err.println("TwitchPubSubWS Error: " + messageObj.getString("error"));
                     return;
                 }
@@ -462,7 +482,7 @@ public class TwitchPubSub {
                     return;
                 }
 
-                    parse(messageObj);
+                parse(messageObj);
             } catch (JSONException ex) {
                 com.gmt2001.Console.err.logStackTrace(ex);
             }
@@ -472,6 +492,7 @@ public class TwitchPubSub {
          * Class for the PING timer. Since PubSub doesn't send PINGS we need to request them.
          */
         private class PingTask extends TimerTask {
+
             @Override
             public void run() {
                 try {

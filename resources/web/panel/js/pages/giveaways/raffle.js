@@ -1,5 +1,5 @@
-/*
- * Copyright (C) 2016-2020 phantom.bot
+3/*
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,11 +16,11 @@
  */
 
 // Function that querys all of the data we need.
-$(run = function() {
+$(run = function () {
     socket.getDBValues('raffle_module_status_toggle', {
         tables: ['modules', 'raffleSettings'],
         keys: ['./systems/raffleSystem.js', 'isActive']
-    }, true, function(e) {
+    }, true, function (e) {
         if (!helpers.handleModuleLoadUp(['raffleListModule', 'raffleModal'], e['./systems/raffleSystem.js'], 'raffleModuleToggle')) {
             // Remove the chat.
             $('#raffle-chat').find('iframe').remove();
@@ -37,8 +37,8 @@ $(run = function() {
         /**
          * @function Loads the raffle list.
          */
-        helpers.temp.loadRaffleList = function() {
-            socket.getDBTableValues('get_raffle_list', 'raffleList', function(results) {
+        helpers.temp.loadRaffleList = function () {
+            socket.getDBTableValues('get_raffle_list', 'raffleList', function (results) {
                 const table = $('#raffle-table');
 
                 // Remove current data content.
@@ -57,15 +57,15 @@ $(run = function() {
         };
 
         if (location.protocol.toLowerCase().startsWith('https') && !(location.port > 0 && location.port !== 443)) {
-        // Add Twitch chat.
-        $('#raffle-chat').html($('<iframe/>', {
-            'frameborder': '0',
-            'scrolling': 'no',
-            'style': 'width: 100%; height: 610px;',
+            // Add Twitch chat.
+            $('#raffle-chat').html($('<iframe/>', {
+                'frameborder': '0',
+                'scrolling': 'no',
+                'style': 'width: 100%; height: 610px;',
                 'src': 'https://www.twitch.tv/embed/' + getChannelName() + '/chat' + (helpers.isDark ? '?darkpopout&' : '?') + 'parent=' + location.hostname
-        }));
+            }));
         } else {
-            $('#raffle-chat').html('Aufgrund von Änderungen durch Twitch kann das Chat-Panel nicht mehr angezeigt werden, es sei denn, du aktivierst SSL im PhantomBot-Panel und änderst den Baseport auf 443. Dies funktioniert möglicherweise nicht ohne Root-Privilegien.<br /><br />Alternativ können Sie sich mit der GitHub-Version des Panels bei <a href="https://phantombot.github.io/PhantomBot/">PhantomBot - GitHub.io</a> anmelden, die dieses Problem umgeht.<br /><br />Hilfe beim Einrichten von SSL finden Sie in <a href="https://phantombot.github.io/PhantomBot/guides/#guide=content/twitchembeds">diesem Handbuch</a>.');
+            $('#raffle-chat').html('Aufgrund von Änderungen durch Twitch kann das Chat-Panel nicht mehr angezeigt werden, es sei denn, du aktivierst SSL im PhantomBot-Panel und änderst den Baseport auf 443. Dies funktioniert möglicherweise nicht ohne Root-Privilegien.<br /><br />Alternativ können Sie sich mit der GitHub-Version des Panels bei <a href="https://phantombot.github.io/PhantomBot/">PhantomBot - GitHub.io</a> anmelden, die dieses Problem umgeht.<br /><br />Hilfe beim Einrichten von SSL finden Sie in <a href="https://phantombot.github.io/PhantomBot/guides/#guide=content/integrations/twitchembeds">diesem Handbuch</a>.');
             $('#raffle-chat').addClass('box-body');
         }
 
@@ -73,22 +73,22 @@ $(run = function() {
         helpers.temp.loadRaffleList();
 
         // Set a timer to auto load the raffle list.
-        helpers.setInterval(function() {
+        helpers.setInterval(function () {
             helpers.temp.loadRaffleList();
         }, 5e3);
     });
 });
 
 // Function that handlers the loading of events.
-$(function() {
+$(function () {
     // Module toggle.
-    $('#raffleModuleToggle').on('change', function() {
+    $('#raffleModuleToggle').on('change', function () {
         socket.sendCommandSync('raffle_system_module_toggle_cmd',
-            'module ' + ($(this).is(':checked') ? 'enablesilent' : 'disablesilent') + ' ./systems/raffleSystem.js', run);
+                'module ' + ($(this).is(':checked') ? 'enablesilent' : 'disablesilent') + ' ./systems/raffleSystem.js', run);
     });
 
     // Title update
-    $('#raffle-req').on('change', function() {
+    $('#raffle-req').on('change', function () {
         if ($(this).val() === '-usetime') {
             $('#raffle-cost-title').html('Minimale Zeit (Minuten)');
         } else {
@@ -97,15 +97,15 @@ $(function() {
     })
 
     // Open/close raffle button.
-    $('#open-or-close-raffle').on('click', function() {
+    $('#open-or-close-raffle').on('click', function () {
         if ($(this)[0].innerText.trim() === 'Öffnen') {
             const keyword = $('#raffle-keyword'),
-                cost = $('#raffle-cost'),
-                costType = $('#raffle-req').val(),
-                elegibility = $('#raffle-perm').val(),
-                timer = $('#raffle-timer'),
-                regLuck = $('#raffle-reg'),
-                subLuck = $('#raffle-sub');
+                    cost = $('#raffle-cost'),
+                    costType = $('#raffle-req').val(),
+                    elegibility = $('#raffle-perm').val(),
+                    timer = $('#raffle-timer'),
+                    regLuck = $('#raffle-reg'),
+                    subLuck = $('#raffle-sub');
 
             // Make sure the user entered everything right.
             switch (false) {
@@ -120,10 +120,10 @@ $(function() {
                         tables: ['raffleSettings', 'raffleSettings'],
                         keys: ['subscriberBonusRaffle', 'regularBonusRaffle'],
                         values: [subLuck.val(), regLuck.val()]
-                    }, function() {
-                        socket.sendCommandSync('raffle_reload', 'reloadraffle', function() {
+                    }, function () {
+                        socket.sendCommandSync('raffle_reload', 'reloadraffle', function () {
                             socket.sendCommand('open_raffle_cmd', 'raffle open ' + cost.val() + ' ' + keyword.val() +
-                                ' ' + timer.val() + ' ' +  costType + ' ' + elegibility, function() {
+                                    ' ' + timer.val() + ' ' + costType + ' ' + elegibility, function () {
                                 // Alert the user.
                                 toastr.success('Die Verlosung wurde erfolgreich eröffnet!');
                                 // Update the button.
@@ -135,7 +135,7 @@ $(function() {
                     });
             }
         } else {
-            socket.sendCommandSync('close_raffle_cmd', 'raffle close', function() {
+            socket.sendCommandSync('close_raffle_cmd', 'raffle close', function () {
                 // Alert the user.
                 toastr.success('Die Verlosung wurde erfolgreich beendet!');
                 // Reload to remove the winner.
@@ -149,8 +149,8 @@ $(function() {
     });
 
     // Draw raffle button.
-    $('#draw-raffle').on('click', function() {
-        socket.sendCommandSync('draw_raffle_cmd', 'raffle draw', function() {
+    $('#draw-raffle').on('click', function () {
+        socket.sendCommandSync('draw_raffle_cmd', 'raffle draw', function () {
             // Alert the user.
             toastr.success('Ein Gewinner wurde erfolgreich gezogen!');
             // Reload to remove the winner.
@@ -159,7 +159,7 @@ $(function() {
     });
 
     // Reset raffle button.
-    $('#reset-raffle').on('click', function() {
+    $('#reset-raffle').on('click', function () {
         // Reset values.
         $('#raffle-keyword').val('');
         $('#raffle-cost, #raffle-timer').val('0');
@@ -173,74 +173,74 @@ $(function() {
         })).append('&nbsp; Öffnen').removeClass('btn-warning').addClass('btn-success');
 
         // Close raffle but don't pick a winner.
-        socket.sendCommand('reset_raffle_cmd', 'raffle reset', function() {
+        socket.sendCommand('reset_raffle_cmd', 'raffle reset', function () {
             toastr.success('Die Verlosung wurde erfolgreich zurückgesetzt!');
         });
     });
 
     // Raffle settings button.
-    $('#raffle-settings').on('click', function() {
+    $('#raffle-settings').on('click', function () {
         socket.getDBValues('get_raffle_settings', {
             tables: ['raffleSettings', 'raffleSettings', 'raffleSettings', 'raffleSettings', 'raffleSettings'],
             keys: ['raffleMSGToggle', 'raffleWhisperWinner', 'noRepickSame', 'raffleMessage', 'raffleMessageInterval']
-        }, true, function(e) {
+        }, true, function (e) {
             helpers.getModal('raffle-settings-modal', 'Verlosungseinstellungen', 'Speichern', $('<form/>', {
                 'role': 'form'
             })
-            // Add the div for the col boxes.
-            .append($('<div/>', {
-                'class': 'panel-group',
-                'id': 'accordion'
-            })
-            // Append first collapsible accordion.
-            .append(helpers.getCollapsibleAccordion('main-1', 'Zeitgesteuerte Nachrichteneinstellungen', $('<form/>', {
-                    'role': 'form'
-                })
-                // Append interval box for the message
-                .append(helpers.getInputGroup('msg-timer', 'number', 'Nachrichtenintervall (Minuten)', '', e['raffleMessageInterval'],
-                    'Wie oft die Verlosungsnachricht in den Chat gesendet werden soll, während eine Verlosung aktiv ist.'))
-                // Append message box for the message
-                .append(helpers.getTextAreaGroup('msg-msg', 'text', 'Verlosungsnachricht', '', e['raffleMessage'],
-                    'Die Nachricht wird in jedem Intervall gesendet, während die Verlosung aktiv ist. Tags: (keyword) und (entries)'))))
-            // Append second collapsible accordion.
-            .append(helpers.getCollapsibleAccordion('main-2', 'Zusätzliche Einstellungen',  $('<form/>', {
-                    'role': 'form'
-                })
-                // Add toggle for warning messages.
-                .append(helpers.getDropdownGroup('warning-msg', 'Warnmeldungen aktivieren', (e['raffleMSGToggle'] === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'],
-                    'Wenn Warnmeldungen im Chat gesendet werden sollen, wenn ein Benutzer bereits eingetragen ist oder nicht genügend Punkte hat.'))
-                // Add toggle for repicks
-                .append(helpers.getDropdownGroup('draw-toggle', 'Mehrere Ziehungen zulassen', (e['noRepickSame'] === 'false' ? 'Ja' : 'Nein'), ['Ja', 'Nein'],
-                    'Wenn ein Benutzer mehrmals für eine Verlosung gezogen werden kann.'))
-                // Add toggle for repicks
-                .append(helpers.getDropdownGroup('whisper-toggle', 'Dem Gewinner flüstern', (e['raffleWhisperWinner'] === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'],
-                    'Wenn der Gewinner der Verlosung ein Flüsternachricht bekommen soll, dass er gewonnen hat.'))))),
-            function() {
-                let raffleTimer = $('#msg-timer'),
-                    raffleMessage = $('#msg-msg'),
-                    warningMsg = $('#warning-msg').find(':selected').text() === 'Ja',
-                    drawToggle = $('#draw-toggle').find(':selected').text() !== 'Ja',
-                    whisperWinner = $('#whisper-toggle').find(':selected').text() === 'Ja';
+                    // Add the div for the col boxes.
+                    .append($('<div/>', {
+                        'class': 'panel-group',
+                        'id': 'accordion'
+                    })
+                            // Append first collapsible accordion.
+                            .append(helpers.getCollapsibleAccordion('main-1', 'Zeitgesteuerte Nachrichteneinstellungen', $('<form/>', {
+                                'role': 'form'
+                            })
+                                    // Append interval box for the message
+                                    .append(helpers.getInputGroup('msg-timer', 'number', 'Nachrichtenintervall (Minuten)', '', e['raffleMessageInterval'],
+                                            'Wie oft die Verlosungsnachricht in den Chat gesendet werden soll, während eine Verlosung aktiv ist.'))
+                                    // Append message box for the message
+                                    .append(helpers.getTextAreaGroup('msg-msg', 'text', 'Verlosungsnachricht', '', e['raffleMessage'],
+                                            'Die Nachricht wird in jedem Intervall gesendet, während die Verlosung aktiv ist. Tags: (keyword) und (entries)'))))
+                            // Append second collapsible accordion.
+                            .append(helpers.getCollapsibleAccordion('main-2', 'Zusätzliche Einstellungen', $('<form/>', {
+                                'role': 'form'
+                            })
+                                    // Add toggle for warning messages.
+                                    .append(helpers.getDropdownGroup('warning-msg', 'Warnmeldungen aktivieren', (e['raffleMSGToggle'] === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'],
+                                            'Wenn Warnmeldungen im Chat gesendet werden sollen, wenn ein Benutzer bereits eingetragen ist oder nicht genügend Punkte hat.'))
+                                    // Add toggle for repicks
+                                    .append(helpers.getDropdownGroup('draw-toggle', 'Mehrere Ziehungen zulassen', (e['noRepickSame'] === 'false' ? 'Ja' : 'Nein'), ['Ja', 'Nein'],
+                                            'Wenn ein Benutzer mehrmals für eine Verlosung gezogen werden kann.'))
+                                    // Add toggle for repicks
+                                    .append(helpers.getDropdownGroup('whisper-toggle', 'Dem Gewinner flüstern', (e['raffleWhisperWinner'] === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'],
+                                            'Wenn der Gewinner der Verlosung ein Flüsternachricht bekommen soll, dass er gewonnen hat.'))))),
+                    function () {
+                        let raffleTimer = $('#msg-timer'),
+                                raffleMessage = $('#msg-msg'),
+                                warningMsg = $('#warning-msg').find(':selected').text() === 'Ja',
+                                drawToggle = $('#draw-toggle').find(':selected').text() !== 'Ja',
+                                whisperWinner = $('#whisper-toggle').find(':selected').text() === 'Ja';
 
-                switch (false) {
-                    case helpers.handleInputNumber(raffleTimer):
-                    case helpers.handleInputString(raffleMessage):
-                        break;
-                    default:
-                        socket.updateDBValues('update_raffle_settings_2', {
-                            tables: ['raffleSettings', 'raffleSettings', 'raffleSettings', 'raffleSettings', 'raffleSettings'],
-                            keys: ['raffleMSGToggle', 'raffleWhisperWinner', 'noRepickSame', 'raffleMessage', 'raffleMessageInterval'],
-                            values: [warningMsg, whisperWinner, drawToggle, raffleMessage.val(), raffleTimer.val()]
-                        }, function() {
-                            socket.sendCommand('raffle_reload_cmd', 'reloadraffle', function() {
-                                // Close the modal.
-                                $('#raffle-settings-modal').modal('toggle');
-                                // Warn the user.
-                                toastr.success('Verlosungseinstellungen erfolgreich aktualisiert!');
-                            });
-                        });
-                }
-            }).modal('toggle');
+                        switch (false) {
+                            case helpers.handleInputNumber(raffleTimer):
+                            case helpers.handleInputString(raffleMessage):
+                                break;
+                            default:
+                                socket.updateDBValues('update_raffle_settings_2', {
+                                    tables: ['raffleSettings', 'raffleSettings', 'raffleSettings', 'raffleSettings', 'raffleSettings'],
+                                    keys: ['raffleMSGToggle', 'raffleWhisperWinner', 'noRepickSame', 'raffleMessage', 'raffleMessageInterval'],
+                                    values: [warningMsg, whisperWinner, drawToggle, raffleMessage.val(), raffleTimer.val()]
+                                }, function () {
+                                    socket.sendCommand('raffle_reload_cmd', 'reloadraffle', function () {
+                                        // Close the modal.
+                                        $('#raffle-settings-modal').modal('toggle');
+                                        // Warn the user.
+                                        toastr.success('Verlosungseinstellungen erfolgreich aktualisiert!');
+                                    });
+                                });
+                        }
+                    }).modal('toggle');
         });
     });
 });

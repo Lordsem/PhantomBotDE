@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
  */
 (function() {
     var autoGreetEnabled = $.getSetIniDbBoolean('greeting', 'autoGreetEnabled', false),
-        defaultJoinMessage = $.getSetIniDbString('greeting', 'defaultJoin', '(name) joined!'),
+        defaultJoinMessage = $.getSetIniDbString('greeting', 'defaultJoin', '(name) kam dazu!'),
         greetingCooldown = $.getSetIniDbNumber('greeting', 'cooldown', (6 * 36e5)),
         /* 6 Hours */
         greetingQueue = new java.util.concurrent.ConcurrentLinkedQueue,
@@ -51,7 +51,7 @@
 
     /**
      * @function doUserGreetings
-     * Provides timer function for sending greetings into chat. Will delete messages if the 
+     * Provides timer function for sending greetings into chat. Will delete messages if the
      * host disables autoGreetings in the middle of a loop.  The reason for a delay is to
      * ensure that the output queue does not become overwhelmed.
      */
@@ -135,6 +135,7 @@
                 } else {
                     $.say($.whisperPrefix(sender) + $.lang.get('greetingsystem.set.autogreet.disabled', $.username.resolve($.botName)));
                 }
+                return;
             }
 
             /**
@@ -151,6 +152,7 @@
                 $.inidb.set('greeting', 'defaultJoin', message);
                 defaultJoinMessage = message;
                 $.say($.whisperPrefix(sender) + $.lang.get('greetingsystem.set.default.success', defaultJoinMessage));
+                return;
             }
 
             /**
@@ -170,6 +172,7 @@
                     $.inidb.set('greeting', sender, message);
                 }
                 $.say($.whisperPrefix(sender) + $.lang.get('greetingsystem.set.personal.success', $.inidb.get('greeting', sender)));
+                return;
             }
 
             /**
@@ -180,6 +183,7 @@
                     $.inidb.del('greeting', sender);
                     $.say($.whisperPrefix(sender) + $.lang.get('greetingsystem.remove.personal.success'));
                 }
+                return;
             }
         }
     });

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -146,10 +146,10 @@
                     modules[scriptName] = new Module(scriptName, script, enabled);
 
                     if (!silent) {
-                        consoleLn('Modul geladen: ' + scriptName.replace(/\.\//g, '') + ' (' + (enabled ? 'Aktiviert' : 'Deaktiviert') + ')');
+                        consoleLn('Geladenes Modul: ' + scriptName.replace(/\.\//g, '') + ' (' + (enabled ? 'Aktiviert' : 'Deaktiviert') + ')');
                     }
                 } catch (ex) {
-                    consoleLn('Fehler beim laden "' + scriptName + '": ' + ex);
+                    consoleLn('Fehler beim Laden "' + scriptName + '": ' + ex);
                 }
             }
         }
@@ -185,15 +185,6 @@
         }
     }
 
-    /*
-     * @function getModuleIndex
-     *
-     * @param  {String} scriptName
-     * @return {Number}
-     */
-    function getModuleIndex(scriptName) {
-        return modules.indexOf(scriptName);
-    }
 
     /*
      * @function isModuleEnabled
@@ -264,11 +255,11 @@
      * @param {Function} handler
      */
     function addHook(hookName, handler) {
-        var scriptName = $script.getPath().replace('\\', '/').replace('./scripts/', ''),
+        var scriptName = $.replace($.replace($script.getPath(), '\\', '/'), './scripts/', ''),
                 i = getHookIndex(scriptName, hookName);
 
         if (hookName !== 'initReady' && $api.exists(hookName) == false) {
-            Packages.com.gmt2001.Console.err.printlnRhino('[addHook()@init.js:254] Failed to register hook "' + hookName + '" since there is no such event.');
+            Packages.com.gmt2001.Console.err.printlnRhino('[addHook()@init.js:254] Fehler beim Registrieren des Hooks "' + hookName + '", da es kein solches Ereignis gibt.');
         } else if (i !== -1) {
             hooks[hookName].handlers[i].handler = handler;
         } else {
@@ -285,7 +276,7 @@
      * @param {String} hookName
      */
     function removeHook(hookName) {
-        var scriptName = $script.getPath().replace('\\', '/').replace('./scripts/', ''),
+        var scriptName = $.replace($.replace($script.getPath(), '\\', '/'), './scripts/', ''),
                 i = getHookIndex(scriptName, hookName);
 
         if (hooks[hookName] !== undefined) {
@@ -314,9 +305,9 @@
             try {
                 hook.handlers[i].handler(event);
             } catch (ex) {
-                $.log.error('Error with Event Handler [' + hookName + '] Script [' + hook.handlers[i].scriptName + '] Stacktrace [' + ex.stack.trim().replace(/\r/g, '').split('\n').join(' > ').replace(/anonymous\(\)@|callHook\(\)@/g, '') + '] Exception [' + ex + ']');
+                $.log.error('Fehler mit Event-Handler [' + hookName + '] Script [' + hook.handlers[i].scriptName + '] Stacktrace [' + ex.stack.trim().replace(/\r/g, '').split('\n').join(' > ').replace(/anonymous\(\)@|callHook\(\)@/g, '') + '] Exception [' + ex + ']');
                 if (ex.javaException !== undefined) {
-                    $.consoleLn("Sending stack trace to error log...");
+                    $.consoleLn("Sende Stack-Trace zum Fehlerprotokoll...");
                     Packages.com.gmt2001.Console.err.printStackTrace(ex.javaException);
                 }
             }
@@ -326,9 +317,9 @@
                     try {
                         hook.handlers[i].handler(event);
                     } catch (ex) {
-                        $.log.error('Error with Event Handler [' + hookName + '] Script [' + hook.handlers[i].scriptName + '] Stacktrace [' + ex.stack.trim().replace(/\r/g, '').split('\n').join(' > ').replace(/anonymous\(\)@|callHook\(\)@/g, '') + '] Exception [' + ex + ']');
+                        $.log.error('Fehler mit Event-Handler [' + hookName + '] Script [' + hook.handlers[i].scriptName + '] Stacktrace [' + ex.stack.trim().replace(/\r/g, '').split('\n').join(' > ').replace(/anonymous\(\)@|callHook\(\)@/g, '') + '] Exception [' + ex + ']');
                         if (ex.javaException !== undefined) {
-                            $.consoleLn("Sending stack trace to error log...");
+                            $.consoleLn("Sende Stack-Trace zum Fehlerprotokoll...");
                             Packages.com.gmt2001.Console.err.printStackTrace(ex.javaException);
                         }
                     }
@@ -350,13 +341,14 @@
         events();
 
         if (silentScriptsLoad) {
-            consoleLn('Loading modules...');
+            consoleLn('Lade Module...');
         }
 
         // Load all core modules.
         loadScript('./core/misc.js', false, silentScriptsLoad);
         loadScript('./core/jsTimers.js', false, silentScriptsLoad);
         loadScript('./core/updates.js', false, silentScriptsLoad);
+        loadScript('./core/commandTags.js', false, silentScriptsLoad);
         loadScript('./core/chatModerator.js', false, silentScriptsLoad);
         loadScript('./core/fileSystem.js', false, silentScriptsLoad);
         loadScript('./core/lang.js', false, silentScriptsLoad);
@@ -403,7 +395,7 @@
         if (silentScriptsLoad) {
             consoleLn('Module wurden geladen.');
         }
-        $.log.event('Bot Module geladen. Initialisierung der main Funktionen...');
+        $.log.event('Bot Module geladen. Initialisieren der Hauptfunktionen...');
 
         // Register custom commands.
         $.addComRegisterCommands();
@@ -412,14 +404,14 @@
         consoleLn('');
 
         if ($.isNightly) {
-            consoleLn('PhantomBot Nightly Build - No Support is Provided');
-            consoleLn('Please report bugs including the date of the Nightly Build and Repo Version to:');
+            consoleLn('PhantomBot Nightly Build - Es wird kein Support bereitgestellt');
+            consoleLn('Bitte melde Fehler einschließlich des Datums der Nightly Build- und Repo-Version an:');
             consoleLn('https://discord.gg/YKvMd78');
         } else if ($.isPrerelease) {
-            consoleLn('PhantomBot Pre-Release Build - Please Report Bugs and Issues Found');
-            consoleLn('When reporting bugs or issues, please remember to say that this is a pre-release build.');
+            consoleLn('PhantomBot Pre-Release Build - Bitte melde gefundene Fehler und Probleme');
+            consoleLn('Wenn du Fehler oder Probleme meldest, denke bitte daran, dass es sich um eine Vorabversion handelt.');
         } else {
-            consoleLn('For support please visit: https://discord.gg/YKvMd78');
+            consoleLn('Für Unterstützung besuche bitte: https://discord.gg/YKvMd78');
         }
         consoleLn('');
     }
@@ -473,6 +465,10 @@
                     subCommand = $.getSubCommandFromArguments(command, args),
                     isMod = $.isModv3(sender, event.getTags());
 
+            if (isReady === false && command.equalsIgnoreCase(bot) && args[0].equalsIgnoreCase('moderate')) {
+                $.session.getModerationStatus();
+            }
+
             // Check if the command exists or if the module is disabled.
             if (!$.commandExists(command) || !isModuleEnabled($.getCommandScript(command))) {
                 return;
@@ -509,21 +505,21 @@
             // Check the command permission.
             if ($.permCom(sender, command, subCommand, event.getTags()) !== 0) {
                 $.sayWithTimeout($.whisperPrefix(sender) + $.lang.get('cmd.perm.404', (!$.subCommandExists(command, subCommand) ? $.getCommandGroupName(command) : $.getSubCommandGroupName(command, subCommand))), $.getIniDbBoolean('settings', 'permComMsgEnabled', false));
-                consoleDebug('Command !' + command + ' was not sent due to the user not having permission for it.');
+                consoleDebug('Befehl !' + command + ' wurde nicht gesendet, weil der Benutzer keine Berechtigung dafür hatte.');
                 return;
             } else
 
             // Check the command cooldown.
             if ($.coolDown.get(command, sender, isMod) !== 0) {
                 $.sayWithTimeout($.whisperPrefix(sender) + $.lang.get('init.cooldown.msg', command, $.coolDown.getSecs(sender, command, isMod)), $.getIniDbBoolean('settings', 'coolDownMsgEnabled', false));
-                consoleDebug('Command !' + command + ' was not sent due to it being on cooldown.');
+                consoleDebug('Befehl !' + command + ' wurde nicht gesendet, da er sich in der Abklingzeit befindet.');
                 return;
             } else
 
             // Check the command cost.
             if ($.priceCom(sender, command, subCommand, isMod) === 1) {
                 $.sayWithTimeout($.whisperPrefix(sender) + $.lang.get('cmd.needpoints', $.getPointsString($.getCommandPrice(command, subCommand, ''))), $.getIniDbBoolean('settings', 'priceComMsgEnabled', false));
-                consoleDebug('Command !' + command + ' was not sent due to the user not having enough points.');
+                consoleDebug('Befehl !' + command + ' wurde nicht gesendet, weil der Benutzer nicht genügend Punkte hatte.');
                 return;
             }
 
@@ -659,13 +655,6 @@
          */
         $api.on($script, 'twitchHosted', function (event) {
             callHook('twitchHosted', event, false);
-        });
-
-        /*
-         * @event twitchAutoHosted
-         */
-        $api.on($script, 'twitchAutoHosted', function (event) {
-            callHook('twitchAutoHosted', event, false);
         });
 
         /*
@@ -1119,7 +1108,6 @@
         loadScriptRecursive: loadScriptRecursive,
         isModuleEnabled: isModuleEnabled,
         isModuleLoaded: isModuleLoaded,
-        getModuleIndex: getModuleIndex,
         getHookIndex: getHookIndex,
         loadScript: loadScript,
         getModule: getModule,

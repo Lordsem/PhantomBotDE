@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,36 +14,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package tv.phantombot.console;
 
-import net.engio.mbassy.listener.Handler;
-
+import com.gmt2001.HttpRequest;
+import com.gmt2001.HttpResponse;
 import com.gmt2001.TwitchAPIv5;
 import com.gmt2001.datastore.DataStore;
-
 import com.scaniatv.BotImporter;
 import com.scaniatv.GenerateLogs;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
-
 import java.text.SimpleDateFormat;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Properties;
 import java.util.TimeZone;
 import java.util.TreeSet;
+import net.engio.mbassy.listener.Handler;
 import org.json.JSONException;
-
+import org.json.JSONObject;
+import tv.phantombot.CaselessProperties;
 import tv.phantombot.PhantomBot;
-
 import tv.phantombot.discord.DiscordAPI;
-
 import tv.phantombot.event.EventBus;
 import tv.phantombot.event.Listener;
 import tv.phantombot.event.console.ConsoleInputEvent;
@@ -56,19 +51,17 @@ import tv.phantombot.event.twitch.host.TwitchHostedEvent;
 import tv.phantombot.event.twitch.offline.TwitchOfflineEvent;
 import tv.phantombot.event.twitch.online.TwitchOnlineEvent;
 import tv.phantombot.event.twitch.raid.TwitchRaidEvent;
+import tv.phantombot.event.twitch.subscriber.TwitchAnonymousSubscriptionGiftEvent;
+import tv.phantombot.event.twitch.subscriber.TwitchMassAnonymousSubscriptionGiftedEvent;
 import tv.phantombot.event.twitch.subscriber.TwitchPrimeSubscriberEvent;
 import tv.phantombot.event.twitch.subscriber.TwitchReSubscriberEvent;
 import tv.phantombot.event.twitch.subscriber.TwitchSubscriberEvent;
 import tv.phantombot.event.twitch.subscriber.TwitchSubscriptionGiftEvent;
-import tv.phantombot.event.twitch.subscriber.TwitchMassAnonymousSubscriptionGiftedEvent;
-import tv.phantombot.event.twitch.subscriber.TwitchAnonymousSubscriptionGiftEvent;
-
 import tv.phantombot.event.twitter.TwitterRetweetEvent;
-
 import tv.phantombot.script.Script;
 
-
 public class ConsoleEventHandler implements Listener {
+
     private static final ConsoleEventHandler instance = new ConsoleEventHandler();
 
     /**
@@ -149,10 +142,10 @@ public class ConsoleEventHandler implements Listener {
          * @consolecommand exportpoints - This command exports points and time to a CSV file.
          */
         if (message.equalsIgnoreCase("exportpoints")) {
-            com.gmt2001.Console.out.println("[CONSOLE] Führe exportpoints aus.");
+            com.gmt2001.Console.out.println("[CONSOLE] Executing exportpoints.");
 
             // Top headers of the CSV file.
-            String[] headers = new String[] {"Username", "Seconds", "Points"};
+            String[] headers = new String[]{"Username", "Seconds", "Points"};
             // All points keys.
             String[] keys = dataStore.GetKeyList("points", "");
             // Array to store our values.
@@ -180,7 +173,7 @@ public class ConsoleEventHandler implements Listener {
             com.gmt2001.Console.out.println("[CONSOLE] Führe createcmdlist aus.");
 
             // Headers of the CSV file.
-            String[] headers = new String[] {"Command", "Permission", "Module"};
+            String[] headers = new String[]{"Command", "Permission", "Module"};
             // All commands.
             String[] keys = dataStore.GetKeyList("permcom", "");
             // Array to store commands.
@@ -285,15 +278,15 @@ public class ConsoleEventHandler implements Listener {
         }
 
         /**
-         * @consolecommand jointest - Sends 30 fake join events or one specific user for testing.
+         * @consolecommand jointest (userName) - Sends 30 fake join events or one specific user for testing.
          */
         if (message.equalsIgnoreCase("jointest")) {
             com.gmt2001.Console.out.println("[CONSOLE] Führe jointest aus");
 
-            if (argument != null) {
+            if (argument != null && argument.length > 0 && !argument[0].isBlank()) {
                 EventBus.instance().postAsync(new IrcChannelJoinEvent(PhantomBot.instance().getSession(), argument[0]));
             } else {
-                for (int i = 0 ; i < 30; i++) {
+                for (int i = 0; i < 30; i++) {
                     EventBus.instance().postAsync(new IrcChannelJoinEvent(PhantomBot.instance().getSession(), PhantomBot.generateRandomString(8)));
                 }
             }
@@ -314,7 +307,7 @@ public class ConsoleEventHandler implements Listener {
         if (message.equalsIgnoreCase("followertest")) {
             String user = (argument == null ? PhantomBot.generateRandomString(10) : argument[0]);
 
-            com.gmt2001.Console.out.println("[CONSOLE] Führe followertest (User: " + user + ") aus");
+            com.gmt2001.Console.out.println("[CONSOLE] Executing followertest (User: " + user + ")");
 
             EventBus.instance().postAsync(new TwitchFollowEvent(user));
             return;
@@ -327,7 +320,7 @@ public class ConsoleEventHandler implements Listener {
             String randomUser = PhantomBot.generateRandomString(10);
             int followCount = (argument == null ? 5 : Integer.parseInt(argument[0]));
 
-            com.gmt2001.Console.out.println("[CONSOLE] Führe followerstest (Count: " + followCount + ", User: " + randomUser + ") aus");
+            com.gmt2001.Console.out.println("[CONSOLE] Executing followerstest (Count: " + followCount + ", User: " + randomUser + ")");
 
             for (int i = 0; i < followCount; i++) {
                 EventBus.instance().postAsync(new TwitchFollowEvent(randomUser + "_" + i));
@@ -341,7 +334,7 @@ public class ConsoleEventHandler implements Listener {
         if (message.equalsIgnoreCase("subscribertest")) {
             String randomUser = PhantomBot.generateRandomString(10);
 
-            com.gmt2001.Console.out.println("[CONSOLE] Führe subscribertest (User: " + randomUser + ") aus");
+            com.gmt2001.Console.out.println("[CONSOLE] Executing subscribertest (User: " + randomUser + ")");
 
             EventBus.instance().postAsync(new TwitchSubscriberEvent(randomUser, "1000", ((int) (Math.random() * 100.0)) + "", "No message"));
             return;
@@ -365,7 +358,7 @@ public class ConsoleEventHandler implements Listener {
         if (message.equalsIgnoreCase("resubscribertest")) {
             String randomUser = PhantomBot.generateRandomString(10);
 
-            com.gmt2001.Console.out.println("[CONSOLE] Führe resubscribertest (User: " + randomUser + ") aus");
+            com.gmt2001.Console.out.println("[CONSOLE] Executing resubscribertest (User: " + randomUser + ")");
 
             EventBus.instance().postAsync(new TwitchReSubscriberEvent(randomUser, "10", "1000", "No message"));
             return;
@@ -377,7 +370,7 @@ public class ConsoleEventHandler implements Listener {
         if (message.equalsIgnoreCase("giftsubtest")) {
             String randomUser = PhantomBot.generateRandomString(10);
 
-            com.gmt2001.Console.out.println("[CONSOLE] Führe giftsubtest (User: " + randomUser + ") aus");
+            com.gmt2001.Console.out.println("[CONSOLE] Executing giftsubtest (User: " + randomUser + ")");
 
             EventBus.instance().postAsync(new TwitchSubscriptionGiftEvent(PhantomBot.instance().getChannelName(), randomUser, "10", "1000"));
             return;
@@ -407,7 +400,7 @@ public class ConsoleEventHandler implements Listener {
          * @consolecommand onlinetest - Sends a fake online event.
          */
         if (message.equalsIgnoreCase("onlinetest")) {
-            com.gmt2001.Console.out.println("[CONSOLE] Führe onlinetest aus");
+            com.gmt2001.Console.out.println("[CONSOLE] Executing onlinetest");
 
             EventBus.instance().postAsync(new TwitchOnlineEvent());
             return;
@@ -417,7 +410,7 @@ public class ConsoleEventHandler implements Listener {
          * @consolecommand offlinetest - Sends a fake offline event.
          */
         if (message.equalsIgnoreCase("offlinetest")) {
-            com.gmt2001.Console.out.println("[CONSOLE] Führe offlinetest aus");
+            com.gmt2001.Console.out.println("[CONSOLE] Executing offlinetest");
 
             EventBus.instance().postAsync(new TwitchOfflineEvent());
             return;
@@ -429,7 +422,7 @@ public class ConsoleEventHandler implements Listener {
         if (message.equalsIgnoreCase("cliptest")) {
             String randomUser = (argument == null ? PhantomBot.generateRandomString(10) : argument[0]);
 
-            com.gmt2001.Console.out.println("[CONSOLE] Führe cliptest " + randomUser + " aus");
+            com.gmt2001.Console.out.println("[CONSOLE] Executing cliptest " + randomUser);
 
             EventBus.instance().postAsync(new TwitchClipEvent("https://clips.twitch.tv/ThisIsNotARealClipAtAll", randomUser, "Some title",
                     new org.json.JSONObject("{\"medium\": \"https://clips-media-assets.twitch.tv/vod-107049351-offset-26-preview-480x272.jpg\", "
@@ -444,7 +437,7 @@ public class ConsoleEventHandler implements Listener {
         if (message.equalsIgnoreCase("hosttest")) {
             String randomUser = (argument == null ? PhantomBot.generateRandomString(10) : argument[0]);
 
-            com.gmt2001.Console.out.println("[CONSOLE] Führe hosttest " + randomUser + " aus");
+            com.gmt2001.Console.out.println("[CONSOLE] Executing hosttest " + randomUser);
 
             EventBus.instance().postAsync(new TwitchHostedEvent(randomUser));
             return;
@@ -456,7 +449,7 @@ public class ConsoleEventHandler implements Listener {
         if (message.equalsIgnoreCase("bitstest")) {
             String sendMessage = (argument == null ? "" : arguments);
 
-            com.gmt2001.Console.out.println("[CONSOLE] Führe bitstest aus");
+            com.gmt2001.Console.out.println("[CONSOLE] Executing bitstest");
 
             EventBus.instance().postAsync(new TwitchBitsEvent(PhantomBot.instance().getBotName(), "100", sendMessage));
             return;
@@ -466,7 +459,7 @@ public class ConsoleEventHandler implements Listener {
          * @consolecommand discordreconnect - Reconnects to Discord.
          */
         if (message.equalsIgnoreCase("discordreconnect")) {
-            com.gmt2001.Console.out.println("[CONSOLE] Führe discordreconnect aus");
+            com.gmt2001.Console.out.println("[CONSOLE] Executing discordreconnect");
 
             DiscordAPI.instance().reconnect();
             return;
@@ -602,13 +595,64 @@ public class ConsoleEventHandler implements Listener {
                 System.out.println("PhantomBot StreamLabs-Setup.");
                 System.out.println("");
 
-                System.out.print("Bitte gebe deinen StreamLabs OAuth-Key ein: ");
-                String twitchAlertsKey = System.console().readLine().trim();
-                PhantomBot.instance().getProperties().setProperty("twitchalertskey", twitchAlertsKey);
+                System.out.println("Bitte registriere eine Anwendung bei StreamLabs");
+                System.out.println("Anleitungen sind erhältlich unter https://dev.streamlabs.com/docs/register-your-application");
+                System.out.println("Stellen Sie sicher, dass Sie den Sender auf die Whitelist setzen");
+                System.out.println("Sie sollten den Umleitungs-URI auf setzen: http://localhost");
 
-                System.out.println("PhantomBot StreamLabs-Setup abgeschlossen, PhantomBot wird beendet.");
-                changed = true;
-            } catch (NullPointerException ex) {
+                System.out.println("");
+                System.out.print("Fügen Sie auf der Seite mit den StreamLabs-Anwendungseinstellungen Ihre StreamLabs-Client-ID ein oder geben Sie sie ein: ");
+                String twitchAlertsClientId = System.console().readLine().trim();
+
+                System.out.println("");
+                System.out.print("Fügen Sie auf der Seite mit den StreamLabs-Anwendungseinstellungen Ihr StreamLabs-Client-Geheimnis ein oder geben Sie es ein: ");
+                String twitchAlertsClientSecret = System.console().readLine().trim();
+
+                System.out.println("");
+                System.out.print("Fügen Sie auf der Seite mit den StreamLabs-Anwendungseinstellungen Ihren StreamLabs-Umleitungs-URI ein oder geben Sie ihn ein: ");
+                String twitchAlertsRedirectURI = System.console().readLine().trim();
+
+                System.out.println("");
+                System.out.println("Verwenden Sie diesen Link, um das Konto zu autorisieren, von dem Sie Spenden lesen möchten");
+                System.out.println("HINWEIS: Es ist normal, dass nach der Genehmigung der Autorisierung entweder eine leere Seite oder eine Browserseite mit der Meldung \"Verbindung nicht möglich\" angezeigt wird");
+                System.out.println("");
+                System.out.println("https://www.streamlabs.com/api/v1.0/authorize?client_id=" + twitchAlertsClientId + "&redirect_uri=" + twitchAlertsRedirectURI + "&response_type=code&scope=donations.read");
+                System.out.println("");
+                System.out.println("Bitte fügen Sie den Zugangscode aus der URL in die Adressleiste Ihres Browsers ein oder geben Sie ihn ein. Sie können auch einfach die gesamte URL einfügen: ");
+                String twitchAlertsKickback = System.console().readLine().trim();
+
+                if (twitchAlertsKickback.contains("code=")) {
+                    twitchAlertsKickback = twitchAlertsKickback.substring(twitchAlertsKickback.indexOf("code=") + 5);
+                }
+
+                if (twitchAlertsKickback.contains("&")) {
+                    twitchAlertsKickback = twitchAlertsKickback.substring(0, twitchAlertsKickback.indexOf("&"));
+                }
+
+                HttpResponse res = HttpRequest.getData(HttpRequest.RequestType.POST, "https://streamlabs.com/api/v1.0/token",
+                        "grant_type=authorization_code&client_id=" + twitchAlertsClientId + "&client_secret=" + twitchAlertsClientSecret
+                                + "&redirect_uri=" + twitchAlertsRedirectURI + "&code=" + twitchAlertsKickback,
+                        new HashMap<>());
+
+                if (res.success) {
+                    JSONObject j = new JSONObject(res.content);
+                    String twitchAlertsKey = j.getString("access_token");
+                    PhantomBot.instance().getProperties().setProperty("twitchalertskey", twitchAlertsKey);
+
+                    System.out.println("PhantomBot StreamLabs-Setup abgeschlossen, PhantomBot wird beendet.");
+                    changed = true;
+                } else if (res.httpCode == 400) {
+                    JSONObject e = new JSONObject(res.content);
+                    System.out.println("PhantomBot StreamLabs-Setup fehlgeschlagen");
+                    System.err.println(e.getString("error"));
+                    System.err.println(e.getString("message"));
+                } else {
+                    System.out.println("PhantomBot StreamLabs-Setup fehlgeschlagen");
+                    System.err.println(res.httpCode);
+                    System.err.println(res.content);
+                    System.err.println(res.exception);
+                }
+            } catch (JSONException | NullPointerException ex) {
                 com.gmt2001.Console.err.printStackTrace(ex);
             }
         }
@@ -714,7 +758,7 @@ public class ConsoleEventHandler implements Listener {
 
         // Check to see if any settings have been changed.
         if (changed) {
-            Properties outputProperties = new Properties() {
+            CaselessProperties outputProperties = new CaselessProperties() {
                 @Override
                 public synchronized Enumeration<Object> keys() {
                     return Collections.enumeration(new TreeSet<>(super.keySet()));

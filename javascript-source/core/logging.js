@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -90,9 +90,9 @@
      * @return {String}
      */
     function getLogEntryTimeDateString() {
-        var dateFormat = new java.text.SimpleDateFormat("MM-dd-yyyy @ HH:mm:ss.SSS z");
+        var dateFormat = new java.text.SimpleDateFormat("dd-MM-yyyy @ HH:mm:ss.SSS z");
 
-        dateFormat.setTimeZone(java.util.TimeZone.getTimeZone(($.inidb.exists('settings', 'timezone') ? $.inidb.get('settings', 'timezone') : 'GMT')));
+        dateFormat.setTimeZone(java.util.TimeZone.getTimeZone(($.inidb.exists('settings', 'timezone') ? $.inidb.get('settings', 'timezone') : 'CET')));
         return dateFormat.format(new Date());
     }
 
@@ -247,7 +247,7 @@
                 }
             }
         }
-        $.log.event('Finished Log Rotation');
+        $.log.event('Abgeschlossene Protokoll Rotation');
     }
 
     /*

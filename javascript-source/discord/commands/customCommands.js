@@ -1,5 +1,5 @@
-/*
- * Copyright (C) 2016-2020 phantom.bot
+ /*
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -119,7 +119,7 @@
 
         if (s.match(/\(readfile/)) {
             if (s.search(/\((readfile ([^)]+)\))/g) >= 0) {
-                s = $.replace(s, '(' + RegExp.$1, $.readFile('./addons/' + RegExp.$2.replace(/\.\./g, ''))[0]);
+                s = $.replace(s, '(' + RegExp.$1, $.readFile('./addons/' + $.replace(RegExp.$2, '..', ''))[0]);
             }
         }
 
@@ -139,7 +139,7 @@
             var file = s.match(/\(writefile (.+), (.+), (.+)\)/)[1],
                 append = (s.match(/\(writefile (.+), (.+), (.+)\)/)[2] == 'true' ? true : false),
                 string = s.match(/\(writefile (.+), (.+), (.+)\)/)[3];
-            $.writeToFile(string, './addons/' + file.replace(/\.\./g, ''), append);
+            $.writeToFile(string, './addons/' + $.replace(file, '..', ''), append);
             return null;
         }
 
@@ -260,7 +260,7 @@
                                 try {
                                     jsonObject = jsonObject.get(jsonCheckList[i]);
                                 } catch (ex) {
-                                    $.log.error('Fehler beim Abrufen der Daten von der API: ' + ex.message);
+                                    $.log.error('Fehler beim Abrufen von Daten aus der API: ' + ex.message);
                                     return $.lang.get('discord.customcommands.customapijson.err', command);
                                 }
                             } else {

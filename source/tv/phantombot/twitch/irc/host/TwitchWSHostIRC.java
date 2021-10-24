@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,37 +21,33 @@
  */
 package tv.phantombot.twitch.irc.host;
 
-import tv.phantombot.event.EventBus;
-import tv.phantombot.event.twitch.host.TwitchHostedEvent;
-import tv.phantombot.event.twitch.host.TwitchAutoHostedEvent;
-import tv.phantombot.event.twitch.host.TwitchHostsInitializedEvent;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
-import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.handshake.ServerHandshake;
-
 import tv.phantombot.PhantomBot;
+import tv.phantombot.event.EventBus;
+import tv.phantombot.event.twitch.host.TwitchHostedEvent;
+import tv.phantombot.event.twitch.host.TwitchHostsInitializedEvent;
 
 public class TwitchWSHostIRC {
     private static final Map<String, TwitchWSHostIRC> instances = new ConcurrentHashMap<>();
     private final String twitchIRCWSS = "wss://irc-ws.chat.twitch.tv";
     private final String channelName;
-    private final String oAuth;
+    private String oAuth;
     private final EventBus eventBus;
     private TwitchWSHostIRCWS twitchWSHostIRCWS;
     private final ReentrantLock lock = new ReentrantLock();
@@ -76,7 +72,7 @@ public class TwitchWSHostIRC {
         }
         return instance;
     }
-
+    
     private static TwitchWSHostIRC instance(String channelName) {
         TwitchWSHostIRC instance = instances.get(channelName);
         return instance;
@@ -105,6 +101,10 @@ public class TwitchWSHostIRC {
             com.gmt2001.Console.err.println("TwitchWSHostIRC URI fehlgeschlagen. Beende PhantomBot.");
             PhantomBot.exitError();
         }
+    }
+
+    public void setOAuth(String oAuth) {
+        this.oAuth = oAuth;
     }
 
     /**
@@ -150,7 +150,7 @@ public class TwitchWSHostIRC {
         if (lock.isLocked() || PhantomBot.instance().isExiting()) {
             return;
         }
-
+        
         lock.lock();
         try {
             new Thread( () -> {
@@ -160,7 +160,7 @@ public class TwitchWSHostIRC {
             lock.unlock();
         }
     }
-
+    
     public void doReconnect() {
         if (lock2.tryLock()) {
             try {
@@ -171,10 +171,10 @@ public class TwitchWSHostIRC {
                 } else {
                     Thread.sleep(nextBackoff);
                 }
-
+                
                 lastReconnect = now;
                 nextBackoff = Math.min(MAX_BACKOFF, nextBackoff * 2L);
-
+                
                 this.twitchWSHostIRCWS.reconnectBlocking();
             } catch (InterruptedException ex) {
                 com.gmt2001.Console.err.printStackTrace(ex);
@@ -196,9 +196,7 @@ public class TwitchWSHostIRC {
         private final String oAuth;
         private final EventBus eventBus;
         private Pattern hostPattern = Pattern.compile("PRIVMSG \\w+ :(\\w+) is now hosting you for up to (\\d+) viewers");
-        private Pattern autoHostPattern = Pattern.compile("PRIVMSG \\w+ :(\\w+) is now auto hosting you for up to (\\d+) viewers");
         private Pattern hostPatternNoViewers = Pattern.compile("PRIVMSG \\w+ :(\\w+) is now hosting you.");
-        private Pattern autoHostPatternNoViewers = Pattern.compile("PRIVMSG \\w+ :(\\w+) is now auto hosting you.");
         private long lastPing = 0L;
         private boolean sentPing = false;
 
@@ -395,18 +393,6 @@ public class TwitchWSHostIRC {
                 matcher = hostPatternNoViewers.matcher(message);
                 if (matcher.find()) {
                     eventBus.postAsync(new TwitchHostedEvent(matcher.group(1)));
-                    return;
-                }
-
-                matcher = autoHostPattern.matcher(message);
-                if (matcher.find()) {
-                    eventBus.postAsync(new TwitchAutoHostedEvent(matcher.group(1), Integer.parseInt(matcher.group(2))));
-                    return;
-                }
-
-                matcher = autoHostPatternNoViewers.matcher(message);
-                if (matcher.find()) {
-                    eventBus.postAsync(new TwitchAutoHostedEvent(matcher.group(1)));
                 }
             }
         }
@@ -440,13 +426,13 @@ public class TwitchWSHostIRC {
             ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
             service.scheduleAtFixedRate(() -> {
                 Thread.currentThread().setName("tv.phantombot.twitchwsirc.TwitchWSHostIRC::checkPingTime");
-
+                
                 if (System.currentTimeMillis() - lastPing >= sendPingWaitTime && !sentPing) {
                     com.gmt2001.Console.debug.println("Sending a PING to Twitch (Host Data) to Verify Connection");
                     sentPing = true;
                     send("PING :tmi.twitch.tv");
                 }
-
+                
                 if (System.currentTimeMillis() - lastPing >= pingWaitTime) {
                     com.gmt2001.Console.debug.println("PING not Detected from Twitch (Host Data) - Forcing Reconnect (Timeout is " + pingWaitTime + "ms)");
                     close();

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
  */
 (function() {
     var toggle = $.getSetIniDbBoolean('discordSettings', 'clipsToggle', false),
-        message = $.getSetIniDbString('discordSettings', 'clipsMessage', '(name) created a new clip!'),
+        message = $.getSetIniDbString('discordSettings', 'clipsMessage', '(name) erstellte einen neuen Clip!'),
         channelName = $.getSetIniDbString('discordSettings', 'clipsChannel', ''),
         announce = false;
 
@@ -31,7 +31,7 @@
     $.bind('webPanelSocketUpdate', function(event) {
         if (event.getScript().equalsIgnoreCase('./discord/handlers/clipHandler.js')) {
             toggle = $.getIniDbBoolean('discordSettings', 'clipsToggle', false);
-            message = $.getIniDbString('discordSettings', 'clipsMessage', '(name) created a new clip!');
+            message = $.getIniDbString('discordSettings', 'clipsMessage', '(name) erstellte einen neuen Clip!');
             channelName = $.getIniDbString('discordSettings', 'clipsChannel', '');
         }
     });

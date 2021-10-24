@@ -3,7 +3,7 @@
 
     <!--
 
-    Copyright (C) 2016-2020 phantom.bot
+    Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,9 +25,9 @@
 
     <property environment="env" />
     <!-- Please see this for version numbers: https://semver.org/ -->
-    <property name="version" value="3.3.0" />
+    <property name="version" value="3.4.7" />
     <!-- Please see this for version numbers: https://semver.org/ -->
-    <property name="webpanel.version" value="1.1.0" />
+    <property name="webpanel.version" value="1.4.0" />
     <property name="src" location="source" />
     <property name="reference" location="lib" />
     <property name="build" location="build" />
@@ -55,7 +55,7 @@
         <fileset dir="${lib.dir}" includes="**/*.jar" />
     </path>
 
-    <condition property="build_type" value="${buildtype}" else="stable">
+    <condition property="build_type" value="${buildtype}" else="custom">
         <and>
             <isset property="buildtype" />
             <length string="${buildtype}" trim="yes" length="0" when="greater" />
@@ -83,14 +83,14 @@
         <taskdef resource="org/apache/ivy/ant/antlib.xml"
                  uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>
     </target>
-
+    
     <target name="init">
         <mkdir dir="${build}" />
         <mkdir dir="${classes}" />
         <mkdir dir="${dist}" />
         <mkdir dir="${version.folder}" />
     </target>
-
+    
     <target depends="init-ivy" name="ivy-retrieve">
         <ivy:retrieve sync="true"/>
         <ivy:report graph="false" todir="resources/licenses/"/>
@@ -104,19 +104,19 @@
             <arg value="resources/licenses/tv.phantombot-phantombot-default.html"/>
         </exec>
     </target>
-
+    
     <target depends="init-ivy" name="ivy-cleancache">
         <ivy:cleancache/>
     </target>
-
+    
     <target name="clearlib">
         <delete>
             <fileset dir="${reference}" includes="**/*.jar" />
         </delete>
     </target>
-
+    
     <target depends="clearlib,ivy-cleancache,ivy-retrieve" name="ivy-clean-retrieve" />
-
+    
     <target depends="ivy-retrieve" name="classpaths">
         <path id="reference.class.path">
             <fileset dir="${reference}">
@@ -125,7 +125,7 @@
                 <exclude name="*javadoc.jar"/>
             </fileset>
         </path>
-
+        
         <pathconvert property="mf.classpath" pathsep=" ">
             <path refid="reference.class.path" />
             <mapper>
@@ -177,6 +177,7 @@
         <javac target="11" source="11" debug="on" destdir="${classes}" srcdir="${src}" includeantruntime="false" >
             <compilerarg value="-Xlint:unchecked" />
             <compilerarg value="-Xlint:-options" />
+            <compilerarg value="-XDenableSunApiLintControl" />
             <compilerarg line="--add-exports java.base/sun.security.x509=ALL-UNNAMED" />
             <classpath refid="reference.class.path" />
         </javac>
@@ -192,6 +193,7 @@
         <javac target="11" source="11" debug="on" destdir="${classes}" srcdir="${src}" includeantruntime="false" >
             <compilerarg value="-Xlint:all" />
             <compilerarg value="-Xlint:-options" />
+            <compilerarg value="-XDenableSunApiLintControl" />
             <compilerarg line="--add-exports java.base/sun.security.x509=ALL-UNNAMED" />
             <classpath refid="reference.class.path" />
         </javac>

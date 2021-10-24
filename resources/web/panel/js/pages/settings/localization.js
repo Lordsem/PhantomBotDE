@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,8 +27,8 @@ $(function() {
                 helpers.getModal('edit-lang', 'Lang-Datei laden', 'Bearbeiten', $('<form/>', {
                     'role': 'form'
                 })
-                // Add select box.
-                .append(helpers.getDropdownGroup('file-to-load', 'Lang-Date: ', 'Datei auswählen', data.split('\n'))), function() {
+                    // Add select box.
+                    .append(helpers.getDropdownGroup('file-to-load', 'Lang-Date: ', 'Datei auswählen', data.split('\n'))), function() {
                     currentLang = $('#file-to-load').find(':selected').text();
 
                     $.ajax({
@@ -62,7 +62,7 @@ $(function() {
         // ID for the lang.
         .append(helpers.getInputGroup('lang-id', 'text', 'Lang ID', 'module.name.id'))
         // Resonse for the lang.
-        .append(helpers.getTextAreaGroup('lang-response', 'text', 'Antwort', 'Antwort beispiel!')), function() {
+        .append(helpers.getTextAreaGroup('lang-response', 'text', 'Antwort', 'Antwort Beispiel!')), function() {
             const table = $('#langTable').DataTable({
                     "language": {
                         "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/German.json"
@@ -144,7 +144,7 @@ $(function() {
                 if (xhr.status === 200) {
                     toastr.success('Lang erfolgreich gespeichert!');
                 } else {
-                    toastr.success('Die lang konnte nicht gespeichert werden.');
+                    toastr.success('Die Lang konnte nicht gespeichert werden.');
                 }
             }
         });
@@ -275,7 +275,7 @@ $(function() {
                         ]).draw(false);
 
                         // Alert the user.
-                        toastr.success('lang Antwort erfolgreich aktualisiert!');
+                        toastr.success('Lang Antwort erfolgreich aktualisiert!');
 
                         // Close the modal.
                         $('#edit-lang').modal('toggle');

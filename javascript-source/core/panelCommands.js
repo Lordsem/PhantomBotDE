@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -242,18 +242,6 @@
         }
 
         /*
-         * Sets the community on stream
-         */
-        if (command.equalsIgnoreCase('setcommunitysilent')) {
-            if (!$.isBot(sender)) {
-                return;
-            }
-            var argsString = args.join(' ').split(', ');
-            $.updateCommunity($.channelName, argsString, sender, true);
-            return;
-        }
-
-        /*
          * Reloads the adventure variables.
          */
         if (command.equalsIgnoreCase('reloadadventure')) {
@@ -371,6 +359,17 @@
                 return;
             }
             $.greetingspanelupdate();
+            return;
+        }
+
+        /*
+         * Reloads the welcome variables.
+         */
+        if (command.equalsIgnoreCase('welcomepanelupdate')) {
+            if (!$.isBot(sender)) {
+                return;
+            }
+            $.welcomepanelupdate();
             return;
         }
 
@@ -532,6 +531,7 @@
             $.registerChatCommand('./core/panelCommands.js', 'reloadkill', 30);
             $.registerChatCommand('./core/panelCommands.js', 'reloadraid', 30);
             $.registerChatCommand('./core/panelCommands.js', 'reloadmisc', 30);
+            $.registerChatCommand('./core/panelCommands.js', 'welcomepanelupdate', 30);
         }, 10000);
     });
 })();

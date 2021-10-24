@@ -1,5 +1,5 @@
 <!--
-    Copyright (C) 2016-2020 phantom.bot
+    Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
     <section class="content-header">
         <h1>Punkte
         <label class="switch" data-toggle="tooltip" title="Modul umschalten">
-                <input type="checkbox" id="pointsModuleToggle" checked="true">
+                <input type="checkbox" id="pointsModuleToggle" checked>
                 <span class="slider round"></span>
             </label>
         </h1>
@@ -50,10 +50,10 @@
                                         <!-- Points message -->
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <lable>Punkte Nachricht</lable>
+                                                <label for="points-message">Punkte Nachricht</label>
                                                 <input type="text" class="form-control" id="points-message" data-toggle="tooltip"
                                                     title="Nachricht, die in den Chat gesendet werden soll, wenn jemand den Befehl !points verwendet. Tags: (userprefix), (user), (points),
-                                                        (pointsname), (pointstring), (time) und (rank)"/>
+                                                        (pointsname), (pointsstring), (time) und (rank)"/>
                                             </div>
                                         </div>
                                     </div>
@@ -62,7 +62,7 @@
                                         <!-- Points name single -->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <lable>Name der Punkte (Einzeln)</lable>
+                                                <label for="points-name-single">Name der Punkte (Einzeln)</label>
                                                 <input type="text" class="form-control" id="points-name-single" placeholder="Punkt" data-toggle="tooltip"
                                                     title="Name Ihrer Währung für die einzelne Einheit."/>
                                             </div>
@@ -71,7 +71,7 @@
                                         <!-- Points name multiple -->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <lable>Name der Punkte (Mehrere)</lable>
+                                                <label for="points-name-multiple">Name der Punkte (Mehrere)</label>
                                                 <input type="text" class="form-control" id="points-name-multiple" placeholder="Punkte" data-toggle="tooltip"
                                                     title="Name deiner Währung für mehrere Einheiten."/>
                                             </div>
@@ -82,7 +82,7 @@
                                         <!-- online interval -->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <lable>Auszahlungsintervall (Online)</lable>
+                                                <label for="points-interval-online">Auszahlungsintervall (Online)</label>
                                                 <input type="number" class="form-control" id="points-interval-online" placeholder="15" data-toggle="tooltip"
                                                     title="Online Auszahlungsintervall in Minuten."/>
                                             </div>
@@ -91,7 +91,7 @@
                                         <!-- offline interval -->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <lable>Auszahlungsintervall (Offline)</lable>
+                                                <label for="points-interval-offline">Auszahlungsintervall (Offline)</label>
                                                 <input type="number" class="form-control" id="points-interval-offline" placeholder="10" data-toggle="tooltip"
                                                     title="Offline-Auszahlungsintervall in Minuten."/>
                                             </div>
@@ -102,7 +102,7 @@
                                         <!-- online payout -->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <lable>Auszahlungsbetrag (Online)</lable>
+                                                <label for="points-payout-online">Auszahlungsbetrag (Online)</label>
                                                 <input type="number" class="form-control" id="points-payout-online" placeholder="10" data-toggle="tooltip" title="Online Auszahlungsbetrag."/>
                                             </div>
                                         </div>
@@ -110,7 +110,7 @@
                                         <!-- offline payout -->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <lable>Auszahlungsbetrag (Offline)</lable>
+                                                <label for="points-payout-offline">Auszahlungsbetrag (Offline)</label>
                                                 <input type="number" class="form-control" id="points-payout-offline" placeholder="15" data-toggle="tooltip" title="Offline Auszahlungsbetrag."/>
                                             </div>
                                         </div>
@@ -120,7 +120,7 @@
                                         <!-- Active bonus -->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <lable>Aktiver Bonus</lable>
+                                                <label for="points-active">Aktiver Bonus</label>
                                                 <input type="number" class="form-control" id="points-active" placeholder="1" data-toggle="tooltip"
                                                     title="Die Anzahl der Extrapunkte, die aktive Benutzer bei jeder Auszahlung erhalten."/>
                                             </div>
@@ -129,7 +129,7 @@
                                         <!-- Top list amount -->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <lable>Top-List-Betrag</lable>
+                                                <label for="points-top">Top-Liste Anzahl</label>
                                                 <input type="number" class="form-control" id="points-top" max="15" placeholder="5" data-toggle="tooltip"
                                                     title="Anzahl der Benutzer, die in der Top-Liste erscheinen. Max ist 15."/>
                                             </div>
@@ -142,7 +142,7 @@
                                         <!-- Caster payout online -->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <lable>Caster-Auszahlung (Online)</lable>
+                                                <label for="points-payout-caster-on">Caster-Auszahlung  (Online)</label>
                                                 <input type="number" class="form-control" id="points-payout-caster-on" placeholder="1" data-toggle="tooltip"
                                                     title="Auszahlung für die Caster-Gruppe während der Stream online ist. -1 ist die Standardauszahlung."/>
                                             </div>
@@ -151,7 +151,7 @@
                                         <!-- Caster payout offline -->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <lable>Caster-Auszahlung (Offline)</lable>
+                                                <label for="points-payout-caster-off">Caster-Auszahlung (Offline)</label>
                                                 <input type="number" class="form-control" id="points-payout-caster-off" placeholder="5" data-toggle="tooltip"
                                                     title="Auszahlung für die Caster-Gruppe während der Stream offline ist. -1 ist die Standardauszahlung."/>
                                             </div>
@@ -162,7 +162,7 @@
                                         <!-- Caster payout online -->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <lable>Administrator-Auszahlung (Online)</lable>
+                                                <label for="points-payout-administrator-on">Administrator-Auszahlung (Online)</label>
                                                 <input type="number" class="form-control" id="points-payout-administrator-on" placeholder="1" data-toggle="tooltip"
                                                     title="Auszahlung der Administratorengruppe während der Stream online ist. -1 ist die Standardauszahlung."/>
                                             </div>
@@ -171,7 +171,7 @@
                                         <!-- Caster payout offline -->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <lable>Administrator-Auszahlung (Offline)</lable>
+                                                <label for="points-payout-administrator-off">Administrator-Auszahlung (Offline)</label>
                                                 <input type="number" class="form-control" id="points-payout-administrator-off" placeholder="5" data-toggle="tooltip"
                                                     title="Auszahlung für die Administratorgruppe während der Stream offline ist. -1 ist die Standardauszahlung."/>
                                             </div>
@@ -182,7 +182,7 @@
                                         <!-- Caster payout online -->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <lable>Moderatorenauszahlung (Online)</lable>
+                                                <label for="points-payout-moderator-on">Moderator-Auszahlung (Online)</label>
                                                 <input type="number" class="form-control" id="points-payout-moderator-on" placeholder="1" data-toggle="tooltip"
                                                     title="Auszahlung der Moderatorengruppe während der Stream online ist. -1 ist die Standardauszahlung."/>
                                             </div>
@@ -191,7 +191,7 @@
                                         <!-- Caster payout offline -->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <lable>Moderator Payout (Offline)</lable>
+                                                <label for="points-payout-moderator-off">Moderator-Auszahlung (Offline)</label>
                                                 <input type="number" class="form-control" id="points-payout-moderator-off" placeholder="5" data-toggle="tooltip"
                                                     title="Auszahlung für die Moderatorengruppe während der Stream offline ist. -1 ist die Standardauszahlung."/>
                                             </div>
@@ -202,7 +202,7 @@
                                         <!-- Caster payout online -->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <lable>Abonnentenauszahlung (Online)</lable>
+                                                <label for="points-payout-subscriber-on">Subscriber-Auszahlung (Online)</label>
                                                 <input type="number" class="form-control" id="points-payout-subscriber-on" placeholder="1" data-toggle="tooltip"
                                                     title="Auszahlung für die Abonnentengruppe während der Stream online ist. -1 ist die Standardauszahlung."/>
                                             </div>
@@ -211,7 +211,7 @@
                                         <!-- Caster payout offline -->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <lable>Abonnentenauszahlung (Offline)</lable>
+                                                <label for="points-payout-subscriber-off">Subscriber-Auszahlung (Offline)</label>
                                                 <input type="number" class="form-control" id="points-payout-subscriber-off" placeholder="5" data-toggle="tooltip"
                                                     title="Auszahlung für die Abonnentengruppe während der Stream offline ist. -1 ist die Standardauszahlung."/>
                                             </div>
@@ -222,7 +222,7 @@
                                         <!-- Caster payout online -->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <lable>Spenderauszahlung (Online)</lable>
+                                                <label for="points-payout-donator-on">Donator-Auszahlung (Online)</label>
                                                 <input type="number" class="form-control" id="points-payout-donator-on" placeholder="1" data-toggle="tooltip"
                                                     title="Auszahlung für die Spendergruppe während der Stream online ist. -1 ist die Standardauszahlung."/>
                                             </div>
@@ -231,7 +231,7 @@
                                         <!-- Caster payout offline -->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <lable>Spenderauszahlung (Offline)</lable>
+                                                <label for="points-payout-donator-off">Donator-Auszahlung (Offline)</label>
                                                 <input type="number" class="form-control" id="points-payout-donator-off" placeholder="5" data-toggle="tooltip"
                                                     title="Auszahlung für die Spendergruppe während der Stream offline ist. -1 ist die Standardauszahlung."/>
                                             </div>
@@ -242,7 +242,7 @@
                                         <!-- Caster payout online -->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <lable>Stammzuschauerauszahlung (Online)</lable>
+                                                <label for="points-payout-regular-on">Regular-Auszahlung(Online)</label>
                                                 <input type="number" class="form-control" id="points-payout-regular-on" placeholder="1" data-toggle="tooltip"
                                                     title="Auszahlung für die Stammzuschauergruppe während der Stream online ist. -1 ist die Standardauszahlung."/>
                                             </div>
@@ -251,7 +251,7 @@
                                         <!-- Caster payout offline -->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <lable>Stammzuschauerauszahlung (Offline)</lable>
+                                                <label for="points-payout-regular-off">Regular-Auszahlung (Offline)</label>
                                                 <input type="number" class="form-control" id="points-payout-regular-off" placeholder="5" data-toggle="tooltip"
                                                     title="Auszahlung für die Stammzuschauergruppe während der Stream offline ist. -1 ist die Standardauszahlung."/>
                                             </div>
@@ -262,7 +262,7 @@
                                         <!-- Caster payout online -->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <lable>Zuschauer-Auszahlung (Online)</lable>
+                                                <label for="points-payout-viewer-on">Viewer-Auszahlung(Online)</label>
                                                 <input type="number" class="form-control" id="points-payout-viewer-on" placeholder="1" data-toggle="tooltip"
                                                     title="Auszahlung für die Zuschauergruppe während der Stream online ist. -1 ist die Standardauszahlung."/>
                                             </div>
@@ -271,7 +271,7 @@
                                         <!-- Caster payout offline -->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <lable>Zuschauer-Auszahlung (Offline)</lable>
+                                                <label for="points-payout-viewer-off">Viewer-Auszahlung (Offline)</label>
                                                 <input type="number" class="form-control" id="points-payout-viewer-off" placeholder="5" data-toggle="tooltip"
                                                     title="Auszahlung für die Zuschauergruppe während der Stream offline ist. -1 ist die Standardauszahlung."/>
                                             </div>
@@ -280,7 +280,7 @@
                                 </div>
 
                                 <!-- Box footer -->
-                                <div class="box-footer" style="padding-right: 0px; padding-bottom: 0px;">
+                                <div class="box-footer" style="padding-right: 0; padding-bottom: 0;">
                                     <button type="button" class="btn btn-primary pull-right" id="points-save-all"> Speichern</button>
                                 </div>
                             </div>
@@ -299,14 +299,14 @@
                                 <div class="box-body">
                                     <!-- Username -->
                                     <div class="form-group">
-                                        <lable>Benutzername</lable>
+                                        <label for="points-panalty-user">Benutzername</label>
                                         <input type="text" class="form-control" id="points-panalty-user" placeholder="PhantomBotDE" data-toggle="tooltip"
                                             title="Benutzername, der für die angegebene Zeit keine Punkte erhält.">
                                     </div>
 
                                     <!-- Bonus Time -->
                                     <div class="form-group">
-                                        <lable>Strafzeit (Minuten)</lable>
+                                        <label for="points-panalty-time">Strafzeit (Minuten)</label>
                                         <input type="number" class="form-control" id="points-panalty-time" placeholder="1" data-toggle="tooltip"
                                             title="Minuten, für die der angegebene Benutzer keine Punkte erhält.">
                                     </div>
@@ -335,13 +335,13 @@
                                 <div class="box-body">
                                     <!-- Username -->
                                     <div class="form-group">
-                                        <lable>Benutzername</lable>
+                                        <label for="points-username">Benutzername</label>
                                         <input type="text" class="form-control" id="points-username" placeholder="PhantomBotDE"  data-toggle="tooltip" title="Benutzername zum Bearbeiten der Punkte.">
                                     </div>
 
                                     <!-- Number of points -->
                                     <div class="form-group">
-                                        <lable>Punkte</lable>
+                                        <label for="points-username-points">Punkte</label>
                                         <div class="input-group input-group-md">
                                             <input type="number" class="form-control" id="points-username-points" placeholder="0" data-toggle="tooltip" title="Anzahl der Punkte, die der Benutzer haben wird.">
                                             <span class="input-group-btn">
@@ -372,13 +372,13 @@
                                 <div class="box-body">
                                     <!-- Amount -->
                                     <div class="form-group">
-                                        <lable>Betrag</lable>
+                                        <label for="points-bonus-amount">Betrag</label>
                                         <input type="number" class="form-control" id="points-bonus-amount" placeholder="10">
                                     </div>
 
                                     <!-- Bonus Time -->
                                     <div class="form-group">
-                                        <lable>Bonuszeit (Minuten)</lable>
+                                        <label for="points-bonus-time">Bonuszeit (Minuten)</label>
                                         <input type="number" class="form-control" id="points-bonus-time" placeholder="1" data-toggle="tooltip" title="Zeit, die der Bonus dauern soll.">
                                     </div>
                                 </div>

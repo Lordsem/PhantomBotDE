@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,21 +16,18 @@
  */
 package tv.phantombot.cache;
 
-import com.gmt2001.datastore.DataStore;
 import com.gmt2001.TwitchAPIv5;
-
+import com.gmt2001.datastore.DataStore;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
-
-import tv.phantombot.event.twitch.follower.TwitchFollowsInitializedEvent;
-import tv.phantombot.event.twitch.follower.TwitchFollowEvent;
-import tv.phantombot.event.EventBus;
-import tv.phantombot.PhantomBot;
-
-import org.json.JSONObject;
 import org.json.JSONArray;
+import org.json.JSONObject;
+import tv.phantombot.PhantomBot;
+import tv.phantombot.event.EventBus;
+import tv.phantombot.event.twitch.follower.TwitchFollowEvent;
+import tv.phantombot.event.twitch.follower.TwitchFollowsInitializedEvent;
 
 public class FollowersCache implements Runnable {
 
@@ -93,6 +90,7 @@ public class FollowersCache implements Runnable {
                 } catch (Exception ex) {
                     checkLastFail();
                     com.gmt2001.Console.debug.println("FollowersCache.run: Die Follower konnten nicht aktualisiert werden: " + ex.getMessage());
+                    com.gmt2001.Console.debug.printStackTrace(ex);
                 }
             } catch (Exception ex) {
                 com.gmt2001.Console.err.println("FollowersCache.run: Die Follower konnten nicht aktualisiert werden [" + ex.getClass().getSimpleName() + "]: " + ex.getMessage());

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -112,25 +112,23 @@ $(function() {
     helpers.getEventMessage = function(event) {
         switch (event.type.toLowerCase()) {
             case 'subscriber':
-                return (event.username + ' hat dich gerade abonniert!');
+                return (event.username + ' hat gerade mit Stufe ' + event.tier + ' abonniert!');
             case 'prime subscriber':
-                return (event.username + ' hat dich gerade mit Twitch Prime abonniert!');
+                return (event.username + ' hat gerade mit Prime abonniert!');
             case 'resubscriber':
-                return (event.username + ' hat dich den ' + event.months + 'ten Monate in Folge abboniert!');
+                return (event.username + ' hat reabonniert mit Stufe ' + event.tier + ' und das seit ' + event.months + ' Monaten!');
             case 'follower':
-                return (event.username + ' folgt dir jetzt!');
+                return (event.username + ' folgt jetzt!');
             case 'bits':
                 return (event.username + ' hat ' + event.amount + ' Bits gecheered!');
             case 'host':
-                return (event.username + ' hostet dich derzeit mit' + event.viewers + ' Zuschauern!');
-            case 'auto-host':
-                return (event.username + ' hostet dich automatisch derzeit mit ' + event.viewers + ' Zuschauern!');
+                return (event.username + ' hostet dich derzeit mit ' + event.viewers + ' Zuschauern!');
             case 'tip': // To be added soon.
                 break;
             case 'raid':
-                return (event.username + ' überfällt dich mit ' + event.viewers + ' Zuschauern!');
+                return (event.username + ' raidet dich mit ' + event.viewers + ' Zuschauern!');
             case 'gifted subscription':
-                return (event.username + ' hat ' + event.recipient + ' ein Abonnement geschenkt!');
+                return (event.username + ' hat ' + event.recipient + 'ein Abonnement geschenkt!');
         }
     };
 
@@ -155,8 +153,6 @@ $(function() {
                 return 'background-color: #6441a5;';
             case 'host':
                 return 'background-color: #ed4c1c;';
-            case 'auto-host':
-                return 'background-color: #ffff00; color: #000000;';
             case 'tip': // To be added soon.
                 return 'background-color: #6441a5;';
             case 'raid':
@@ -602,7 +598,6 @@ $(function() {
      *
      * @param  {String} id
      * @param  {String} title
-     * @param  {String} def
      * @param  {Array}  options [
         {
             'title': 'Some title',
@@ -648,7 +643,7 @@ $(function() {
                     'id': roles[i]._id
                 });
 
-                if (roles[i].selected !== undefined && roles[i].selected === 'true') {
+                if (roles[i].selected === 'true') {
                     o.attr('selected', 'selected');
                 } else if (selected !== undefined && selected.indexOf(roles[i]._id) > -1) {
                     o.attr('selected', 'selected');
@@ -658,6 +653,49 @@ $(function() {
             }
 
             return group;
+        }))));
+    };
+
+    /*
+     * @function Generates a multi-select dropdown.
+     *
+     * @param  {String} id
+     * @param  {String} title
+     * @param  {Array}  options [
+           {
+               'name': 'option name',
+               'selected': 'true'
+           },
+           ...
+     * ]
+     * @param  {String} toolTip
+     * @return {Object}
+     */
+    helpers.getFlatMultiDropdownGroup = function(id, title, options, toolTip) {
+        return  $('<div/>', {
+            'class': 'form-group'
+        }).append($('<lable/>', {
+            'html': $('<b/>', {
+                'text': title
+            })
+        })).append($('<div/>', {
+            'class': 'dropdown',
+            'data-toggle': 'tooltip',
+            'title': toolTip
+        }).append($('<select/>', {
+            'class': 'form-control select2 select2-hidden-accessible',
+            'multiple': 'multiple',
+            'id': id,
+            'style': 'width: 100%; cursor: pointer;'
+        }).append(options.map(function(option) {
+            let o = $('<option/>', {
+                'html': option.name,
+                'id': option._id
+            });
+            if (option.selected === 'true') {
+                o.attr('selected', 'selected');
+            }
+            return o;
         }))));
     };
 
@@ -1068,14 +1106,14 @@ $(function() {
                             'role': 'form'
                         })
                         .append($('<p/>', {
-                            'html': 'Die Version ' + version + ' von PhantomBotDE ist ab sofort zum Download verfügbar! <br>' +
-                            'Die Änderungen dieser Version können Sie ' +
-                                $('<a/>', { 'target': '_blank' }).prop('href', 'https://github.com/PhantomBotDE/PhantomBotDE/releases/' + version).append('hier einsehen.')[0].outerHTML + ' <br>' +
-                            'Du kannst dir ' +
-                                $('<a/>', { 'target': '_blank' }).prop('href', downloadLink).append('hier')[0].outerHTML + ' deine eigene Kopie der Version ' + version + '\' von PhantomBot besorgen. \<br>' +
-                            '<b>Bitte lesen Sie in ' +
-                                $('<a/>', { 'target': '_blank' }).prop('href', 'https://phantombot.github.io/PhantomBot/guides/#guide=content/setupbot/updatebot').append('dieser Anleitung')[0].outerHTML +
-                                ' nach, wie Sie PhantomBotDE richtig aktualisieren können.</b>'
+                            'html': 'Version ' + version + ' of PhantomBot is now available to download! <br>' +
+                            'You can view the changes of this version ' +
+                                $('<a/>', { 'target': '_blank' }).prop('href', 'https://github.com/PhantomBot/PhantomBot/releases/' + version).append('here.')[0].outerHTML + ' <br>' +
+                            'Du kannst dir deine eigene Kopie der Version ' + version + 'vom Phantombot ' +
+                                $('<a/>', { 'target': '_blank' }).prop('href', downloadLink).append('hier')[0].outerHTML + 'holen. <br>' +
+                            '<b>Please check ' +
+                                $('<a/>', { 'target': '_blank' }).prop('href', 'https://phantombot.github.io/PhantomBot/guides/#guide=content/setupbot/updatebot').append('Dieser Guide')[0].outerHTML +
+                                ' hilft dir, wie man den PhantomBot richtig aktualisiert.</b>'
                         })), function() {
                             $('#pb-update').modal('toggle');
                         }).modal('toggle');
@@ -1137,11 +1175,11 @@ $(function() {
                 parsedDate = Date.parse(matcher[4] + '.' + matcher[2] + '.' + matcher[6]);
 
                 if (isNaN(parsedDate)) {
-                    helpers.logError('Failed to parse date from "' + date + '". Returning current date.', true);
+                    helpers.logError('Fehler beim analysieren des Datums von "' + date + '". Rückgabe des aktuellen Datums.', true);
                     parsedDate = now;
                 }
             } else {
-                helpers.logError('Failed to parse date from "' + date + '". Returning current date.', true);
+                helpers.logError('Fehler beim analysieren des Datums von "' + date + '". Rückgabe des aktuellen Datums.', true);
                 parsedDate = now;
             }
         }
