@@ -40,7 +40,7 @@ $(function() {
                 helpers.log('sendToSocket:: ' + json, helpers.LOG_TYPE.DEBUG);
             }
         } catch (e) {
-            helpers.logError('Failed to send message to socket: ' + e.message, helpers.LOG_TYPE.DEBUG);
+            helpers.logError('Fehler beim Senden der Nachricht an Socket: ' + e.message, helpers.LOG_TYPE.DEBUG);
         }
     };
 

@@ -55,7 +55,7 @@ $(function() {
             // Toggle the settings button.
             $('#' + name.replace('Toggle', 'Settings')).prop('disabled', !checked);
             // Alert the user.
-            toastr.success('Das Alarmmodul wurde erfolgreich ' + (checked ? 'aktiviert!' : 'deaktiviert!'));
+            toastr.success('Das Alarmmodul wurde erfolgreich ' + (checked ? 'aktiviert' : 'deaktiviert') + '!');
         });
     });
 
@@ -141,7 +141,7 @@ $(function() {
                     'Die Nachricht wird gesendet, wenn sich jemand den Kanal abonniert. Tags: (name), (alert), (playsound), (plan), und (reward)', false))
                 // Appen the reward box
                 .append(helpers.getInputGroup('sub-reward', 'number', 'Abonnement Belohnung', '', e.subscribeReward,
-                    'Belohnung, die der Benutzer erhält, wenn er den Kanal abonnier, ein Geschenk-Abonnement erhält oder mit Twitch Prime abonniert.'))))
+                    'Belohnung, die der Benutzer erhält, wenn er den Kanal abonnier, ein Geschenk-Abonnement erhält oder mit Prime abonniert.'))))
             // Append second collapsible accordion.
             .append(helpers.getCollapsibleAccordion('main-2', 'Prime Abonnement-Einstellungen',  $('<form/>', {
                     'role': 'form'
@@ -766,10 +766,10 @@ $(function() {
             .append(helpers.getDropdownGroup('tipeeestream-toggle', 'TipeeeStream-Alarme aktivieren', (e.toggle === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'],
                 'Wenn TipeeeStream Spenden in den Chat gesendet werden sollen.'))
             // Add the the text area for the tip message.
-            .append(helpers.getTextAreaGroup('tipeeestream-message', 'text', 'Spenden Nachrichte', '', e.message,
+            .append(helpers.getTextAreaGroup('tipeeestream-message', 'text', 'Spenden Nachricht', '', e.message,
                 'Die Nachricht wird in den Kanal gesendet, wenn jemand über TipeeStream spendet. Tags: (name), (amount), (reward), (formattedamount) und (message)'))
             // Add the the box for the tip reward
-            .append(helpers.getInputGroup('tipeeestream-reward', 'number', 'Spenden Belohnungs-Multiplier', '', e.reward, 'Belohnungsmultiplikator für die Belohnung.')),
+            .append(helpers.getInputGroup('tipeeestream-reward', 'number', 'Spenden Belohnungs-Multiplikator', '', e.reward, 'Belohnungsmultiplikator für die Belohnung.')),
             function() { // Callback once the user clicks save.
                 let tipToggle = $('#tipeeestream-toggle').find(':selected').text() === 'Ja',
                     tipMessage = $('#tipeeestream-message'),
@@ -870,7 +870,7 @@ $(function() {
                 .append(helpers.getDropdownGroup('poll-retweets', 'Suche Retweets', (e.poll_retweets === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'],
                     'Wenn PhantomBot nach Ihren Retweets suchen und diese im Chat posten soll.'))
                 // Add the toggle for home timeline
-                .append(helpers.getDropdownGroup('poll-home', 'Suche auf der Home Timeline', (e.poll_hometimeline === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'],
+                .append(helpers.getDropdownGroup('poll-home', 'Suche auf der Startseiten Timeline', (e.poll_hometimeline === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'],
                     'Wenn PhantomBot nach allem auf deiner Timeline suchen und es im Chat posten soll.'))
                 // Add the toggle for user timeline
                 .append(helpers.getDropdownGroup('poll-user', 'Suche auf der Benutzer-Timeline', (e.poll_usertimeline === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'],
@@ -888,7 +888,7 @@ $(function() {
                     'role': 'form'
                 })
                 // Add the toggle for mentions
-                .append(helpers.getDropdownGroup('retweet-toggle', 'Retweet-Belohnungen aktivieren', (e.reward_toggle === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'], 'Wenn PhantomBot Benutzer belohnen soll, die Ihre Tweets retweeten.'))
+                .append(helpers.getDropdownGroup('retweet-toggle', 'Retweet-Belohnungen aktivieren', (e.reward_toggle === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'], 'Wenn PhantomBot Benutzer belohnen soll, die Tweets retweeten.'))
                 // Add the toggle for retweets
                 .append(helpers.getDropdownGroup('retweet-toggle-msg', 'Retweet Belohnungensnachricht aktivieren', (e.reward_announce === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'],
                     'Wenn PhantomBot ankündigen soll, dass es einen Benutzer für das Reetweeten Ihrer Tweets belohnt hat.'))

@@ -371,9 +371,9 @@ $(function() {
                 if (message.ytkeycheck === false) {
                     hasAPIKey = false;
                     console.error("Fehlender YouTube-API-Schlüssel.");
-                    toastr.error('A YouTube API key has not been configured. Please review the instructions ' +
-                                 '<a href="https://phantombot.github.io/PhantomBot/guides/#guide=content/integrations/youtubesetup">here' +
-                                 '</a> on the PhantomBot Community Forum.', 'Fehlender YouTube-API-Schlüssel',
+                    toastr.error('Es wurde kein YouTube-API-Schlüssel konfiguriert. Bitte lese die Anweisungen ' +
+                                 '<a href="https://phantombot.github.io/PhantomBot/guides/#guide=content/integrations/youtubesetup">hier' +
+                                 '</a> im PhantomBot-Community-Forum.', 'Fehlender YouTube-API-Schlüssel',
                                  {timeOut: 0, extendedTimeOut: 0});
                 }
                 return;

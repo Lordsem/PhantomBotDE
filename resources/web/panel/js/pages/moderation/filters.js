@@ -74,10 +74,10 @@ $(function() {
             .append(helpers.getCheckBox('timeout-message-toggle', e.silentTimeoutLinks === 'true', 'Stumm', 'Ob die Warnmeldung gesendet werden soll oder nicht.')))
             // Append input box for the warning time.
             .append(helpers.getInputGroup('timeout-warning-time', 'number', 'Warndauer (Sekunden)', '0', e.warningTimeLinks,
-                'Wie lange in Sekunden der Benutzer bei seinem ersten Vergehen einen Timeout erhält. 0 Sekunden löschen nur die letzte Nachricht.'))
+                'Für wie viele Sekunden der Benutzer bei seinem ersten Vergehen einen Timeout erhält. 0 Sekunden löscht nur die letzte Nachricht.'))
             // Append input box for the timeout time.
             .append(helpers.getInputGroup('timeout-timeout-time', 'number', 'Timeout Dauer (Sekunden)', '0', e.timeoutTimeLinks,
-                'Wie lange in Sekunden der Benutzer bei seinem letzten Vergehen einen Timeout erhält. 0 Sekunden löschen nur die letzte Nachricht.'))
+                'Für wie viele Sekunden der Benutzer bei seinem letzten Vergehen einen Timeout erhält. 0 Sekunden löscht nur die letzte Nachricht.'))
             // Add an advance section that can be opened with a button toggle.
             .append($('<div/>', {
                 'class': 'collapse',
@@ -101,7 +101,7 @@ $(function() {
                     'Wenn Stammzuschauer erlaubt sein soll, diesen Filter zu umgehen.'))
                 // Tooltip to toggle for subs to bypass this filter.
                 .append(helpers.getCheckBox('exclude-subscribers', e.subscribersModerateLinks !== 'true', 'Abonnenten ausschließen',
-                    'Wenn es den Abonnenten erlaubt sein soll, diesen Filter zu umgehen.'))
+                    'Wenn es den Abonnenten erlaubt sein soll, diesen Filter zu umgehen.')))
             // Callback function to be called once we hit the save button on the modal.
             })), function() {
                 let timeoutMessage = $('#timeout-message'),
@@ -191,7 +191,7 @@ $(function() {
                     'Wenn Stammzuschauer erlaubt sein soll, diesen Filter zu umgehen.'))
                 // Tooltip to toggle for subs to bypass this filter.
                 .append(helpers.getCheckBox('exclude-subscribers', e.subscribersModerateCaps !== 'true', 'Abonnenten ausschließen',
-                    'Wenn es den Abonnenten erlaubt sein soll, diesen Filter zu umgehen.'))
+                    'Wenn es den Abonnenten erlaubt sein soll, diesen Filter zu umgehen.')))
             // Callback function to be called once we hit the save button on the modal.
             })), function() {
                 let timeoutMessage = $('#timeout-message'),
@@ -367,7 +367,7 @@ $(function() {
                     'role': 'form'
                 })
                 // Append ban reason. This is the message Twitch shows with the timeout.
-                .append(helpers.getInputGroup('timeout-banmsg', 'text', 'Timeout grund', '', e.silentSpamMessage,
+                .append(helpers.getInputGroup('timeout-banmsg', 'text', 'Timeout Grund', '', e.silentSpamMessage,
                     'Nachricht, die allen Moderatoren angezeigt wird, wenn der Benutzer einen Timeout erhält.'))
                 // Append input box for amount of caps required before checking.
                 .append(helpers.getInputGroup('spam-amount', 'number', 'Spam-Limit', '0', e.spamLimit,

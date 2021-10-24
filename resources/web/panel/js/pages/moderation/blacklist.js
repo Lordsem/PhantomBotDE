@@ -140,7 +140,7 @@ $(run = function() {
                     .append(helpers.getCheckBox('exclude-regulars', e.excludeRegulars, 'Stammzuschauer ausschließen', 'Wenn Stammzuschauern erlaubt sein soll, diesen Filter zu umgehen.'))
                     // Tooltip to toggle for subs to bypass this filter.
                     .append(helpers.getCheckBox('exclude-subscribers', e.excludeSubscribers, 'Abonnenten ausschließen',
-                        'Wenn es den Abonnenten erlaubt sein soll, diesen Filter zu umgehen.'))
+                        'Wenn es den Abonnenten erlaubt sein soll, diesen Filter zu umgehen.')))
                 // Callback function to be called once we hit the save button on the modal.
                 })), function() {
                     let phrase = $('#ban-phrase'),
@@ -150,7 +150,7 @@ $(run = function() {
                         timeoutTime = $('#timeout-timeout-time'),
                         timeoutMsg = $('#timeout-reason'),
                         isReg = $('#exclude-regulars').is(':checked'),
-                        isSub = $('#exclude-subscribers').is(':checked'),
+                        isSub = $('#exclude-subscribers').is(':checked');
 
                     // Add regex prefix is regex.
                     if (isRegex && !phrase.val().startsWith('regex:')) {

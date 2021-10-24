@@ -40,7 +40,7 @@ $(function() {
             $('#grp-instant-commercial').addClass('hidden');
         } else {
             $('#instant-commercial-length').select2({
-                placeholder: 'Werbespotlänge, in Sekunden.',
+                placeholder: 'Werbespotlänge in Sekunden.',
                 width: '100%'
             }).tooltip('disable');
         }
@@ -328,7 +328,7 @@ $(function () {
             return;
         }
         socket.sendCommand('instant_commercial', 'commercial ' + $('#instant-commercial-length').val() + ($('#instant-commercial-silent').is(':checked') ? ' silent' : ''), function() {
-            toastr.success('Successfully ran a commercial!');
+            toastr.success('Erfolgreich einen Werbespot geschaltet!');
         });
     });
 

@@ -207,7 +207,7 @@ $(function() {
                     .append(helpers.getTextAreaGroup('command-response', 'text', 'Antwort', '', e.command, 'Antwort des Befehls. Verwenden Sie die Eingabetaste für mehrere Chat-Linien, maximal 5.'))
                     .append(tokenButton)
                     // Append a select option for the command permission.
-                    .append(helpers.getDropdownGroup('command-permission', 'User Level', helpers.getGroupNameById(e.permcom),
+                    .append(helpers.getDropdownGroup('command-permission', 'Benutzerlevel', helpers.getGroupNameById(e.permcom),
                         ['Caster', 'Administrators', 'Moderators', 'Subscribers', 'Donators', 'VIPs', 'Regulars', 'Viewers']))
                     // Add an advance section that can be opened with a button toggle.
                     .append($('<div/>', {
@@ -231,7 +231,7 @@ $(function() {
                             .append(helpers.getCheckBox('command-disabled', e.disabledCommands != null, 'Deaktiviert',
                                 'Wenn diese Option aktiviert ist, kann der Befehl nicht im Chat verwendet werden.'))
                             .append(helpers.getCheckBox('command-hidden', e.hiddenCommands != null, 'Versteckt',
-                                'Wenn diese Option aktiviert ist, wird der Befehl beim Aufruf von !command nicht aufgelistet.'))
+                                'Wenn diese Option aktiviert ist, wird der Befehl beim Aufruf von !commands nicht aufgelistet.'))
                         // Callback function to be called once we hit the save button on the modal.
                     })), function() {
                         let commandName = $('#command-name'),
@@ -324,7 +324,7 @@ $(function() {
         // Append a text box for the command response.
         .append(helpers.getTextAreaGroup('command-response', 'text', 'Antwort', 'Antwortbeispiel! Verwenden Sie die Eingabetaste für mehrere Chatzeilen, maximal 5.'))
         // Append a select option for the command permission.
-        .append(helpers.getDropdownGroup('command-permission', 'User Level', 'Viewers',
+        .append(helpers.getDropdownGroup('command-permission', 'Benutzerlevel', 'Viewers',
             ['Caster', 'Administrators', 'Moderators', 'Subscribers', 'Donators', 'VIPs', 'Regulars', 'Viewers']))
         // Add an advance section that can be opened with a button toggle.
         .append($('<div/>', {
@@ -348,7 +348,7 @@ $(function() {
                 .append(helpers.getCheckBox('command-disabled', false, 'Deaktiviert',
                     'Wenn diese Option aktiviert ist, kann der Befehl nicht im Chat verwendet werden.'))
                 .append(helpers.getCheckBox('command-hidden', false, 'Versteckt',
-                    'Wenn diese Option aktiviert ist, wird der Befehl beim Aufruf von !command nicht aufgelistet.'))
+                    'Wenn diese Option aktiviert ist, wird der Befehl beim Aufruf von !commands nicht aufgelistet.'))
         })), function() {
             // Callback function to be called once we hit the save button on the modal.
             let commandName = $('#command-name'),

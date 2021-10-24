@@ -195,7 +195,7 @@ $(function() {
                     .append(helpers.getCheckBox('alias-disabled', e.disabledCommands != null, 'Deaktiviert',
                         'vWenn diese Option aktiviert ist, kann der Alias im Chat nicht verwendet werden.'))
                     .append(helpers.getCheckBox('alias-hidden', e.hiddenCommands != null, 'Versteckt',
-                        'Wenn diese Option aktiviert ist, wird der Alias beim Aufruf von !command nicht aufgeführt.')),
+                        'Wenn diese Option aktiviert ist, wird der Alias beim Aufruf von !commands nicht aufgeführt.')),
                     function() {// Callback once we click the save button.
                         let aliasCmd = $('#alias-cmd');
 
@@ -259,11 +259,11 @@ $(function() {
             'role': 'form'
         })
         // Append alias name.
-        .append(helpers.getInputGroup('alias-name', 'text', 'Alias', '!cmds', '', 'Name des Alias.'))
+        .append(helpers.getInputGroup('alias-name', 'text', 'Alias', '!alias', '', 'Name des Alias.'))
         // Append alias.
-        .append(helpers.getInputGroup('alias-cmd', 'text', 'Befehl', '!commands', '', 'Befehl, der vom Alias ausgeführt werden soll.'))
-        .append(helpers.getCheckBox('alias-disabled', false, 'Disabled', 'Wenn diese Option aktiviert ist, kann der Alias im Chat nicht verwendet werden.'))
-        .append(helpers.getCheckBox('alias-hidden', false, 'Hidden', 'Wenn diese Option aktiviert ist, wird der Alias beim Aufruf von !Befehl nicht aufgeführt.')),
+        .append(helpers.getInputGroup('alias-cmd', 'text', 'Befehl', '!befehl', '', 'Befehl, der vom Alias ausgeführt werden soll.'))
+        .append(helpers.getCheckBox('alias-disabled', false, 'Deaktiviert', 'Wenn diese Option aktiviert ist, kann der Alias im Chat nicht verwendet werden.'))
+        .append(helpers.getCheckBox('alias-hidden', false, 'Versteckt', 'Wenn diese Option aktiviert ist, wird der Alias beim Aufruf von !commands nicht aufgeführt.')),
         function() {// Callback once we click the save button.
             let aliasName = $('#alias-name'),
                 aliasCmd = $('#alias-cmd');

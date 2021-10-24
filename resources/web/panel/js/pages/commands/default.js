@@ -154,7 +154,7 @@ $(function() {
                         // Append input box for the command name. This one is disabled.
                         .append(helpers.getInputGroup('command-name', 'text', 'Befehl', '', '!' + command, 'Name des Befehls. Dieser kann nicht bearbeitet werden.', true))
                         // Append a select option for the command permission.
-                        .append(helpers.getDropdownGroup('command-permission', 'User Level', helpers.getGroupNameById(e.permcom),
+                        .append(helpers.getDropdownGroup('command-permission', 'Benutzerlevel', helpers.getGroupNameById(e.permcom),
                             ['Caster', 'Administrators', 'Moderators', 'Subscribers', 'Donators', 'VIPs', 'Regulars', 'Viewers']))
                         // Add an advance section that can be opened with a button toggle.
                         .append($('<div/>', {
@@ -214,7 +214,7 @@ $(function() {
                                                     // Close the modal.
                                                     $('#edit-command').modal('hide');
                                                     // Tell the user the command was edited.
-                                                    toastr.success('Befehl !' + command + ' erfolgreich bearbeitet!);
+                                                    toastr.success('Befehl !' + command + ' erfolgreich bearbeitet!');
                                                 });
                                             });
                                         });

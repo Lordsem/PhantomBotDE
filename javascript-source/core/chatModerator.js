@@ -27,7 +27,7 @@
         linkPermitTime = $.getSetIniDbNumber('chatModerator', 'linkPermitTime', 30),
 
         capsToggle = $.getSetIniDbBoolean('chatModerator', 'capsToggle', false),
-        capsMessage = $.getSetIniDbString('chatModerator', 'capsMessage', 'Du wurdest für das Überstrapazieren der Caps funktion bestraft.'),
+        capsMessage = $.getSetIniDbString('chatModerator', 'capsMessage', 'Du wurdest für das Überstrapazieren der Caps Funktion bestraft.'),
         capsLimitPercent = $.getSetIniDbFloat('chatModerator', 'capsLimitPercent', 70),
         capsTriggerLength = $.getSetIniDbNumber('chatModerator', 'capsTriggerLength', 20),
 
