@@ -358,7 +358,7 @@ public class TwitchWSIRCParser implements Runnable {
         webSocket.send("JOIN #" + channelName);
 
         // Log in the console that web joined.
-        com.gmt2001.Console.out.println("Channel Joined [#" + channelName + "]");
+        com.gmt2001.Console.out.println("Kanal [#" + channelName + "] beigetreten");
 
         // Port the channel joined event.
         eventBus.postAsync(new IrcJoinCompleteEvent(session));

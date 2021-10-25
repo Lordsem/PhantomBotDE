@@ -261,7 +261,7 @@ $(function() {
                         'class': 'btn btn-secondary btn-sm',
                         'data-toggle': 'tooltip',
                         'data-song': songlist[i].song,
-                        'title': 'Play song',
+                        'title': 'Song abspielen',
                         'html': $('<i/>', {
                             'class': 'fas fa-play'
                         }),
@@ -277,7 +277,7 @@ $(function() {
                         'type': 'button',
                         'class': 'btn btn-secondary btn-sm',
                         'data-toggle': 'tooltip',
-                        'title': 'Delete song',
+                        'title': 'Song löschen',
                         'data-song': songlist[i].song,
                         'html': $('<i/>', {
                             'class': 'fas fa-trash'
@@ -538,7 +538,7 @@ $(function() {
                 let playlist = $('#playlist-load').find(':selected').text();
 
                 if (playlist === 'Select a playlist') {
-                    toastr.error('Bitte wählen Sie eine gültige Playlist aus.');
+                    toastr.error('Bitte wähle eine gültige Playlist aus.');
                 } else {
                     if (playlist.length > 0) {
                         player.loadPlaylist(playlist);

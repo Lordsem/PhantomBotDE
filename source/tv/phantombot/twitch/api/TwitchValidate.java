@@ -413,7 +413,7 @@ public class TwitchValidate {
                     }
                 }
 
-                com.gmt2001.Console.out.println("Validated Twitch " + type + " OAUTH Token.");
+                com.gmt2001.Console.out.println("Bestätigter Twitch" + type + " OAUTH Token.");
             } catch (JSONException ex) {
                 com.gmt2001.Console.err.logStackTrace(ex);
             }

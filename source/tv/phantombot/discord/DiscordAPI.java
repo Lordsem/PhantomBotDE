@@ -137,7 +137,7 @@ public class DiscordAPI extends DiscordUtil {
             com.gmt2001.Console.err.println("Failed to authenticate with Discord: [" + e.getClass().getSimpleName() + "] " + e.getMessage());
             com.gmt2001.Console.err.logStackTrace(e);
         }).doOnSuccess(cgateway -> {
-            com.gmt2001.Console.out.println("Connected to Discord, finishing authentication...");
+            com.gmt2001.Console.out.println("Mit Discord verbunden, Authentifizierung wird abgeschlossen...");
             DiscordAPI.gateway = cgateway;
             subscribeToEvents();
             cgateway.getSelfId().timeout(Duration.ofSeconds(5)).doOnSuccess(aselfId -> {
@@ -315,7 +315,7 @@ public class DiscordAPI extends DiscordUtil {
         }
 
         public static void onDiscordReadyEvent(List<GuildCreateEvent> events) {
-            com.gmt2001.Console.out.println("Successfully authenticated with Discord.");
+            com.gmt2001.Console.out.println("Erfolgreich mit Discord authentifiziert.");
 
             DiscordAPI.instance().ready = true;
 

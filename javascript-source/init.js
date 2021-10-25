@@ -446,7 +446,7 @@
                 if (event.getAdd().toString().equals('true')) {
                     if (isReady === false) {
                         // Bot is now ready.
-                        consoleLn($.botName + ' ready!');
+                        consoleLn($.botName + ' bereit!');
                         // Call the initReady event.
                         callHook('initReady', null, false);
                     }

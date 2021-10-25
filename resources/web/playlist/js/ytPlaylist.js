@@ -71,7 +71,7 @@ connection.onmessage = function (e) {
 
     if (messageObject['authresult'] === 'false') {
         if (!messageObject['authresult']) {
-            newAlert('WS Auth Failed', 'Reload page, if that fails, let the caster know', 'danger', 0);
+            newAlert('WS Auth Failed', 'Seite neu laden, wenn das fehlschlägt, lass es den Caster wissen', 'danger', 0);
             return;
         }
         return;

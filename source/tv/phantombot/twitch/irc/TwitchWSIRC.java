@@ -136,7 +136,7 @@ public class TwitchWSIRC extends WebSocketClient {
      */
     @Override
     public void onOpen(ServerHandshake handshakedata) {
-        com.gmt2001.Console.out.println("Connected to " + this.botName + "@" + this.uri.getHost() + " (SSL)");
+        com.gmt2001.Console.out.println("Verbunden mit " + this.botName + "@" + this.uri.getHost() + " (SSL)");
 
         this.twitchWSIRCParser = TwitchWSIRCParser.instance(this.getConnection(), channelName, session);
 

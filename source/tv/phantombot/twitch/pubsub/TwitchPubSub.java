@@ -377,7 +377,7 @@ public class TwitchPubSub {
                     jsonObject.put("data", topics);
 
                     send(jsonObject.toString());
-                    com.gmt2001.Console.out.println("Connected to Twitch Moderation Data Feed");
+                    com.gmt2001.Console.out.println("Verbunden mit dem Twitch-Moderations-Datenfeed");
                 }
 
                 if (TwitchValidate.instance().hasAPIScope("channel:read:redemptions")) {
@@ -392,7 +392,7 @@ public class TwitchPubSub {
                     jsonObject2.put("data", topics2);
 
                     send(jsonObject2.toString());
-                    com.gmt2001.Console.out.println("Connected to Twitch Channel Points Data Feed");
+                    com.gmt2001.Console.out.println("Verbunden mit Twitch Channel Points Data Feed");
                 }
             } catch (JSONException ex) {
                 com.gmt2001.Console.err.logStackTrace(ex);

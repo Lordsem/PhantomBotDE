@@ -72,7 +72,7 @@ public class TwitchAuthorizationCodeFlow {
                 properties.setProperty("oauth", result.getString("access_token"));
                 properties.setProperty("refresh", result.getString("refresh_token"));
 
-                com.gmt2001.Console.out.println("Refreshed the bot token");
+                com.gmt2001.Console.out.println("Bot-Token aktualisiert");
                 changed = true;
             }
         }
@@ -87,7 +87,7 @@ public class TwitchAuthorizationCodeFlow {
                 properties.setProperty("apioauth", result.getString("access_token"));
                 properties.setProperty("apirefresh", result.getString("refresh_token"));
 
-                com.gmt2001.Console.out.println("Refreshed the broadcaster token");
+                com.gmt2001.Console.out.println("Broadcaster-Token aktualisiert");
                 changed = true;
             }
         }
@@ -106,7 +106,7 @@ public class TwitchAuthorizationCodeFlow {
                     outputProperties.store(outputStream, "PhantomBot Configuration File");
                 }
 
-                com.gmt2001.Console.debug.println("reloading properties");
+                com.gmt2001.Console.debug.println("Eigenschaften zum Wiederladen");
                 if (PhantomBot.instance() != null) {
                     PhantomBot.instance().reloadProperties();
                 }
@@ -123,7 +123,7 @@ public class TwitchAuthorizationCodeFlow {
             return;
         }
         if (clientid != null && !clientid.isBlank() && clientsecret != null && !clientsecret.isBlank()) {
-            com.gmt2001.Console.debug.println("starting timer");
+            com.gmt2001.Console.debug.println("Timer starten");
             t = new Timer();
             t.scheduleAtFixedRate(new TimerTask() {
                 @Override
@@ -142,7 +142,7 @@ public class TwitchAuthorizationCodeFlow {
                     && PhantomBot.instance().getProperties().getProperty("clientsecret") != null && !PhantomBot.instance().getProperties().getProperty("clientsecret").isBlank()) {
                 data = PhantomBot.instance().getProperties().getProperty("clientid").getBytes();
             } else {
-                com.gmt2001.Console.debug.println("missing id or secret");
+                com.gmt2001.Console.debug.println("fehlende ID oder Geheimnis");
                 data = "false".getBytes();
             }
 
@@ -178,7 +178,7 @@ public class TwitchAuthorizationCodeFlow {
                     }
 
                     data = qsd.parameters().get("clientid").get(0).getBytes();
-                    com.gmt2001.Console.debug.println("reloading properties");
+                    com.gmt2001.Console.debug.println("Eigenschaften zum Wiederladen");
                     PhantomBot.instance().reloadProperties();
                     PhantomBot.instance().getAuthFlow().startup(PhantomBot.instance().getProperties().getProperty("clientid"), PhantomBot.instance().getProperties().getProperty("clientsecret"));
                 } catch (IOException ex) {
@@ -236,7 +236,7 @@ public class TwitchAuthorizationCodeFlow {
                         }
 
                         data = "success".getBytes();
-                        com.gmt2001.Console.debug.println("reloading properties");
+                        com.gmt2001.Console.debug.println("Eigenschaften zum Wiederladen");
                         PhantomBot.instance().reloadProperties();
                     } catch (IOException ex) {
                         com.gmt2001.Console.err.printStackTrace(ex);

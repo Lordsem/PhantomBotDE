@@ -83,7 +83,7 @@ $(function() {
                     helpers.log('Ajax-Anfrage für Seite abgeschlossen: ' + folder + '/' + page, helpers.LOG_TYPE.DEBUG);
                 },
                 error: function(err) {
-                    helpers.logError('Failed to load page (' + page + ') => ' + err.statusText, helpers.LOG_TYPE.FORCE);
+                    helpers.logError('Fehler beim Laden der Seite (' + page + ') => ' + err.statusText, helpers.LOG_TYPE.FORCE);
                 }
             });
         }

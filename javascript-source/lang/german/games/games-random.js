@@ -94,7 +94,7 @@ $.lang.register('randomcommand.57', 'Süßigkeiten, Süßigkeiten und mehr Süß
 $.lang.register('randomcommand.58', 'Nun verstehe ich die Umstände und bin erleichtert...');
 $.lang.register('randomcommand.59', 'Komm schon, Kritzeleien an der Badezimmerwand? Bitte zeige mir den Weg zur wahren Erleuchtung!');
 $.lang.register('randomcommand.60', 'Bitte mach dir keine Sorgen, (sender), ich bin nur hergekommen, um dich auszulöschen - nicht um dich auszurauben.');
-$.lang.register('randomcommand.61', '... wenn du die Fliege am Leben lassen, wird die Spinne sterben. Du kannst nicht beide retten, ohne dass einer davon leidet. Es ist deine Wahl (sender).');
+$.lang.register('randomcommand.61', '... wenn du die Fliege am Leben lässt, wird die Spinne sterben. Du kannst nicht beide retten, ohne dass einer davon leidet. Es ist deine Wahl (sender).');
 $.lang.register('randomcommand.62', 'Bonsai, Badespielzeug, kluger Typ, Wasserjunge, Lichter leuchten hell in der Stadt heute Abend.');
 $.lang.register('randomcommand.63', 'Ziehen, ziehen, ziehen... pusten, pusten, pusten! Yay!');
 $.lang.register('randomcommand.64', 'Blut für den Blutgott und Schädel für den Schädelthron!');

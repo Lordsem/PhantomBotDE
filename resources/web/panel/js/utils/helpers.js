@@ -1102,13 +1102,13 @@ $(function() {
                 $('#notifications-menu-ul').append($('<li/>').append($('<a/>', {
                     'href': 'javascript:void(0);',
                     'click': function() {
-                        helpers.getModal('pb-update', 'PhantomBot Update', 'Ok', $('<form/>', {
+                        helpers.getModal('pb-update', 'PhantomBotDE Update', 'Ok', $('<form/>', {
                             'role': 'form'
                         })
                         .append($('<p/>', {
-                            'html': 'Version ' + version + ' of PhantomBot is now available to download! <br>' +
-                            'You can view the changes of this version ' +
-                                $('<a/>', { 'target': '_blank' }).prop('href', 'https://github.com/PhantomBot/PhantomBot/releases/' + version).append('here.')[0].outerHTML + ' <br>' +
+                            'html': 'Version ' + version + ' von PhantomBot steht jetzt zum Download bereit! <br>' +
+                            'Du kannst dir die Änderungen dieser Version ' +
+                                $('<a/>', { 'target': '_blank' }).prop('href', 'https://github.com/PhantomBotDE/PhantomBotDE/releases/' + version).append('hier.')[0].outerHTML + 'anzeigen lassen <br>' +
                             'Du kannst dir deine eigene Kopie der Version ' + version + 'vom Phantombot ' +
                                 $('<a/>', { 'target': '_blank' }).prop('href', downloadLink).append('hier')[0].outerHTML + 'holen. <br>' +
                             '<b>Please check ' +

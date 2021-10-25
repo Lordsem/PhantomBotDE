@@ -71,10 +71,10 @@ public class Script {
         try {
             load();
             if (file.getPath().endsWith("init.js")) {
-                com.gmt2001.Console.out.println("Reloaded module: init.js");
+                com.gmt2001.Console.out.println("Modul neu geladen: init.js");
             } else {
                 String path = file.getPath().replace("\056\134", "").replace("\134", "/").replace("scripts/", "");
-                com.gmt2001.Console.out.println("Reloaded module: " + path);
+                com.gmt2001.Console.out.println("Modul neu geladen: " + path);
             }
             fileNotFoundCount = 0;
         } catch (IOException ex) {
@@ -107,10 +107,10 @@ public class Script {
             load();
             if (silent) {
                 if (file.getPath().endsWith("init.js")) {
-                    com.gmt2001.Console.out.println("Neugeladenes Modul: init.js");
+                    com.gmt2001.Console.out.println("Modul neu geladen: init.js");
                 } else {
                     String path = file.getPath().replace("\056\134", "").replace("\134", "/").replace("scripts/", "");
-                    com.gmt2001.Console.out.println("Neugeladenes Modul: " + path);
+                    com.gmt2001.Console.out.println("Modul neu geladen: " + path);
                 }
             }
             fileNotFoundCount = 0;
