@@ -22,7 +22,7 @@ $.lang.register('rafflesystem.open.points', 'Eine Verlosung ist nun geöffnet! T
 $.lang.register('rafflesystem.open', 'Eine Verlosung ist nun geöffnet! Tippe $1 um an der Verlosung teilzunehmen$2! $3');
 $.lang.register('rafflesystem.close.error.closed', 'Derzeit ist keine Verlosung im Gange.');
 $.lang.register('rafflesystem.close.success', 'Die Verlosung ist nun geschlossen! Es werden keine Teilnehmer:innen mehr angenommen!');
-$.lang.register('rafflesystem.winner', 'Der/Die Gewinner:in dieser Verlosung ist $1! $2');
+$.lang.register('rafflesystem.winner', 'Gewinner:in dieser Verlosung ist $1! $2');
 $.lang.register('rafflesystem.whisper.winner', 'Du hast eine Verlosung im Kanal von $1 gewonnen!');
 $.lang.register('rafflesystem.repick.error', 'Es sind keine weiteren Teilnehmer:innen in der Teilnehmer:innenliste vorhanden.');
 $.lang.register('rafflesystem.enter.404', 'Du nimmst an dieser Verlosung bereits teil!');

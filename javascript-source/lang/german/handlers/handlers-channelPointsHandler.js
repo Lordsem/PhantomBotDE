@@ -15,10 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-$.lang.register('channelpointshandler.notenabled', 'Derzeit sind keine Kanalpunktfunktionen aktiviert. Bitte benutze "!channelpoints info" für Informationen darüber, was PhantomBotDE mit Kanalpunkten machen kann oder "!channelpoints usage" für die Verwendung');
-$.lang.register('channelpointshandler.info', 'PhantomBotDE kann so konfiguriert werden, dass Kanalpunkteinlösungen für mehrere Funktionen automatisiert werden. Transfer: Benutzer erhält Bot-Währung. Giveall: Jeder im Chat erhält Bot-Währung. Emoteonly: Setzt den Chat für eine bestimmte Zeit in den Emote Only Modus. Timeout: Timeout für einen bestimmten Benutzer für einen bestimmten Zeitraum.');
+$.lang.register('channelpointshandler.notenabled', 'Derzeit sind keine Kanalpunktfunktionen aktiviert. Bitte benutze "!channelpoints info" für Informationen darüber, was PhantomBot mit Kanalpunkten machen kann oder "!channelpoints usage" für die Verwendung');
+$.lang.register('channelpointshandler.info', 'PhantomBot kann so konfiguriert werden, dass Kanalpunkteinlösungen für mehrere Funktionen automatisiert werden. Transfer: Benutzer erhält Bot-Währung. Giveall: Jeder im Chat erhält Bot-Währung. Emoteonly: Setzt den Chat für eine bestimmte Zeit in den Emote Only Modus. Timeout: Timeout für einen bestimmten Benutzer für einen bestimmten Zeitraum.');
 $.lang.register('channelpointshandler.usage', 'Verwendung: !channelpoints [info / usage / transfer / giveall / emoteonly / timeout]');
-$.lang.register('channelpointshandler.current', 'Kanalpunkteautomatisierung derzeit für $1 aktiviert. Verwende bitte "!channelpoints useage" für die Verwendung von Befehlen oder "!channelpoints info" um Informationen darüber zu erhalten, was PhantomBotDE mit Kanalpunkten tun kann.');
+$.lang.register('channelpointshandler.current', 'Kanalpunkteautomatisierung derzeit für $1 aktiviert. Verwende bitte "!channelpoints useage" für die Verwendung von Befehlen oder "!channelpoints info" um Informationen darüber zu erhalten, was PhantomBot mit Kanalpunkten tun kann.');
 $.lang.register('channelpointshandler.nan', 'Eingabe muss eine Zahl sein, bitte versuche es erneut.');
 $.lang.register('channelpointshandler.config.failed', 'Es wurde keine Kanalpunkt-Einlösung erkannt. Bitte versuche es erneut. Wenn du Probleme hast, besuche bitte den PhantomBot Discord https://discord.com/invite/YKvMd78');
 

@@ -87,7 +87,7 @@ $(run = function() {
                     row = $(this).parents('tr');
 
                 // Ask the user if he want to remove the command.
-                helpers.getConfirmDeleteModal('custom_command_modal_remove', 'Sind Sie sicher, dass Sie dieses Schlüsselwort entfernen möchten?', true,
+                helpers.getConfirmDeleteModal('custom_command_modal_remove', 'Bist du sicher, dass du dieses Schlüsselwort entfernen möchtest?', true,
                     'Das Schlüsselwort wurde erfolgreich entfernt!', function() {
                     socket.removeDBValue('discord_keyword_remove', 'discordKeywords', keyword, function() {
                         // Remove the table row.
@@ -148,9 +148,9 @@ $(function() {
             'role': 'form'
         })
         // Append keyword.
-        .append(helpers.getInputGroup('keyword-name', 'text', 'Schlüsselwort', 'hi', '', 'Schlüsselwort, das die Antwort auslöst. Regex ist erlaubt.'))
+        .append(helpers.getInputGroup('keyword-name', 'text', 'Schlüsselwort', 'Hi', '', 'Schlüsselwort, das die Antwort auslöst. Regex ist erlaubt.'))
         // Append response.
-        .append(helpers.getTextAreaGroup('keyword-response', 'text', 'Antwort', 'Hi there!', '', 'Antwort des Schlüsselwortes.')), function() {// Callback once we click the save button.
+        .append(helpers.getTextAreaGroup('keyword-response', 'text', 'Antwort', 'Hallo!', '', 'Antwort des Schlüsselwortes.')), function() {// Callback once we click the save button.
             const keyword = $('#keyword-name'),
                 response = $('#keyword-response');
 

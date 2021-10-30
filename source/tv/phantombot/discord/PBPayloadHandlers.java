@@ -104,12 +104,12 @@ public abstract class PBPayloadHandlers {
     }
 
     private static void handleHeartbeat(PBPayloadContext<Heartbeat> context) {
-        log.debug(format(context.getContext(), "Received heartbeat"));
+        log.debug(format(context.getContext(), "Empfangener Herzschlag"));
         context.getClient().sender().next(GatewayPayload.heartbeat(ImmutableHeartbeat.of(context.getClient().sequence().get())));
     }
 
     private static void handleReconnect(PBPayloadContext<?> context) {
-        context.getHandler().error(new ReconnectException("Reconnecting due to reconnect packet received"));
+        context.getHandler().error(new ReconnectException("Reconnect wegen empfangenem Reconnect-Paket"));
     }
 
     private static void handleInvalidSession(PBPayloadContext<InvalidSession> context) {
@@ -121,7 +121,7 @@ public abstract class PBPayloadHandlers {
         } else {
             client.allowResume().set(false);
             context.getHandler().error(new GatewayException(context.getContext(),
-                    "Reconnecting due to non-resumable session invalidation"));
+                    "Wiederherstellung der Verbindung aufgrund nicht fortsetzbarer Sitzungsentwertung"));
         }
     }
 
@@ -131,7 +131,7 @@ public abstract class PBPayloadHandlers {
         client.heartbeat().start(Duration.ZERO, interval);
 
         if (client.allowResume().get()) {
-            log.debug(format(context.getContext(), "Resuming Gateway session from {}"), client.sequence().get());
+            log.debug(format(context.getContext(), "Wiederaufnahme der Gateway-Sitzung von {}"), client.sequence().get());
             client.sender().next(GatewayPayload.resume(
                     ImmutableResume.of(client.token(), client.getSessionId(), client.sequence().get())));
         } else {
@@ -150,14 +150,14 @@ public abstract class PBPayloadHandlers {
                     .guildSubscriptions(options.getIntents().isAbsent() ?
                             Possible.of(options.isGuildSubscriptions()) : Possible.absent())
                     .build();
-            log.debug(format(context.getContext(), "Identifying to Gateway"), client.sequence().get());
+            log.debug(format(context.getContext(), "Identifizieren mit Gateway"), client.sequence().get());
             client.sender().next(GatewayPayload.identify(identify));
         }
     }
 
     private static void handleHeartbeatAck(PBPayloadContext<?> context) {
         context.getClient().ackHeartbeat();
-        log.debug(format(context.getContext(), "Heartbeat acknowledged after {}"),
+        log.debug(format(context.getContext(), "Herzschlag bestätigt nach {}"),
                 context.getClient().getResponseTime());
     }
 

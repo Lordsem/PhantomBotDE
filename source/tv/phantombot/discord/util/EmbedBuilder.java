@@ -167,7 +167,7 @@ public class EmbedBuilder {
 
     public Consumer<? super EmbedCreateSpec> build() {
         if (this.doesExceedCharacterLimit()) {
-            throw new IllegalArgumentException("Embed exceeds character limit of " + TOTAL_MAX_CHAR + " (has " + this.getTotalVisibleCharacters() + " chars)");
+            throw new IllegalArgumentException("Einbetten überschreitet die Zeichenbeschränkung von " + TOTAL_MAX_CHAR + " (hat " + this.getTotalVisibleCharacters() + " Zeichen)");
         }
 
         return (EmbedCreateSpec t) -> {

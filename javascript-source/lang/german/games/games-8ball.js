@@ -24,7 +24,7 @@ $.lang.register('8ball.answer.6', 'Ja, zu gegebener Zeit.');
 $.lang.register('8ball.answer.7', 'Du musst noch warten.');
 $.lang.register('8ball.answer.8', 'Frag später noch einmal.');
 $.lang.register('8ball.answer.9', 'Ja! Sicher');
-$.lang.register('8ball.answer.10', 'Konzentrier dich und frag nochmal.');
+$.lang.register('8ball.answer.10', 'Konzentriere dich und frag nochmal.');
 $.lang.register('8ball.answer.11', 'Wahrscheinlich.');
 $.lang.register('8ball.answer.12', 'Das wird nie passieren.');
 $.lang.register('8ball.answer.13', 'Die Chancen, dass das passiert, sind ziemlich klein.');

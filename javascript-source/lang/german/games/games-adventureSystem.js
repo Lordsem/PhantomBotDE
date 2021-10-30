@@ -56,7 +56,7 @@ $.lang.register('adventuresystem.stories.3.chapter.3', 'Das war eine knappe Ents
 
 $.lang.register('adventuresystem.stories.4.title', 'Mannbärschwein');
 $.lang.register('adventuresystem.stories.4.chapter.1', 'Ich denke, wir haben sehr gute Chancen, das sagenumwobene Monster in dieser Höhle zu finden... Es ist zu einem Drittel Mensch, einem Drittel Bär und einem Drittel Schwein. Lacht nicht, ICH MEINE ES TOT ERNST!');
-$.lang.register('adventuresystem.stories.4.chapter.2', '/me Als sich der/die Abenteurer seinen/ihren Weg durch die Tunnel bahnt/en, hören sie ein leises Geräusch hinter sich...');
+$.lang.register('adventuresystem.stories.4.chapter.2', '/me Als sich der/die Abenteurer:in seinen/ihren Weg durch die Tunnel bahnt/en, hören sie ein leises Geräusch hinter sich...');
 $.lang.register('adventuresystem.stories.4.chapter.3', 'Achtung! Es ist Mannbärschwein! (caught) wurde(n) in die Dunkelheit gezogen und verschwand(en) auf nimmer Wiedersehen.');
 $.lang.register('adventuresystem.stories.4.chapter.4', '(survivors), lasst uns hier verschwinden! Wir können es nicht mit ihm aufnehmen!');
 

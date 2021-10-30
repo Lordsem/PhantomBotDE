@@ -108,7 +108,7 @@
                 top.push((parseInt(i) + 1) + '. ' + $.resolveRank(temp[i].username) + ' ' + $.getTimeString(temp[i].value, true));
             }
 
-            $.say($.lang.get('top5.default', amountTime, 'time', top.join(', ')));
+            $.say($.lang.get('top5.default', amountTime, 'Zeit', top.join(', ')));
             return;
         }
 

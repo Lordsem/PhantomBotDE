@@ -225,7 +225,7 @@ $(function() {
                                     'Wenn eine Nachricht im Kanal gesendet werden soll, wenn jemand den Kanal hostet.'))
                             // Add the the text area for the host message.
                             .append(helpers.getTextAreaGroup('host-message', 'text', 'Host Nachricht', '', e.hostMessage,
-                                    'Die Nachricht wird gesendet, wenn jemand den Kanal hostet. Tag: (name) und (Streamer\', \'Administrator\', \'Moderator\', \'Abonnent\', \'Spender\', \'Stammzuschauer\', \'Zuschauer)', false))
+                                    'Die Nachricht wird gesendet, wenn jemand den Kanal hostet. Tag: (name) und (Caster\', \'Administrator\', \'Moderator\', \'Abonnent\', \'Spender\', \'Stammzuschauer\', \'Zuschauer)', false))
                             // Add the the box for the reward.
                             .append(helpers.getInputGroup('host-channel', 'Alarmkanal', '#alerts', e.hostChannel,
                                     'Kanal, in dem alle Benachrichtigungen angezeigt werden sollen.'))),

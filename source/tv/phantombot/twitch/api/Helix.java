@@ -228,7 +228,7 @@ public class Helix {
 
         try {
             if (this.oAuthToken == null || this.oAuthToken.isBlank()) {
-                throw new IllegalArgumentException("apioauth is required");
+                throw new IllegalArgumentException("apiauth ist erforderlich");
             }
 
             RequestSender client = HttpClient.create().secure().baseUrl(BASE_URL).headers(h -> {
@@ -254,7 +254,7 @@ public class Helix {
             responseCode = response.response.status().code();
 
             if (PhantomBot.instance().getProperties().getProperty("helixdebug", "false").equals("true")) {
-                com.gmt2001.Console.debug.println("Helix ratelimit response > Limit: " + response.response.responseHeaders().getAsString("Ratelimit-Limit")
+                com.gmt2001.Console.debug.println("Helix-Ratelimit-Antwort > Limit: " + response.response.responseHeaders().getAsString("Ratelimit-Limit")
                         + " <> Remaining: " + response.response.responseHeaders().getAsString("Ratelimit-Remaining") + " <> Reset: "
                         + response.response.responseHeaders().getAsString("Ratelimit-Reset"));
             }
@@ -276,7 +276,7 @@ public class Helix {
             c.add(Calendar.MINUTE, WARNING_INTERVAL_MINS);
             nextWarning = c.getTime();
 
-            com.gmt2001.Console.warn.println("Helix rejected a request [" + endPoint + "] " + returnObject.optInt("status", 0) + " "
+            com.gmt2001.Console.warn.println("Helix hat eine Anfrage abgelehntt [" + endPoint + "] " + returnObject.optInt("status", 0) + " "
                     + returnObject.optString("error", "Unknown") + ": " + returnObject.optString("message", "Unknown"));
         }
 
@@ -417,7 +417,7 @@ public class Helix {
         }
 
         if (game_id == null && (language == null || language.isBlank()) && (title == null || title.isBlank()) && delay < 0) {
-            throw new IllegalArgumentException("must provide one valid argument");
+            throw new IllegalArgumentException("muss ein gültiges Argument liefern");
         }
 
         JSONStringer js = new JSONStringer();
@@ -528,7 +528,7 @@ public class Helix {
     public Mono<JSONObject> getUsersFollowsAsync(@Nullable String from_id, @Nullable String to_id, int first, @Nullable String after)
             throws JSONException, IllegalArgumentException {
         if ((from_id == null || from_id.isBlank()) && (to_id == null || to_id.isBlank())) {
-            throw new IllegalArgumentException("from_id or to_id");
+            throw new IllegalArgumentException("from_id oder to_id");
         }
 
         if (first <= 0) {
@@ -651,7 +651,7 @@ public class Helix {
     public Mono<JSONObject> getStreamsAsync(int first, @Nullable String before, @Nullable String after, @Nullable List<String> user_id,
             @Nullable List<String> user_login, @Nullable List<String> game_id, @Nullable List<String> language) throws JSONException, IllegalArgumentException {
         if (before != null && !before.isBlank() && after != null && !after.isBlank()) {
-            throw new IllegalArgumentException("can not use before and after at the same time");
+            throw new IllegalArgumentException("kann nicht gleichzeitig vorher und nachher verwendet werden");
         }
 
         if (first <= 0) {
@@ -925,12 +925,12 @@ public class Helix {
             @Nullable String after, @Nullable String language, @Nullable String period, @Nullable String sort, @Nullable String type)
             throws JSONException, IllegalArgumentException {
         if ((id == null || id.isEmpty()) && (user_id == null || user_id.isBlank()) && (game_id == null || game_id.isBlank())) {
-            throw new IllegalArgumentException("id, user_id, or game_id");
+            throw new IllegalArgumentException("id, user_id, oder game_id");
         }
 
         if (id != null && !id.isEmpty() && ((after != null && !after.isBlank()) || (before != null && !before.isBlank()) || (language != null && !language.isBlank())
                 || (period != null && !period.isBlank()) || (sort != null && !sort.isBlank()) || (type != null && !type.isBlank()))) {
-            throw new IllegalArgumentException("other parameters not allowed with video id");
+            throw new IllegalArgumentException("andere Parameter mit Video-ID nicht zulässig");
         }
 
         int c = 0;
@@ -947,11 +947,11 @@ public class Helix {
         }
 
         if (c > 1) {
-            throw new IllegalArgumentException("only one of id, user_id, or game_id may be specified");
+            throw new IllegalArgumentException("Es darf nur eine von id, user_id oder game_id angegeben werden");
         }
 
         if (before != null && !before.isBlank() && after != null && !after.isBlank()) {
-            throw new IllegalArgumentException("can not use before and after at the same time");
+            throw new IllegalArgumentException("kann nicht gleichzeitig vorher und nachher verwendet werden");
         }
 
         if (period != null && !period.isBlank() && !period.equals("all") && !period.equals("day") && !period.equals("week") && !period.equals("month")) {
@@ -1044,11 +1044,11 @@ public class Helix {
      */
     public Mono<JSONObject> getTeamsAsync(@Nullable String name, @Nullable String id) throws JSONException, IllegalArgumentException {
         if ((name == null || name.isBlank()) && (id == null || id.isBlank())) {
-            throw new IllegalArgumentException("name or id");
+            throw new IllegalArgumentException("Name oder ID");
         }
 
         if (name != null && !name.isBlank() && id != null && !id.isBlank()) {
-            throw new IllegalArgumentException("only one of name or id can be specified");
+            throw new IllegalArgumentException("Es kann nur einer von Name oder ID angegeben werden");
         }
 
         String endpoint = "/teams?" + this.qspValid("name", name) + this.qspValid("id", id);
@@ -1108,12 +1108,12 @@ public class Helix {
             @Nullable String before, @Nullable String after, @Nullable String started_at, @Nullable String ended_at)
             throws JSONException, IllegalArgumentException {
         if ((id == null || id.isEmpty()) && (broadcaster_id == null || broadcaster_id.isBlank()) && (game_id == null || game_id.isBlank())) {
-            throw new IllegalArgumentException("id, broadcaster_id, or game_id");
+            throw new IllegalArgumentException("id, broadcaster_id, oder game_id");
         }
 
         if (id != null && !id.isEmpty() && ((after != null && !after.isBlank()) || (before != null && !before.isBlank())
                 || (ended_at != null && !ended_at.isBlank()) || (started_at != null && !started_at.isBlank()))) {
-            throw new IllegalArgumentException("other parameters not allowed with clip id");
+            throw new IllegalArgumentException("andere Parameter mit Clip-ID nicht erlaubt");
         }
 
         if (ended_at != null && !ended_at.isBlank() && (started_at == null || started_at.isBlank())) {
@@ -1134,11 +1134,11 @@ public class Helix {
         }
 
         if (c > 1) {
-            throw new IllegalArgumentException("only one of id, broadcaster_id, or game_id may be specified");
+            throw new IllegalArgumentException("Es darf nur eine von id, Broadcaster_id oder game_id angegeben werden");
         }
 
         if (before != null && !before.isBlank() && after != null && !after.isBlank()) {
-            throw new IllegalArgumentException("can not use before and after at the same time");
+            throw new IllegalArgumentException("kann nicht gleichzeitig vorher und nachher verwendet werden");
         }
 
         if (first <= 0) {

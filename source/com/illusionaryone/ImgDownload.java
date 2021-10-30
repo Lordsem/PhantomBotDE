@@ -64,7 +64,7 @@ public class ImgDownload {
             }
             return new String("true");
         } catch (IOException ex) {
-            com.gmt2001.Console.debug.println("ImgDownload::downloadHTTP(" + urlString + ", " + location + ") failed: " +
+            com.gmt2001.Console.debug.println("ImgDownload::downloadHTTP(" + urlString + ", " + location + ") gescheitert: " +
                                             ex.getMessage());
             return new String("false");
         }

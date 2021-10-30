@@ -18,9 +18,9 @@
 $.lang.register('roulette.win.1', 'Der Abzug wurde betätigt und der Revolver klickt. $1 hat das Roulette überlebt!');
 $.lang.register('roulette.win.2', 'Der Abzug wurde betätigt, aber der Revolver hat eine Fehlfunktion. $1 hatte Glück und darf einen weiteren Tag leben!');
 $.lang.register('roulette.win.3', 'Der Abzug wurde betätigt, aber wie durch Magie, ist $1 nichts passiert!');
-$.lang.register('roulette.win.4', 'Der Abzug wurde betätigt, aber weil im Kopf nur Luft ist, ist nichts passiert.');
+$.lang.register('roulette.win.4', 'Der Abzug wurde betätigt, aber weil im Kopf von $1 nur Luft ist, ist nichts passiert.');
 $.lang.register('roulette.win.5', 'Der Abzug wurde betätigt, aber $1\'s Schädelknochen ist so dick, dass die Kugel nicht durchdringen konnte.');
-$.lang.register('roulette.win.6', 'Der Abzug wurde betätigt, aber die Kugel wurde durch Zeit und Raum abgelenkt.');
+$.lang.register('roulette.win.6', 'Der Abzug wurde betätigt, aber die Kugel wurde durch Zeit und Raum von $1 abgelenkt.');
 $.lang.register('roulette.win.7', 'Der Abzug wurde betätigt, aber $1 starb nicht durch die Kugel, sondern die Kugel starb durch $1.');
 
 $.lang.register('roulette.lost.1', 'Der Abzug wurde betätigt und $1\'s Kopf hat nun einen Gehörgang mehr!');

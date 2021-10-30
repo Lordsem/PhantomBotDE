@@ -132,9 +132,9 @@ public class WsSharedRWTokenAuthenticationHandler implements WsAuthenticationHan
 
         if (!ctx.channel().attr(ATTR_AUTHENTICATED).get()) {
             com.gmt2001.Console.debug.println("wsauthfail");
-            com.gmt2001.Console.debug.println("Expected (rw): >" + readWriteToken + "<");
-            com.gmt2001.Console.debug.println("Expected (r): >" + readOnlyToken + "<");
-            com.gmt2001.Console.debug.println("Got: >" + astr + "<");
+            com.gmt2001.Console.debug.println("Erwartet (rw): >" + readWriteToken + "<");
+            com.gmt2001.Console.debug.println("Erwartet (r): >" + readOnlyToken + "<");
+            com.gmt2001.Console.debug.println("Habe: >" + astr + "<");
             if (ctx.channel().attr(ATTR_AUTH_ATTEMPTS).get() >= maxAttempts) {
                 WebSocketFrameHandler.sendWsFrame(ctx, frame, WebSocketFrameHandler.prepareCloseWebSocketFrame(WebSocketCloseStatus.POLICY_VIOLATION));
                 ctx.close();

@@ -1019,7 +1019,7 @@ public class SqliteStore extends DataStore {
 
             try (Statement statement = connection.createStatement()) {
                 statement.execute("backup to ./dbbackup/" + filename);
-                com.gmt2001.Console.debug.println("Backed up SQLite3 DB to ./dbbackup/" + filename);
+                com.gmt2001.Console.debug.println("Gesicherte SQLite3-Datenbank auf ./dbbackup/" + filename);
             }
         } catch (SQLException ex) {
             com.gmt2001.Console.err.printStackTrace(ex);

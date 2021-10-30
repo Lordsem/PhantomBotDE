@@ -103,7 +103,7 @@ public class TwitchAuthorizationCodeFlow {
             try {
                 try (FileOutputStream outputStream = new FileOutputStream("./config/botlogin.txt")) {
                     outputProperties.putAll(properties);
-                    outputProperties.store(outputStream, "PhantomBot Configuration File");
+                    outputProperties.store(outputStream, "PhantomBot Konfigurationsdatei");
                 }
 
                 com.gmt2001.Console.debug.println("Eigenschaften zum Wiederladen");
@@ -174,7 +174,7 @@ public class TwitchAuthorizationCodeFlow {
                 try {
                     try (FileOutputStream outputStream = new FileOutputStream("./config/botlogin.txt")) {
                         outputProperties.putAll(PhantomBot.instance().getProperties());
-                        outputProperties.store(outputStream, "PhantomBot Configuration File");
+                        outputProperties.store(outputStream, "PhantomBot Konfigurationsdatei");
                     }
 
                     data = qsd.parameters().get("clientid").get(0).getBytes();
@@ -232,7 +232,7 @@ public class TwitchAuthorizationCodeFlow {
                     try {
                         try (FileOutputStream outputStream = new FileOutputStream("./config/botlogin.txt")) {
                             outputProperties.putAll(PhantomBot.instance().getProperties());
-                            outputProperties.store(outputStream, "PhantomBot Configuration File");
+                            outputProperties.store(outputStream, "PhantomBot v");
                         }
 
                         data = "success".getBytes();

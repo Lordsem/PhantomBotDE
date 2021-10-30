@@ -108,6 +108,6 @@ public class HttpSharedTokenOrPasswordAuthenticationHandler implements HttpAuthe
 
     @Override
     public void invalidateAuthorization(ChannelHandlerContext ctx, FullHttpRequest req) {
-        throw new UnsupportedOperationException("Not supported by this authentication handler.");
+        throw new UnsupportedOperationException("Wird von diesem Authentifizierungs-Handler nicht unterstützt.");
     }
 }

@@ -220,11 +220,11 @@ public class PBDiscordGatewayClient implements GatewayClient {
                                 connected.set(true);
                                 ConnectionObserver.State state;
                                 if (reconnectContext.getResetCount() == 0) {
-                                    log.info(format(context, "Connected to Gateway"));
+                                    log.info(format(context, "Mit Gateway verbunden"));
                                     dispatchSink.next(GatewayStateChange.connected());
                                     state = GatewayObserver.CONNECTED;
                                 } else {
-                                    log.info(format(context, "Reconnected to Gateway"));
+                                    log.info(format(context, "Wieder mit Gateway verbunden"));
                                     dispatchSink.next(GatewayStateChange.retrySucceeded(reconnectContext.getAttempts()));
                                     state = GatewayObserver.RETRY_SUCCEEDED;
                                 }
@@ -256,7 +256,7 @@ public class PBDiscordGatewayClient implements GatewayClient {
                             .doOnNext(payload -> {
                                 if (Opcode.RECONNECT.equals(payload.getOp())) {
                                     sessionHandler.error(
-                                            new GatewayException(context, "Reconnecting due to user action"));
+                                            new GatewayException(context, "Wiederverbindung aufgrund einer Benutzeraktion"));
                                 }
                             })
                             .then();
@@ -269,14 +269,14 @@ public class PBDiscordGatewayClient implements GatewayClient {
                                 long delay = now - lastAck.get();
                                 if (lastSent.get() - lastAck.get() > 0) {
                                     if (missedAck.incrementAndGet() > maxMissedHeartbeatAck) {
-                                        log.warn(format(context, "Missing heartbeat ACK for {} (tick: {}, seq: {})"),
+                                        log.warn(format(context, "Fehlender Herzschlag ACK für {} (tick: {}, seq: {})"),
                                                 Duration.ofNanos(delay), t, sequence.get());
                                         sessionHandler.error(new GatewayException(context,
-                                                "Reconnecting due to zombie or failed connection"));
+                                                "Wiederherstellung der Verbindung aufgrund eines Zombies oder einer fehlgeschlagenen Verbindung"));
                                         return Mono.empty();
                                     }
                                 }
-                                log.debug(format(context, "Sending heartbeat {} after last ACK"),
+                                log.debug(format(context, "Senden von Heartbeat {} nach der letzten ACK"),
                                         Duration.ofNanos(delay));
                                 lastSent.set(now);
                                 return Mono.just(GatewayPayload.heartbeat(ImmutableHeartbeat.of(sequence.get())));
@@ -302,7 +302,7 @@ public class PBDiscordGatewayClient implements GatewayClient {
                                     log.info(format(context, "{}"), t.getMessage());
                                 } else {
                                     if (log.isDebugEnabled()) {
-                                        log.error(format(context, "Gateway client error"), t);
+                                        log.error(format(context, "Gateway-Client-Fehler"), t);
                                     } else {
                                         log.error(format(context, "{}"), t.toString());
                                     }
@@ -353,7 +353,7 @@ public class PBDiscordGatewayClient implements GatewayClient {
                     int attempt = retryContext.applicationContext().getAttempts();
                     Duration backoff = retryContext.backoff();
                     log.info(format(getContextFromException(retryContext.exception()),
-                            "Reconnect attempt {} in {}"), attempt, backoff);
+                            "Wiederverbindungsversuch {} in {}"), attempt, backoff);
                     if (attempt == 1) {
                         if (!allowResume.get() || !canResume(retryContext.exception())) {
                             dispatchSink.next(GatewayStateChange.retryStarted(backoff));
@@ -417,7 +417,7 @@ public class PBDiscordGatewayClient implements GatewayClient {
             } else {
                 behavior = sourceBehavior;
             }
-            log.info(format(ctx, "Handling close {} with behavior: {}"), closeStatus, behavior);
+            log.info(format(ctx, "Handhabung schließen {} mit Verhalten: {}"), closeStatus, behavior);
             heartbeat.stop();
             reconnectContext.clear();
             connected.set(false);
@@ -466,7 +466,7 @@ public class PBDiscordGatewayClient implements GatewayClient {
     public Mono<Void> close(boolean allowResume) {
         return Mono.defer(() -> {
             if (sessionHandler == null || disconnectNotifier == null) {
-                return Mono.error(new IllegalStateException("Gateway client is not active!"));
+                return Mono.error(new IllegalStateException("Gateway-Client ist nicht aktiv!"));
             }
             if (allowResume) {
                 sessionHandler.close(DisconnectBehavior.stopAbruptly(null));
@@ -629,9 +629,9 @@ public class PBDiscordGatewayClient implements GatewayClient {
         if (capacityValue != null) {
             try {
                 int capacity = Integer.parseInt(capacityValue);
-                log.info("Overriding default outbound limiter capacity: {}", capacity);
+                log.info("Überschreiben der standardmäßigen Ausgangsbegrenzerkapazität: {}", capacity);
             } catch (NumberFormatException e) {
-                log.warn("Invalid custom outbound limiter capacity: {}", capacityValue);
+                log.warn("Ungültige Kapazität des benutzerdefinierten Outbound-Limiters: {}", capacityValue);
             }
         }
         return 120;

@@ -92,7 +92,7 @@
             }, messageInterval * 6e4);
         }
 
-        $.log.event(user + ' opened a ticket raffle.');
+        $.log.event(user + ' eröffnete eine Ticket-Verlosung.');
         $.inidb.set('traffleSettings', 'isActive', 'true');
     };
 
@@ -105,7 +105,7 @@
         clear();
 
         $.say($.lang.get('ticketrafflesystem.raffle.closed'));
-        $.log.event(user + ' closed a ticket raffle.');
+        $.log.event(user + ' hat eine Ticketverlosung geschlossen.');
     };
 
     function clear() {
@@ -295,7 +295,7 @@
                 raffleMessage = argString.replace(action, '').trim();
                 $.inidb.set('settings', 'traffleMessage', raffleMessage);
                 $.say($.whisperPrefix(sender) + $.lang.get('ticketrafflesystem.auto.msg.set', raffleMessage));
-                $.log.event(sender + ' changed the auto annouce message to ' + raffleMessage);
+                $.log.event(sender + ' änderte die automatische Ansage-Nachricht zu ' + raffleMessage);
             }
 
             /**
@@ -310,7 +310,7 @@
                 messageInterval = parseInt(args[1]);
                 $.inidb.set('settings', 'traffleMessageInterval', messageInterval);
                 $.say($.whisperPrefix(sender) + $.lang.get('ticketrafflesystem.auto.msginterval.set', messageInterval));
-                $.log.event(sender + ' changed the auto annouce interval to ' + messageInterval);
+                $.log.event(sender + ' änderte den automatischen Ansage-Interval zu ' + messageInterval);
             }
         }
 

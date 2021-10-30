@@ -239,19 +239,19 @@
             } else if (commands[command].groupId == 2) {
                 group = 'Moderator';
             } else if (commands[command].groupId == $.getSubscriberGroupID()) {
-                group = 'Subscriber';
+                group = 'Abonnent';
             } else if (commands[command].groupId == 4) {
-                group = 'Donator';
+                group = 'Spender';
             } else if (commands[command].groupId == $.getVIPGroupID()) {
                 group = 'VIP';
             } else if (commands[command].groupId == 6) {
-                group = 'Regular';
+                group = 'Stammzuschauer';
             } else if (commands[command].groupId == 7) {
-                group = 'Viewer';
+                group = 'Zuschauer';
             }
             return group;
         }
-        return 'Viewer';
+        return 'Zuschauer';
     }
 
     /*
@@ -289,19 +289,19 @@
             } else if (commands[command].subcommands[subcommand].groupId == 2) {
                 group = 'Moderator';
             } else if (commands[command].subcommands[subcommand].groupId == $.getSubscriberGroupID()) {
-                group = 'Subscriber';
+                group = 'Abonnent';
             } else if (commands[command].subcommands[subcommand].groupId == 4) {
-                group = 'Donator';
+                group = 'Spender';
             } else if (commands[command].subcommands[subcommand].groupId == $.getVIPGroupID()) {
                 group = 'VIP';
             } else if (commands[command].subcommands[subcommand].groupId == 6) {
-                group = 'Regular';
+                group = 'Stammzuschauer';
             } else if (commands[command].subcommands[subcommand].groupId == 7) {
-                group = 'Viewer';
+                group = 'Zuschauer';
             }
             return group;
         }
-        return 'Viewer';
+        return 'Zuschauer';
     }
 
     /*

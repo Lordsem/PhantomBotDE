@@ -195,7 +195,7 @@ public class TwitchValidate {
             validateA = new Thread(validateRunnable, "tv.phantombot.twitch.api.TwitchValidate::ValidateRunnable");
             validateA.start();
         } catch (Exception ex) {
-            com.gmt2001.Console.out.println("Unable to validate Twitch " + type + " OAUTH Token.");
+            com.gmt2001.Console.out.println("Kann nicht validiert werden: Twitch " + type + " OAUTH Token.");
         }
     }
 
@@ -206,7 +206,7 @@ public class TwitchValidate {
             validateC = new Thread(validateRunnable, "tv.phantombot.twitch.api.TwitchValidate::ValidateRunnable");
             validateC.start();
         } catch (Exception ex) {
-            com.gmt2001.Console.out.println("Unable to validate Twitch " + type + " OAUTH Token.");
+            com.gmt2001.Console.out.println("Kann nicht validiert werden: Twitch " + type + " OAUTH Token.");
         }
     }
 
@@ -217,7 +217,7 @@ public class TwitchValidate {
             validateT = new Thread(validateRunnable, "tv.phantombot.twitch.api.TwitchValidate::ValidateRunnable");
             validateT.start();
         } catch (Exception ex) {
-            com.gmt2001.Console.out.println("Unable to validate Twitch " + type + " OAUTH Token.");
+            com.gmt2001.Console.out.println("Kann nicht validiert werden: Twitch " + type + " OAUTH Token.");
         }
     }
 
@@ -299,17 +299,17 @@ public class TwitchValidate {
         }
 
         if (this.hasAPIScope("chat:edit") && !this.hasChatScope("chat:edit")) {
-            com.gmt2001.Console.warn.println("CHAT (oauth) does not have chat:edit but API (apioauth) does. OAuth tokens may be reversed");
+            com.gmt2001.Console.warn.println("CHAT (oauth) hat keinen chat:edit. Aber API (apioauth) hat. OAuth-Token können rückgängig gemacht werden");
         } else if (!this.hasChatScope("chat:edit")) {
-            com.gmt2001.Console.warn.println("CHAT (oauth) does not have chat:edit. Bot may be unable to respond");
+            com.gmt2001.Console.warn.println("CHAT (oauth) hat keinen chat:edit. Bot kann möglicherweise nicht antworten");
         } else if (!this.hasChatScope("channel:moderate")) {
-            com.gmt2001.Console.warn.println("CHAT (oauth) does not have channel:moderate. Bot may be unable to purge/timeout/ban");
+            com.gmt2001.Console.warn.println("CHAT (oauth) hat keinen channel:moderate. Bot kann möglicherweise nicht löschen/timeouten/bannen");
         }
 
         if (this.getAPILogin().equalsIgnoreCase(botName) && !this.getChatLogin().equalsIgnoreCase(botName)) {
-            com.gmt2001.Console.warn.println("CHAT (oauth) is not logged in as " + botName + " but API (apioauth) is. OAuth tokens may be reversed");
+            com.gmt2001.Console.warn.println("CHAT (oauth) ist nicht eingeloggt als " + botName + " aber API (apioauth) ist. OAuth-Token können rückgängig gemacht werden");
         } else if (!this.getChatLogin().equalsIgnoreCase(botName)) {
-            com.gmt2001.Console.warn.println("CHAT (oauth) is not logged in as " + botName + ". OAuth token may be under the wrong login");
+            com.gmt2001.Console.warn.println("CHAT (oauth) ist nicht eingeloggt als " + botName + ". OAuth-Token befindet sich möglicherweise unter der falschen Anmeldung");
         }
     }
 
@@ -335,14 +335,14 @@ public class TwitchValidate {
                 com.gmt2001.Console.debug.println(type + requestObj.toString(4));
 
                 if (requestObj.has("message") && requestObj.getString("message").equals("invalid access token")) {
-                    com.gmt2001.Console.err.println("Twitch reports your " + type + " OAUTH token as invalid. It may have expired, "
-                            + "been disabled, or the Twitch API is experiencing issues.");
+                    com.gmt2001.Console.err.println("Twitch meldet deinen " + type + " OAUTH Token als ungültig. Er könnte abgelaufen, "
+                            + "deaktiviert sein oder die Twitch-API hat Probleme.");
                     com.gmt2001.Console.debug.println(requestObj.toString(4));
                     return;
                 }
 
                 if (!requestObj.getBoolean("_success")) {
-                    com.gmt2001.Console.err.println("Attempt to validate " + type + " OAUTH token failed.");
+                    com.gmt2001.Console.err.println("Validierungsversuch " + type + " OAUTH Token fehlgeschlagen.");
                     com.gmt2001.Console.debug.println(requestObj.toString(4));
                     return;
                 }

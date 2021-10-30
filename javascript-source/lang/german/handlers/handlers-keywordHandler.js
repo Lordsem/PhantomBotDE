@@ -23,4 +23,4 @@ $.lang.register('keywordhandler.keyword.usage', 'Verwendung: !keyword [add / rem
 $.lang.register('keywordhandler.remove.usage', 'Verwendung: !keyword remove [Schlüsselwort]');
 $.lang.register('keywordhandler.cooldown.usage', 'Verwendung: !keyword cooldown [Schlüsselwort] [Sekunden] - Verwende -1 um die Abklingzeit zu entfernen.');
 $.lang.register('keywordhandler.cooldown.removed', 'Abklingzeit für Schlüsselwort "$1" wurde entfernt.');
-$.lang.register('keywordhandler.cooldown.set', 'Abklingzeit für Schlüsselwort $1 wurde auf $2 Sekunden gesetzt.');
+$.lang.register('keywordhandler.cooldown.set', 'Abklingzeit für Schlüsselwort "$1" wurde auf $2 Sekunden gesetzt.');

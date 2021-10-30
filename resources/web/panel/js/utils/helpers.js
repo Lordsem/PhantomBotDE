@@ -907,8 +907,8 @@ $(function() {
      */
     helpers.getGroupIdByName = function(name, asString) {
         switch (name.toLowerCase()) {
-            case 'streamer':
-            case 'streamer':
+            case 'caster':
+            case 'caster':
                 return (asString ? '0' : 0);
             case 'aministratoren':
             case 'administrator':
@@ -961,7 +961,7 @@ $(function() {
     helpers.getGroupNameById = function(id) {
         switch (id.toString()) {
             case '0':
-                return 'Streamer';
+                return 'Caster';
             case '1':
                 return 'Administrator';
             case '2':

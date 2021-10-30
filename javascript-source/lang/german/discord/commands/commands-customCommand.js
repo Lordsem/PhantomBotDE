@@ -17,10 +17,10 @@
 
 $.lang.register('discord.customcommands.addcom.usage', 'Verwendung: !addcom [Befehl] [Antwort]');
 $.lang.register('discord.customcommands.addcom.err', 'Der Befehl existiert bereits!');
-$.lang.register('discord.customcommands.addcom.success', 'Befehl !$1 wurde erstellt.');
+$.lang.register('discord.customcommands.addcom.success', 'Der Befehl !$1 wurde erstellt.');
 $.lang.register('discord.customcommands.editcom.usage', 'Verwendung:! editcom [Befehl] [Antwort]');
 $.lang.register('discord.customcommands.editcom.404', 'Der Befehl existiert nicht!');
-$.lang.register('discord.customcommands.editcom.success', 'Der Befehl!$1 wurde bearbeitet.');
+$.lang.register('discord.customcommands.editcom.success', 'Der Befehl !$1 wurde bearbeitet.');
 $.lang.register('discord.customcommands.delcom.usage', 'Verwendung: !delcom [Befehl] [Antwort]');
 $.lang.register('discord.customcommands.delcom.404', 'Der Befehl existiert nicht.');
 $.lang.register('discord.customcommands.delcom.success', ' Der Befehl !$1 wurde gelöscht.');

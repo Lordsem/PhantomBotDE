@@ -50,7 +50,7 @@ public class GenerateLogs {
 
         String fileName = ("errors_" + getDate(false, false) + "@" + System.currentTimeMillis() + ".txt");
 
-        com.gmt2001.Console.out.println("Log file \"" + fileName + "\" was created in the main bot folder.");
+        com.gmt2001.Console.out.println("Logdatei \"" + fileName + "\" wurde im Hauptordner des Bots erstellt.");
 
         writeToFile(fileName, logData);
     }
@@ -59,7 +59,7 @@ public class GenerateLogs {
      * Method that will print the latest errors in the console.
      */
     public static void printLogs() {
-        com.gmt2001.Console.out.println("Generating latest error logs...");
+        com.gmt2001.Console.out.println("Aktuelle Fehlerprotokolle werden erstellt...");
 
         String logData = "";
 
@@ -93,7 +93,7 @@ public class GenerateLogs {
                 }
             }
         } catch (IOException ex) {
-            com.gmt2001.Console.err.println("Failed to read log file: [" + file + "] [IOException] " + ex.getMessage());
+            com.gmt2001.Console.err.println("Protokolldatei konnte nicht gelesen werden: [" + file + "] [IOException] " + ex.getMessage());
         } finally {
             if (bufferedReader != null) {
                 try {
@@ -122,7 +122,7 @@ public class GenerateLogs {
             bufferedWriter.write(data);
             bufferedWriter.flush();
         } catch (IOException ex) {
-            com.gmt2001.Console.err.println("Failed to write log file: [" + file + "] [IOException] " + ex.getMessage());
+            com.gmt2001.Console.err.println("Protokolldatei konnte nicht geschrieben werden: [" + file + "] [IOException] " + ex.getMessage());
         } finally {
             if (bufferedWriter != null) {
                 try {

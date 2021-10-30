@@ -134,7 +134,7 @@ public class DiscordAPI extends DiscordUtil {
     public void connect() {
         com.gmt2001.Console.debug.println("IntentSet: " + this.connectIntents.toString());
         DiscordAPI.client.gateway().setEnabledIntents(this.connectIntents).login(PBDiscordGatewayClient::new).timeout(Duration.ofSeconds(30)).doOnError(e -> {
-            com.gmt2001.Console.err.println("Failed to authenticate with Discord: [" + e.getClass().getSimpleName() + "] " + e.getMessage());
+            com.gmt2001.Console.err.println("Authentifizierung bei Discord fehlgeschlagen: [" + e.getClass().getSimpleName() + "] " + e.getMessage());
             com.gmt2001.Console.err.logStackTrace(e);
         }).doOnSuccess(cgateway -> {
             com.gmt2001.Console.out.println("Mit Discord verbunden, Authentifizierung wird abgeschlossen...");
@@ -148,11 +148,11 @@ public class DiscordAPI extends DiscordUtil {
         }).doFinally(sig -> {
             if (lastCloseStatus.getCode() > 1000) {
                 if (lastCloseStatus.getCode() == 4014 && (this.connectIntents.contains(Intent.GUILD_MEMBERS) || this.connectIntents.contains(Intent.GUILD_PRESENCES))) {
-                    com.gmt2001.Console.err.println("Discord rejected privileged intents (" + lastCloseStatus.getCode() + (lastCloseStatus.getReason().isPresent() ? " " + lastCloseStatus.getReason().get() : "") + "). Trying without them...");
+                    com.gmt2001.Console.err.println("Discord lehnte privilegierte Absichten ab (" + lastCloseStatus.getCode() + (lastCloseStatus.getReason().isPresent() ? " " + lastCloseStatus.getReason().get() : "") + "). Versuche es ohne sie...");
                     this.connectIntents = IntentSet.of(Intent.GUILDS, Intent.GUILD_VOICE_STATES, Intent.GUILD_MESSAGES, Intent.GUILD_MESSAGE_REACTIONS, Intent.DIRECT_MESSAGES);
                     this.reconnect();
                 } else {
-                    com.gmt2001.Console.err.println("Discord connection closed with status " + lastCloseStatus.getCode() + (lastCloseStatus.getReason().isPresent() ? " " + lastCloseStatus.getReason().get() : ""));
+                    com.gmt2001.Console.err.println("Discord-Verbindung geschlossen mit Status " + lastCloseStatus.getCode() + (lastCloseStatus.getReason().isPresent() ? " " + lastCloseStatus.getReason().get() : ""));
                 }
             }
         }).subscribe();
@@ -226,9 +226,9 @@ public class DiscordAPI extends DiscordUtil {
      */
     public ConnectionState checkConnectionStatus() {
         if (!isLoggedIn() || !isReady()) {
-            com.gmt2001.Console.warn.println("Connection lost with Discord, attempting to reconnect...");
+            com.gmt2001.Console.warn.println("Verbindung mit Discord verloren, versuche, die Verbindung wiederherzustellen...");
             if (reconnect()) {
-                com.gmt2001.Console.warn.println("Connection re-established with Discord.");
+                com.gmt2001.Console.warn.println("Verbindung mit Discord wieder hergestellt.");
                 // We were able to reconnect.
                 return ConnectionState.RECONNECTED;
             } else {
@@ -328,8 +328,8 @@ public class DiscordAPI extends DiscordUtil {
             service.scheduleAtFixedRate(() -> {
                 if (reconnectState != ConnectionState.CANNOT_RECONNECT && !PhantomBot.instance().isExiting()
                         && DiscordAPI.instance().checkConnectionStatus() == ConnectionState.DISCONNECTED) {
-                    com.gmt2001.Console.err.println("Connection with Discord was lost.");
-                    com.gmt2001.Console.err.println("Reconnecting will be attempted in 60 seconds...");
+                    com.gmt2001.Console.err.println("Die Verbindung zu Discord wurde unterbrochen.");
+                    com.gmt2001.Console.err.println("In 60 Sekunden wird versucht, die Verbindung wiederherzustellen...");
                 }
             }, 0, 1, TimeUnit.MINUTES);
 

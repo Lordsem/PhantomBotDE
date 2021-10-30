@@ -574,20 +574,20 @@
      * @function generateDefaultGroupPoints
      */
     function generateDefaultGroupPoints() {
-        $.getSetIniDbString('grouppoints', 'Streamer', '-1');
-        $.getSetIniDbString('grouppointsoffline', 'Streamer', '-1');
+        $.getSetIniDbString('grouppoints', 'Caster', '-1');
+        $.getSetIniDbString('grouppointsoffline', 'Caster', '-1');
         $.getSetIniDbString('grouppoints', 'Administrator', '-1');
         $.getSetIniDbString('grouppointsoffline', 'Administrator', '-1');
         $.getSetIniDbString('grouppoints', 'Moderator', '-1');
         $.getSetIniDbString('grouppointsoffline', 'Moderator', '-1');
-        $.getSetIniDbString('grouppoints', 'Abonennt', '-1');
-        $.getSetIniDbString('grouppointsoffline', 'Abonennt', '-1');
+        $.getSetIniDbString('grouppoints', 'Abonnent', '-1');
+        $.getSetIniDbString('grouppointsoffline', 'Abonnent', '-1');
         $.getSetIniDbString('grouppoints', 'Spender', '-1');
         $.getSetIniDbString('grouppointsoffline', 'Spender', '-1');
         $.getSetIniDbString('grouppoints', 'VIP', '-1');
         $.getSetIniDbString('grouppointsoffline', 'VIP', '-1');
         $.getSetIniDbString('grouppoints', 'Stammzuschauer', '-1');
-        $.getSetIniDbString('grouppointsoffline', 'Stamzuschauer', '-1');
+        $.getSetIniDbString('grouppointsoffline', 'Stammzuschauer', '-1');
         $.getSetIniDbString('grouppoints', 'Zuschauer', '-1');
         $.getSetIniDbString('grouppointsoffline', 'Zuschauer', '-1');
     }

@@ -76,14 +76,14 @@ public class TwitchWSIRC extends WebSocketClient {
 
             // if we sent a ping longer than 3 minutes ago, send another one.
             if (System.currentTimeMillis() > (lastPing + 180000)) {
-                com.gmt2001.Console.debug.println("Sending a PING to Twitch.");
+                com.gmt2001.Console.debug.println("Senden eines PINGs an Twitch.");
                 lastPing = System.currentTimeMillis();
                 this.send("PING");
 
                 // If Twitch's last pong was more than 3.5 minutes ago, close our connection.
             } else if (System.currentTimeMillis() > (lastPong + 210000)) {
-                com.gmt2001.Console.out.println("Closing our connection with Twitch since no PONG got sent back.");
-                com.gmt2001.Console.warn.println("Closing our connection with Twitch since no PONG got sent back.", true);
+                com.gmt2001.Console.out.println("Schließe unsere Verbindung mit Twitch, da kein PONG zurückgeschickt wurde.");
+                com.gmt2001.Console.warn.println("Schließe unsere Verbindung mit Twitch, da kein PONG zurückgeschickt wurde.", true);
                 this.close();
             }
         }, 10, 30, TimeUnit.SECONDS);
@@ -160,8 +160,8 @@ public class TwitchWSIRC extends WebSocketClient {
     public void onClose(int code, String reason, boolean remote) {
         // Reconnect if the bot isn't shutting down.
         if (!reason.equals("bye")) {
-            com.gmt2001.Console.out.println("Lost connection to Twitch WS-IRC. Reconnecting...");
-            com.gmt2001.Console.warn.println("Lost connection with Twitch, caused by: ", true);
+            com.gmt2001.Console.out.println("Verbindung zu Twitch WS-IRC verloren. Wieder verbinden...");
+            com.gmt2001.Console.warn.println("Verbindung zu Twitch verloren, verursacht durch: ", true);
             com.gmt2001.Console.warn.println("Code [" + code + "] Reason [" + reason + "] Remote Hangup [" + remote + "]", true);
 
             connecting = true;

@@ -131,7 +131,7 @@ public class ConfigurationManager {
         if (!requiredPropertiesErrorMessage.isEmpty()) {
             com.gmt2001.Console.err.println();
             com.gmt2001.Console.err.println("Fehlende erforderliche Eigenschaften: " + requiredPropertiesErrorMessage);
-            com.gmt2001.Console.err.println("Beende PhantomBotDE");
+            com.gmt2001.Console.err.println("Beende PhantomBot");
             PhantomBot.exitError();
         }
 
@@ -223,7 +223,7 @@ public class ConfigurationManager {
         try {
             try (FileOutputStream outputStream = new FileOutputStream(saveFileDestination)) {
                 outputProperties.putAll(properties);
-                outputProperties.store(outputStream, "PhantomBot Configuration File");
+                outputProperties.store(outputStream, "PhantomBot Konfigurationsdatei");
             }
         } catch (IOException ex) {
             com.gmt2001.Console.err.printStackTrace(ex);

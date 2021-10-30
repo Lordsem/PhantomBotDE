@@ -136,7 +136,7 @@ public class MessageQueue implements Runnable {
                     if (lastWrite > time) {
                         if (writes >= limit && !message.hasPriority()) {
                             nextWrite = (time + (lastWrite - time));
-                            com.gmt2001.Console.warn.println("Message limit of (" + limit + ") has been reached. Messages will be sent again in " + (nextWrite - time) + "ms");
+                            com.gmt2001.Console.warn.println("Nachrichtenlimit von (" + limit + ") wurde erreicht. Nachrichten werden wieder gesendet in " + (nextWrite - time) + "ms");
                             continue;
                         }
                         writes++;
@@ -150,7 +150,7 @@ public class MessageQueue implements Runnable {
                     com.gmt2001.Console.out.println("[CHAT] " + message.getMessage());
                 }
             } catch (WebsocketNotConnectedException ex) {
-                com.gmt2001.Console.err.println("Failed to send message due to being disconnected from Twitch IRC.");
+                com.gmt2001.Console.err.println("Die Nachricht konnte nicht gesendet werden, da die Verbindung zum Twitch IRC getrennt wurde.");
                 this.setAllowSendMessages(false);
                 session.reconnect();
             } catch (InterruptedException ex) {

@@ -118,11 +118,11 @@ public class DiscordUtil {
      */
     public Mono<Message> sendMessageAsync(MessageChannel channel, String message, int iteration) {
         if (iteration >= MAX_ITERATION) {
-            throw new IllegalStateException("connection failing");
+            throw new IllegalStateException("Verbindung fehlgeschlagen");
         }
 
         if (iteration > 0) {
-            com.gmt2001.Console.err.println("Request failed, trying again in " + (iteration * iteration) + " seconds...");
+            com.gmt2001.Console.err.println("Anfrage fehlgeschlagen, erneuter Versuch in " + (iteration * iteration) + " Sekunden...");
             Mono.delay(Duration.ofSeconds(iteration * iteration));
         }
 
@@ -139,7 +139,7 @@ public class DiscordUtil {
         } else if (DiscordAPI.instance().checkConnectionStatus() == DiscordAPI.ConnectionState.RECONNECTED) {
             return sendMessageAsync(channel, message, iteration + 1);
         } else {
-            throw new IllegalArgumentException("channel object was null");
+            throw new IllegalArgumentException("Kanalobjekt war null");
         }
     }
 
@@ -171,7 +171,7 @@ public class DiscordUtil {
                 com.gmt2001.Console.err.printStackTrace(e);
             }).doOnSuccess(channel -> sendPrivateMessage(channel, message)).subscribe();
         } else {
-            throw new IllegalArgumentException("user object was null");
+            throw new IllegalArgumentException("Benutzerobjekt war null");
         }
     }
 
@@ -197,11 +197,11 @@ public class DiscordUtil {
      */
     public void sendPrivateMessage(PrivateChannel channel, String message, int iteration) {
         if (iteration >= MAX_ITERATION) {
-            throw new IllegalStateException("connection failing");
+            throw new IllegalStateException("Verbindung fehlgeschlagen");
         }
 
         if (iteration > 0) {
-            com.gmt2001.Console.err.println("Request failed, trying again in " + (iteration * iteration) + " seconds...");
+            com.gmt2001.Console.err.println("Anfrage fehlgeschlagen, erneuter Versuch in " + (iteration * iteration) + " Sekunden...");
             Mono.delay(Duration.ofSeconds(iteration * iteration));
         }
 
@@ -228,7 +228,7 @@ public class DiscordUtil {
         } else if (DiscordAPI.instance().checkConnectionStatus() == DiscordAPI.ConnectionState.RECONNECTED) {
             sendPrivateMessage(channel, message, iteration + 1);
         } else {
-            throw new IllegalArgumentException("channel object was null");
+            throw new IllegalArgumentException("Kanalobjekt war null");
         }
     }
 
@@ -250,11 +250,11 @@ public class DiscordUtil {
      */
     public Mono<Message> sendMessageEmbedAsync(GuildMessageChannel channel, Consumer<? super EmbedCreateSpec> embed, int iteration) {
         if (iteration >= MAX_ITERATION) {
-            throw new IllegalStateException("connection failing");
+            throw new IllegalStateException("Verbindung fehlgeschlagen");
         }
 
         if (iteration > 0) {
-            com.gmt2001.Console.err.println("Request failed, trying again in " + (iteration * iteration) + " seconds...");
+            com.gmt2001.Console.err.println("Anfrage fehlgeschlagen, erneuter Versuch in " + (iteration * iteration) + " Sekunden...");
             Mono.delay(Duration.ofSeconds(iteration * iteration));
         }
 
@@ -268,7 +268,7 @@ public class DiscordUtil {
         } else if (DiscordAPI.instance().checkConnectionStatus() == DiscordAPI.ConnectionState.RECONNECTED) {
             return sendMessageEmbedAsync(channel, embed, iteration + 1);
         } else {
-            throw new IllegalArgumentException("channel object was null");
+            throw new IllegalArgumentException("Kanalobjekt war null");
         }
     }
 
@@ -341,17 +341,17 @@ public class DiscordUtil {
      */
     public Mono<Message> sendFileAsync(GuildMessageChannel channel, String message, String fileLocation, int iteration) {
         if (iteration >= MAX_ITERATION) {
-            throw new IllegalStateException("connection failing");
+            throw new IllegalStateException("Verbindung fehlgeschlagen");
         }
 
         if (iteration > 0) {
-            com.gmt2001.Console.err.println("Request failed, trying again in " + (iteration * iteration) + " seconds...");
+            com.gmt2001.Console.err.println("Anfrage fehlgeschlagen, erneuter Versuch in " + (iteration * iteration) + " Sekunden...");
             Mono.delay(Duration.ofSeconds(iteration * iteration));
         }
 
         if (channel != null) {
             if (!this.isValidFilePath(fileLocation)) {
-                com.gmt2001.Console.err.println("[DISCORD] [#" + channel.getName() + "] [UPLOAD] [" + fileLocation + "] Rejecting fileLocation");
+                com.gmt2001.Console.err.println("[DISCORD] [#" + channel.getName() + "] [UPLOAD] [" + fileLocation + "] Ablehnen von fileLocation");
                 return null;
             } else {
                 if (message.isEmpty()) {
@@ -385,7 +385,7 @@ public class DiscordUtil {
         } else if (DiscordAPI.instance().checkConnectionStatus() == DiscordAPI.ConnectionState.RECONNECTED) {
             return sendFileAsync(channel, message, fileLocation, iteration + 1);
         } else {
-            throw new IllegalArgumentException("channel object was null");
+            throw new IllegalArgumentException("Kanalobjekt war null");
         }
     }
 
@@ -443,7 +443,7 @@ public class DiscordUtil {
         } else if (DiscordAPI.instance().checkConnectionStatus() == DiscordAPI.ConnectionState.RECONNECTED) {
             addReaction(message, emoji);
         } else {
-            throw new IllegalArgumentException("message or emoji object was null");
+            throw new IllegalArgumentException("Nachricht oder Emoji-Objekt war null");
         }
     }
 
@@ -531,7 +531,7 @@ public class DiscordUtil {
             return DiscordAPI.getGuild().getChannels().filter(channel -> channel.getName().equalsIgnoreCase(schannelName)
                     || channel.getId().asString().equals(schannelName)).take(1).single().map(c -> (GuildMessageChannel) c);
         } catch (NoSuchElementException ex) {
-            com.gmt2001.Console.err.println("Unable to find channelName [" + channelName + "]");
+            com.gmt2001.Console.err.println("Kann Kanalname nicht finden [" + channelName + "]");
             throw ex;
         }
     }
@@ -551,7 +551,7 @@ public class DiscordUtil {
         try {
             return DiscordAPI.getGuild().getChannels().filter(channel -> channel.getId().asString().equals(channelId)).take(1).single().map(c -> (GuildMessageChannel) c);
         } catch (NoSuchElementException ex) {
-            com.gmt2001.Console.err.println("Unable to find channelId [" + channelId + "]");
+            com.gmt2001.Console.err.println("Kanal-ID kann nicht gefunden werden [" + channelId + "]");
             throw ex;
         }
     }
@@ -583,7 +583,7 @@ public class DiscordUtil {
         try {
             return filteredMembers.take(1).single().map(m -> (User) m);
         } catch (NoSuchElementException ex) {
-            com.gmt2001.Console.err.println("Unable to find userName [" + userName + "]");
+            com.gmt2001.Console.err.println("Benutzername kann nicht gefunden werden [" + userName + "]");
             throw ex;
         }
     }
@@ -603,7 +603,7 @@ public class DiscordUtil {
         try {
             return DiscordAPI.getGuild().getMembers().filter(user -> user.getId().asLong() == userId).take(1).single().map(m -> (User) m);
         } catch (NoSuchElementException ex) {
-            com.gmt2001.Console.err.println("Unable to find userId [" + userId + "]");
+            com.gmt2001.Console.err.println("Benutzer-ID kann nicht gefunden werden [" + userId + "]");
             throw ex;
         }
     }
@@ -625,7 +625,7 @@ public class DiscordUtil {
             return DiscordAPI.getGuild().getMembers().filter(user -> user.getDisplayName().equalsIgnoreCase(userName)
                     && user.getDiscriminator().equalsIgnoreCase(discriminator)).take(1).single().map(m -> (User) m);
         } catch (NoSuchElementException ex) {
-            com.gmt2001.Console.err.println("Unable to find userNameDiscriminator [" + userName + "#" + discriminator + "]");
+            com.gmt2001.Console.err.println("Kann userNameDiscriminator nicht finden [" + userName + "#" + discriminator + "]");
             throw ex;
         }
     }
@@ -658,7 +658,7 @@ public class DiscordUtil {
         try {
             return filteredRoles.take(1).single();
         } catch (NoSuchElementException ex) {
-            com.gmt2001.Console.err.println("Unable to find roleName [" + roleName + "]");
+            com.gmt2001.Console.err.println("Rollenname kann nicht gefunden werden [" + roleName + "]");
             throw ex;
         }
     }
@@ -678,7 +678,7 @@ public class DiscordUtil {
         try {
             return DiscordAPI.getGuild().getRoles().filter(role -> role.getId().asString().equalsIgnoreCase(id)).take(1).single();
         } catch (NoSuchElementException ex) {
-            com.gmt2001.Console.err.println("Unable to find roleId [" + id + "]");
+            com.gmt2001.Console.err.println("Rollen-ID kann nicht gefunden werden [" + id + "]");
             throw ex;
         }
     }
@@ -738,7 +738,7 @@ public class DiscordUtil {
      */
     public void editUserRoles(User user, Role... roles) {
         if (roles == null || user == null) {
-            throw new IllegalArgumentException("user or roles object was null");
+            throw new IllegalArgumentException("Benutzer- oder Rollenobjekt war null");
         }
 
         user.asMember(DiscordAPI.getGuild().getId()).doOnSuccess(m -> {
@@ -774,7 +774,7 @@ public class DiscordUtil {
      */
     public void addRole(Role role, User user) {
         if (role == null || user == null) {
-            throw new IllegalArgumentException("user or role object was null");
+            throw new IllegalArgumentException("Benutzer- oder Rollenobjekt war null");
         }
 
         user.asMember(DiscordAPI.getGuild().getId()).doOnSuccess(m -> {
@@ -819,7 +819,7 @@ public class DiscordUtil {
      */
     public void removeRole(Role role, User user) {
         if (role == null || user == null) {
-            throw new IllegalArgumentException("user or role object was null");
+            throw new IllegalArgumentException("Benutzer- oder Rollenobjekt war null");
         }
 
         user.asMember(DiscordAPI.getGuild().getId()).doOnSuccess(m -> {
@@ -899,7 +899,7 @@ public class DiscordUtil {
 
     public Mono<Boolean> isAdministratorAsync(User user) {
         if (user == null) {
-            throw new IllegalArgumentException("user object was null");
+            throw new IllegalArgumentException("Benutzerobjekt war null");
         }
 
         return user.asMember(DiscordAPI.getGuild().getId()).onErrorReturn(null).flatMap(m -> m.getBasePermissions()).map(ps -> ps != null && ps.contains(Permission.ADMINISTRATOR));
@@ -931,15 +931,15 @@ public class DiscordUtil {
         // So start this on a new thread to avoid that. Please note that you need to delete at least 2 messages.
 
         if (channel == null || amount < 2) {
-            throw new IllegalArgumentException("channel object was null or amount was less than 2");
+            throw new IllegalArgumentException("Kanalobjekt war null oder Betrag war kleiner als 2");
         }
 
-        com.gmt2001.Console.debug.println("Attempting to delete " + amount + " messages from " + channel.getName());
+        com.gmt2001.Console.debug.println("Versucht " + amount + " Nachrichten von " + channel.getName() + " zu löschen");
         Thread thread;
         thread = new Thread(() -> {
             channel.getMessagesBefore(channel.getLastMessageId().orElseThrow()).take(amount).collectList().doOnSuccess(msgs -> {
-                com.gmt2001.Console.debug.println("Found " + msgs.size() + " messages to delete");
-                channel.bulkDelete(Flux.fromIterable(msgs).map(msg -> msg.getId())).doOnNext(s -> com.gmt2001.Console.err.println("Rejected message " + s.asString() + " from delete operation for being too old")).doOnError(e -> com.gmt2001.Console.debug.printStackTrace(e)).doOnComplete(() -> com.gmt2001.Console.debug.println("Bulk delete complete")).subscribe();
+                com.gmt2001.Console.debug.println( msgs.size() + " Nachrichten zum löschen gefunden");
+                channel.bulkDelete(Flux.fromIterable(msgs).map(msg -> msg.getId())).doOnNext(s -> com.gmt2001.Console.err.println("Abgelehnte Nachricht " + s.asString() + " vom Löschvorgang, weil zu alt")).doOnError(e -> com.gmt2001.Console.debug.printStackTrace(e)).doOnComplete(() -> com.gmt2001.Console.debug.println("Massenlöschung abgeschlossen")).subscribe();
             }).subscribe();
         }, "tv.phantombot.discord.util.DiscordUtil::bulkDelete");
 
@@ -964,7 +964,7 @@ public class DiscordUtil {
      */
     public void bulkDeleteMessages(GuildMessageChannel channel, Message... list) {
         if (channel == null || list == null || list.length < 2) {
-            throw new IllegalArgumentException("channel object was null, list object was null, or amount was less than 2");
+            throw new IllegalArgumentException("Kanalobjekt war null, Listenobjekt war null oder Betrag war kleiner als 2");
         }
 
         Flux<Snowflake> msgSfs = Flux.empty();
@@ -993,10 +993,10 @@ public class DiscordUtil {
      */
     public void deleteMessage(Message message) {
         if (message == null) {
-            throw new IllegalArgumentException("message object was null");
+            throw new IllegalArgumentException("Nachrichtenobjekt war null");
         }
 
-        com.gmt2001.Console.debug.println("Deleteing Discord message: " + message.getId().asString());
+        com.gmt2001.Console.debug.println("Discord-Nachricht löschen: " + message.getId().asString());
 
         message.delete().doOnError(e -> {
             if (e instanceof ClientException) {
@@ -1004,7 +1004,7 @@ public class DiscordUtil {
                 if (er != null && er.getFields().containsKey("errorResponse")) {
                     ErrorResponse er2 = (ErrorResponse) er.getFields().get("errorResponse");
                     if (er2 != null && er2.getFields().containsKey("code") && (int) er2.getFields().get("code") == 10008) {
-                        com.gmt2001.Console.err.println("Delete message failed (Unknown Message): " + message.getId().asString());
+                        com.gmt2001.Console.err.println("Nachricht löschen fehlgeschlagen (Unbekannte Nachricht): " + message.getId().asString());
                         com.gmt2001.Console.debug.printStackTrace(e);
                         return;
                     }

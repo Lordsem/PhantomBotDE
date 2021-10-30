@@ -356,7 +356,7 @@
              */
             if (action.equalsIgnoreCase('open')) {
                 open(sender, arguments);
-                $.log.event('Ein Gewinnspiel wurde eröffnet von ' + sender + '. Parameter (' + arguments + ')');
+                $.log.event('Ein Gewinnspiel wurde eröffnet von ' + sender + '. Parameter: (' + arguments + ')');
                 return;
             }
 

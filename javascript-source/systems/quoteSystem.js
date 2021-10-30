@@ -47,7 +47,7 @@
      */
     function saveQuote(username, quote) {
         var newKey = $.inidb.GetKeyList('quotes', '').length,
-            game = ($.getGame($.channelName) != '' ? $.getGame($.channelName) : "Some Game");
+            game = ($.getGame($.channelName) != '' ? $.getGame($.channelName) : "Irgendeine Kategorie");
 
         if ($.inidb.exists('quotes', newKey)) {
             newKey++;
@@ -195,7 +195,7 @@
                 }
                 quote = args.splice(0).join(' ');
                 $.say($.lang.get('quotesystem.add.success', $.username.resolve(sender), saveQuote(String($.username.resolve(sender)), quote)));
-                $.log.event(sender + ' added a quote "' + quote + '".');
+                $.log.event(sender + ' hat Zitat "' + quote + '" hinzugefügt.');
                 return;
             } else {
                 if (args.length < 2) {
@@ -211,7 +211,7 @@
                 quote = args.splice(1).join(' ');
                 var username = useTwitchNames ? $.username.resolve(target) : target;
                 $.say($.lang.get('quotesystem.add.success', username, saveQuote(String(username), quote)));
-                $.log.event(sender + ' added a quote "' + quote + '".');
+                $.log.event(sender + ' hat Zitat "' + quote + '" hinzugefügt.');
                 return;
             }
         }
@@ -274,7 +274,7 @@
                 quoteStr = quoteStr.replace('(id)', (quote.length == 5 ? quote[4].toString() : quote[3].toString())).
                 replace('(quote)', quote[1]).
                 replace('(user)', $.resolveRank(quote[0])).
-                replace('(game)', (quote.length == 5 ? quote[3] : "Some Game")).
+                replace('(game)', (quote.length == 5 ? quote[3] : "Irgendeine Kategorie")).
                 replace('(date)', $.getLocalTimeString('dd-MM-yyyy', parseInt(quote[2])));
                 $.say(quoteStr);
             } else {
@@ -294,7 +294,7 @@
             quoteStr = args.splice(0).join(' ');
             $.inidb.set('settings', 'quoteMessage', quoteStr);
             $.say($.whisperPrefix(sender) + $.lang.get('quotesystem.quotemessage.success'));
-            $.log.event(sender + ' changed the quote message to: ' + quoteStr);
+            $.log.event(sender + ' änderte die Zitat-Nachricht zu: ' + quoteStr);
         }
 
         /**

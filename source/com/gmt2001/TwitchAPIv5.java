@@ -165,7 +165,7 @@ public class TwitchAPIv5 {
 
     public JSONObject UpdateChannel(String channel, String oauth, String status, String game) throws JSONException {
         if (oauth != null && !oauth.isBlank()) {
-            com.gmt2001.Console.warn.println("The oauth parameter in is no longer supported, all requests will now use the apioauth from botlogin.txt");
+            com.gmt2001.Console.warn.println("Der oAuth-Parameter in wird nicht mehr unterstützt, alle Anfragen verwenden jetzt den apioauth von botlogin.txt");
         }
 
         return UpdateChannel(channel, status, game, -1);
@@ -173,7 +173,7 @@ public class TwitchAPIv5 {
 
     public JSONObject UpdateChannel(String channel, String oauth, String status, String game, int delay) throws JSONException {
         if (oauth != null && !oauth.isBlank()) {
-            com.gmt2001.Console.warn.println("The oauth parameter in is no longer supported, all requests will now use the apioauth from botlogin.txt");
+            com.gmt2001.Console.warn.println("Der oAuth-Parameter in wird nicht mehr unterstützt, alle Anfragen verwenden jetzt den apioauth von botlogin.txt");
         }
 
         return UpdateChannel(channel, status, game, delay);
@@ -301,11 +301,11 @@ public class TwitchAPIv5 {
      */
     public JSONObject GetChannelFollows(String channel, int limit, int offset, boolean ascending) throws JSONException {
         if (offset > 0) {
-            com.gmt2001.Console.warn.println("The offset parameter in is no longer supported, please update to use pagination from Helix");
+            com.gmt2001.Console.warn.println("Der Offset-Parameter in wird nicht mehr unterstützt, bitte aktualisieren Sie, um die Paginierung von Helix zu verwenden");
         }
 
         if (ascending) {
-            com.gmt2001.Console.warn.println("Sorting in ascending order is no longer supported");
+            com.gmt2001.Console.warn.println("Das Sortieren in aufsteigender Reihenfolge wird nicht mehr unterstützt");
         }
 
         JSONObject followData = Helix.instance().getUsersFollowsAsync(null, this.getIDFromChannel(channel), limit, null).block();
@@ -362,11 +362,11 @@ public class TwitchAPIv5 {
      */
     public JSONObject GetChannelSubscriptions(String channel, int limit, int offset, boolean ascending) throws JSONException {
         if (offset > 0) {
-            com.gmt2001.Console.warn.println("The offset parameter in is no longer supported, please update to use pagination from Helix");
+            com.gmt2001.Console.warn.println("Der Offset-Parameter in wird nicht mehr unterstützt, bitte aktualisieren Sie, um die Paginierung von Helix zu verwenden");
         }
 
         if (ascending) {
-            com.gmt2001.Console.warn.println("Sorting in ascending order is no longer supported");
+            com.gmt2001.Console.warn.println("Das Sortieren in aufsteigender Reihenfolge wird nicht mehr unterstützt");
         }
 
         JSONObject subscriptionData = Helix.instance().getBroadcasterSubscriptionsAsync(this.getIDFromChannel(channel), null, limit, null).block();
@@ -409,7 +409,7 @@ public class TwitchAPIv5 {
 
     public JSONObject GetChannelSubscriptions(String channel, int limit, int offset, boolean ascending, String oauth) throws JSONException {
         if (oauth != null && !oauth.isBlank()) {
-            com.gmt2001.Console.warn.println("The oauth parameter in is no longer supported, all requests will now use the apioauth from botlogin.txt");
+            com.gmt2001.Console.warn.println("Der oAuth-Parameter in wird nicht mehr unterstützt, alle Anfragen verwenden jetzt den apioauth von botlogin.txt");
         }
 
         return GetChannelSubscriptions(channel, limit, offset, ascending);
@@ -1211,7 +1211,7 @@ public class TwitchAPIv5 {
         } while (!jsonInput.getJSONArray("data").isEmpty());
 
         dataStore.RenameFile("followed_fixtable", "followed");
-        com.gmt2001.Console.out.println("FixFollowedTable: Pulled followers into the followed table, loaded " + insertCtr + "/" + followerCount + " records.");
+        com.gmt2001.Console.out.println("FixFollowedTable: Follower in die Follower-Tabelle gezogen, geladen " + insertCtr + "/" + followerCount + " v.");
     }
 
     /**
@@ -1227,12 +1227,12 @@ public class TwitchAPIv5 {
         /* Determine number of followers to determine if this should not execute unless forced. */
         JSONObject jsonInput = Helix.instance().getUsersFollows(null, this.getIDFromChannel(channel), 1, null);
         if (!jsonInput.has("total")) {
-            com.gmt2001.Console.err.println("Failed to pull follower count for FixFollowedTable");
+            com.gmt2001.Console.err.println("Die Anzahl der Follower konnte nicht abgerufen werden für FixFollowedTable");
             return;
         }
         int followerCount = jsonInput.getInt("total");
         if (followerCount > 10000 && !force) {
-            com.gmt2001.Console.out.println("Follower count is above 10,000 (" + followerCount + "). Not executing. You may force this.");
+            com.gmt2001.Console.out.println("Die Anzahl der Follower liegt über 10.000 (" + followerCount + "). Nicht ausführen. Du kannst dies erzwingen.");
             return;
         }
 
@@ -1240,7 +1240,7 @@ public class TwitchAPIv5 {
             FixFollowedTableRunnable fixFollowedTableRunnable = new FixFollowedTableRunnable(this.getIDFromChannel(channel), dataStore, followerCount);
             new Thread(fixFollowedTableRunnable, "com.gmt2001.TwitchAPIv5::fixFollowedTable").start();
         } catch (Exception ex) {
-            com.gmt2001.Console.err.println("Failed to start thread for updating followed table.");
+            com.gmt2001.Console.err.println("Fehler beim Starten des Threads zum Aktualisieren der gefolgten Tabelle.");
         }
     }
 
@@ -1260,7 +1260,7 @@ public class TwitchAPIv5 {
      * @return String The name of the user or null to indicate that there was an error.
      */
     public String GetUserFromOauth(String userOauth) throws JSONException {
-        throw new UnsupportedOperationException("The oauth parameter in is no longer supported");
+        throw new UnsupportedOperationException("Der oAuth-Parameter in wird nicht mehr unterstützt");
     }
 
     /**

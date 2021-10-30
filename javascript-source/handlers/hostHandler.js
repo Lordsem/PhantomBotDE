@@ -225,17 +225,17 @@
          */
         if (command.equalsIgnoreCase('hosthistory')) {
             if (args.length < 1) {
-                $.say($.whisperPrefix(sender) + $.lang.get('hosthistory.usage', $.getIniDbBoolean('settings', 'hostHistory') ? "on" : "off"));
+                $.say($.whisperPrefix(sender) + $.lang.get('hosthistory.usage', $.getIniDbBoolean('settings', 'hostHistory') ? "an" : "aus"));
                 return;
             }
             if (action.equalsIgnoreCase('on')) {
                 $.setIniDbBoolean('settings', 'hostHistory', true);
-                $.say($.whisperPrefix(sender) + $.lang.get('hosthistory.change', $.getIniDbBoolean('settings', 'hostHistory') ? "on" : "off"));
+                $.say($.whisperPrefix(sender) + $.lang.get('hosthistory.change', $.getIniDbBoolean('settings', 'hostHistory') ? "an" : "aus"));
             } else if (action.equalsIgnoreCase('off')) {
                 $.setIniDbBoolean('settings', 'hostHistory', false);
-                $.say($.whisperPrefix(sender) + $.lang.get('hosthistory.change', $.getIniDbBoolean('settings', 'hostHistory') ? "on" : "off"));
+                $.say($.whisperPrefix(sender) + $.lang.get('hosthistory.change', $.getIniDbBoolean('settings', 'hostHistory') ? "an" : "aus"));
             } else {
-                $.say($.whisperPrefix(sender) + $.lang.get('hosthistory.usage', $.getIniDbBoolean('settings', 'hostHistory') ? "on" : "off"));
+                $.say($.whisperPrefix(sender) + $.lang.get('hosthistory.usage', $.getIniDbBoolean('settings', 'hostHistory') ? "an" : "aus"));
             }
         }
 

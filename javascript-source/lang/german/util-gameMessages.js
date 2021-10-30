@@ -83,7 +83,7 @@ $.lang.register('slot.lost.42', 'Hah ha ha ha ha ha ha!');
 $.lang.register('slot.lost.43', 'Such keine Ausreden für dein Versagen! Trainiere und versuche es erneut!');
 $.lang.register('slot.lost.44', 'Hey, du bist nicht wirklich schlecht. Du bist aber auch nicht richtig gut!');
 $.lang.register('slot.lost.45', 'Ich hatte Meetings, die aufregender waren!');
-$.lang.register('slot.lost.46', 'ESelbst nach den niedrigsten Standards war das wirklich schlecht!');
+$.lang.register('slot.lost.46', 'Selbst nach den niedrigsten Standards war das wirklich schlecht!');
 $.lang.register('slot.lost.47', 'Ha-ha-ha! Was ist da los? Du hasst es zu verlieren? Das ist aber nicht mein Problem! Ha, ha, ha, ha, ha!');
 $.lang.register('slot.lost.48', 'Alte Worte der Weisheit... " Du Niete! "');
 $.lang.register('slot.lost.49', 'Ich werde dir nicht sagen, dass du schlecht bist. Ich werde es mir einfach denken, okay?');

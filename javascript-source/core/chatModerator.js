@@ -23,46 +23,46 @@
         spamTracker = {},
 
         linksToggle = $.getSetIniDbBoolean('chatModerator', 'linksToggle', false),
-        linksMessage = $.getSetIniDbString('chatModerator', 'linksMessage', 'Du wurdest für das Posten eines Links bestraft.'),
+        linksMessage = $.getSetIniDbString('chatModerator', 'linksMessage', 'Du wurdest bestraft, weil du einen Link gepostet hast.'),
         linkPermitTime = $.getSetIniDbNumber('chatModerator', 'linkPermitTime', 30),
 
         capsToggle = $.getSetIniDbBoolean('chatModerator', 'capsToggle', false),
-        capsMessage = $.getSetIniDbString('chatModerator', 'capsMessage', 'Du wurdest für das Überstrapazieren der Caps Funktion bestraft.'),
+        capsMessage = $.getSetIniDbString('chatModerator', 'capsMessage', 'Du wurdest bestraft, weil du die zu viele Caps benutzt hast.'),
         capsLimitPercent = $.getSetIniDbFloat('chatModerator', 'capsLimitPercent', 70),
         capsTriggerLength = $.getSetIniDbNumber('chatModerator', 'capsTriggerLength', 20),
 
         spamToggle = $.getSetIniDbBoolean('chatModerator', 'spamToggle', false),
-        spamMessage = $.getSetIniDbString('chatModerator', 'spamMessage', 'Du wurdest fürs spammen bestraft.'),
+        spamMessage = $.getSetIniDbString('chatModerator', 'spamMessage', 'Du wurdest bestraft, weil du zu viele wiederholende Zeichen gespammt hast.'),
         spamLimit = $.getSetIniDbNumber('chatModerator', 'spamLimit', 15),
 
         symbolsToggle = $.getSetIniDbBoolean('chatModerator', 'symbolsToggle', false),
-        symbolsMessage = $.getSetIniDbString('chatModerator', 'symbolsMessage', 'Du wurdest bestraft weil du zu viele Symbolen benutzt.'),
+        symbolsMessage = $.getSetIniDbString('chatModerator', 'symbolsMessage', 'Du wurdest bestraft, weil du zu viele Symbole benutzt hast.'),
         symbolsLimitPercent = $.getSetIniDbFloat('chatModerator', 'symbolsLimitPercent', 50),
         symbolsGroupLimit = $.getSetIniDbFloat('chatModerator', 'symbolsGroupLimit', 10),
         symbolsTriggerLength = $.getSetIniDbNumber('chatModerator', 'symbolsTriggerLength', 20),
 
         emotesToggle = $.getSetIniDbBoolean('chatModerator', 'emotesToggle', false),
-        emotesMessage = $.getSetIniDbString('chatModerator', 'emotesMessage', 'Du wurdest bestraft weil du zu viele Emotes benutzt.'),
+        emotesMessage = $.getSetIniDbString('chatModerator', 'emotesMessage', 'Du wurdest bestraft, weil du zu viele Emotes benutzt hast.'),
         emotesLimit = $.getSetIniDbNumber('chatModerator', 'emotesLimit', 5),
 
         longMessageToggle = $.getSetIniDbBoolean('chatModerator', 'longMessageToggle', false),
-        longMessageMessage = $.getSetIniDbString('chatModerator', 'longMessageMessage',  'Du wurdest bestraft weil deine Nachricht zu lang war.'),
+        longMessageMessage = $.getSetIniDbString('chatModerator', 'longMessageMessage',  'Du wurdest bestraft, weil deine Nachricht zu lang war.'),
         longMessageLimit = $.getSetIniDbNumber('chatModerator', 'longMessageLimit', 325),
 
         colorsToggle = $.getSetIniDbBoolean('chatModerator', 'colorsToggle', false),
-        colorsMessage = $.getSetIniDbString('chatModerator', 'colorsMessage', 'Du wurdest bestraft weil du farbig schreibst.'),
+        colorsMessage = $.getSetIniDbString('chatModerator', 'colorsMessage', 'Du wurdest bestraft, weil du farbig geschrieben hast.'),
 
         spamTrackerToggle = $.getSetIniDbBoolean('chatModerator', 'spamTrackerToggle', false),
-        spamTrackerMessage = $.getSetIniDbString('chatModerator', 'spamTrackerMessage',  'Du wurdest für das Spammen bestraft.'),
+        spamTrackerMessage = $.getSetIniDbString('chatModerator', 'spamTrackerMessage',  'Du wurdest bestraft, weil du im Chat gespammt hast.'),
         spamTrackerTime = $.getSetIniDbNumber('chatModerator', 'spamTrackerTime', 30),
         spamTrackerLimit = $.getSetIniDbNumber('chatModerator', 'spamTrackerLimit', 30),
 
                 blacklistTimeoutTime = $.getSetIniDbNumber('chatModerator', 'blacklistTimeoutTime', 600),
-        blacklistMessage = $.getSetIniDbString('chatModerator', 'blacklistMessage', 'Du wurdest bestraft weil du etwas verbotenes geschrieben hast.'),
-        blacklistMessageBan = $.getSetIniDbString('chatModerator', 'blacklistMessageBan', 'Du wurdest gebannt weil du etwas verbotenes geschrieben hast.'),
+        blacklistMessage = $.getSetIniDbString('chatModerator', 'blacklistMessage', 'Du wurdest bestraft, weil du etwas verbotenes geschrieben hast.'),
+        blacklistMessageBan = $.getSetIniDbString('chatModerator', 'blacklistMessageBan', 'Du wurdest gebannt, weil du etwas verbotenes geschrieben hast.'),
 
         fakePurgeToggle = $.getSetIniDbBoolean('chatModerator', 'fakePurgeToggle', false),
-        fakePurgeMessage = $.getSetIniDbString('chatModerator', 'fakePurgeMessage',  'Du wurdest bestraft weil du einen Timeout vorgetäuscht hast.'),
+        fakePurgeMessage = $.getSetIniDbString('chatModerator', 'fakePurgeMessage',  'Du wurdest bestraft, weil du einen Timeout vorgetäuscht hast.'),
 
         subscribers = {
             Links: $.getSetIniDbBoolean('chatModerator', 'subscribersModerateLinks', true),
@@ -99,16 +99,16 @@
             Blacklist: $.getSetIniDbBoolean('chatModerator', 'silentTimeoutBlacklist', false),
             SpamTracker: $.getSetIniDbBoolean('chatModerator', 'silentTimeoutSpamTracker', false),
             FakePurge: $.getSetIniDbBoolean('chatModerator', 'silentTimeoutFakePurge', false),
-            LinkMessage: $.getSetIniDbString('chatModerator', 'silentLinkMessage', 'Posten von Links ohne Erlaubnis. (Automatisiert von ' + $.botName + ')'),
+            LinkMessage: $.getSetIniDbString('chatModerator', 'silentLinkMessage', 'Posten eines Links ohne Erlaubnis. (Automatisiert von ' + $.botName + ')'),
             SpamMessage: $.getSetIniDbString('chatModerator', 'silentSpamMessage', 'Übermäßige Verwendung von sich wiederholenden Zeichen. (Automatisiert von ' + $.botName + ')'),
             CapMessage: $.getSetIniDbString('chatModerator', 'silentCapMessage', 'Übermäßige Verwendung von Caps. (Automatisiert von ' + $.botName + ')'),
             SymbolMessage: $.getSetIniDbString('chatModerator', 'silentSymbolsMessage', 'Übermäßige Verwendung von Symbolen. (Automatisiert von ' + $.botName + ')'),
             ColorMessage: $.getSetIniDbString('chatModerator', 'silentColorMessage', 'Verwenden von farbigem Text. (Automatisiert von ' + $.botName + ')'),
-            EmoteMessage: $.getSetIniDbString('chatModerator', 'silentEmoteMessage', 'Übermäßiger Gebrauch von Emotes. (Automatisiert von ' + $.botName + ')'),
+            EmoteMessage: $.getSetIniDbString('chatModerator', 'silentEmoteMessage', 'Übermäßige Verwendung von Emotes. (Automatisiert von ' + $.botName + ')'),
             LongMessage: $.getSetIniDbString('chatModerator', 'silentLongMessage', 'Übermäßige Nachrichtenlänge. (Automatisiert von ' + $.botName + ')'),
             BlacklistMessage: $.getSetIniDbString('chatModerator', 'silentBlacklistMessage', 'Verwendung einer Phrase von der Verbotsliste. (Automatisiert von ' + $.botName + ')'),
-            SpamTrackerMessage: $.getSetIniDbString('chatModerator', 'silentSpamTrackerMessage', 'SChat spammen. (Automatisiert von ' + $.botName + ')'),
-            FakePurgeMessage: $.getSetIniDbString('chatModerator', 'silentFakePurgeMessage', 'Fake purge. (Automatisiert von ' + $.botName + ')'),
+            SpamTrackerMessage: $.getSetIniDbString('chatModerator', 'silentSpamTrackerMessage', 'Chat spammen. (Automatisiert von ' + $.botName + ')'),
+            FakePurgeMessage: $.getSetIniDbString('chatModerator', 'silentFakePurgeMessage', 'Fake-Purge. (Automatisiert von ' + $.botName + ')'),
         },
 
         warningTime = {
@@ -762,7 +762,7 @@
                 spamTrackerMessage = argString.replace(action, '').trim();
                 $.inidb.set('chatModerator', 'spamTrackerMessage', spamTrackerMessage);
                 $.say($.whisperPrefix(sender) + $.lang.get('chatmoderator.spamtracker.message.set', spamTrackerMessage));
-                $.log.event(sender + ' änderte die Spam-Überwachungs-Warnmeldung in "' + spamTrackerMessage + '"');
+                $.log.event(sender + ' änderte die Spam-Überwachungswarnmeldung in "' + spamTrackerMessage + '"');
                 return;
             }
 
@@ -777,7 +777,7 @@
                         regulars.SpamTracker = args[2].equalsIgnoreCase('true');
                         $.inidb.set('chatModerator', 'regularsModerateSpamTracker', regulars.SpamTracker);
                         $.say($.whisperPrefix(sender) + (regulars.SpamTracker ? $.lang.get('chatmoderator.regulars.spamtracker.allowed') : $.lang.get('chatmoderator.regulars.spamtracker.not.allowed')));
-                        $.log.event(sender + ' hat die Stammgäste-Moderation die Spam-Überwachung auf ' + args[2] + ' gestellt');
+                        $.log.event(sender + ' hat die Stammgäste-Moderation für die Spam-Überwachung auf ' + args[2] + ' gestellt');
                         return;
                     }
                 }
@@ -996,7 +996,7 @@
                 $.inidb.set('blackList', word, JSON.stringify(obj));
                 loadBlackList();
                 $.say($.whisperPrefix(sender) + $.lang.get('chatmoderator.blacklist.added'));
-                $.log.event('"' + word + '" wurde zur Blacklist hinzugefügt von ' + sender);
+                $.log.event('"' + word + '" wurde zur Verbotsliste hinzugefügt von ' + sender);
             }
 
             /**
@@ -1037,7 +1037,7 @@
                 $.inidb.set('whiteList', link, 'true');
                 addToWhiteList(link);
                 $.say($.whisperPrefix(sender) + $.lang.get('chatmoderator.whitelist.link.added'));
-                $.log.event('"' + link + '" wurde zur Whitelist hinzugefügt von ' + sender);
+                $.log.event('"' + link + '" wurde zur Ausnahmenliste hinzugefügt von ' + sender);
             }
 
             /**
@@ -1850,7 +1850,7 @@
                 blacklistMessage = argString.replace(action, '').trim();
                 $.inidb.set('chatModerator', 'blacklistMessage', blacklistMessage);
                 $.say($.whisperPrefix(sender) + $.lang.get('chatmoderator.blacklist.message.set', blacklistMessage));
-                $.log.event(sender + ' änderte die Warnnachricht für die Blacklist auf "' + blacklistMessage + '"');
+                $.log.event(sender + ' änderte die Warnnachricht für die Verbotsliste auf "' + blacklistMessage + '"');
                 return;
             }
 
@@ -1865,7 +1865,7 @@
                 blacklistMessageBan = argString.replace(action, '').trim();
                 $.inidb.set('chatModerator', 'blacklistMessageBan', blacklistMessageBan);
                 $.say($.whisperPrefix(sender) + $.lang.get('chatmoderator.blacklistban.message.set', blacklistMessageBan));
-                $.log.event(sender + ' änderte die Bannnachricht für die Blacklist auf "' + blacklistMessageBan + '"');
+                $.log.event(sender + ' änderte die Bannnachricht für die Verbotsliste auf "' + blacklistMessageBan + '"');
                 return;
             }
 

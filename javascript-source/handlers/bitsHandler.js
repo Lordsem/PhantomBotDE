@@ -49,7 +49,7 @@
         }
 
         if (bits == 1) {
-            s = $.replace(s, 'bits', 'bit');
+            s = $.replace(s, 'Bits', 'Bit');
         }
 
         if (s.match(/\(name\)/g)) {

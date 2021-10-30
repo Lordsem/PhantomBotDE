@@ -24,7 +24,7 @@
 (function() {
     var welcomeEnabled = $.getSetIniDbBoolean('welcome', 'welcomeEnabled', false),
         welcomeMessage = $.getSetIniDbString('welcome', 'welcomeMessage', 'Willkommen zurück, (names)!'),
-        welcomeMessageFirst = $.getSetIniDbString('welcome', 'welcomeMessageFirst', '(names) (1 is)(2 are) neu hier. Begrüße alle herzlich!'),
+        welcomeMessageFirst = $.getSetIniDbString('welcome', 'welcomeMessageFirst', '(names) (1 ist)(2 sind) neu hier. Begrüße alle herzlich!'),
         welcomeCooldown = $.getSetIniDbNumber('welcome', 'cooldown', (6 * 36e5)), // 6 Hours
         welcomeQueue = new java.util.concurrent.ConcurrentLinkedQueue,
         welcomeQueueFirst = new java.util.concurrent.ConcurrentLinkedQueue,

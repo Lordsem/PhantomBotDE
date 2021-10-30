@@ -457,7 +457,7 @@
          * @commandpath streamertime - Announce the caster's local time
          */
         if (command.equalsIgnoreCase('streamertime')) {
-            $.say($.whisperPrefix(sender) + $.lang.get('timesystem.streamertime', getCurLocalTimeString("dd. MMMMM yyyy hh:mm:ss zzz '('Z')'"), $.username.resolve($.ownerName)));
+            $.say($.whisperPrefix(sender) + $.lang.get('timesystem.streamertime', getCurLocalTimeString("dd. MMMMM yyyy HH:mm:ss zzz '('Z')'"), $.username.resolve($.ownerName)));
         }
 
         /**

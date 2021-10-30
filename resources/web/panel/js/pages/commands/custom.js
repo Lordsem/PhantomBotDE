@@ -208,7 +208,7 @@ $(function() {
                     .append(tokenButton)
                     // Append a select option for the command permission.
                     .append(helpers.getDropdownGroup('command-permission', 'Benutzerlevel', helpers.getGroupNameById(e.permcom),
-                        ['Streamer', 'Administrator', 'Moderator', 'Abonnent', 'Spender', 'VIP', 'Stammzuschauer', 'Zuschauer']))
+                        ['Caster', 'Administrator', 'Moderator', 'Abonnent', 'Spender', 'VIP', 'Stammzuschauer', 'Zuschauer']))
                     // Add an advance section that can be opened with a button toggle.
                     .append($('<div/>', {
                         'class': 'collapse',
@@ -325,7 +325,7 @@ $(function() {
         .append(helpers.getTextAreaGroup('command-response', 'text', 'Antwort', 'Antwortbeispiel! Verwenden Sie die Eingabetaste für mehrere Chatzeilen, maximal 5.'))
         // Append a select option for the command permission.
         .append(helpers.getDropdownGroup('command-permission', 'Benutzerlevel', 'Zuschauer',
-            ['Streamer', 'Administrator', 'Moderator', 'Abonnent', 'Spender', 'VIP', 'Stammzuschauer', 'Zuschauer']))
+            ['Caster', 'Administrator', 'Moderator', 'Abonnent', 'Spender', 'VIP', 'Stammzuschauer', 'Zuschauer']))
         // Add an advance section that can be opened with a button toggle.
         .append($('<div/>', {
             'class': 'collapse',

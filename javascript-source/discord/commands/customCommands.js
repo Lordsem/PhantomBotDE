@@ -144,7 +144,7 @@
         }
 
         if (s.match(/\(lasttip\)/g)) {
-            s = $.replace(s, '(lasttip)', ($.inidb.exists('donations', 'last_donation_message') ? $.inidb.get('donations', 'last_donation_message') : 'No donations found.'));
+            s = $.replace(s, '(lasttip)', ($.inidb.exists('donations', 'last_donation_message') ? $.inidb.get('donations', 'last_donation_message') : 'Keine Spenden gefunden.'));
         }
 
         if (s.match(/\(encodeurl ([\w\W]+)\)/)) {

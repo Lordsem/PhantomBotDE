@@ -1245,7 +1245,7 @@ public final class PhantomBot implements Listener {
         moveUserConfig();
 
         if (Float.valueOf(System.getProperty("java.specification.version")) < (float) 11) {
-            System.out.println("Detected Java " + System.getProperty("java.version") + ". " + "PhantomBot erfordert Java 11 oder höher.");
+            System.out.println("Erkanntes Java " + System.getProperty("java.version") + ". " + "PhantomBot erfordert Java 11 oder höher.");
             PhantomBot.exitError();
         }
 

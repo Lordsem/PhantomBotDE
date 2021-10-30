@@ -92,7 +92,7 @@
             try {
                 java.lang.Thread.sleep(1000);
             } catch (ex) {
-                $.log.error('Die Berechtigung für den Discord-Befehl konnte nicht festgelegt werden, da Discord nicht verbunden ist. Bitte starte PhantomBotDE neu.');
+                $.log.error('Die Berechtigung für den Discord-Befehl konnte nicht festgelegt werden, da Discord nicht verbunden ist. Bitte starte den PhantomBot neu.');
                 return;
             }
         }

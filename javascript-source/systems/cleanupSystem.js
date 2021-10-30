@@ -31,17 +31,17 @@
                 count = 0,
                 i;
 
-            $.consoleLn('>>> Prozess wird gestartet dies kann einige Minuten dauern...');
+            $.consoleLn('>>> Prozess wird gestartet, dies kann einige Minuten dauern...');
             running = true;
             for (i in keys) {
                 if (parseInt($.inidb.get('time', keys[i])) <= time) {
-                    $.consoleLn('>> Entferne ' + keys[i] + ' aus der Zeitentabelle mit ' + $.inidb.get('time', keys[i]) + ' Zeiten.');
+                    $.consoleLn('>> Entferne ' + keys[i] + ' aus der Zeittabelle mit ' + $.inidb.get('time', keys[i]) + ' Zeiten.');
                     $.inidb.del('time', keys[i]);
                     count++;
                 }
             }
-            $.consoleLn('> Vorgang abgeschlossen. ' + count + ' Nutzer wurden aus der Zeitentabelle entfernt.');
-            $.log.file(logName, '' + 'Die Aufräumarbeiten für die Zeitentabelle liefen von ' + sender + '. (Entfernte ' + count + ' Nutzer aus der Zeitentabelle.)');
+            $.consoleLn('> Vorgang abgeschlossen. ' + count + ' Nutzer wurden aus der Zeittabelle entfernt.');
+            $.log.file(logName, '' + 'Die Aufräumarbeiten für die Zeittabelle liefen von ' + sender + '. (Entfernte ' + count + ' Nutzer aus der Zeittabelle.)');
             running = false;
             return;
         }

@@ -42,7 +42,7 @@ public class BotImporter {
         List<String> points = new ArrayList<>();
         String brLine;
 
-        com.gmt2001.Console.out.println("Importing RevloBot points...");
+        com.gmt2001.Console.out.println("Importiere RevloBot Punkte...");
 
         try {
             // Create a new reader.
@@ -56,17 +56,17 @@ public class BotImporter {
 
                 users.add(spl[0].toLowerCase());
                 points.add(spl[2]);
-                com.gmt2001.Console.out.println("Imported: " + spl[0] + " - Points: " + spl[2]);
+                com.gmt2001.Console.out.println("Importiert: " + spl[0] + " - Punkte: " + spl[2]);
             }
-            com.gmt2001.Console.out.println("Saving data...");
+            com.gmt2001.Console.out.println("Speichere Daten");
 
             db.SetBatchString("points", "", users.toArray(new String[users.size()]), points.toArray(new String[points.size()]));
 
-            com.gmt2001.Console.out.println("Importing done!");
+            com.gmt2001.Console.out.println("Importierung abgeschlossen!");
         } catch (IOException ex) {
-            com.gmt2001.Console.err.println("Failed to convert points from RevloBot [IOException] " + ex.getMessage());
+            com.gmt2001.Console.err.println("Fehler beim Konvertieren von Punkten von RevloBot [IOException] " + ex.getMessage());
         } catch (Exception ex) {
-            com.gmt2001.Console.err.println("Failed to convert points from RevloBot [Exception] " + ex.getMessage());
+            com.gmt2001.Console.err.println("Fehler beim Konvertieren von Punkten von RevloBot [Exception] " + ex.getMessage());
         } finally {
             if (bufferedReader != null) {
                 try {
@@ -91,7 +91,7 @@ public class BotImporter {
         List<String> time = new ArrayList<>();
         String brLine;
 
-        com.gmt2001.Console.out.println("Importing AnkhBot points and time...");
+        com.gmt2001.Console.out.println("Importieren von AnkhBot Punkten und Zeiten...");
 
         try {
             // Create a new reader.
@@ -107,18 +107,18 @@ public class BotImporter {
                 users.add(spl[0].toLowerCase());
                 points.add(spl[1]);
                 time.add(String.valueOf((Integer.parseInt(spl[2]) * 3600)));
-                com.gmt2001.Console.out.println("Imported: " + spl[0] + " - Points: " + spl[1] + " - Time " + spl[2]);
+                com.gmt2001.Console.out.println("Importiert: " + spl[0] + " - Punkte: " + spl[1] + " - Zeit " + spl[2]);
             }
-            com.gmt2001.Console.out.println("Saving data...");
+            com.gmt2001.Console.out.println("Speichere Daten...");
 
             db.SetBatchString("points", "", users.toArray(new String[users.size()]), points.toArray(new String[points.size()]));
             db.SetBatchString("time", "", users.toArray(new String[users.size()]), time.toArray(new String[time.size()]));
 
-            com.gmt2001.Console.out.println("Importing done! " + (System.currentTimeMillis() - d) + "ms");
+            com.gmt2001.Console.out.println("Importierung abgeschlossen! " + (System.currentTimeMillis() - d) + "ms");
         } catch (IOException ex) {
-            com.gmt2001.Console.err.println("Failed to convert points and time from AnkhBot [IOException] " + ex.getMessage());
+            com.gmt2001.Console.err.println("Fehler beim Konvertieren von Punkten und Zeit von AnkhBot [IOException] " + ex.getMessage());
         } catch (NumberFormatException ex) {
-            com.gmt2001.Console.err.println("Failed to convert points and time from AnkhBot [Exception] " + ex.getMessage());
+            com.gmt2001.Console.err.println("Fehler beim Konvertieren von Punkten und Zeit von AnkhBot [Exception] " + ex.getMessage());
         } finally {
             if (bufferedReader != null) {
                 try {

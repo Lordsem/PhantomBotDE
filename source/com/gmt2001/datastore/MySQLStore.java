@@ -94,7 +94,7 @@ public class MySQLStore extends DataStore {
         try (Connection connection = DriverManager.getConnection(db, user, pass)) {
             return true;
         } catch (SQLException ex) {
-            com.gmt2001.Console.err.println("Failure to Connect to MySQL: " + ex.getMessage());
+            com.gmt2001.Console.err.println("Fehler beim Herstellen einer Verbindung zu MySQL: " + ex.getMessage());
         }
 
         return false;

@@ -918,7 +918,7 @@
             $.inidb.set('keywords', newKeywords[i].key, JSON.stringify(newKeywords[i].json));
         }
 
-        $.consoleLn('PhantomBotDE Update 3.3.0 abgeschlossen!');
+        $.consoleLn('PhantomBot Update 3.3.0 abgeschlossen!');
         $.inidb.set('updates', 'installedv3.3.0', 'true');
     }
 

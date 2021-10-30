@@ -144,7 +144,7 @@ public class TwitchPubSub {
                     }
 
                     if (this.backoff.GetTotalIterations() >= BACKOFF_MAX) {
-                        com.gmt2001.Console.out.println("Failed to reconnect to PubSub, aborting...");
+                        com.gmt2001.Console.out.println("Wiederherstellung der Verbindung zu PubSub fehlgeschlagen, Abbruch...");
                         return;
                     }
 
@@ -238,7 +238,7 @@ public class TwitchPubSub {
             if (!reconnect) {
                 com.gmt2001.Console.debug.println("Verbinde zu Twitch PubSub-Edge (SSL) [" + this.uri.getHost() + "]");
             } else {
-                com.gmt2001.Console.debug.println("Reconnecte zu Twitch PubSub-Edge (SSL) [" + this.uri.getHost() + "]");
+                com.gmt2001.Console.debug.println("Wiederverbinde zu Twitch PubSub-Edge (SSL) [" + this.uri.getHost() + "]");
             }
 
             try {
@@ -363,7 +363,7 @@ public class TwitchPubSub {
         @Override
         public void onOpen(ServerHandshake handshakedata) {
             try {
-                com.gmt2001.Console.debug.println("Connected to Twitch PubSub-Edge (SSL) [" + this.uri.getHost() + "]");
+                com.gmt2001.Console.debug.println("Verbunden mit Twitch PubSub-Edge (SSL) [" + this.uri.getHost() + "]");
 
                 if (TwitchValidate.instance().hasAPIScope("channel:moderate")) {
                     String[] type = new String[]{"chat_moderator_actions." + (TwitchValidate.instance().getAPIUserID().equalsIgnoreCase("" + this.channelId) ? "" : this.botId + ".") + this.channelId};
@@ -412,11 +412,11 @@ public class TwitchPubSub {
             closeTimer();
 
             if (remote && !this.hasModerator && !this.hasRedemptions) {
-                com.gmt2001.Console.out.println("Disconnected from Twitch PubSub due to no valid topic subscriptions");
+                com.gmt2001.Console.out.println("Verbindung zu Twitch PubSub aufgrund fehlender gültiger Themenabonnements getrennt");
                 return;
             }
 
-            com.gmt2001.Console.out.println("Lost connection to Twitch Moderation Data Feed, retrying soon...");
+            com.gmt2001.Console.out.println("Verbindung zum Twitch-Moderationsdaten-Feed verloren, versuche es bald erneut...");
             this.twitchPubSub.reconnect(false);
         }
 
@@ -428,7 +428,7 @@ public class TwitchPubSub {
         @Override
         public void onError(Exception ex) {
             if (!ex.toString().contains("ArrayIndexOutOfBoundsException")) {
-                com.gmt2001.Console.debug.println("TwitchPubSubWS Exception: " + ex);
+                com.gmt2001.Console.debug.println("TwitchPubSubWS Ausnahme: " + ex);
             }
         }
 
@@ -451,17 +451,17 @@ public class TwitchPubSub {
                 if (messageObj.getString("type").equalsIgnoreCase("response")) {
                     if (messageObj.getString("nonce").equalsIgnoreCase("moderator")) {
                         this.hasModerator = !(messageObj.has("error") && messageObj.getString("error").length() > 0);
-                        com.gmt2001.Console.debug.println("Got chat_moderator_actions response " + this.hasModerator);
+                        com.gmt2001.Console.debug.println("Chat_moderator_actions-Antwort erhalten " + this.hasModerator);
                         if (!this.hasModerator) {
-                            com.gmt2001.Console.err.println("WARNING: This APIOauth token was rejected for Moderation Feed (You can ignore the error if you aren't using this feature)");
+                            com.gmt2001.Console.err.println("WARNUNG: Dieses APIOauth-Token wurde für den Moderations-Feed abgelehnt (Sie können den Fehler ignorieren, wenn Sie diese Funktion nicht verwenden)");
                             com.gmt2001.Console.debug.println("TwitchPubSubWS Error: " + messageObj.getString("error"));
                             return;
                         }
                     } else if (messageObj.getString("nonce").equalsIgnoreCase("redemptions")) {
                         this.hasRedemptions = !(messageObj.has("error") && messageObj.getString("error").length() > 0);
-                        com.gmt2001.Console.debug.println("Got channel-points-channel-v1 response " + this.hasRedemptions);
+                        com.gmt2001.Console.debug.println("Kanal-Punkte-Kanal-v1-Antwort erhalten " + this.hasRedemptions);
                         if (!this.hasRedemptions) {
-                            com.gmt2001.Console.err.println("WARNING: This APIOauth token was rejected for Channel Points (You can ignore the error if you aren't using this feature)");
+                            com.gmt2001.Console.err.println("WARNUNG: Dieses APIOauth-Token wurde für Channel Points abgelehnt (Sie können den Fehler ignorieren, wenn Sie diese Funktion nicht verwenden)");
                             com.gmt2001.Console.debug.println("TwitchPubSubWS Error: " + messageObj.getString("error"));
                             return;
                         }
@@ -472,13 +472,13 @@ public class TwitchPubSub {
                 }
 
                 if (messageObj.getString("type").equalsIgnoreCase("reconnect")) {
-                    com.gmt2001.Console.out.println("Received RECONNECT from Twitch PubSub");
+                    com.gmt2001.Console.out.println("RECONNECT von Twitch PubSub empfangen");
                     this.twitchPubSub.reconnect(true);
                     return;
                 }
 
                 if (messageObj.getString("type").equalsIgnoreCase("pong")) {
-                    com.gmt2001.Console.debug.println("TwitchPubSubWS: Got a PONG.");
+                    com.gmt2001.Console.debug.println("TwitchPubSubWS: Habe ein PONG.");
                     return;
                 }
 
@@ -501,7 +501,7 @@ public class TwitchPubSub {
                     jsonObject.put("type", "PING");
 
                     send(jsonObject.toString());
-                    com.gmt2001.Console.debug.println("TwitchPubSubWS: Sent a PING.");
+                    com.gmt2001.Console.debug.println("TwitchPubSubWS: Sende ein PING.");
                 } catch (JSONException ex) {
                     com.gmt2001.Console.err.logStackTrace(ex);
                 }

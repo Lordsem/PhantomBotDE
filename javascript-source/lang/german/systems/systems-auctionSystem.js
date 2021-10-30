@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-$.lang.register('auctionsystem.usage', 'Verwendung: !auction open [Wieviele Gebote] [Minimalstes Gebot] [Timer für automatisches Schließen]');
+$.lang.register('auctionsystem.usage', 'Verwendung: !auction open [Wie viele Gebote] [Minimalstes Gebot] [Timer für automatisches Schließen]');
 $.lang.register('auctionsystem.err.opened', 'Es läuft bereits eine Auktion!');
 $.lang.register('auctionsystem.opened', 'Die Auktion ist nun eröffnet! Du kannst Gebote in Schritten von $1 abgeben. Kleinstes, erlaubtes Gebot sind $2! Gib Gebote mit "!bid [Gebot]" ab.');
 $.lang.register('auctionsystem.auto.timer.msg', 'Auktion endet automatisch in $1 Sekunden!');

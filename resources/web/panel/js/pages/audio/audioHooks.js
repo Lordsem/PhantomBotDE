@@ -215,7 +215,7 @@ $(run = function() {
                     .append(helpers.getInputGroup('command-audio', 'text', 'Audio Hook', '', e.audioCommands, 'Audio der abgespielt werden soll. Dieser kann nicht bearbeitet werden.', true))
                     // Append a select option for the command permission.
                     .append(helpers.getDropdownGroup('command-permission', 'Benutzerlevel', helpers.getGroupNameById(e.permcom),
-                        ['Streamer', 'Administratoren', 'Moderatoren', 'Abonnenten', 'Spender', 'VIPs', 'Stammzuschauer', 'Zuschauer']))
+                        ['Caster', 'Administratoren', 'Moderatoren', 'Abonnenten', 'Spender', 'VIPs', 'Stammzuschauer', 'Zuschauer']))
                     // Add an advance section that can be opened with a button toggle.
                     .append($('<div/>', {
                         'class': 'collapse',
@@ -394,7 +394,7 @@ $(function() {
             .append(helpers.getDropdownGroup('command-audio', 'Audio Hook', 'Auswählen eines Audio-Hooks', audioNames, 'Audio-Hook, der abgespielt werden soll, wenn der Befehl ausgeführt wird.'))
             // Append a select option for the command permission.
             .append(helpers.getDropdownGroup('command-permission', 'Benuterlevel', 'Zuschauer',
-                ['Streamer', 'Administratoren', 'Moderatoren', 'Abonnenten', 'Spender', 'VIPs', 'Stammzuschauer', 'Zuschauer'], 'Benutzer, die den Befehl ausführen können.'))
+                ['Caster', 'Administratoren', 'Moderatoren', 'Abonnenten', 'Spender', 'VIPs', 'Stammzuschauer', 'Zuschauer'], 'Benutzer, die den Befehl ausführen können.'))
             // Add an advance section that can be opened with a button toggle.
             .append($('<div/>', {
                 'class': 'collapse',

@@ -283,7 +283,7 @@ public class TwitchCache implements Runnable {
                 if (streamObj.has("message")) {
                     com.gmt2001.Console.err.println("TwitchCache::updateCache: " + streamObj.getString("message"));
                 } else {
-                    com.gmt2001.Console.debug.println("TwitchCache::updateCache: Failed to update.");
+                    com.gmt2001.Console.debug.println("TwitchCache::updateCache: Fehler beim Aktualisieren.");
                 }
             }
         } catch (JSONException ex) {

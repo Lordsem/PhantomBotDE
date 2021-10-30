@@ -428,13 +428,13 @@ public class TwitchWSHostIRC {
                 Thread.currentThread().setName("tv.phantombot.twitchwsirc.TwitchWSHostIRC::checkPingTime");
                 
                 if (System.currentTimeMillis() - lastPing >= sendPingWaitTime && !sentPing) {
-                    com.gmt2001.Console.debug.println("Sending a PING to Twitch (Host Data) to Verify Connection");
+                    com.gmt2001.Console.debug.println("Senden eines PINGs an Twitch (Host Data) um die Verbindung zu überprüfen");
                     sentPing = true;
                     send("PING :tmi.twitch.tv");
                 }
                 
                 if (System.currentTimeMillis() - lastPing >= pingWaitTime) {
-                    com.gmt2001.Console.debug.println("PING not Detected from Twitch (Host Data) - Forcing Reconnect (Timeout is " + pingWaitTime + "ms)");
+                    com.gmt2001.Console.debug.println("PING von Twitch nicht erkannt (Host Data) - Erzwingen einer erneuten Verbindung (Timeout ist " + pingWaitTime + "ms)");
                     close();
                 }
             }, 1, 1, TimeUnit.MINUTES);

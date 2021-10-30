@@ -176,7 +176,7 @@ public class TwitchWSIRCParser implements Runnable {
                 parseLine(rawMessage, client);
             }
         } catch (Exception ex) {
-            com.gmt2001.Console.err.println("Failed to parse Twitch message: [" + ex.getMessage() + "] \n\n {" + rawMessage + "}");
+            com.gmt2001.Console.err.println("Fehler beim analysieren der Twitch-Nachricht: [" + ex.getMessage() + "] \n\n {" + rawMessage + "}");
             com.gmt2001.Console.err.printStackTrace(ex);
         }
     }
@@ -358,7 +358,7 @@ public class TwitchWSIRCParser implements Runnable {
         webSocket.send("JOIN #" + channelName);
 
         // Log in the console that web joined.
-        com.gmt2001.Console.out.println("Kanal [#" + channelName + "] beigetreten");
+        com.gmt2001.Console.out.println("Kanal " + channelName + " beigetreten");
 
         // Port the channel joined event.
         eventBus.postAsync(new IrcJoinCompleteEvent(session));
@@ -504,21 +504,21 @@ public class TwitchWSIRCParser implements Runnable {
         switch (message) {
             case "Login authentication failed":
                 com.gmt2001.Console.out.println();
-                com.gmt2001.Console.out.println("Twitch Inidicated Login Failed. Check OAUTH password.");
-                com.gmt2001.Console.out.println("Exiting PhantomBot.");
+                com.gmt2001.Console.out.println("Twitch angezeigte Anmeldung fehlgeschlagen. Überprüfen Sie das OAUTH-Passwort.");
+                com.gmt2001.Console.out.println("Beende PhantomBot.");
                 com.gmt2001.Console.out.println();
                 PhantomBot.exitError();
                 break;
             case "Invalid NICK":
                 com.gmt2001.Console.out.println();
-                com.gmt2001.Console.out.println("Twitch Inidicated Invalid Bot Name. Check 'user=' setting in botlogin.txt");
-                com.gmt2001.Console.out.println("Exiting PhantomBot.");
+                com.gmt2001.Console.out.println("Twitch hat einen ungültigen Bot-Namen angezeigt. Überprüfen Sie die Einstellung 'user=' in botlogin.txt");
+                com.gmt2001.Console.out.println("Beende PhantomBot.");
                 com.gmt2001.Console.out.println();
                 PhantomBot.exitError();
                 break;
             default:
                 eventBus.postAsync(new IrcPrivateMessageEvent(session, "jtv", message, tags));
-                com.gmt2001.Console.debug.println("Message from jtv (NOTICE): " + message);
+                com.gmt2001.Console.debug.println("Nachricht von jtv (HINWEIS): " + message);
                 break;
         }
     }

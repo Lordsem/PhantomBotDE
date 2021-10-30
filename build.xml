@@ -48,7 +48,7 @@
     <property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar"/>
 
     <tstamp>
-        <format property="NOW" pattern="MMM dd yyyy HH:mm:ss zzz" timezone="GMT" />
+        <format property="NOW" pattern="DD MMM yyyy HH:mm:ss zzz" timezone="CET" />
     </tstamp>
 
     <path id="classpath">

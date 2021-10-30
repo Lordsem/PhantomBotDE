@@ -101,12 +101,12 @@ public class TwitchSession extends MessageQueue {
         try {
             this.twitchWSIRC.send(message);
         } catch (NotYetConnectedException  ex) {
-            com.gmt2001.Console.err.println("Failed to send message to Twitch [NotYetConnectedException]: " + ex.getMessage());
+            com.gmt2001.Console.err.println("Fehler beim Senden der Nachricht an Twitch [NotYetConnectedException]: " + ex.getMessage());
         } catch (WebsocketNotConnectedException ex) {
             reconnect();
-            com.gmt2001.Console.err.println("Failed to send message to Twitch [WebsocketNotConnectedException]: " + ex.getMessage());
+            com.gmt2001.Console.err.println("Fehler beim Senden der Nachricht an Twitch [WebsocketNotConnectedException]: " + ex.getMessage());
         } catch (Exception ex) {
-            com.gmt2001.Console.err.println("Failed to send message to Twitch [" + ex.getClass().getSimpleName() + "]: " + ex.getMessage());
+            com.gmt2001.Console.err.println("Fehler beim Senden der Nachricht an Twitch [" + ex.getClass().getSimpleName() + "]: " + ex.getMessage());
         }
     }
 
@@ -137,7 +137,7 @@ public class TwitchSession extends MessageQueue {
         try {
             this.twitchWSIRC = new TwitchWSIRC(new URI("wss://irc-ws.chat.twitch.tv"), channelName, botName, oAuth, this);
             if (!this.twitchWSIRC.connectWSS(false)) {
-                throw new Exception("Error when connecting to Twitch.");
+                throw new Exception("Fehler beim Verbinden mit Twitch.");
             }
         } catch (Exception ex) {
             com.gmt2001.Console.err.println("Fehler beim Erstellen einer neuen TwitchWSIRC-Instanz: " + ex.getMessage());
@@ -173,8 +173,8 @@ public class TwitchSession extends MessageQueue {
                 if (lastReconnect + (MAX_BACKOFF * 2) < now) {
                     nextBackoff = 1000L;
                 } else {
-                    com.gmt2001.Console.out.println("Delaying next connection attempt to prevent spam, " + (nextBackoff / 1000) + " seconds...");
-                    com.gmt2001.Console.warn.println("Delaying next reconnect " + (nextBackoff / 1000) + " seconds...", true);
+                    com.gmt2001.Console.out.println("Verzögern des nächsten Verbindungsversuchs, um Spam zu verhindern, " + (nextBackoff / 1000) + " Sekunden...");
+                    com.gmt2001.Console.warn.println("Verzögern der nächsten Wiederverbindung " + (nextBackoff / 1000) + " Sekunden...", true);
                     Thread.sleep(nextBackoff);
                 }
 
