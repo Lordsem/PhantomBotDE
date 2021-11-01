@@ -16,7 +16,13 @@
 <main>
     <!-- Header -->
     <section class="content-header">
-        <h1>Timer</h1>
+        <h1>
+            Timer
+            <label class="switch" data-toggle="tooltip" title="Modul umschalten">
+                <input type="checkbox" id="noticesModuleToggle" checked>
+                <span class="slider round"></span>
+            </label>
+        </h1>
         <ol class="breadcrumb">
             <li><a href="javascript:void(0);"><i class="fa fa-dashboard"></i> Startseite</a></li>
             <li class="active">Timer</li>
@@ -25,34 +31,56 @@
 
     <!-- Main content -->
     <section class="content">
-    	<div class="box box-solid">
-            <div class="box-header with-border">
-                <label class="switch" data-toggle="tooltip" title="Modul umschalten">
-                    <input type="checkbox" id="noticesModuleToggle" checked>
-                    <span class="slider round"></span>
-                </label>
+        <form role="form" id="noticesModule">
+            <div class="row">
 
-                <h3 class="box-title">Timer</h3>
-            </div>
-            <form role="form" id="noticesModule">
-                <!-- Box content -->
-                <div class="box-body">
-                    <div class="btn-toolbar pull-right">
-                        <button class="btn btn-primary btn-sm" type="button" id="add-timer-button"><i class="fa fa-plus"></i>&nbsp; Timer hinzufügen</button>
-                        <button class="btn btn-primary btn-sm" type="button" id="timer-settings-button"><i class="fa fa-cog"></i>&nbsp; Einstellungen</button>
-                    </div>
+                <!-- Groups table -->
+                <div class="col-md-6">
+                    <div class="box box-solid" id="groups-box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Timer Gruppen</h3>
+                        </div>
+                        <!-- Box content -->
+                        <div class="box-body">
+                            <div class="btn-toolbar pull-right">
+                                <button class="btn btn-primary btn-sm" type="button" id="btn-add-group">
+                                    <i class="fa fa-plus"></i>&nbsp; Gruppe hinzuf&uuml;gen
+                                </button>
+                            </div>
 
-                    <div class="load-ajax">
-                        <div class="spinner"></div>
-                        <p class="load-ajax-text">Lade...</p>
+                            <div class="load-ajax">
+                                <div class="spinner"></div>
+                                <p class="load-ajax-text">Lade...</p>
+                            </div>
+
+                            <table id="groups-table" class="table table-bordered table-hover"></table>
+                        </div>
                     </div>
-                    
-                    <table id="timersTable" class="table table-bordered table-hover"></table>
                 </div>
-            </form>
-        </div>
+
+                <!-- Messages table -->
+                <div class="col-md-6">
+                    <div class="box box-solid hidden" id="messages-box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Nachricht in <span></span></h3>
+                        </div>
+                        <!-- Box content -->
+                        <div class="box-body">
+                            <div class="btn-toolbar pull-right">
+                                <button class="btn btn-primary btn-sm" type="button" id="add-message-button">
+                                    <i class="fa fa-plus"></i>&nbsp; Nachricht hinzuf&uuml;gen
+                                </button>
+                            </div>
+
+                            <table id="messages-table" class="table table-bordered table-hover"></table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
     </section>
 
     <!-- timers -->
-    <script src="/panel/js/pages/timers/timers.js"></script>
+    <script src="js/pages/timers/timers.js"></script>
 </main>

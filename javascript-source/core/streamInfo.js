@@ -391,7 +391,7 @@
     function getChannelAge(event) {
         var channelData = $.twitch.GetChannel((!event.getArgs()[0] ? event.getSender() : $.user.sanitize(event.getArgs()[0])));
 
-        if (channelData.getInt('_http') === 404) {
+        if (channelData.getInt('_http') === 404 || !channelData.getBoolean('_success')) {
             $.say($.userPrefix(event.getSender(), true) + $.lang.get('channel.age.user.404'));
             return;
         }
@@ -442,7 +442,7 @@
 
                 $.twitchcache.setGameTitle(http.getString('game'));
                 $.inidb.set('streamInfo', 'game', http.getString('game'));
-                $.log.event($.username.resolve(sender) + ' die aktuelle Kategorie geändert zu ' + http.getString('game'));
+                $.log.event($.username.resolve(sender) + ' äanderte die aktuelle Kategorie zu ' + http.getString('game'));
                 if ($.bot.isModuleEnabled('./commands/deathctrCommand.js')) {
                     $.deathUpdateFile(game);
                 }

@@ -27,18 +27,11 @@ $(function () {
     });
 
     // the button that signs out.
-    $('#sign-out-btn').on('click', function() {
-        $.ajax({
-            'type': 'GET',
-            'url': window.location.pathname,
-            'username': 'log',
-            'password': 'out'
-        }).done(function() {
-            window.location = '/panel/login?logout=true';
-        }).fail(function() {
-            // We logged out. We want a 401, this means the old password was dumped (The good one).
-            window.location = '/';
-        });
+    $('#sign-out-btn').on('click', function () {
+        toastr.info('Signing out...', '', {timeOut: 0});
+        socket.close();
+        window.sessionStorage.removeItem("webauth");
+        window.location = window.location.origin + window.location.pathname + 'login/#logoutSuccess=true';
     });
 
     // Load the display name.
@@ -79,6 +72,32 @@ $(function () {
                     }
                 });
             }, 3e4);
+        }
+    });
+
+    socket.getBotVersion('get_autorefresh', function (e) {
+        if (e['autorefreshoauth'] !== null && e['autorefreshoauth'] !== undefined && !e['autorefreshoauth']) {
+            let html = 'Es scheint, als ob du die Automatische Aktualisierung der OAuth-Token nicht eingerichtet hast. Es wird dringend empfohlen, dies einzustellen, '
+                    + 'um die neuesten Funktionen zu genießen und um zu vermeiden, dass der aktuelle Token abläuft. Du kannst dies ' +
+                    $('<a/>', {'target': '_blank', 'rel': 'noopener noreferrer'}).prop('href', '../oauth/').append('hier')[0].outerHTML + ' einrichten.';
+            toastr.warning('OAuth-Tokens werden möglicherweise nicht automatisch aktualisiert!', {
+                'timeOut': 2000
+            });
+            helpers.addNotification($('<a/>', {
+                'href': 'javascript:void(0);',
+                'click': function () {
+                    helpers.getModal('pb-oauth', 'PhantomBot OAuth Token', 'Ok', $('<form/>', {
+                        'role': 'form'
+                    })
+                            .append($('<p/>', {
+                                'html': html
+                            })), function () {
+                        $('#pb-oauth').modal('toggle');
+                    }).modal('toggle');
+                }
+            }).append($('<i/>', {
+                'class': 'fa fa-warning text-yellow'
+            })).append('OAuth Token werden nicht aktualisiert'));
         }
     });
 });

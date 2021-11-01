@@ -16,37 +16,38 @@
 <!DOCTYPE html>
 <html lang="de">
 
-<head>
-    <!-- Set the default charset -->
-    <meta charset="utf-8">
-    <!-- Tell IE to use the latest render engine -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- Main title -->
-    <title>PhantomBotDE Dashboard</title>
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="/panel/vendors/font-awesome/css/font-awesome.min.css">
-    <!-- Discord Icon -->
-    <link rel="stylesheet" href="/panel/vendors/font-awesome/css/discord.min.css">
-    <!-- Bootstrap 3.3.7 -->
-    <link rel="stylesheet" href="/panel/vendors/bootstrap/css/bootstrap.min.css">
-    <!-- Datatables -->
-    <link rel="stylesheet" href="/panel/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css">
-    <!-- Toastr -->
-    <link rel="stylesheet" href="/panel/vendors/toastr/toastr.min.css">
-    <!-- Pace theme -->
-    <link rel="stylesheet" href="/panel/vendors/PACE/pace.min.css">
-    <!-- Pretty Checkbox -->
-    <link rel="stylesheet" href="/panel/vendors/pretty-checkbox/pretty-checkbox.min.css">
-    <!-- Easy auto comeplete -->
-    <link rel="stylesheet" href="/panel/vendors/EasyAutocomplete-1.3.5/easy-autocomplete.min.css">
-    <!-- Loader -->
-    <link rel="stylesheet" href="/panel/css/main.min.css">
-    <!-- Google Font -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-    <!-- More css is loaded via JavaScript -->
-</head>
+    <head>
+        <!-- Set the default charset -->
+        <meta charset="utf-8">
+        <!-- Tell IE to use the latest render engine -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- Main title -->
+        <title>PhantomBotDE Dashboard</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <link rel="icon" href="../favicon.ico" type="image/x-icon">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="vendors/font-awesome/css/font-awesome.min.css">
+        <!-- Discord Icon -->
+        <link rel="stylesheet" href="vendors/font-awesome/css/discord.min.css">
+        <!-- Bootstrap 3.3.7 -->
+        <link rel="stylesheet" href="vendors/bootstrap/css/bootstrap.min.css">
+        <!-- Datatables -->
+        <link rel="stylesheet" href="vendors/datatables.net-bs/css/dataTables.bootstrap.min.css">
+        <!-- Toastr -->
+        <link rel="stylesheet" href="vendors/toastr/toastr.min.css">
+        <!-- Pace theme -->
+        <link rel="stylesheet" href="vendors/PACE/pace.min.css">
+        <!-- Pretty Checkbox -->
+        <link rel="stylesheet" href="vendors/pretty-checkbox/pretty-checkbox.min.css">
+        <!-- Easy auto comeplete -->
+        <link rel="stylesheet" href="vendors/EasyAutocomplete-1.3.5/easy-autocomplete.min.css">
+        <!-- Loader -->
+        <link rel="stylesheet" href="css/main.min.css">
+        <!-- Google Font -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+        <!-- More css is loaded via JavaScript -->
+    </head>
 
     <!-- Main body -->
     <body class="hold-transition skin-purple sidebar-mini">
@@ -64,7 +65,7 @@
                     <!-- Logo -->
                     <div class="logo">
                         <span class="logo-mini"><b>P</b>B</span>
-                        <span class="logo-lg"><b>Phantom</b>BotDE</span>
+                        <img class="navbar-brand" alt="PhantomBot" src="/common/images/logo.png" /> <span class="logo-lg"><b>Phantom</b>Bot<b>DE</b></span>
                     </div>
 
                     <!-- Sidebar toggle -->
@@ -94,14 +95,14 @@
                                 <!-- Panel user -->
                                 <li class="dropdown user user-menu">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                        <img src="/panel/img/logo.jpeg" alt="User Avatar" class="user-image">
+                                        <img src="img/logo.png" alt="User Avatar" class="user-image" id="user-image1">
 
                                         <span class="hidden-xs" id="main-name">PhantomBotDE</span>
                                     </a>
                                     <ul class="dropdown-menu">
                                         <!-- User image -->
                                         <li class="user-header" style="background-color: #6441a5; height: auto;">
-                                            <img src="panel/img/logo.jpeg" alt="Logo" class="img-circle" id="user-image2">
+                                            <img src="img/logo.png" alt="Logo" class="img-circle" id="user-image2">
 
                                             <p class="panel-admin" id="second-name">
                                                 PhantomBotDE
@@ -317,6 +318,7 @@
                                     <li><a href="#tipsHistory.html" data-folder="history"><i class="fa fa-circle-o"></i> Spenden</a></li>
                                     <li><a href="#hostHistory.html" data-folder="history"><i class="fa fa-circle-o"></i> Hosts</a></li>
                                     <li><a href="#raidHistory.html" data-folder="history"><i class="fa fa-circle-o"></i> Raids</a></li>
+                                    <li><a href="#followsHistory.html" data-folder="history"><i class="fa fa-circle-o"></i> Follows</a></li>
                                 </ul>
                             </li>
 
@@ -446,7 +448,7 @@
                                 <label for="toggle-chat">Twitch-Chat anzeigen</label>
                             </div>
 
-                            <p>Twitch-Chat ein- oder ausblenden..</p>
+                            <p>Twitch-Chat ein- oder ausblenden.</p>
                         </div>
 
                         <div class="form-group">
@@ -495,35 +497,59 @@
             <div class="control-sidebar-bg"></div>
         </div>
 
-    <!-- jQuery 3 -->
-    <script src="/panel/vendors/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 3.3.7 -->
-    <script src="/panel/vendors/bootstrap/js/bootstrap.min.js"></script>
-    <!-- Pace -->
-    <script src="/panel/vendors/PACE/pace.min.js"></script>
-    <!-- Toastr -->
-    <script src="/panel/vendors/toastr/toastr.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="/panel/vendors/adminlte/js/adminlte.min.js"></script>
-    <!-- Select2 -->
-    <script src="/panel/vendors/select2/select2.full.min.js"></script>
-    <!-- Sweetalert -->
-    <script src="/panel/vendors/sweetalert/sweetalert.min.js"></script>
-    <!-- Datatables -->
-    <script src="/panel/vendors/datatables.net-bs/js/jquery.dataTables.min.js"></script>
-    <script src="/panel/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-    <!-- Easy auto comeplete -->
-    <script src="/panel/vendors/EasyAutocomplete-1.3.5/jquery.easy-autocomplete.min.js"></script>
-    <!-- Panel config script -->
-    <script src="/panel/js/utils/panelConfig.js"></script>
-    <!-- Helpers -->
-    <script src="/panel/js/utils/helpers.js"></script>
-    <!-- Ajax page loader -->
-    <script src="/panel/js/utils/ajaxLoader.js"></script>
-    <!-- Reconnecting socket. -->
-    <script src="/common/reconnecting-websocket/reconnectingWS.min.js"></script>
-    <!-- Main js file -->
-    <script src="/panel/js/index.js"></script>
-</body>
+        <!-- jQuery 3 -->
+        <script src="vendors/jquery/jquery.min.js"></script>
+        <!-- Bootstrap 3.3.7 -->
+        <script src="vendors/bootstrap/js/bootstrap.min.js"></script>
+        <!-- Pace -->
+        <script src="vendors/PACE/pace.min.js"></script>
+        <!-- Toastr -->
+        <script src="vendors/toastr/toastr.min.js"></script>
+        <!-- AdminLTE App -->
+        <script src="vendors/adminlte/js/adminlte.min.js"></script>
+        <!-- Select2 -->
+        <script src="vendors/select2/select2.full.min.js"></script>
+        <!-- Sweetalert -->
+        <script src="vendors/sweetalert/sweetalert.min.js"></script>
+        <!-- Datatables -->
+        <script src="vendors/datatables.net-bs/js/jquery.dataTables.min.js"></script>
+        <script src="vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+        <!-- Easy auto comeplete -->
+        <script src="vendors/EasyAutocomplete-1.3.5/jquery.easy-autocomplete.min.js"></script>
+        <!-- Panel config script -->
+        <script src="js/utils/panelConfig.js"></script>
+        <!-- Helpers -->
+        <script src="js/utils/helpers.js"></script>
+        <!-- Ajax page loader -->
+        <script src="js/utils/ajaxLoader.js"></script>
+        <!-- Reconnecting socket. -->
+        <script src="../common/reconnecting-websocket/reconnectingWS.min.js"></script>
+        <!-- Main js file -->
+        <script>
+            $(function () {
+                helpers.parseHashmap();
+                helpers.setupAuth();
+                if (helpers.getBotHost() === '!missing') {
+                    window.location = window.location.origin + window.location.pathname + 'login/#missingBot=true';
+                    return;
+                }
+                if (getAuth() === '!missing') {
+                    window.location = window.location.origin + window.location.pathname + 'login/#missingAuth=true';
+                    return;
+                }
+                $('#sr-link').attr('href', 'http://' + helpers.getBotHost() + '/ytplayer');
+                $('body').append($('<script>', {
+                    'src': 'js/index.js'
+                }));
+            });
+        </script>
+        <script>
+        if (!window.location.pathname.endsWith("/")) {
+            let newURL = window.location.toString().replace(window.location.pathname, window.location.pathname + "/");
+            document.body.innerHTML = 'Fixe die URL, klicke <a href="' + newURL + '" target="_self">hier</a>, wenn du nicht automatisch weitergeleitet wirst...';
+            window.location.replace(newURL);
+        }
+        </script>
+    </body>
 
 </html>

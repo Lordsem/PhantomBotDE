@@ -16,20 +16,19 @@
  */
 
 // Main function that gets all of our data.
-$(function() {
-	// Get all module toggles.
+$(function () {
+    // Get all module toggles.
     socket.getDBValues('alerts_get_modules', {
         tables: ['modules', 'modules', 'modules', 'modules', 'modules', 'modules', 'modules', 'modules', 'modules', 'modules', 'modules', 'modules'],
         keys: ['./discord/handlers/followHandler.js', './discord/handlers/subscribeHandler.js', './discord/handlers/hostHandler.js',
-        		'./discord/handlers/bitsHandler.js', './discord/handlers/clipHandler.js', './discord/systems/greetingsSystem.js', './discord/handlers/streamlabsHandler.js',
-        		'./discord/handlers/raidHandler.js', './discord/handlers/tipeeeStreamHandler.js', './discord/handlers/streamElementsHandler.js',
-        		'./discord/handlers/twitterHandler.js', './discord/handlers/streamHandler.js']
-    }, true, function(e) {
+            './discord/handlers/bitsHandler.js', './discord/handlers/clipHandler.js', './discord/systems/greetingsSystem.js', './discord/handlers/streamlabsHandler.js',
+            './discord/handlers/raidHandler.js', './discord/handlers/tipeeeStreamHandler.js', './discord/handlers/streamElementsHandler.js',
+            './discord/handlers/twitterHandler.js', './discord/handlers/streamHandler.js']
+    }, true, function (e) {
         // Handle the settings button.
         let keys = Object.keys(e),
-            module = '',
-            i;
-
+                module = '',
+                i;
         for (i = 0; i < keys.length; i++) {
             module = keys[i].substring(keys[i].lastIndexOf('/') + 1).replace('.js', '');
             // Handle the status of the buttons.
@@ -44,15 +43,80 @@ $(function() {
 });
 
 // Function that handles events
-$(function() {
-	// Toggle for the alert modules.
-    $('[data-alert-toggle]').on('change', function() {
+$(function () {
+    let discordChannels = null;
+    let allowedChannelTypes = ['GUILD_NEWS', 'GUILD_TEXT'];
+
+    function refreshChannels() {
+        socket.getDiscordChannelList('discord_alerts_getchannels', function (d) {
+            discordChannels = d.data;
+        });
+    }
+
+    function getChannelSelector(id, title, placeholder, value, tooltip, allowedChannelTypes) {
+        if (discordChannels === null) {
+            return helpers.getInputGroup(id, 'text', title, placeholder, value, tooltip);
+        } else {
+            let data = [];
+
+            for (const [category, channels] of Object.entries(discordChannels)) {
+                let entry = {};
+                entry.title = channels.name;
+                entry.options = [];
+
+                for (const [channel, info] of Object.entries(channels)) {
+                    if (channel === 'name') {
+                        continue;
+                    }
+
+                    entry.options.push({
+                        'name': info.name,
+                        'value': channel,
+                        'selected': channel === value,
+                        'disabled': !allowedChannelTypes.includes(info.type)
+                    });
+                }
+
+                data.push(entry);
+            }
+
+            return helpers.getDropdownGroupWithGrouping(id, title, data, tooltip);
+        }
+    }
+
+    function discordChannelTemplate(fchannel) {
+        if (fchannel.id) {
+            for (const [category, channels] of Object.entries(discordChannels)) {
+                for (const [channel, info] of Object.entries(channels)) {
+                    if (fchannel.id === channel) {
+                        switch (info.type) {
+                            case 'GUILD_NEWS':
+                                return $('<span><i class="fa fa-bullhorn fa-lg" style="margin-right: 5px;" /> ' + info.name + '</span>');
+                            case 'GUILD_STAGE_VOICE':
+                                return $('<span><i class="fa fa-users fa-lg" style="margin-right: 5px;" /> ' + info.name + '</span>');
+                            case 'GUILD_STORE':
+                                return $('<span><i class="fa fa-shopping-cart fa-lg" style="margin-right: 5px;" /> ' + info.name + '</span>');
+                            case 'GUILD_TEXT':
+                                return $('<span><i class="fa fa-hashtag fa-lg" style="margin-right: 5px;" /> ' + info.name + '</span>');
+                            case 'GUILD_VOICE':
+                                return $('<span><i class="fa fa-volume-up fa-lg" style="margin-right: 5px;" /> ' + info.name + '</span>');
+                        }
+                    }
+                }
+            }
+        }
+
+        return fchannel.text;
+    }
+
+    // Toggle for the alert modules.
+    $('[data-alert-toggle]').on('change', function () {
         let name = $(this).attr('id'),
-            checked = $(this).is(':checked');
+                checked = $(this).is(':checked');
 
         // Handle the module.
         socket.sendCommandSync('discord_alerts_module_toggle', 'module '
-            + (checked ? 'enablesilent' : 'disablesilent') + ' ' + $(this).data('alert-toggle'), function() {
+                + (checked ? 'enablesilent' : 'disablesilent') + ' ' + $(this).data('alert-toggle'), function () {
             name = name.replace('Toggle', 'Settings');
             // Toggle the settings button.
             $('#discord' + name.charAt(0).toUpperCase() + name.substring(1)).prop('disabled', !checked);
@@ -62,54 +126,60 @@ $(function() {
     });
 
     // Follower alert.
-    $('#discordFollowHandlerSettings').on('click', function() {
+    $('#discordFollowHandlerSettings').on('click', function () {
         socket.getDBValues('discord_alerts_follow_get_settings', {
             tables: ['discordSettings', 'discordSettings', 'discordSettings'],
             keys: ['followToggle', 'followMessage', 'followChannel']
-        }, true, function(e) {
+        }, true, function (e) {
             helpers.getModal('follow-alert', 'Follower Alarm-Einstellungen', 'Speichern', $('<form/>', {
                 'role': 'form'
             })
-            // Add the toggle for follow alerts.
-            .append(helpers.getDropdownGroup('follow-toggle', 'Follow-Alerts aktivieren', (e.followToggle === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'],
-                'Wenn eine Nachricht im Kanal gesendet werden soll, wenn jemand folgt.'))
-            // Add the the text area for the follow message.
-            .append(helpers.getTextAreaGroup('follow-message', 'text', 'Follow Nachricht', '', e.followMessage,
-                'Die Nachricht wird gesendet, wenn jemand dem Kanal folgt. Tag: (name)', false))
-            // Add the the box for the reward.
-            .append(helpers.getInputGroup('follow-channel', 'text', 'Alarmkanal', '#alerts', e.followChannel,
-                'Kanal, in dem auch alle Benachrichtigungen erfolgen sollen.')),
-            function() { // Callback once the user clicks save.
-                let followToggle = $('#follow-toggle').find(':selected').text() === 'Ja',
-                    followMessage = $('#follow-message'),
-                    followChannel = $('#follow-channel');
+                    // Add the toggle for follow alerts.
+                    .append(helpers.getDropdownGroup('follow-toggle', 'Follow-Alerts aktivieren', (e.followToggle === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'],
+                            'Wenn eine Nachricht im Kanal gesendet werden soll, wenn jemand folgt.'))
+                    // Add the the text area for the follow message.
+                    .append(helpers.getTextAreaGroup('follow-message', 'text', 'Follow Nachricht', '', e.followMessage,
+                            'Die Nachricht wird gesendet, wenn jemand dem Kanal folgt. Tag: (name)', false))
+                    // Add the the box for the reward.
+                    .append(helpers.getInputGroup('follow-channel', 'text', 'Alarmkanal', '#alerts', e.followChannel,
+                            'Kanal, in dem auch alle Benachrichtigungen erfolgen sollen.')),
+                    function () { // Callback once the user clicks save.
+                        let followToggle = $('#follow-toggle').find(':selected').text() === 'Ja',
+                                followMessage = $('#follow-message'),
+                                followChannel = $('#follow-channel');
 
-                // Make sure everything has been filled it correctly.
-                switch (false) {
-                    case helpers.handleInputString(followMessage):
-                    case helpers.handleInputString(followChannel):
-                        break;
-                    default:
-                        // Update settings.
-                        socket.updateDBValues('discord_alerts_follow_update_settings', {
-                            tables: ['discordSettings', 'discordSettings', 'discordSettings'],
-                            keys: ['followToggle', 'followMessage', 'followChannel'],
-                            values: [followToggle, followMessage.val(), followChannel.val()]
-                        }, function() {
-                            socket.wsEvent('discord', './discord/handlers/followHandler.js', '', [], function() {
-                                // Close the modal.
-                                $('#follow-alert').modal('toggle');
-                                // Alert the user.
-                                toastr.success('Follower-Aalarm-Einstellungen wurden erfolgreich aktualisiert!');
-                            });
-                        });
+                        // Make sure everything has been filled it correctly.
+                        switch (false) {
+                            case helpers.handleInputString(followMessage):
+                            case helpers.handleInputString(followChannel):
+                                break;
+                            default:
+                                // Update settings.
+                                socket.updateDBValues('discord_alerts_follow_update_settings', {
+                                    tables: ['discordSettings', 'discordSettings', 'discordSettings'],
+                                    keys: ['followToggle', 'followMessage', 'followChannel'],
+                                    values: [followToggle, followMessage.val(), followChannel.val()]
+                                }, function () {
+                                    socket.wsEvent('discord', './discord/handlers/followHandler.js', '', [], function () {
+                                        // Close the modal.
+                                        $('#follow-alert').modal('toggle');
+                                        // Alert the user.
+                                        toastr.success('Follower-Aalarm-Einstellungen wurden erfolgreich aktualisiert!');
+                                    });
+                                });
+                        }
+                    }).on('shown.bs.modal', function (e) {
+                refreshChannels();
+
+                if (discordChannels !== null) {
+                    $('#follow-channel').select2({ templateResult: discordChannelTemplate });
                 }
             }).modal('toggle');
         });
     });
 
     // Subscriber alerts.
-    $('#discordSubscribeHandlerSettings').on('click', function() {
+    $('#discordSubscribeHandlerSettings').on('click', function () {
         socket.getDBValues('discord_alerts_subscribe_get_settings', {
             tables: ['discordSettings', 'discordSettings', 'discordSettings', 'discordSettings', 'discordSettings', 'discordSettings', 'discordSettings', 'discordSettings', 'discordSettings'],
             keys: ['subMessage', 'primeMessage', 'resubToggle', 'giftsubMessage', 'subToggle', 'primeToggle', 'resubMessage', 'giftsubToggle', 'subChannel']
@@ -181,33 +251,38 @@ $(function() {
                                 subChannel = $('#channel-alert'),
                                 gifSubReward = $('#gifsub-reward');
 
-                // Make sure the user has someone in each box.
-                switch (false) {
-                    case helpers.handleInputString(subMsg):
-                    case helpers.handleInputString(primeSubMsg):
-                    case helpers.handleInputString(reSubMsg):
-                    case helpers.handleInputString(gifSubMsg):
-                        break;
-                    default:
-                        socket.updateDBValues('discord_alerts_subscribe_update_settings', {
-                            tables: ['discordSettings', 'discordSettings', 'discordSettings', 'discordSettings', 'discordSettings', 'discordSettings', 'discordSettings', 'discordSettings', 'discordSettings'],
-                            keys: ['subMessage', 'primeMessage', 'resubMessage', 'giftsubMessage', 'subToggle', 'primeToggle', 'resubToggle', 'giftsubToggle', 'subChannel'],
-                            values: [subMsg.val(), primeSubMsg.val(), reSubMsg.val(), gifSubMsg.val(), subToggle, primeSubToggle, reSubToggle, gifSubToggle, subChannel.val()]
-                        }, function() {
-                            socket.wsEvent('discord', './discord/handlers/subscribeHandler.js', '', [], function() {
-                                // Close the modal.
-                                $('#subscribe-alert').modal('toggle');
-                                // Alert the user.
-                                toastr.success('Abonnementalarmeinstellungen wurden erfolgreich aktualisiert!');
-                            });
-                        });
+                        // Make sure the user has someone in each box.
+                        switch (false) {
+                            case helpers.handleInputString(subMsg):
+                            case helpers.handleInputString(primeSubMsg):
+                            case helpers.handleInputString(reSubMsg):
+                            case helpers.handleInputString(gifSubMsg):
+                                break;
+                            default:
+                                socket.updateDBValues('discord_alerts_subscribe_update_settings', {
+                                    tables: ['discordSettings', 'discordSettings', 'discordSettings', 'discordSettings', 'discordSettings', 'discordSettings', 'discordSettings', 'discordSettings', 'discordSettings'],
+                                    keys: ['subMessage', 'primeMessage', 'resubMessage', 'giftsubMessage', 'subToggle', 'primeToggle', 'resubToggle', 'giftsubToggle', 'subChannel'],
+                                    values: [subMsg.val(), primeSubMsg.val(), reSubMsg.val(), gifSubMsg.val(), subToggle, primeSubToggle, reSubToggle, gifSubToggle, subChannel.val()]
+                                }, function () {
+                                    socket.wsEvent('discord', './discord/handlers/subscribeHandler.js', '', [], function () {
+                                        // Close the modal.
+                                        $('#subscribe-alert').modal('toggle');
+                                        // Alert the user.
+                                        toastr.success('Abonnementalarmeinstellungen wurden erfolgreich aktualisiert!');
+                                    });
+                                });
+                        }
+                    }).on('shown.bs.modal', function (e) {
+                refreshChannels();
+                if (discordChannels !== null) {
+                    $('#channel-alert').select2({ templateResult: discordChannelTemplate });
                 }
             }).modal('toggle');
         });
     });
 
     // Host settings button.
-    $('#discordHostHandlerSettings').on('click', function() {
+    $('#discordHostHandlerSettings').on('click', function () {
         socket.getDBValues('alerts_get_host_settings', {
             tables: ['discordSettings', 'discordSettings', 'discordSettings'],
             keys: ['hostToggle', 'hostMessage', 'hostChannel']
@@ -225,10 +300,10 @@ $(function() {
                                     'Wenn eine Nachricht im Kanal gesendet werden soll, wenn jemand den Kanal hostet.'))
                             // Add the the text area for the host message.
                             .append(helpers.getTextAreaGroup('host-message', 'text', 'Host Nachricht', '', e.hostMessage,
-                                    'Die Nachricht wird gesendet, wenn jemand den Kanal hostet. Tag: (name) und (Caster\', \'Administrator\', \'Moderator\', \'Abonnent\', \'Spender\', \'Stammzuschauer\', \'Zuschauer)', false))
+                                    'Die Nachricht wird gesendet, wenn jemand den Kanal hostet. Tag: (name) und (viewers)', false))
                             // Add the the box for the reward.
                             .append(helpers.getInputGroup('host-channel', 'Alarmkanal', '#alerts', e.hostChannel,
-                                    'Kanal, in dem alle Benachrichtigungen angezeigt werden sollen.'))),
+                                    'Kanal, in dem alle Benachrichtigungen angezeigt werden sollen.', allowedChannelTypes))),
                     function () { // Callback once the user clicks save.
                         let hostToggle = $('#host-toggle').find(':selected').text() === 'Yes',
                                 hostMsg = $('#host-message'),
@@ -253,6 +328,11 @@ $(function() {
                                 });
                         }
 
+                    }).on('shown.bs.modal', function (e) {
+                refreshChannels();
+                if (discordChannels !== null) {
+                    $('#host-channel').select2({ templateResult: discordChannelTemplate });
+                }
             }).modal('toggle');
         });
     });
@@ -274,7 +354,7 @@ $(function() {
                             'Die Nachricht wird gesendet, wenn jemand im Kanal cheert. Tags: (name), (message) und (amount)', false))
                     // Add the box for the reward.
                     .append(helpers.getInputGroup('bits-channel', 'Alarmkanal', '#alerts', e.bitsChannel,
-                            'Der Kanal, in dem die Bit-Nachricht gesendet wird.')),
+                            'Der Kanal, in dem die Bit-Nachricht gesendet wird.', allowedChannelTypes)),
                     function () { // Callback once the user clicks save.
                         let bitsToggle = $('#bits-toggle').find(':selected').text() === 'Yes',
                                 bitsMsg = $('#bits-message'),
@@ -297,6 +377,11 @@ $(function() {
                                         toastr.success('Bits Alarm-Einstellungen wurden erfolgreich aktualisiert!');
                                     });
                                 });
+                        }
+                    }).on('shown.bs.modal', function (e) {
+                refreshChannels();
+                if (discordChannels !== null) {
+                    $('#bits-channel').select2({ templateResult: discordChannelTemplate });
                 }
             }).modal('toggle');
         });
@@ -531,6 +616,11 @@ $(function() {
                                     });
                                 });
                         }
+                    }).on('shown.bs.modal', function (e) {
+                refreshChannels();
+                if (discordChannels !== null) {
+                    $('#channel-alert').select2({ templateResult: discordChannelTemplate });
+                }
             }).modal('toggle');
         });
     });
@@ -552,7 +642,7 @@ $(function() {
                             'Die Nachricht wird gesendet, wenn jemand dem Kanal spendet. Tag: (name), (amount), (currency)  und (message)', false))
                     // Add the the box for the reward.
                     .append(helpers.getInputGroup('streamlabs-channel', 'Alarmkanal', '#alerts', e.streamlabsChannel,
-                            'Kanal, in den alle Alarme gesendet werden sollen.')),
+                            'Kanal, in den alle Alarme gesendet werden sollen.', allowedChannelTypes)),
                     function () { // Callback once the user clicks save.
                         let streamLabsToggle = $('#streamlabs-toggle').find(':selected').text() === 'Ja',
                                 streamLabsMessage = $('#streamlabs-message'),
@@ -577,17 +667,22 @@ $(function() {
                                         toastr.success('StreamLabs Alarmeinstellungen erfolgreich aktualisiert!');
                                     });
                                 });
+                        }
+                    }).on('shown.bs.modal', function (e) {
+                refreshChannels();
+                if (discordChannels !== null) {
+                    $('#streamlabs-channel').select2({ templateResult: discordChannelTemplate });
                 }
             }).modal('toggle');
         });
     });
 
     // TipeeeStream settings.
-    $('#discordTipeeeStreamHandlerSettings').on('click', function() {
+    $('#discordTipeeeStreamHandlerSettings').on('click', function () {
         socket.getDBValues('discord_alerts_tipeeestream_get_settings', {
             tables: ['discordSettings', 'discordSettings', 'discordSettings'],
             keys: ['tipeeestreamToggle', 'tipeeestreamMessage', 'tipeeestreamChannel']
-        }, true, function(e) {
+        }, true, function (e) {
             helpers.getModal('tipeeestream-alert', 'TipeeeStream Alarm-Einstellungen\', \'Speichern', $('<form/>', {
                 'role': 'form'
             })
@@ -599,7 +694,7 @@ $(function() {
                             'Die Nachricht wird gesendet, wenn jemand dem Kanal spendet. Tag: (name), (amount), (currency) und (message)', false))
                     // Add the the box for the reward.
                     .append(helpers.getInputGroup('tipeeestream-channel', 'Alarmkanal', '#alerts', e.tipeeestreamChannel,
-                            'Kanal, in den alle Alarme gesendet werden sollen.')),
+                            'Kanal, in den alle Alarme gesendet werden sollen.', allowedChannelTypes)),
                     function () { // Callback once the user clicks save.
                         let tipeeeStreamToggle = $('#tipeeestream-toggle').find(':selected').text() === 'Ja',
                                 tipeeeStreamMessage = $('#tipeeestream-message'),
@@ -624,17 +719,22 @@ $(function() {
                                         toastr.success('TipeeeStream-Alarmeinstellungen erfolgreich aktualisiert!');
                                     });
                                 });
+                        }
+                    }).on('shown.bs.modal', function (e) {
+                refreshChannels();
+                if (discordChannels !== null) {
+                    $('#tipeeestream-channel').select2({ templateResult: discordChannelTemplate });
                 }
             }).modal('toggle');
         });
     });
 
     // StreamElements settings.
-    $('#discordStreamElementsHandlerSettings').on('click', function() {
+    $('#discordStreamElementsHandlerSettings').on('click', function () {
         socket.getDBValues('discord_alerts_streamelements_get_settings', {
             tables: ['discordSettings', 'discordSettings', 'discordSettings'],
             keys: ['streamelementsToggle', 'streamelementsMessage', 'streamelementsChannel']
-        }, true, function(e) {
+        }, true, function (e) {
             helpers.getModal('streamelements-alert', 'StreamElements Alarm-Einstellungen', 'Speichern', $('<form/>', {
                 'role': 'form'
             })
@@ -646,7 +746,7 @@ $(function() {
                             'Die Nachricht wird gesendet, wenn jemand dem Kanal spendet. Tag: (name), (amount), (currency) und (message)', false))
                     // Add the the box for the reward.
                     .append(helpers.getInputGroup('streamelements-channel', 'Alarmkanal', '#alerts', e.streamelementsChannel,
-                            'Kanal, in den alle Alarme gesendet werden sollen.')),
+                            'Kanal, in den alle Alarme gesendet werden sollen.', allowedChannelTypes)),
                     function() { // Callback once the user clicks save.
                         let streamElementsToggle = $('#streamelements-toggle').find(':selected').text() === 'Ja',
                                 streamElementsMessage = $('#streamelements-message'),
@@ -671,17 +771,22 @@ $(function() {
                                         toastr.success('StreamElements-Alarmeinstellungen erfolgreich aktualisiert!');
                                     });
                                 });
+                        }
+                    }).on('shown.bs.modal', function (e) {
+                refreshChannels();
+                if (discordChannels !== null) {
+                    $('#streamelements-channel').select2({ templateResult: discordChannelTemplate });
                 }
             }).modal('toggle');
         });
     });
 
     // Twitter settings.
-    $('#discordTwitterHandlerSettings').on('click', function() {
+    $('#discordTwitterHandlerSettings').on('click', function () {
         socket.getDBValues('discord_alerts_twitter_get_settings', {
             tables: ['discordSettings', 'discordSettings'],
             keys: ['twitterToggle', 'twitterChannel']
-        }, true, function(e) {
+        }, true, function (e) {
             helpers.getModal('twitter-alert', 'Twitter Alarm-Einstellungen', 'Speichern', $('<form/>', {
                 'role': 'form'
             })
@@ -690,7 +795,7 @@ $(function() {
                             'Wenn deine Tweets in Discord gepostet werden sollen. Bitte beachte, dass das Twitch Twitter-Modul eingerichtet sein muss, damit dies funktioniert.'))
                     // Add the the box for the reward.
                     .append(helpers.getInputGroup('twitter-channel', 'Alarmkanal', '#alerts', e.twitterChannel,
-                            'Kanal, in den alle Alarme gesendet werden sollen.')),
+                            'Kanal, in den alle Alarme gesendet werden sollen.', allowedChannelTypes)),
                     function () { // Callback once the user clicks save.
                         let twitterToggle = $('#twitter-toggle').find(':selected').text() === 'Ja',
                                 twitterChannel = $('#twitter-channel');
@@ -713,8 +818,15 @@ $(function() {
                                         toastr.success('Twitter-Alarmeinstellungen erfolgreich aktualisiert!');
                                     });
                                 });
+                        }
+                    }).on('shown.bs.modal', function (e) {
+                refreshChannels();
+                if (discordChannels !== null) {
+                    $('#twitter-channel').select2({ templateResult: discordChannelTemplate });
                 }
             }).modal('toggle');
         });
     });
+
+    refreshChannels();
 });

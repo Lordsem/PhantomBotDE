@@ -16,13 +16,16 @@
  */
 package tv.phantombot.twitch.irc.chat.utils;
 
+import java.util.Date;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 import org.java_websocket.exceptions.WebsocketNotConnectedException;
 import tv.phantombot.PhantomBot;
+import tv.phantombot.twitch.api.TwitchValidate;
 import tv.phantombot.twitch.irc.TwitchSession;
 
 public class MessageQueue implements Runnable {
+
     private final BlockingDeque<Message> queue = new LinkedBlockingDeque<>();
     private final String channelName;
     private final Thread thread;
@@ -30,6 +33,8 @@ public class MessageQueue implements Runnable {
     private boolean isAllowedToSend = false;
     private boolean isKilled = false;
     private int writes = 0;
+    private final Date nextReminder = new Date();
+    private final long REMINDER_INTERVAL = 300000L;
 
     /**
      * Class constructor.
@@ -148,6 +153,20 @@ public class MessageQueue implements Runnable {
                     // Send the message.
                     session.sendRaw("PRIVMSG #" + this.channelName + " :" + message.getMessage());
                     com.gmt2001.Console.out.println("[CHAT] " + message.getMessage());
+                }
+
+                if (new Date().after(nextReminder)) {
+                    if ((!isAllowedToSend || TwitchValidate.instance().hasOAuthInconsistencies(PhantomBot.instance().getBotName()))) {
+                        com.gmt2001.Console.warn.println("WARNUNG: Letzte Nachricht kann aufgrund eines Konfigurationsfehlers nicht gesendet werden");
+
+                        TwitchValidate.instance().checkOAuthInconsistencies(PhantomBot.instance().getBotName());
+
+                        if (!isAllowedToSend) {
+                            com.gmt2001.Console.warn.println("WARNUNG: Darf kein Moderator sein");
+                        }
+                    }
+
+                    nextReminder.setTime(new Date().getTime() + REMINDER_INTERVAL);
                 }
             } catch (WebsocketNotConnectedException ex) {
                 com.gmt2001.Console.err.println("Die Nachricht konnte nicht gesendet werden, da die Verbindung zum Twitch IRC getrennt wurde.");

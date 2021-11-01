@@ -35,9 +35,9 @@
         interval;
 
     /* Set default values for all configuration items. */
-    $.getSetIniDbString('twitter', 'message_online', 'Der Stream hat begonnen. -> (twitchurl))');
+    $.getSetIniDbString('twitter', 'message_online', 'Der Stream hat begonnen. -> (twitchurl)');
     $.getSetIniDbString('twitter', 'message_gamechange', 'Die Kategorie wurde auf (game) gewechselt. (twitchurl)');
-    $.getSetIniDbString('twitter', 'message_update', 'Streame immer noch (game) und bin seit (uptime) online. (twitchurl).');
+    $.getSetIniDbString('twitter', 'message_update', 'Streame immer noch (game) und bin seit (uptime) online. (twitchurl)');
 
     $.getSetIniDbNumber('twitter', 'polldelay_mentions', 60);
     $.getSetIniDbNumber('twitter', 'polldelay_retweets', 60);

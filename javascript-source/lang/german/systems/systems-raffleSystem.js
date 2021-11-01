@@ -48,7 +48,7 @@ $.lang.register('rafflesystem.common.following', 'und du musst dem Kanal folgen'
 $.lang.register('rafflesystem.common.timer', 'Die Verlosung endet in $1 Minuten.');
 $.lang.register('rafflesystem.common.message', 'nicht mehr');
 $.lang.register('rafflesystem.open.keyword-exists', 'Das Schlüsselwort darf kein existierender Befehl sein: $1');
-$.lang.register('rafflesystem.winner.404', 'Kann keine:n Gewinner:in ermitteln. Niemand hat bei der Verlosung teilgenommen.');
+$.lang.register('rafflesystem.winner.404', 'Gewinner:in kann nicht ermitteln werden. Niemand hat bei der Verlosung teilgenommen.');
 $.lang.register('rafflesystem.isfollowing', '[Follower]');
 $.lang.register('rafflesystem.isnotfollowing', '[Kein Follower]');
 $.lang.register('rafflesystem.reset', 'Die Verlosung wurde zurückgesetzt.');

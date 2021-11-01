@@ -218,7 +218,7 @@
      * @returns {boolean}
      */
     function isMod(username) {
-        return getUserGroupId(username.toLowerCase()) <= 2 || isOwner(username);
+        return isModeratorCache(username.toLowerCase()) || getUserGroupId(username.toLowerCase()) <= 2 || isOwner(username);
     }
 
     /**
@@ -229,7 +229,13 @@
      * @returns {boolean}
      */
     function isModv3(username, tags) {
-        return (tags != null && tags != '{}' && tags.get('user-type').length() > 0) || isModeratorCache(username.toLowerCase()) || isOwner(username);
+        if (tags != null && tags != '{}') {
+            if (tags.get('user-type').length() > 0) { // Broadcaster should be included here.
+                return true;
+            }
+        }
+        $.consoleDebug('Used isModv3 without tags::' + tags);
+        return isMod(username);
     }
 
     /**
@@ -253,17 +259,10 @@
         if (tags != null && tags != '{}') {
             if (tags.containsKey('subscriber')) {
                 return tags.get('subscriber').equals('1');
-            } else {
-                $.consoleDebug('Verwendet isSub ohne Tags::' + tags);
-                return isSub(username);
             }
-        } else {
-            $.consoleDebug('Verwendet isSub ohne Tags::' + tags);
-            return isSub(username);
         }
-
-        // Only use isSub is we don't have tags, using that method is our last resource.
-        // return (tags != null && tags != '{}' && tags.get('subscriber').equals('1')) || isSub(username);
+        $.consoleDebug('Verwendet isSubv3 ohne Tags::' + tags);
+        return isSub(username);
     }
 
     /**
@@ -293,7 +292,13 @@
      * @returns {boolean}
      */
     function isVIP(username, tags) {
-        return (tags != null && tags != '{}' && tags.get('vip').equals('1')) || getUserGroupId(username.toLowerCase()) == getVIPGroupID();
+        if (tags != null && tags != '{}') {
+            if (tags.containsKey('vip')) {
+                return tags.get('vip').equals('1');
+            }
+        }
+        $.consoleDebug('Verwendet isVIP ohne Tags::' + tags);
+        return getUserGroupId(username.toLowerCase()) == getVIPGroupID();
     }
 
     /**
@@ -596,7 +601,7 @@
      * @function generateDefaultGroups
      */
     function generateDefaultGroups() {
-        if (!userGroups[0] || userGroups[0] != 'Stremer') {
+        if (!userGroups[0] || userGroups[0] != 'Caster') {
             userGroups[0] = 'Caster';
             $.inidb.set('groups', '0', 'Caster');
         }

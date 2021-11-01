@@ -23,7 +23,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import net.engio.mbassy.listener.Handler;
-import org.apache.commons.lang3.text.WordUtils;
+import org.apache.commons.text.WordUtils;
 import tv.phantombot.event.Event;
 import tv.phantombot.event.Listener;
 
@@ -72,12 +72,14 @@ public class ScriptEventManager implements Listener {
                 String eventName = event.getClass().getSimpleName();
                 ScriptEventHandler e = events.get(eventName);
 
-                e.handle(event);
+                if (e != null) {
+                    e.handle(event);
+                }
 
                 com.gmt2001.Console.debug.println("Versendete Event " + eventName);
             } catch (Exception ex) {
                 com.gmt2001.Console.err.println("Dispatchen des Events fehlgeschlagen " + event.getClass().getName());
-                com.gmt2001.Console.err.printStackTrace(ex);
+                com.gmt2001.Console.err.printStackTrace(ex, false, true);
             }
         }
     }

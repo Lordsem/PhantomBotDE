@@ -382,7 +382,7 @@ $(function() {
                 'Wenn eine Nachricht im Kanal gesagt werden soll, wenn jemand cheert.'))
             // Add the the text area for the bits message.
             .append(helpers.getTextAreaGroup('bits-message', 'text', 'Bits Nachricht', '', e.message,
-                'Die Nachricht wird gesendet, wenn jemand im Kanal cheert. Tags: (name), (alert), (playsound), (message), und (amount)', false))
+                'Die Nachricht wird gesendet, wenn jemand im Kanal cheert. Tags: (name), (alert), (playsound), (message) und (amount)', false))
             // Add the box for the reward.
             .append(helpers.getInputGroup('bits-minimum', 'number', 'Bits Minimum', '', e.minimum, 'Anzahl der Bits, die benötigt werden, um den Alarm auszulösen.')),
             function() { // Callback once the user clicks save.

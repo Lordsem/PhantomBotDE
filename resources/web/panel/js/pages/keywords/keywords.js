@@ -88,7 +88,7 @@ $(run = function() {
                 let keyword = $(this).data('keyword'),
                     row = $(this).parents('tr');
 
-                helpers.getConfirmDeleteModal('keyword_modal_remove', 'Sind Sie sicher, dass Sie das Schlüsselwort "' + keyword + '" entfernen möchten?', true,
+                helpers.getConfirmDeleteModal('keyword_modal_remove', 'Bist du sicher, dass du das Schlüsselwort "' + keyword + '" entfernen möchtest?', true,
                     'Du hast das Schlüsselwort "' + keyword + '" erfolgreich entfernt!', function() {
                     // Delete all of the info about the keyword.
                     socket.removeDBValues('rm_keyword', {

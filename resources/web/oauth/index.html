@@ -67,7 +67,7 @@
                 <nav class="navbar navbar-static-top">
                     <div class="container-fluid">
                         <div class="navbar-header">
-                            <a href=".."><img class="navbar-brand" alt="PhantomBot" src="/common/images/logo.png" /> <span class="navbar-brand logo-lg"><b>Phantom</b>Bot</span></a>
+                            <a href=".."><img class="navbar-brand" alt="PhantomBot" src="/common/images/logo.png" /> <span class="navbar-brand logo-lg"><b>Phantom</b>Bot<b>DE</b></span></a>
                         </div>
 
                         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -102,6 +102,14 @@
                             <div>
                                 Auf dieser Seite wird der Bot so eingerichtet, dass die OAuth-Token des Bots automatisch aktualisiert werden. Bitte befolge alle Anweisungen unten, um dies richtig einzurichten.
                             </div>
+                            <br />
+                            <div>
+                                Wie wirst du die OAuths durchführen?<br />
+                                <input id="authmodeboth" type="radio" checked="checked" name="authmode" value="both"> <label for="authmodeboth">Ich werde sowohl den Bot als auch den Broadcaster autorisieren</label>
+                                <br /><br />
+                                <input id="authmodeseparate" type="radio" name="authmode" value="separate"> <label for="authmodeseparate">Ich werde nur den Bot autorisieren, der Broadcaster wird sich separat autorisieren</label>
+                            </div>
+                            <br />
                             <div id="instructions">
                                 <ol>
                                     <li>Erstelle eine neue Twitch-Anwendung, falls noch nicht geschehen<br />
@@ -142,7 +150,7 @@
                                     <li>
                                         Re-Autorisiere den Bot und Broadcaster mit den Schaltfl&auml;chen unten
                                     </li>
-                                    <li>
+                                    <li id="broadcasteroauthinstructions" class="hide">
                                         Lasse den Broadcaster sein OAuth durchf&uuml;hren
                                         <ol>
                                             <li>Gehe zurück zum <a href="https://dev.twitch.tv/" target="_blank">Twitch Developer Portal</a> und melde dich an</li>
@@ -173,8 +181,12 @@
                                     <br />
                                     <div style="padding-left: 25px;">
                                         <ul>
-                                            <li id="connectbotinstruction"><div class="text-bold" style="display: inline;">Verbinde mit Twitch Bot</div> - vergewissere dich, bevor du auf die Schaltfl&auml;che klickst, dass du mit dem Twitch-Konto deines Bots eingeloggt bist, wenn nicht, klicke auf <div class="text-bold" style="display: inline;">"Das bist nicht du? Abmelden."</div> oben auf der Twitch-Seite.</li>
-                                            <li><div class="text-bold" style="display: inline;">Verbinde mit Twitch Broadcaster</div> - vergewissere dich, bevor du auf die Schaltfl&auml;che klickst, dass du mit dem Twitch-Konto des Broadcasters eingeloggt bist, wenn nicht, klicke auf <div class="text-bold" style="display: inline;">"Das bist nicht du? Abmelden."</div> oben auf der Twitch-Seite.</li>
+                                            <li id="connectbotinstruction"><div class="text-bold" style="display: inline;">Verbinde mit Twitch Bot</div> - vergewissere dich, bevor du auf die Schaltfl&auml;che klickst, dass du mit dem Twitch-Konto deines Bots eingeloggt bist, wenn nicht, klicke auf <div class="text-bold" style="display: inline;">"Das bist nicht du? Abmelden."</div> oben auf der Twitch-Seite.
+                                                <ul><li>Dies ist das Konto, als das der Bot im Chat angezeigt wird, und das Konto, als das der Bot chattet.</li></ul>
+                                            </li>
+                                            <li id="connectbroadcasterinstruction"><div class="text-bold" style="display: inline;">Verbinde mit Twitch Broadcaster</div> - vergewissere dich, bevor du auf die Schaltfl&auml;che klickst, dass du mit dem Twitch-Konto des Broadcasters eingeloggt bist, wenn nicht, klicke auf <div class="text-bold" style="display: inline;">"Das bist nicht du? Abmelden."</div> oben auf der Twitch-Seite.
+                                                <ul><li>Dies ist der Account des Broadcasters, an dessen Kanal der Bot teilnehmen wird.</li></ul>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -190,7 +202,7 @@
                                 </div>
                                 <br />
                                 <br />
-                                <div>
+                                <div id="connectbroadcasterscope">
                                     Die folgenden Berechtigungen werden f&uuml;r das <div class="text-bold" style="display: inline;">Broadcaster</div> Twitch Konto angefordert (Twitch zeigt auch diese Liste an. F&uuml;r weitere Informationen schau mal <a href="https://dev.twitch.tv/docs/authentication/" target="devdoc">hier</a>):
                                     <br />
                                     <div style="padding-left: 25px;">
@@ -229,6 +241,10 @@
                     'use strict';
                     $(function () {
                         var scopesBot = {
+                            "channel_editor": {
+                                "desc": "Kanalmetadaten schreiben (Spiel, Status usw.).",
+                                "tooltip": "Verwendete Start-/End-Raids und Hosting."
+                            },
                             "channel:manage:broadcast": {
                                 "desc": "Verwalte die Übertragungskonfiguration deines Kanals einschließlich der Aktualisierung der Kanalkonfiguration und der Verwaltung von Stream-Markierungen und -Tags.",
                                 "tooltip": "Wird von benutzerdefinierten Skripten verwendet, um Raids zu starten."
@@ -256,6 +272,10 @@
                         };
 
                         var scopesBroadcaster = {
+                            "bits:read": {
+                                "desc": "Lesezugriff auf Bits Cheers in deinem Kanal.",
+                                "tooltip": "Wird von EventSub verwendet, um Bit-Benachrichtigungen zu abonnieren."
+                            },
                             "channel:manage:broadcast": {
                                 "desc": "Verwalte die Übertragungskonfiguration deines Kanals einschließlich der Aktualisierung der Kanalkonfiguration und der Verwaltung von Stream-Markierungen und -Tags.",
                                 "tooltip": "Wird verwendet, um den Titel/die Kategorie zu ändern."
@@ -268,6 +288,18 @@
                                 "desc": "Moderationsaktionen in einem Kanal ausführen.",
                                 "tooltip": "Wird verwendet, um in PubSub auf Moderationsaktionen zu achten."
                             },
+                            "channel:read:hype_train": {
+                                "desc": "[Helix] Informationen zu aktuellen/vergangenen Hype-Trains abrufen",
+                                "tooltip": "Wird verwendet, um in EventSub nach Hype-Train-Benachrichtigungen zu suchen."
+                            },
+                            "channel:read:polls": {
+                                "desc": "[Helix] Informationen zu aktuellen/vergangenen Umfragen abrufen",
+                                "tooltip": "Wird verwendet, um in EventSub auf Twitch-Umfragebenachrichtigungen zu achten."
+                            },
+                            "channel:read:predictions": {
+                                "desc": "[Helix] Informationen zu aktuellen/vergangenen Vorhersagen abrufen",
+                                "tooltip": "Wird verwendet, um in EventSub auf Twitch-Vorhersagebenachrichtigungen zu achten."
+                            },
                             "channel:read:redemptions": {
                                 "desc": "Sieh dir benutzerdefinierte Belohnungen, für die du deine Kanalpunkte einlösen kannst, auf deinem Kanal an.",
                                 "tooltip": "Wird verwendet, um die Einlösung von benutzerdefinierten Channel Points-Prämien in PubSub zu beobachten."
@@ -279,6 +311,10 @@
                             "chat:read": {
                                 "desc": "Live-Nachrichten im Stream-Chat und in Räumen ansehen",
                                 "tooltip": "Wird von der zweiten Chat-Verbindung verwendet, um nach Host-Benachrichtigungen zu suchen."
+                            },
+                            "moderation:read": {
+                                "desc": "[Helix] Lies die Liste der Kanalmoderatoren",
+                                "tooltip": "Wird verwendet, um zu beobachten, ob Moderatoren in EventSub hinzufügt/entfernt werden."
                             }
                         };
 
@@ -313,7 +349,7 @@
                                 queryParts = queryString.substr(1).split(/#|&/), // Split at each &, which is a new query.
                                 queryMap = new Map(), // Create a new map for save our keys and values.
                                 baseAPIUri = 'https://id.twitch.tv/oauth2/authorize',
-                                redirectURI = window.location.origin + window.location.pathname,
+                                redirectURI = (window.location.origin + window.location.pathname).replace(/\/$/, ''),
                                 redirectURIBroadcaster = redirectURI + "/broadcaster",
                                 broadcaster = "",
                                 clientID,
@@ -494,6 +530,26 @@
                             window.location = baseAPIUri + '?response_type=code&client_id=' + clientID + '&redirect_uri=' + redirectURI + '&force_verify=true&scope=' + scopes + '&state=' + generateState('broadcaster');
                         });
 
+                        $('input[type=radio][name=authmode]').change(function () {
+                            if (this.value === 'separate') {
+                                $('#connectone').addClass('hide');
+                                $('#connectplural').addClass('hide');
+                                $('#auththebroadcaster').addClass('hide');
+                                $('#connectbroadcasterinstruction').addClass('hide');
+                                $('#connectbroadcasterscope').addClass('hide');
+                                $('#connect-caster').addClass('hide');
+                                $('#broadcasteroauthinstructions').removeClass('hide');
+                            } else {
+                                $('#connectone').removeClass('hide');
+                                $('#connectplural').removeClass('hide');
+                                $('#auththebroadcaster').removeClass('hide');
+                                $('#connectbroadcasterinstruction').removeClass('hide');
+                                $('#connectbroadcasterscope').removeClass('hide');
+                                $('#connect-caster').removeClass('hide');
+                                $('#broadcasteroauthinstructions').addClass('hide');
+                            }
+                        });
+
                         $.ajax({
                             cache: false,
                             dataType: 'text',
@@ -516,6 +572,8 @@
 
                         if (redirectURI.includes("/broadcaster")) {
                             $('#instructions').addClass('hide');
+                            $('#connectone').addClass('hide');
+                            $('#connectplural').addClass('hide');
                             $('#connectbotinstruction').addClass('hide');
                             $('#connectbotscope').addClass('hide');
                             $('#connect-bot').addClass('hide');

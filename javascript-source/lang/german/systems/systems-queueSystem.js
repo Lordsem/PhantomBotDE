@@ -31,7 +31,7 @@ $.lang.register('queuesystem.remove.404', 'Diese:r Benutzer:in scheint nicht in 
 $.lang.register('queuesystem.remove.removed', 'Benutzer:in $1 wurde aus der Warteschlange entfernt!');
 $.lang.register('queuesystem.info.success', 'Aktuelle Warteschlangen Informationen: Titel: [$1], Einträge: [$2], Max. Größe: [$3], Eröffnet um: [$4]');
 $.lang.register('queuesystem.time.info', '(vor $1)');
-$.lang.register('queuesystem.position.self', 'eine aktuelle Position in der Warteschlange ist #$1 und du tratst bei: $2 ');
+$.lang.register('queuesystem.position.self', 'eine aktuelle Position in der Warteschlange ist #$1 und du tratst bei: $2');
 $.lang.register('queuesystem.position.self.error', 'Du bist aktuell nicht in der Warteschlange.');
 $.lang.register('queuesystem.position.other', '$1 ist aktuell auf der Position #$2 der Warteschlange und du tratst bei: $3');
 $.lang.register('queuesystem.position.other.error', '$1 ist aktuell nicht in der Warteschlange.');

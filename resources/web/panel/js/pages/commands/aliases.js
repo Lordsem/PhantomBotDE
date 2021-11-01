@@ -160,7 +160,7 @@ $(function() {
                     row = $(this).parents('tr');
 
                 // Ask the user if he wants to delete the alias.
-                helpers.getConfirmDeleteModal('custom_alias_modal_remove', 'Sind Sie sicher, dass Sie den Alias !' + alias + ' entfernen möchten?', true,
+                helpers.getConfirmDeleteModal('custom_alias_modal_remove', 'Bist du sicher, dass du den Alias !' + alias + ' entfernen möchtest?', true,
                     'Der Alias !' + alias + ' wurde erfolgreich entfernt!', function() { // Callback if the user clicks delete.
                 // Delete all information about the alias.
                     socket.removeDBValues('alias_remove', {
@@ -224,7 +224,7 @@ $(function() {
                                             // Close the modal.
                                             $('#edit-alias').modal('hide');
                                             // Alert the user.
-                                            toastr.success('Alias !' + alias + ' erfolgreich bearbeitet !');
+                                            toastr.success('Alias !' + alias + ' erfolgreich bearbeitet!');
                                         });
                                     });
                                 });

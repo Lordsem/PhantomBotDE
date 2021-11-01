@@ -129,7 +129,7 @@ $(function() {
             'class': 'form-control',
             'id': 'death-url',
             'readonly': 'readonly',
-            'value': 'http://' + window.location.host + '/addons/deathctr/deathctr.txt?refresh=true',
+            'value': 'http://' + helpers.getBotHost() + '/addons/deathctr/deathctr.txt?refresh=true',
             'style': 'color: transparent !important; text-shadow: 0 0 5px hsla(0, 0%, 100%, .5);',
             'data-toggle': 'tooltip',
             'title': 'Wenn Sie auf dieses Feld klicken, wird der Link angezeigt. Geben Sie diesen Link NICHT an Dritte weiter, da er sensible Informationen enthält.',

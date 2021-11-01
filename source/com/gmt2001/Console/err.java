@@ -17,9 +17,11 @@
 package com.gmt2001.Console;
 
 import com.gmt2001.Logger;
+import com.gmt2001.RollbarProvider;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.Map;
 import tv.phantombot.PhantomBot;
 
 /**
@@ -75,13 +77,64 @@ public final class err {
     }
 
     public static void printStackTrace(Throwable e) {
-        if (PhantomBot.getEnableDebugging()) {
+        printStackTrace(e, false);
+    }
+
+    public static void printStackTrace(Throwable e, boolean isUncaught) {
+        printStackTrace(e, null, isUncaught);
+    }
+
+    public static void printStackTrace(Throwable e, boolean isUncaught, boolean force) {
+        printStackTrace(e, null, "", isUncaught, force);
+    }
+
+    public static void printStackTrace(Throwable e, String description) {
+        printStackTrace(e, null, description, false);
+    }
+
+    public static void printStackTrace(Throwable e, Map<String, Object> custom) {
+        printStackTrace(e, custom, false);
+    }
+
+    public static void printStackTrace(Throwable e, Map<String, Object> custom, boolean isUncaught) {
+        printStackTrace(e, custom, "", isUncaught);
+    }
+
+    public static void printStackTrace(Throwable e, Map<String, Object> custom, String description, boolean isUncaught) {
+        printStackTrace(e, custom, description, isUncaught, false);
+    }
+
+    public static void printStackTrace(Throwable e, Map<String, Object> custom, String description, boolean isUncaught, boolean force) {
+        if (PhantomBot.getEnableDebugging() || force) {
             e.printStackTrace(System.err);
         }
-        logStackTrace(e);
+
+        logStackTrace(e, custom, description, isUncaught);
     }
 
     public static void logStackTrace(Throwable e) {
+        logStackTrace(e, false);
+    }
+
+    public static void logStackTrace(Throwable e, boolean isUncaught) {
+        logStackTrace(e, null, isUncaught);
+    }
+
+    public static void logStackTrace(Throwable e, String description) {
+        logStackTrace(e, null, description, false);
+    }
+
+    public static void logStackTrace(Throwable e, Map<String, Object> custom) {
+        logStackTrace(e, custom, false);
+    }
+
+    public static void logStackTrace(Throwable e, Map<String, Object> custom, boolean isUncaught) {
+        logStackTrace(e, custom, "", false);
+    }
+
+    public static void logStackTrace(Throwable e, Map<String, Object> custom, String description, boolean isUncaught) {
+        RollbarProvider.instance().error(e, custom, description, isUncaught);
+
         Writer trace = new StringWriter();
         PrintWriter ptrace = new PrintWriter(trace);
 

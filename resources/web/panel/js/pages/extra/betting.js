@@ -151,7 +151,7 @@ $(function () {
     };
 
     // Reset bet button.
-    $('#reset-betting').on('click', function() {
+    $('#reset-betting').on('click', function () {
         helpers.getModal('betting-reset', 'Wette zurücksetzen', 'Zurücksetzen', $('<form/>', {
             'role': 'form'
         })
@@ -170,7 +170,7 @@ $(function () {
     });
 
     // Close bet button
-    $('#close-betting').on('click', function() {
+    $('#close-betting').on('click', function () {
         helpers.getModal('betting-close', 'Wette schließen', 'Schließen', $('<form/>', {
             'role': 'form'
         })
@@ -186,7 +186,7 @@ $(function () {
     });
 
     // Open bet button.
-    $('#open-betting').on('click', function() {
+    $('#open-betting').on('click', function () {
         helpers.getModal('betting-open', 'Wette eröffnen', 'Öffnen', $('<form/>', {
             'role': 'form'
         })
@@ -252,7 +252,7 @@ $(function () {
                             'In welchem Datumsformat sollen die Wetten gespeichert werden.'))
                     // Save format
                     .append(helpers.getInputGroup('bet-gain', 'text', 'Gewinnsteigerung (Prozent)', '', e.gain,
-                            'Der Prozentsatz der Punkte, den der Benutzer von der gesamten Anzahl der Punkte erhält, die auf die Gewinnoption gesetzt wurden. Der eingesetzte Betrag wird immer zurückgegeben..')),
+                            'Der Prozentsatz der Punkte, den der Benutzer von der gesamten Anzahl der Punkte erhält, die auf die Gewinnoption gesetzt wurden. Der eingesetzte Betrag wird immer zurückgegeben.')),
                     function () {
                         let saveBets = $('#save-bets').find(':selected').text() === 'Ja',
                                 warningMessages = $('#warning-bets').find(':selected').text() === 'Ja',

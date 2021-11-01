@@ -37,7 +37,6 @@ public class FollowersCache implements Runnable {
     private Date timeoutExpire = new Date();
     private Date lastFail = new Date();
     private Boolean firstUpdate = true;
-    private Boolean hasFail = false;
     private Boolean killed = false;
     private int numfail = 0;
 
@@ -62,6 +61,7 @@ public class FollowersCache implements Runnable {
      *
      * @param {String} channelName
      */
+    @SuppressWarnings("CallToThreadStartDuringObjectConstruction")
     private FollowersCache(String channelName) {
         this.updateThread = new Thread(this, "tv.phantombot.cache.FollowersCache");
         this.channelName = channelName;
@@ -111,7 +111,6 @@ public class FollowersCache implements Runnable {
         com.gmt2001.Console.debug.println("FollowersCache::updateCache");
 
         JSONObject jsonObject = TwitchAPIv5.instance().GetChannelFollows(this.channelName, 100, 0, false);
-        Map<String, String> newCache = new HashMap<String, String>();
         DataStore datastore = PhantomBot.instance().getDataStore();
 
         if (jsonObject.getBoolean("_success")) {
@@ -120,10 +119,15 @@ public class FollowersCache implements Runnable {
 
                 for (int i = 0; i < jsonArray.length(); i++) {
                     String follower = jsonArray.getJSONObject(i).getJSONObject("user").getString("name").toLowerCase();
+                    String followDate = jsonArray.getJSONObject(i).getString("created_at");
 
                     if (!datastore.exists("followed", follower)) {
-                        EventBus.instance().post(new TwitchFollowEvent(follower));
+                        EventBus.instance().post(new TwitchFollowEvent(follower, followDate));
                         datastore.set("followed", follower, "true");
+                    }
+
+                    if (!datastore.exists("followedDate", follower)) {
+                        datastore.set("followedDate", follower, followDate);
                     }
                 }
             } else {
@@ -131,7 +135,7 @@ public class FollowersCache implements Runnable {
                                     + jsonObject.getString("_type") + " " + jsonObject.getString("_url") + " " + jsonObject.getString("_post") + "  "
                                     + (jsonObject.has("message") && !jsonObject.isNull("message") ? "message=" + jsonObject.getString("message") : "content=" + jsonObject.getString("_content")));
             }
-        } else {
+        } else if (!jsonObject.getString("_exception").isBlank()) {
             throw new Exception("[" + jsonObject.getString("_exception") + "] " + jsonObject.getString("_exceptionMessage"));
         }
 
@@ -167,8 +171,8 @@ public class FollowersCache implements Runnable {
      * @function killall
      */
     public static void killall() {
-        for (FollowersCache instance : instances.values()) {
+        instances.values().forEach(instance -> {
             instance.kill();
-        }
+        });
     }
 }

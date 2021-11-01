@@ -116,7 +116,7 @@ $(run = function() {
                         t = $(this);
 
                     // Ask the user if he want to reset the command.
-                    helpers.getConfirmDeleteModal('discord_default_command_modal_remove', 'Sind Sie sicher, dass Sie die Berechtigung des Befehls zurücksetzen möchten?', false,
+                    helpers.getConfirmDeleteModal('discord_default_command_modal_remove', 'Bist du sicher, dass du die Berechtigung des Befehls zurücksetzen möchtest?', false,
                             'Die Berechtigung des Befehls wurde zurückgesetzt!', function() {
                         socket.removeDBValue('discord_permcom_temp_del', 'discordPermcom', command, function(e) {
                             // Hide tooltip.

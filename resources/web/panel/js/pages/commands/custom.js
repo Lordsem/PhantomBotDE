@@ -155,7 +155,7 @@ $(function() {
                     row = $(this).parents('tr');
 
                 // Ask the user if he want to remove the command.
-                helpers.getConfirmDeleteModal('custom_command_modal_remove', 'Sind Sie sicher, dass Sie den Befehl !' + command + ' entfernen möchten?', true,
+                helpers.getConfirmDeleteModal('custom_command_modal_remove', 'Bist du sicher, dass du den Befehl !' + command + ' entfernen möchtest?', true,
                     'Der Befehl !' + command + ' wurde erfolgreich entfernt!', function () {
                     // Delete all information about the command.
                     socket.removeDBValues('custom_command_remove', {
@@ -415,16 +415,16 @@ $(function() {
         helpers.getModal('token-command', 'Setze Befehl Token', 'Speichern', $('<form/>', {
             'role': 'form'
         })
-            .append('In dieser Dialog wird ein user/pass oder API-Schlüssel gespeichert, der in ein (customapi)-Tag ersetzt wird.\n\
+        .append('In dieser Dialog wird ein user/pass oder API-Schlüssel gespeichert, der in ein (customapi)-Tag ersetzt wird.\n\
         <br /> HINWEIS: Dies ist nur nützlich, wenn Sie ein (Token) Subtag in die URL eines (customapi) oder (customapijson) Befehlstags einfügen.\n\
         <br /> Beispiel (Verwendung der Bots Chat-Befehle zu Demonstrationszwecken):\n\
         <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;!addcom myapicommand (customapi http://(token)@example.com/myapi)\n\
         <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;!tokencom myapicommand myuser:mypass\n\
         <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>Der Befehl ruft jetzt effektiv http://myuser:mypass@example.com/myapi auf und reduziert gleichzeitig die Sichtbarkeit Ihres user/pass.</i>')
-            // Append input box for the command name. This one is disabled.
-            .append(helpers.getInputGroup('command-tname', 'text', 'Befehl', '', '!' + command, 'Name des Befehls. Dieser kann nicht bearbeitet werden.', true))
-            // Append a text box for the command token.
-            .append(helpers.getInputGroup('command-token', 'text', 'Token', '', 'Der Tokenwert für den Befehl.')), function () {
+        // Append input box for the command name. This one is disabled.
+        .append(helpers.getInputGroup('command-tname', 'text', 'Befehl', '', '!' + command, 'Name des Befehls. Dieser kann nicht bearbeitet werden.', true))
+        // Append a text box for the command token.
+        .append(helpers.getInputGroup('command-token', 'text', 'Token', '', 'Der Tokenwert für den Befehl.')), function () {
             let commandName = $('#command-tname'),
                 commandToken = $('#command-token');
 
@@ -436,13 +436,13 @@ $(function() {
                 case helpers.handleInputString(commandName):
                     break;
                 default:
-                    // Update command token.
-                    socket.sendCommand('command_settoken_cmd', 'tokencom silent@' + commandName.val() + ' ' + commandToken.val(), function () {
-                        // Close the modal.
-                        $('#token-command').modal('hide');
-                        // Tell the user the command was edited.
-                        toastr.success('Token für den Befehl !' + commandName.val() + ' erfolgreich geändert.');
-                    });
+                // Update command token.
+                socket.sendCommand('command_settoken_cmd', 'tokencom silent@' + commandName.val() + ' ' + commandToken.val(), function () {
+                    // Close the modal.
+                    $('#token-command').modal('hide');
+                    // Tell the user the command was edited.
+                    toastr.success('Token für den Befehl !' + commandName.val() + ' erfolgreich geändert.');
+                });
             }
         }).modal('toggle');
     };

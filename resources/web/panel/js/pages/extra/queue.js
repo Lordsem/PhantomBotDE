@@ -194,7 +194,7 @@ $(function () {
             'role': 'form'
         })
                 // Append amount to draw
-                .append(helpers.getInputGroup('draw-amount', 'number', 'Anzahl der zu wählenden Benutzer', '', '1', 'Die Anzahl der Benutzer, die aus der Warteschlange gezogen werden sollen.')),
+                .append(helpers.getInputGroup('draw-amount', 'number', 'Anzahl der auszuwählenden Benutzer', '', '1', 'Die Anzahl der Benutzer, die aus der Warteschlange gezogen werden sollen.')),
                 // Callback.
                         function () {
                             let amount = $('#draw-amount');
@@ -210,6 +210,33 @@ $(function () {
                                         helpers.temp.updateQueueList();
                                         // Close the modal.
                                         $('#queue-draw-users').modal('toggle');
+                                    });
+                            }
+                        }).modal('toggle');
+            });
+
+    // Draw random users command.
+    $('#random-queue').on('click', function () {
+        helpers.getModal('queue-random-users', 'Ziehe zufällige Benutzer', 'Ziehe zufällig', $('<form/>', {
+            'role': 'form'
+        })
+                // Append amount to draw
+                .append(helpers.getInputGroup('draw-amount', 'number', 'Anzahl der auszuwählenden Benutzer', '', '1', 'The amount of users to be drawn from the queue.')),
+                // Callback.
+                        function () {
+                            let amount = $('#draw-amount');
+
+                            switch (false) {
+                                case helpers.handleInputNumber(amount, 1, 5):
+                                    break;
+                                default:
+                                    socket.wsEvent('random_queue_users', QUEUE_SCRIPT, null, ['random', amount.val()], function () {
+                                        // Alert the user.
+                                        toastr.success(amount.val() + ' zufällige Benutzer aus der Warteschlange gezogen!');
+                                        // Update the list.
+                                        helpers.temp.updateQueueList();
+                                        // Close the modal.
+                                        $('#queue-random-users').modal('toggle');
                                     });
                             }
                         }).modal('toggle');

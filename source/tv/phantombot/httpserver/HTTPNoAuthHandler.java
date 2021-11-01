@@ -65,10 +65,23 @@ public class HTTPNoAuthHandler implements HttpRequestHandler {
 
     @Override
     public void handleRequest(ChannelHandlerContext ctx, FullHttpRequest req) {
-        if (req.uri().startsWith("/sslcheck")) {
-            FullHttpResponse res = HttpServerPageHandler.prepareHttpResponse(HttpResponseStatus.OK, (HTTPWSServer.instance().sslEnabled ? "true" : "false").getBytes(), null);
+        if (req.uri().startsWith("/presence")) {
+            FullHttpResponse res = HttpServerPageHandler.prepareHttpResponse(HttpResponseStatus.OK, "PBok".getBytes(), null);
             String origin = req.headers().get(HttpHeaderNames.ORIGIN);
-            res.headers().set(HttpHeaderNames.ACCESS_CONTROL_ALLOW_ORIGIN, origin);
+            if (origin != null && !origin.isBlank()) {
+                res.headers().set(HttpHeaderNames.ACCESS_CONTROL_ALLOW_ORIGIN, origin);
+            }
+            com.gmt2001.Console.debug.println("200");
+            HttpServerPageHandler.sendHttpResponse(ctx, req, res);
+            return;
+        }
+
+        if (req.uri().startsWith("/sslcheck")) {
+            FullHttpResponse res = HttpServerPageHandler.prepareHttpResponse(HttpResponseStatus.OK, (HTTPWSServer.instance().isSsl() ? "true" : "false").getBytes(), null);
+            String origin = req.headers().get(HttpHeaderNames.ORIGIN);
+            if (origin != null && !origin.isBlank()) {
+                res.headers().set(HttpHeaderNames.ACCESS_CONTROL_ALLOW_ORIGIN, origin);
+            }
             com.gmt2001.Console.debug.println("200");
             HttpServerPageHandler.sendHttpResponse(ctx, req, res);
             return;
@@ -81,7 +94,7 @@ public class HTTPNoAuthHandler implements HttpRequestHandler {
 
             if (host == null) {
                 host = "";
-            } else if (HTTPWSServer.instance().sslEnabled) {
+            } else if (HTTPWSServer.instance().isSsl()) {
                 host = "https://" + host;
             } else {
                 host = "http://" + host;
@@ -111,16 +124,18 @@ public class HTTPNoAuthHandler implements HttpRequestHandler {
             FullHttpResponse res = HttpServerPageHandler.prepareHttpResponse(HttpResponseStatus.SEE_OTHER, null, null);
 
             if (req.uri().contains("logout=true")) {
-                res.headers().add(HttpHeaderNames.SET_COOKIE, "panellogin=" + (HTTPWSServer.instance().sslEnabled ? "; Secure" + sameSite : "") + "; HttpOnly; expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/");
+                res.headers().add(HttpHeaderNames.SET_COOKIE, "panellogin=" + (HTTPWSServer.instance().isSsl() ? "; Secure" + sameSite : "")
+                        + "; HttpOnly; expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/");
             } else if (req.method().equals(HttpMethod.POST)) {
-                res.headers().add(HttpHeaderNames.SET_COOKIE, "panellogin=" + new String(Base64.getEncoder().encode((user + ":" + pass).getBytes())) + (HTTPWSServer.instance().sslEnabled ? "; Secure" + sameSite : "") + "; HttpOnly; Path=/");
+                res.headers().add(HttpHeaderNames.SET_COOKIE, "panellogin=" + new String(Base64.getEncoder().encode((user + ":" + pass).getBytes()))
+                        + (HTTPWSServer.instance().isSsl() ? "; Secure" + sameSite : "") + "; HttpOnly; Path=/");
             }
 
             String host = req.headers().get(HttpHeaderNames.HOST);
 
             if (host == null) {
                 host = "";
-            } else if (HTTPWSServer.instance().sslEnabled) {
+            } else if (HTTPWSServer.instance().isSsl()) {
                 host = "https://" + host;
             } else {
                 host = "http://" + host;
@@ -178,10 +193,10 @@ public class HTTPNoAuthHandler implements HttpRequestHandler {
                 if (path.startsWith("/addons") && (qsd.parameters().containsKey("marquee") || qsd.parameters().containsKey("refresh"))) {
                     handleAddons(ctx, req, p, qsd);
                 } else {
-                com.gmt2001.Console.debug.println("200 " + req.method().asciiName() + ": " + p.toString() + " (" + p.getFileName().toString() + " = "
-                        + HttpServerPageHandler.detectContentType(p.getFileName().toString()) + ")");
-                HttpServerPageHandler.sendHttpResponse(ctx, req, HttpServerPageHandler.prepareHttpResponse(HttpResponseStatus.OK,
-                        req.method().equals(HttpMethod.HEAD) ? null : Files.readAllBytes(p), p.getFileName().toString()));
+                    com.gmt2001.Console.debug.println("200 " + req.method().asciiName() + ": " + p.toString() + " (" + p.getFileName().toString() + " = "
+                            + HttpServerPageHandler.detectContentType(p.getFileName().toString()) + ")");
+                    HttpServerPageHandler.sendHttpResponse(ctx, req, HttpServerPageHandler.prepareHttpResponse(HttpResponseStatus.OK,
+                            req.method().equals(HttpMethod.HEAD) ? null : Files.readAllBytes(p), p.getFileName().toString()));
                 }
             }
         } catch (IOException ex) {

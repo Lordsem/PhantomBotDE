@@ -75,7 +75,7 @@ $(function() {
                     row = $(this).parents('tr');
 
                 // Ask the user if he want to remove the command.
-                helpers.getConfirmDeleteModal('custom_command_modal_remove', 'Möchten Sie den externen Befehl !' + command + ' wirklich entfernen?', true,
+                helpers.getConfirmDeleteModal('custom_command_modal_remove', 'Möchtest du den externen Befehl !' + command + ' wirklich entfernen?', true,
                     'Der externe Befehl !' + command + ' wurde erfolgreich entfernt!', function() {
                         // Delete all information about the command.
                         socket.removeDBValues('external_command_remove', {

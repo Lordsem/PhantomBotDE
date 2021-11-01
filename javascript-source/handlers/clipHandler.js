@@ -21,7 +21,7 @@
  */
 (function () {
     var toggle = $.getSetIniDbBoolean('clipsSettings', 'toggle', false),
-        message = $.getSetIniDbString('clipsSettings', 'message', '(name) hat einen Clip erstellt: (url)');
+            message = $.getSetIniDbString('clipsSettings', 'message', '(name) hat einen Clip erstellt: (url)');
 
     /*
      * @function reloadClips
