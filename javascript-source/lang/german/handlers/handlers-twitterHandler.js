@@ -63,7 +63,7 @@ $.lang.register('twitter.set.reward.toggle.usage', 'Verwendung: !twitter set rew
 $.lang.register('twitter.set.reward.toggle.success', 'Setze Twitter Retweet Belohnungen auf $1.');
 $.lang.register('twitter.set.reward.points.usage', 'Verwendung: !twitter set reward points [points]. Aktuell $1. Legen Sie den Belohnungsmenge für Retweets fest.');
 $.lang.register('twitter.set.reward.points.success', 'Setzt Twitter Retweet Belohnungen auf $1.');
-$.lang.register('twitter.set.reward.cooldown.usage', 'Verwendung: !twitter set reward cooldown [Stunden]. Aktuell $1. Stunden, die die Benutzer:innen zwischen den Belohnungen warten müssen.');
+$.lang.register('twitter.set.reward.cooldown.usage', 'Verwendung: !twitter set reward cooldown [Stunden]. Aktuell $1. Stunden, die die Benutzer zwischen den Belohnungen warten müssen.');
 $.lang.register('twitter.set.reward.cooldown.success', 'Setzte Twitter Retweet Belohnungs-Abklingzeit auf $1 Stunden.');
 $.lang.register('twitter.set.reward.announce.usage', 'Verwendung: !twitter set reward announce [on/off]. Aktuell $1. Aktiviere/Deaktiviere Benachrichtigungen für Retweet Belohnungen.');
 $.lang.register('twitter.set.reward.announce.success', 'Setze Twitter Retweet Belohnungsnachrichten auf: $1');

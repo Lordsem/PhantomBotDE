@@ -44,7 +44,7 @@ import tv.phantombot.script.ScriptManager;
 
 public final class LangFileUpdater {
     private static final String CUSTOM_LANG_ROOT = "./scripts/lang/custom/";
-    private static final String DEFAULT_LANG_ROOT = "./scripts/lang/english/";
+    private static final String DEFAULT_LANG_ROOT = "./scripts/lang/german/";
     
     /**
      * Class constructor.
@@ -161,7 +161,7 @@ public final class LangFileUpdater {
         String sep = File.separator;
         
         files.forEach((File file) -> {
-            fileNames.add(file.getPath().replace("." + sep + "scripts" + sep + "lang" + sep + "english" + sep, ""));
+            fileNames.add(file.getPath().replace("." + sep + "scripts" + sep + "lang" + sep + "german" + sep, ""));
         });
         
         return fileNames.toArray(new String[fileNames.size()]);

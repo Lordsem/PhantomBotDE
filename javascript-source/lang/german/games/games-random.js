@@ -263,7 +263,7 @@ $.lang.register('randomcommand.226', 'Der Richter: "Angeklagter, nennen sie endl
 $.lang.register('randomcommand.227', 'Ich bin ein so phantastischer Liebhaber, weil ich täglich mit mir selber trainiere. Woody Allen');
 $.lang.register('randomcommand.228', '(random), kuck mal blöd für 5 Euro! ... Aber doch nicht gleich für 100!');
 $.lang.register('randomcommand.229', '(sender) und (random) treffen sich. (sender) sagt: "Ich fahre nach Paris!" "Du Schwein!" sagt (random). "Wieso? Ich fahre doch mit meiner Frau!" "Du dummes Schwein!"');
-$.lang.register('randomcommand.230', 'Wie sortieren Gamer:innen ihre Wäsche? Zwei Stapel: "Dreckig" und "Dreckig, aber tragbar"');
+$.lang.register('randomcommand.230', 'Wie sortieren Gamer ihre Wäsche? Zwei Stapel: "Dreckig" und "Dreckig, aber tragbar"');
 $.lang.register('randomcommand.231', 'Finden zwei Polizeibeamte eine Leiche vor einem Gymnasium. Fragt der eine den anderen: "Du, wie schreibt man denn Gymnasium?" Der andere überlegt und sagt: "Schleppen wir ihn zur Post!"');
 $.lang.register('randomcommand.232', 'Ich habe jeglichen Zucker in meinem Haus weggeschmissen, um abzunehmen. Am nächsten Morgen stand er wieder im Regal. War raffinierter Zucker.');
 $.lang.register('randomcommand.233', 'Jetzt machen wir erst mal NICHTS und dann warten wir ab!');

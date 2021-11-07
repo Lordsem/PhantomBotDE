@@ -901,11 +901,11 @@ $(function() {
                     'role': 'form'
                 })
                 // Add the toggle for the online Tweet.
-                .append(helpers.getDropdownGroup('online-toggle', 'Online-Tweet aktivieren', (e.post_online === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'], 'Lass den Bot für dich twittern, wenn du live gehst.'))
+                .append(helpers.getDropdownGroup('online-toggle', 'Online-Tweet aktivieren', (e.post_online === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'], 'Lasse den Bot twittern, wenn der Steamer live gehst.'))
                 // Add the toggle for the game Tweet.
-                .append(helpers.getDropdownGroup('game-toggle', 'Spielwechsel-Tweet aktivieren', (e.post_gamechange === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'], 'Lassen Sie den Bot für Sie twittern, wenn Sie das Spiel wechseln.'))
+                .append(helpers.getDropdownGroup('game-toggle', 'Spielwechsel-Tweet aktivieren', (e.post_gamechange === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'], 'Lasse den Bot twittern, wenn das Spiel gewechselt wird.'))
                 // Add the toggle for the timed Tweet.
-                .append(helpers.getDropdownGroup('timed-toggle', 'Zeitgesteuerten Online-Tweet aktivieren', (e.post_update === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'], 'Lass den Bot alle X Stunden für dich twittern und sagen, dass du noch live bist.'))
+                .append(helpers.getDropdownGroup('timed-toggle', 'Zeitgesteuerten Online-Tweet aktivieren', (e.post_update === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'], 'Lasse den Bot alle X Stunden twittern und sagen, dass der Steamer noch live ist.'))
                 // Add the the text area for online message
                 .append(helpers.getTextAreaGroup('online-msg', 'text', 'Online-Tweet', '', e.message_online, 'Nachricht, die getwittert wird, wenn Sie live gehen. Tags: (title), (game) und (twitchurl)', false))
                 // Add the the text area for online message

@@ -342,7 +342,7 @@ $(function () {
         }
 
         switch (action) {
-            case 'permit':
+            case 'erlaubnis':
                 command = 'permit ' + username;
                 break;
             case 'shoutout':

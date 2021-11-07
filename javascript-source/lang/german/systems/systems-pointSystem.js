@@ -27,7 +27,7 @@ $.lang.register('pointsystem.user.success', '$1 hat aktuell $2.');
 $.lang.register('pointsystem.makeitrain.error.invalid', 'Entschuldigung, aber es ist derzeit nicht möglich, $1 regnen zu lassen.');
 $.lang.register('pointsystem.makeitrain.error.needpoints', 'Du kannst es dir derzeit nicht leisten, es $1 regnen zu lassen.');
 $.lang.register('pointsystem.makeitrain.error.negative', 'Du kannst keine negativen $1 regnen lassen.');
-$.lang.register('pointsystem.makeitrain.success', 'Ein Regenschauer zieht auf! Dank $1 lässt es regnen und jeder bekommt bis zu $2 $3!');
+$.lang.register('pointsystem.makeitrain.success', 'Ein Regenschauer zieht auf! $1 lässt es regnen und jeder bekommt bis zu $2 $3!');
 $.lang.register('pointsystem.makeitrain.usage', 'Verwendung: !makeitrain [Menge]');
 $.lang.register('pointsystem.set.bonus.error.negative', 'Du kannst den Bonus-per-Gruppe nicht auf negativ $1 setzen.');
 $.lang.register('pointsystem.set.bonus.success', 'Setzt den $1 Bonus auf $2 pro Gruppenlevel.');

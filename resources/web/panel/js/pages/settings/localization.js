@@ -25,7 +25,7 @@ $(function() {
                 'role': 'form'
             })
                     // Add select box.
-                    .append(helpers.getDropdownGroup('file-to-load', 'Lang-Date: ', 'Datei auswählen', e)), function () {
+                    .append(helpers.getDropdownGroup('file-to-load', 'Lang-Datei: ', 'Datei auswählen', e)), function () {
                 currentLang = $('#file-to-load').find(':selected').text();
                 socket.doRemote('loadLang', 'loadLang', {
                     'lang-path': $('#file-to-load').find(':selected').text()

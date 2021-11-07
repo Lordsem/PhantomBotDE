@@ -27,7 +27,7 @@ $.lang.register('ticketrafflesystem.only.buy.amount', 'Du kannst nur $1 Ticket(s
 $.lang.register('ticketrafflesystem.limit.hit', 'Du kannst nicht mehr als $1 Ticket(s) kaufen.');
 $.lang.register('ticketrafflesystem.err.not.following', 'Du musst dem Kanal folgen, um teilnehmen zu können.');
 $.lang.register('ticketrafflesystem.err.points', 'Du hast nicht genügend $1, um teilzunehmen.');
-$.lang.register('ticketrafflesystem.entered', 'Es sind $1 Teilnehmer:innen für die Ticket-Verlosung eingetragen! ($2 Tickets gesamt)');
+$.lang.register('ticketrafflesystem.entered', 'Es sind $1 Teilnehmende für die Ticket-Verlosung eingetragen! ($2 Tickets gesamt)');
 $.lang.register('ticketrafflesystem.entered.bonus', '$1 (+ $2 Bonus) Einträge zur Ticketverlosung hinzugefügt! ($3 (+ $4 Bonus) Tickets insgesamt)');
 $.lang.register('ticketrafflesystem.usage', 'Verwendung: !traffle open [Max. Einträge] [Stammzuschauer-Ticket-Multiplikator (default = 1)] [Abonnenten-Ticket-Multiplikator  (default = 1)] [Ticketpreis] [-followers]');
 $.lang.register('ticketrafflesystem.msg.enabled', 'Nachrichten zur Ticketverlosung wurden aktiviert.');

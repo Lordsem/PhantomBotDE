@@ -113,8 +113,8 @@ Zu den weiteren gesendeten Daten gehören:
 - _os.version_ - Gibt die Version des Betriebssystems an
 - Der aktuelle Status von _debugon_, auch wenn er über die Konsole eingestellt wurde
 - Der aktuelle Status von _debuglog_, auch wenn von der Konsole aus eingestellt
-- Ein boolescher Indikator dafür, ob das OAuth als Bot eingeloggt ist
-- Ein boolescher Indikator dafür, ob das API OAuth als Broadcaster angemeldet ist
+- Ein boolescher Indikator dafür, ob das OAuth als Bot eingeloggt ist (aber nicht das eigentliche OAuth-Token)
+- Ein boolescher Indikator dafür, ob das API OAuth als Broadcaster angemeldet ist (aber nicht das eigentliche OAuth-Token)
 - Der vollständige Stack-Trace der Ausnahme
 
 Um die Meldung von Rollbar-Ausnahmen zu deaktivieren, fügen Sie der _botlogin.txt_ die folgende Zeile hinzu:
@@ -126,5 +126,12 @@ Docker-Benutzer können sich mit der oben genannten Methode abmelden oder dem Co
 ```
 PHANTOMBOT_USEROLLBAR=false
 ```
+
+for docker-compose.yml
+```
+PHANTOMBOT_USEROLLBAR: "false"
+```
+
+Du musst den Bot neu starten, nachdem du das Opt-out aktiviert hast, damit die Änderung wirksam wird. Das Bearbeiten eines Docker-Containers oder docker-compose erfordert möglicherweise weitere Schritte, um die Änderungen zu übernehmen. Konsultieren das Handbuch
 
 Wenn Sie glauben, dass Ihre Daten bereits gesendet wurden und eine GPDR-Löschanfrage stellen möchten, melden Sie sich bitte wie oben an und senden Sie dann Ihren Botnamen, Sendernamen und die _rollbarid_ von _botlogin.txt_ an: **gpdr** /A\T/ phantombot // hopto \\ org

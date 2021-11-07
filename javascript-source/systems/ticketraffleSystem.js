@@ -24,7 +24,7 @@
             followers = false,
             raffleStatus = false,
             msgToggle = $.getSetIniDbBoolean('settings', 'tRaffleMSGToggle', false),
-            raffleMessage = $.getSetIniDbString('settings', 'traffleMessage', 'Eine Verlosung ist noch offen! Geben Sie !tickets (amount) ein, um teilzunehmen. Bisher haben sich (entries) Benutzer:innen angemeldet.'),
+            raffleMessage = $.getSetIniDbString('settings', 'traffleMessage', 'Eine Verlosung ist noch offen! Geben Sie !tickets (amount) ein, um teilzunehmen. Bisher haben sich (entries) Personen angemeldet.'),
             messageInterval = $.getSetIniDbNumber('settings', 'traffleMessageInterval', 0),
             totalEntries = 0,
             totalTickets = 0,

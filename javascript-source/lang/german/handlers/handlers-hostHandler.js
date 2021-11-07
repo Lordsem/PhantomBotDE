@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-$.lang.register('hosthandler.host.message', '(name) hoste dich jetzt mit (viewers) Zuschauern!');
+$.lang.register('hosthandler.host.message', '(name) hostet jetzt mit (viewers) Zuschauern!');
 $.lang.register('hosthandler.deprecated', 'Aufgrund von Twitch-Problemen mit der API ist dieser Befehl veraltet.');
 $.lang.register('hosthandler.newhost', 'Danke $1, für deinen Host!');
 $.lang.register('hosthandler.newhost.reward', 'Danke $1, für den Host! Du bekommst $2 dafür, dass du so fantastisch bist!');

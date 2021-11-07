@@ -17,7 +17,7 @@
 
 $.lang.register('ranks.edit.usage', 'Verwendung: !rankedit [add [Stunden] [Rangname] | del [Stunden] | custom [Nutzer] [Rangname] | customdel [Nutzer] | settime [Stunden] | setcost [Punkte]]');
 $.lang.register('ranks.settime.usage', 'Verwendung: !rankedit settime [Stunden]');
-$.lang.register('ranks.settime.success', 'Zeit für Benutzer:innen zur Erstellung eines benutzerdefinierten Ranges auf $1 Stunden geändert.');
+$.lang.register('ranks.settime.success', 'Zeit für Benutzer zur Erstellung eines benutzerdefinierten Ranges auf $1 Stunden geändert.');
 $.lang.register('ranks.setcost.usage', 'Verwendung: !rankedit setcost [$1]');
 $.lang.register('ranks.setcost.success', 'Kosten für benutzerdefinierten Rang auf $1 $2 festgelegt.');
 $.lang.register('ranks.custom.usage', 'Verwendung: !rankedit custom [Nutzer] [Rangname]');

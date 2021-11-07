@@ -89,7 +89,7 @@ $(function() {
         socket.getDBValues('get_discord_logging_settings', {
             tables: ['discordSettings', 'discordSettings', 'discordSettings'],
             keys: ['modLogs', 'customCommandLogs', 'modLogChannel']
-        }, true, function(e) {
+        }, true, function (e) {
             // Mod toggle.
             $('#twitch-mod-log').val((e['modLogs'] === 'true' ? 'Ja' : 'Nein'));
             // Commands toggle.

@@ -80,7 +80,7 @@ $(function () {
             let html = 'Es scheint, als ob du die Automatische Aktualisierung der OAuth-Token nicht eingerichtet hast. Es wird dringend empfohlen, dies einzustellen, '
                     + 'um die neuesten Funktionen zu genießen und um zu vermeiden, dass der aktuelle Token abläuft. Du kannst dies ' +
                     $('<a/>', {'target': '_blank', 'rel': 'noopener noreferrer'}).prop('href', '../oauth/').append('hier')[0].outerHTML + ' einrichten.';
-            toastr.warning('OAuth-Tokens werden möglicherweise nicht automatisch aktualisiert!', {
+            toastr.warning('OAuth-Token werden möglicherweise nicht automatisch aktualisiert!', {
                 'timeOut': 2000
             });
             helpers.addNotification($('<a/>', {
