@@ -32,4 +32,4 @@ $.lang.register('welcomesystem.set.enableuser.fail', 'Die Begrüßung ist bereit
 $.lang.register('welcomesystem.set.enableuser.success', '$1 wird $2 willkommen heißen.');
 $.lang.register('welcomesystem.generalusage', 'Verwendung: !welcome [toggle | setmessage text | setfirstmessage text | disable user | enable user]. Tags für Nachrichtentext: (names), (1 Text für einen Namen), (2 für Zwei), (3 für Drei oder mehr Namen)');
 $.lang.register('welcomesystem.names.join1', ', ');
-$.lang.register('welcomesystem.names.join2', ', und ');
+$.lang.register('welcomesystem.names.join2', ' und ');

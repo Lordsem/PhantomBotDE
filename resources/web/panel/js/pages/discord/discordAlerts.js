@@ -401,7 +401,7 @@ $(function () {
                             'Wenn eine Nachricht im Channel gesendet werden soll, wenn jemand einen Clip erstellt.'))
                     // Add the text area for the clips message.
                     .append(helpers.getTextAreaGroup('clip-message', 'text', 'Clip Nachricht', '', e.clipsMessage,
-                            'Die Nachricht wird gesendet, wenn jemand einen Clip erstellt. Tags: (name), (embedurl) - wird als gesamte Nachricht verwendet, und (url)', false))
+                            'Die Nachricht wird gesendet, wenn jemand einen Clip erstellt. Tags: (name), (embedurl) - wird als gesamte Nachricht verwendet und (url)', false))
                     // Add the text area for the clips channel.
                     .append(getChannelSelector('clip-channel', 'Alarm Kanal', '#alarme', e.clipsChannel,
                             'Der Kanal, in dem die Clips gepostet werden.', allowedChannelTypes)),
@@ -496,7 +496,7 @@ $(function () {
                                             'Kanal, in dem alle Alarme gesendet werden sollen.', allowedChannelTypes))
                                     // Add the toggle for auto bot streaming status
                                     .append(helpers.getDropdownGroup('delete-message', 'Alarme automatisch löschen', (e.deleteMessageToggle === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'],
-                                            'Löscht die Online-Nachricht automatisch, nachdem der Stream beendet ist, und die Offline-Nachricht, wenn ein neuer Stream gestartet wird.'))))),
+                                            'Löscht die Online-Nachricht automatisch, nachdem der Stream beendet ist und die Offline-Nachricht, wenn ein neuer Stream gestartet wird.'))))),
                     function () {
                         let onlineToggle = $('#online-toggle').find(':selected').text() === 'Ja',
                                 statusToggle = $('#online-status').find(':selected').text() === 'Ja',

@@ -28,7 +28,7 @@ $.lang.register('randomcommand.pg13.7', 'Ich spüre, wie es über mich kommt! Ic
 $.lang.register('randomcommand.pg13.8', '(random) schob (sender) einen Löffel in den Arsch.');
 $.lang.register('randomcommand.pg13.9', 'Echte Männer wissen, wann sie wie eine kleine Schlampe laufen müssen!');
 $.lang.register('randomcommand.pg13.10', 'Wenn du dich mit zwielichtigen Leuten triffst, dann musst du immer deinen Geldbeutel und Anus schützen!');
-$.lang.register('randomcommand.pg13.11', 'Richtig, ich habe etwas, wofür ich mich bei (random) entschuldigen muss. Manchmal, wenn wir spielten, fingst du plötzlich an zu weinen, und dann bist du nach Hause gelaufen. Du dachtest wahrscheinlich, du hättest uns getäuscht, aber jeder wusste... dass du dir in die Hose gemacht hast! Entschuldigung.');
+$.lang.register('randomcommand.pg13.11', 'Richtig, ich habe etwas, wofür ich mich bei (random) entschuldigen muss. Manchmal, wenn wir spielten, fingst du plötzlich an zu weinen und dann bist du nach Hause gelaufen. Du dachtest wahrscheinlich, du hättest uns getäuscht, aber jeder wusste... dass du dir in die Hose gemacht hast! Entschuldigung.');
 $.lang.register('randomcommand.pg13.12', 'Was will ich am meisten tun? Mal sehen.... Nur einmal, ich will wirklich loslassen und in meine Hose pinkeln.');
 $.lang.register('randomcommand.pg13.13', 'Eine junge blonde Frau ist verzweifelt, weil sie befürchtet, dass ihr Mann eine Affäre hat, also geht sie in einen Waffenladen und kauft eine Pistole. Am nächsten Tag kommt sie nach Hause, um ihren Mann im Bett mit einer schönen Rothaarigen zu finden. Sie nimmt die Waffe und hält sie sich selbst an den Kopf. Der Mann springt aus dem Bett, bettelt und fleht sie an, sich nicht selbst zu erschießen. Hysterisch reagiert die Blondine auf den Mann, "Halt die Klappe....du bist der Nächste!".');
 $.lang.register('randomcommand.pg13.14', '(random) gegen (random), wer gewinnt?! Nur derjenige mit dem kleinsten Penis wird dieses Match gewinnen! Kappa');
@@ -61,7 +61,7 @@ $.lang.register('randomcommand.24', '"Ups, jetzt hab ich mir etwas zu viel Käse
 $.lang.register('randomcommand.25', '(sender) ist nicht einfach nur pervers... Sondern SUPER PERVERS!');
 $.lang.register('randomcommand.26', 'Ich blute buchstäblich aus Großzügigkeit.');
 $.lang.register('randomcommand.27', 'Waren es Fallen? Ich dachte, es wären Attraktionen.');
-$.lang.register('randomcommand.28', 'Okay, hier ist der Plan: Wir gehen rein, fangen an, Leute zu schlagen, und sehen, wohin es uns führt.');
+$.lang.register('randomcommand.28', 'Okay, hier ist der Plan: Wir gehen rein, fangen an, Leute zu schlagen und sehen, wohin es uns führt.');
 $.lang.register('randomcommand.29', 'Wenn eine Frau etwas Süßes sagt, kann ein Mann dem einfach nicht vertrauen.');
 $.lang.register('randomcommand.30', 'Ein Leben ohne Glücksspiel, ist wie Popkorn ohne Salz.');
 $.lang.register('randomcommand.31', 'Stress macht kahlköpfig, aber es ist stressig, Stress zu vermeiden, also bist du sowieso gestresst, also kannst du am Ende nichts tun.');
@@ -70,7 +70,7 @@ $.lang.register('randomcommand.33', 'Ich habe eine letzte Bitte. Bitte schlage m
 $.lang.register('randomcommand.34', 'Warum müssen die Menschen selbst für ihre Zuschauer arbeiten? Ich will einfach nur essen und schlafen. Ich sollte als Panda im Zoo geboren sein.');
 $.lang.register('randomcommand.35', 'Bitte! Sendet mir eure Energie!! GivePLZ');
 $.lang.register('randomcommand.36', 'Hast du von dem Typen gehört, dem die ganze rechte Seite abgeschnitten wurde? Ihm geht es jetzt gut.');
-$.lang.register('randomcommand.37', '(sender), während deiner letzten Untersuchung wurde festgestellt, dass du Fußpilz hast, und wir glauben jetzt, dass er dein Gehirn beeinflusst.');
+$.lang.register('randomcommand.37', '(sender), während deiner letzten Untersuchung wurde festgestellt, dass du Fußpilz hast und wir glauben jetzt, dass er dein Gehirn beeinflusst.');
 $.lang.register('randomcommand.38', 'Warum haben wir eigentlich Badesachen an? Man konnte nackt in den Pool springen und niemand würde merken, dass man nichts anhat.');
 $.lang.register('randomcommand.39', 'Kennst du die Tage, an denen selbst beim zocken nichts klappt und man verzweifelt auf Alt und F5 hämmert und nichts passiert...');
 $.lang.register('randomcommand.40', 'Wenn dir jemand sagt, dass du einen schönen Tag haben sollst, starre ihn an und sage „Sag mir nicht, was ich tun soll!"');
@@ -101,7 +101,7 @@ $.lang.register('randomcommand.64', 'Blut für den Blutgott, Schädel für den S
 $.lang.register('randomcommand.65', 'Jemand hat mir einmal gesagt... dass die Vögel zu beobachten, sie dazu bringt, auf eine Reise zu gehen.');
 $.lang.register('randomcommand.66', 'Es würde mir nichts ausmachen, wenn du mich töten willst, aber ich könnte ein bisschen kämpfen.');
 $.lang.register('randomcommand.67', 'Wenn du denkst, du denkst, dann denkst du nur, du denkst.');
-$.lang.register('randomcommand.68', 'Ich liebe es, an Geldautomaten Schlange zu stehen, und wenn Leute ihre PIN eingeben, schreie ich "Hab sie!" und laufe schnell weg.');
+$.lang.register('randomcommand.68', 'Ich liebe es, an Geldautomaten Schlange zu stehen und wenn Leute ihre PIN eingeben, schreie ich "Hab sie!" und laufe schnell weg.');
 $.lang.register('randomcommand.69', 'Seltsame Nachbarn sind wie Stalker, sie beobachten einem immer!');
 $.lang.register('randomcommand.70', 'OK, denken Sie an eine Zahl. Addiere 12 zur Zahl. Subtrahiere 2. Dividiere diese Zahl durch 5. Addiere 20. Hast du 12 bekommen? Ich auch nicht. Ich wollte nur sehen, ob du es tun würdest!');
 $.lang.register('randomcommand.71', 'Wenn mich jemand mit Skittles bewirft und "TASTE THE RAINBOW" schreit, werfe ich eine 2-Liter-Flasche Dr.Pepper und schreie "VERTRAUEN SIE MIR, ICH BIN ARZT".');
@@ -136,11 +136,11 @@ $.lang.register('randomcommand.99', 'Gestern verhaftete die Polizei zwei Kinder,
 $.lang.register('randomcommand.100', 'Zwei Antennen treffen sich auf einem Dach - verlieben sich - heiraten. Die Zeremonie war Müll - aber der Empfang war brillant.');
 $.lang.register('randomcommand.101', 'Doc, ich kann nicht aufhören, "Green Green Grass of Home" zu singen. Er sagte: "Das klingt nach dem Tom Jones-Syndrom". "Ist es verbreitet?" Fragte ich. "Es ist nicht unüblich." Antwortete er.');
 $.lang.register('randomcommand.102', 'Ich mache gerade eine Whiskey Diät. Ich habe bis jetzt drei Tage verloren.');
-$.lang.register('randomcommand.103', 'Ein Mann geht in eine Bar mit einer Rolle Asphalt unter den Arm und sagt: "Ein Bier bitte, und eines für die Straße."');
+$.lang.register('randomcommand.103', 'Ein Mann geht in eine Bar mit einer Rolle Asphalt unter den Arm und sagt: "Ein Bier bitte und eines für die Straße."');
 $.lang.register('randomcommand.104', 'Ich ging heute zum Arzt und fragte: "Haben sie etwas für Winde?" Also hat er mir einen Drachen gegeben.');
 $.lang.register('randomcommand.105', 'Meine Schwiegermutter fiel neulich in einen Wunschbrunnen, ich war sehr erstaunt, denn ich habe nicht gewusst, dass diese auch funktionieren.');
 $.lang.register('randomcommand.106', 'Ich sah diesen Typen im Gespräch mit einem Geparden. Ich dachte, er versucht, schnell einen durch zu ziehen.');
-$.lang.register('randomcommand.107', 'Eine Frau hat Zwillinge, und gibt sie zur Adoption frei. Einer von ihnen geht an eine Familie in Ägypten und wird "Amal" genannt. Der Andere geht zu einer Familie nach Spanien und sie nennen ihn "Juan". Jahre später schickt Juan ein Bild von sich zu seiner Mutter. Als sie das Bild empfängt, erzählt sie ihrem Mann, dass sie wünschte, sie hatte auch ein Bild von Amal. Ihr Mann antwortet, aber sie sind Zwillinge. Wenn du Juan gesehen hast, hast du auch Amal gesehen.');
+$.lang.register('randomcommand.107', 'Eine Frau hat Zwillinge und gibt sie zur Adoption frei. Einer von ihnen geht an eine Familie in Ägypten und wird "Amal" genannt. Der Andere geht zu einer Familie nach Spanien und sie nennen ihn "Juan". Jahre später schickt Juan ein Bild von sich zu seiner Mutter. Als sie das Bild empfängt, erzählt sie ihrem Mann, dass sie wünschte, sie hatte auch ein Bild von Amal. Ihr Mann antwortet, aber sie sind Zwillinge. Wenn du Juan gesehen hast, hast du auch Amal gesehen.');
 $.lang.register('randomcommand.108', 'Da sind zwei Fische in einem Tank und der Eine sagt zum Anderen: "Wie fährst du nur dieses Ding?"');
 $.lang.register('randomcommand.109', 'Ich wollte neulich ein Paar Tarnhosen kaufen, aber ich konnte keine finden.');
 $.lang.register('randomcommand.110', 'Als Sandro um ihre Hand anhielt sagte sie: "Ich liebe die einfachen Dinge im Leben, aber ich will keines von ihnen für meinen Mann."');
@@ -195,7 +195,7 @@ $.lang.register('randomcommand.158', 'Scheisse in der Manteltasche ist die neue 
 $.lang.register('randomcommand.159', 'Andre Gide: "Das Geheimnis des Glücks liegt nicht im Besitz, sondern im Geben. Wer andere glücklich macht, wird glücklich."');
 $.lang.register('randomcommand.160', '(sender) macht das unmögliche Quiz.');
 $.lang.register('randomcommand.161', 'Beim Geschlechtsverkehr: Er: "Schatzi, wir sehen uns jetzt mal \'ne halbe Stunde nicht." Sie: "Häh, wieso?" Er: "Dreh Dich um!"');
-$.lang.register('randomcommand.162', '(sender) gehe zu jemandem, den du nicht magst, und gebe ihm ein High Five. Ins Gesicht. Mit einem Stuhl.');
+$.lang.register('randomcommand.162', '(sender) gehe zu jemandem, den du nicht magst und gebe ihm ein High Five. Ins Gesicht. Mit einem Stuhl.');
 $.lang.register('randomcommand.163', '"Was war Jesus von Beruf?" "Student!" "Er wohnte mit 30 Jahren noch bei den Eltern, hatte lange Haare und wenn er etwas tat, dann war es ein Wunder."');
 $.lang.register('randomcommand.164', 'Setze dich hin und starren Sie 30 Sekunden lang auf diesen Bildschirm.');
 $.lang.register('randomcommand.165', 'Lieber einen Anruf vom Chef als einen Nachruf in der Zeitung.');
@@ -231,7 +231,7 @@ $.lang.register('randomcommand.194', 'Warum ich mit mir selbst spreche?!? Manchm
 $.lang.register('randomcommand.195', 'Männer sind sehr wohl multitaskingfähig - Sie können immerhin mehrere Probleme gleichzeitig verursachen...');
 $.lang.register('randomcommand.196', 'Warum haben Männer oben auf ihrer Eichel ein kleines Loch? Damit das Gehirn mit Sauerstoff versorgt wird.');
 $.lang.register('randomcommand.197', 'Lieber Maler male mir, über meine Zimmertür, meiner Frau zu trotze, eine riesig Große ... Flasche Bier!');
-$.lang.register('randomcommand.198', 'Was haben Männer und Bodenfliesen gemeinsam? Leg sie beim ersten Mal richtig flach, und du kannst den Rest deines Lebens auf ihnen herumtrampeln.');
+$.lang.register('randomcommand.198', 'Was haben Männer und Bodenfliesen gemeinsam? Leg sie beim ersten Mal richtig flach und du kannst den Rest deines Lebens auf ihnen herumtrampeln.');
 $.lang.register('randomcommand.199', 'Gehe zu einem Fremden und spreche in deine Uhr - "Verdächtiger 42 gefunden" und dann renne weg.');
 $.lang.register('randomcommand.200', 'Hol dir durchsichtige Legos, verteile sie auf dem Boden und beobachte die Ergebnisse aus der Ferne.');
 $.lang.register('randomcommand.201', 'Nehme 4 Schweine, malen Sie die Zahlen 1,2,3 und 5 auf ihren Rücken und lasse sie in einem Geschäft frei, lehnen dich zurück und beobachte, wie die Sicherheitskräfte nach Schwein 4 suchen.');
@@ -251,7 +251,7 @@ $.lang.register('randomcommand.214', '"Für so ein schlechtes Zeugnis müsste es
 $.lang.register('randomcommand.215', 'Warum stehen Männer in der Nacht auf? - 17 % müssen aufs WC - 21 % gehen zum Kühlschrank - 62 % müssen nach Hause');
 $.lang.register('randomcommand.216', 'Was hat man, wenn man Viagra über das Internet bestellt? - Eine Standleitung!');
 $.lang.register('randomcommand.217', 'Wenn Dummheit weh tun würde, würde (random) den ganzen Tag schreien!');
-$.lang.register('randomcommand.218', 'Dialog im Kerzenlicht: "Küss mich noch einmal, und ich gehöre Dir, ein Leben lang!", stammelt sie. Er: "DANKE, für die Warnung!..."');
+$.lang.register('randomcommand.218', 'Dialog im Kerzenlicht: "Küss mich noch einmal und ich gehöre Dir, ein Leben lang!", stammelt sie. Er: "DANKE, für die Warnung!..."');
 $.lang.register('randomcommand.219', 'Ernst R. Hauschka (dt. Aphoristiker, 1926-2012): "Was nützt es dem Menschen, wenn er Lesen und Schreiben gelernt hat, aber das Denken anderen überlässt."');
 $.lang.register('randomcommand.220', 'Die letzten Worte des Hardware-Bastlers: "Das Netzkabel lasse ich als Erdung dran..."');
 $.lang.register('randomcommand.221', 'Sie: "Gib mir Tiernamen!" Er: "Ja Hasi, ja Hasi" Sie: "Böse Tiernamen!!" Er: "Böses Hasi, böses Hasi"');
@@ -279,7 +279,7 @@ $.lang.register('randomcommand.242', 'Was hat der Weihnachtsmann, wenn er im Kam
 $.lang.register('randomcommand.243', 'Auf jedem Schiff das dampft und segelt ist einer der die Putzfrau vögelt und ist das Schiff auch noch so klein einer muss die Putzfrau sein.');
 $.lang.register('randomcommand.244', '"Was halten Sie als Lehrer davon, das immer jüngere Schülerinnen sich schminken." - "Das ist schon in Ordnung, die heulen wenigstens nicht, wenn man schlechte Noten verteilt."');
 $.lang.register('randomcommand.245', '"Findest Du nicht (random), daß mir die Gurkenmaske zu einem besseren Aussehen verholfen hat?" "Gewiß (sender), aber warum hast Du sie wieder abgenommen?"');
-$.lang.register('randomcommand.246', 'Als Fred Feuerstein den Grill erfand, hat er sich den Sack verbrannt, Wilma musste zu ihm rasen, und ihn wieder heile blasen.');
+$.lang.register('randomcommand.246', 'Als Fred Feuerstein den Grill erfand, hat er sich den Sack verbrannt, Wilma musste zu ihm rasen und ihn wieder heile blasen.');
 $.lang.register('randomcommand.247', 'Ich wollte dieses Jahr 10kg abnehmen... jetzt fehlen nur noch 13...');
 $.lang.register('randomcommand.248', 'Lehrer: "Was ist die Steigerung von leer?" Schüler: "Lehrer".');
 $.lang.register('randomcommand.249', 'Warum kommen nur 10% aller Männer in den Himmel? Wenn alle reinkommen würden, dann wäre es die Hölle.');

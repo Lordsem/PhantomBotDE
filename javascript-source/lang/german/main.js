@@ -449,6 +449,6 @@ $.lang.register('common.time.minute', 'Minute');
 $.lang.register('common.time.minutes', 'Minuten');
 $.lang.register('common.time.second', 'Sekunde');
 $.lang.register('common.time.seconds', 'Sekunden');
-$.lang.register('common.time.and', ', und ');
+$.lang.register('common.time.and', ' und ');
 $.lang.register('common.time.nostart', 'sieht so aus, als hätte das noch nicht angefangen');
 $.lang.register('common.time.expired', 'sieht aus, als ob das abgelaufen ist');

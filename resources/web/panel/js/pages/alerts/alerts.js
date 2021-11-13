@@ -73,7 +73,7 @@ $(function() {
                 'Wenn eine Nachricht im Kanal gesendet werden soll, wenn jemand folgt. Dadurch wird auch die Belohnung umgeschaltet.'))
             // Add the the text area for the follow message.
             .append(helpers.getTextAreaGroup('follow-message', 'text', 'Follow Nachricht', '', e.followMessage,
-                'Die Nachricht wird gesendet, wenn jemand dem Kanal folgt. Tags: (name), (alert), (playsound), und (reward)', false))
+                'Die Nachricht wird gesendet, wenn jemand dem Kanal folgt. Tags: (name), (alert), (playsound) und (reward)', false))
             // Add the the box for the reward.
             .append(helpers.getInputGroup('follow-reward', 'number', 'Follow Belohnung', '', e.followReward,
                 'Belohnung für Benutzer, die dem Kanal folgen.'))
@@ -138,7 +138,7 @@ $(function() {
                     'Wenn eine Nachricht im Channel gesendet werden soll, wenn dich jemand abonniert. Dadurch wird auch die Belohnung umgeschaltet.'))
                 // Append message box for the message
                 .append(helpers.getTextAreaGroup('sub-msg', 'text', 'Abonnementnachricht', '', e.subscribeMessage,
-                    'Die Nachricht wird gesendet, wenn sich jemand den Kanal abonniert. Tags: (name), (alert), (playsound), (plan), und (reward)', false))
+                    'Die Nachricht wird gesendet, wenn sich jemand den Kanal abonniert. Tags: (name), (alert), (playsound), (plan) und (reward)', false))
                 // Appen the reward box
                 .append(helpers.getInputGroup('sub-reward', 'number', 'Abonnement Belohnung', '', e.subscribeReward,
                     'Belohnung, die der Benutzer erhält, wenn er den Kanal abonnier, ein Geschenk-Abonnement erhält oder mit Prime abonniert.'))))
@@ -151,7 +151,7 @@ $(function() {
                     'Wenn eine Nachricht im Kanal gesendet werden soll, wenn dich jemand über Twitch Prime abonniert. Dadurch wird auch die Belohnung umgeschaltet.'))
                 // Append message box for the message
                 .append(helpers.getTextAreaGroup('primesub-msg', 'text', 'Prime Abonnement Nachricht', '', e.primeSubscribeMessage,
-                    'Die Nachricht wird gesendet, wenn jemand den Kanal mit Twitch Prime abonniert. Tags: (name), (alert), (playsound), (plan), und (reward)', false))))
+                    'Die Nachricht wird gesendet, wenn jemand den Kanal mit Twitch Prime abonniert. Tags: (name), (alert), (playsound), (plan) und (reward)', false))))
             // Append third collapsible accordion.
             .append(helpers.getCollapsibleAccordion('main-3', 'Einstellungen für das erneute Abonnieren', $('<form/>', {
                     'role': 'form'
@@ -161,7 +161,7 @@ $(function() {
                     'Wenn eine Nachricht im Kanal gesendet werden soll, wenn dich jemand erneut abonniert. Dadurch wird auch die Belohnung umgeschaltet.'))
                 // Append message box for the message
                 .append(helpers.getTextAreaGroup('resub-msg', 'text', 'Wieder-Abonnement Nachricht', '', e.reSubscribeMessage,
-                    'Die Nachricht wird gesendet, wenn jemand den Kanal erneut abonniert. Tags: (name), (alert), (playsound), (plan), (months), (customemote), und (reward)', false))
+                    'Die Nachricht wird gesendet, wenn jemand den Kanal erneut abonniert. Tags: (name), (alert), (playsound), (plan), (months), (customemote) und (reward)', false))
                 // Appen the reward box
                 .append(helpers.getInputGroup('resub-reward', 'number', 'Wieder-Abonnement Belohnung', '', e.reSubscribeReward,
                     'Belohnung, die dem Benutzer gegeben wird, wenn er den Kanal erneut abonniert.'))
@@ -177,7 +177,7 @@ $(function() {
                     'Wenn eine Nachricht im Kanal gesendet werden soll, wenn jemand ein Abonnement verschenkt. Dadurch wird auch die Belohnung umgeschaltet.'))
                 // Append message box for the message
                 .append(helpers.getTextAreaGroup('gifsub-msg', 'text', 'Geschenk-Abonnement Nachricht', '', e.giftSubMessage,
-                    'Die Nachricht wird gesendet, wenn jemand ein Abonnement für den Kanal verschenkt. Tags: (name), (alert), (playsound), (recipient), (plan), (months), und (reward)', false))
+                    'Die Nachricht wird gesendet, wenn jemand ein Abonnement für den Kanal verschenkt. Tags: (name), (alert), (playsound), (recipient), (plan), (months) und (reward)', false))
                 // Appen the reward box
                 .append(helpers.getInputGroup('gifsub-reward', 'number', 'Geschenk-Abonnement Belohnung', '', e.giftSubReward,
                     'Belohnung für den Benutzer, der das Abonnement gekauft hat.'))))
@@ -190,7 +190,7 @@ $(function() {
                     'Wenn eine Nachricht im Channel gesendet werden soll, wenn jemand mehrere Abonnements verschenkt. Dadurch wird auch die Belohnung umgeschaltet.'))
                 // Append message box for the message
                 .append(helpers.getTextAreaGroup('mass-gifsub-msg', 'text', 'Mystery Geschenk-Abonnement Nachricht', '', e.massGiftSubMessage,
-                    'Die Nachricht wird gesendet, wenn jemand mehrere Abonnements für den Kanal verschenkt. Tags: (name), (alert), (playsound), (amount), und (reward)', false))
+                    'Die Nachricht wird gesendet, wenn jemand mehrere Abonnements für den Kanal verschenkt. Tags: (name), (alert), (playsound), (amount) und (reward)', false))
                 // Appen the reward box
                 .append(helpers.getInputGroup('mass-gifsub-reward', 'number', 'Mystery Geschenk-Abonnement Belohnung', '', e.massGiftSubReward,
                     'Belohnung für den Benutzer, der das Abonnement gekauft hat. Dies ist ein Multiplikator. (Belohnung * Anzahl Geschenke)'))))
@@ -203,7 +203,7 @@ $(function() {
                     'Wenn eine Nachricht im Kanal gesendet werden soll, wenn jemand ein anonymes Abonnement verschenkt. Dadurch wird auch die Belohnung umgeschaltet.'))
                 // Append message box for the message
                 .append(helpers.getTextAreaGroup('anon-gifsub-msg', 'text', 'Anonyme Geschenk-Abonnement Nachricht', '', e.giftAnonSubMessage,
-                    'Die Nachricht wird gesendet, wenn jemand mehrere Abonnements für den Kanal anonym verschenkt. Tags: (name), (alert), (playsound), (plan), (amount), und (reward)', false))
+                    'Die Nachricht wird gesendet, wenn jemand mehrere Abonnements für den Kanal anonym verschenkt. Tags: (name), (alert), (playsound), (plan), (amount) und (reward)', false))
                 // Appen the reward box
                 .append(helpers.getInputGroup('anon-gifsub-reward', 'number', 'Anonyme Geschenk-Abonnement Belohnung', '', e.subscribeReward,
                     'Belohnung für den Benutzer, an den das Abonnement vergeben wurde. Dies ist das Gleiche wie die normale Abonnement Belohnung.', true))))
@@ -216,7 +216,7 @@ $(function() {
                     'Wenn eine Nachricht im Channel gesendet werden soll, wenn ein anonymer Benutzer mehrere Abonnements verschenkt. Dadurch wird auch die Belohnung umgeschaltet.'))
                 // Append message box for the message
                 .append(helpers.getTextAreaGroup('anon-mass-gifsub-msg', 'text', 'Anonymes Mystery Geschenk Abonnement Nachricht', '', e.massAnonGiftSubMessage,
-                    'Die Nachricht wird gesendet, wenn jemand anonym Abonnements für den Kanal verschenkt. Tags: (name), (plan), und (amount)', false))))
+                    'Die Nachricht wird gesendet, wenn jemand anonym Abonnements für den Kanal verschenkt. Tags: (name), (plan) und (amount)', false))))
             // Tier settings
             .append(helpers.getCollapsibleAccordion('main-8', 'Tier Settings', $('<form/>', {
                     'role': 'form'
@@ -315,7 +315,7 @@ $(function() {
                     'Wenn eine Nachricht im Kanal gesendet werden soll, wenn jemand den Kanal hostet.'))
                 // Append message box for the message
                 .append(helpers.getTextAreaGroup('host-msg', 'text', 'Host-Nachricht', '', e.hostMessage,
-                    'Die Nachricht wird gesendet, wenn jemand den Kanal hostet. Tags: (name), (alert), (playsound), (reward), und (viewers)', false))
+                    'Die Nachricht wird gesendet, wenn jemand den Kanal hostet. Tags: (name), (alert), (playsound), (reward) und (viewers)', false))
                 // Appen the reward box
                 .append(helpers.getInputGroup('host-reward', 'number', 'Host-Belohnung', '', e.hostReward,
                     'Belohnung, die dem Benutzer gezahlt wird, wenn er den Kanal hostet.'))))
@@ -428,7 +428,7 @@ $(function() {
                 'Wenn eine Nachricht im Kanal gesendet werden soll, wenn jemand einen Clip erstellt.'))
             // Add the text area for the clips message.
             .append(helpers.getTextAreaGroup('clip-message', 'text', 'Clip-Nachricht', '', e.message,
-                'Die Nachricht wird gesendet, wenn jemand einen Clip erstellt. Tags: (name), (alert), (playsound), (title), und (url)', false)),
+                'Die Nachricht wird gesendet, wenn jemand einen Clip erstellt. Tags: (name), (alert), (playsound), (title) und (url)', false)),
             function() { // Callback once the user clicks save.
                 let clipToggle = $('#clip-toggle').find(':selected').text() === 'Ja',
                     clipMsg = $('#clip-message');

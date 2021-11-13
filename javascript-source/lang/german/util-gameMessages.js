@@ -98,7 +98,7 @@ $.lang.register('slot.lost.57', 'Ist das alles was du kannst? Dann wundert es mi
 $.lang.register('slot.lost.58', 'Nicht Pech oder Schicksal sind schuld. Du hast verloren, weil du eine Niete bist!');
 $.lang.register('slot.lost.59', 'Du warst nicht schlecht. Du warst erbärmlich! Geh nach Hause!');
 $.lang.register('slot.lost.60', 'Du hast es wenigstens versucht, egal wie erbärmlich es auch war.');
-$.lang.register('slot.lost.61', 'Mein Vater könnte gewinnen, und der ist tot!');
+$.lang.register('slot.lost.61', 'Mein Vater könnte gewinnen und der ist tot!');
 $.lang.register('slot.lost.62', 'Du und die Tastatur! Ich habe trotzdem gewonnen! Du gehst mir auf die Nerven und du stinkst, stinkst erbärmlich!vv');
 
 
@@ -185,7 +185,7 @@ $.lang.register('roll.lost.57', 'Ist das alles was du kannst? Dann wundert es mi
 $.lang.register('roll.lost.58', 'Nicht Pech oder Schicksal sind schuld. Du hast verloren, weil du eine Niete bist!');
 $.lang.register('roll.lost.59', 'Du warst nicht schlecht. Du warst erbärmlich! Geh nach Hause!');
 $.lang.register('roll.lost.60', 'Du hast es wenigstens versucht, egal wie erbärmlich es auch war.');
-$.lang.register('roll.lost.61', 'Mein Vater könnte gewinnen, und der ist tot!');
+$.lang.register('roll.lost.61', 'Mein Vater könnte gewinnen und der ist tot!');
 $.lang.register('roll.lost.62', 'Du und die Tastatur! Ich habe trotzdem gewonnen! Du gehst mir auf die Nerven und du stinkst, stinkst erbärmlich!');
 $.lang.register('roll.lost.63', 'Ein Verlierer weiss nicht, was er tut wenn er verliert, aber er spricht immer zu darüber, was er macht, wenn er gewinnt. Ein Gewinner spricht nicht darüber, was er macht, wenn er gewinnt, aber weiss, was er macht, wenn er verliert.');
 $.lang.register('roll.lost.64', 'Kannst du nicht gewinnen, verliere wenigstens wie ein Champion!');
