@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -76,7 +76,7 @@
      */
     function getCurLocalTimeString(format) {
         var dateFormat = new java.text.SimpleDateFormat(format);
-        dateFormat.setTimeZone(java.util.TimeZone.getTimeZone(($.inidb.exists('settings', 'timezone') ? $.inidb.get('settings', 'timezone') : "GMT")));
+        dateFormat.setTimeZone(java.util.TimeZone.getTimeZone(($.inidb.exists('settings', 'timezone') ? $.inidb.get('settings', 'timezone') : "CET")));
         return dateFormat.format(new java.util.Date());
     }
 
@@ -89,7 +89,7 @@
      */
     function getLocalTimeString(format, utc_secs) {
         var dateFormat = new java.text.SimpleDateFormat(format);
-        dateFormat.setTimeZone(java.util.TimeZone.getTimeZone(($.inidb.exists('settings', 'timezone') ? $.inidb.get('settings', 'timezone') : "GMT")));
+        dateFormat.setTimeZone(java.util.TimeZone.getTimeZone(($.inidb.exists('settings', 'timezone') ? $.inidb.get('settings', 'timezone') : "CET")));
         return dateFormat.format(new java.util.Date(utc_secs));
     }
 
@@ -115,7 +115,7 @@
      */
     function getLocalTime() {
         var dateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        dateFormat.setTimeZone(java.util.TimeZone.getTimeZone(($.inidb.exists('settings', 'timezone') ? $.inidb.get('settings', 'timezone') : "GMT")));
+        dateFormat.setTimeZone(java.util.TimeZone.getTimeZone(($.inidb.exists('settings', 'timezone') ? $.inidb.get('settings', 'timezone') : "CET")));
         return dateFormat.format(new java.util.Date());
     }
 
@@ -457,7 +457,7 @@
          * @commandpath streamertime - Announce the caster's local time
          */
         if (command.equalsIgnoreCase('streamertime')) {
-            $.say($.whisperPrefix(sender) + $.lang.get('timesystem.streamertime', getCurLocalTimeString("MMMM dd', 'yyyy hh:mm:ss a zzz '('Z')'"), $.username.resolve($.ownerName)));
+            $.say($.whisperPrefix(sender) + $.lang.get('timesystem.streamertime', getCurLocalTimeString("dd. MMMMM yyyy HH:mm:ss zzz '('Z')'"), $.username.resolve($.ownerName)));
         }
 
         /**
@@ -467,12 +467,12 @@
             var tzData;
 
             if (!action) {
-                $.say($.whisperPrefix(sender) + $.lang.get('timesystem.set.timezone.usage', ($.inidb.exists('settings', 'timezone') ? $.inidb.get('settings', 'timezone') : "GMT")));
+                $.say($.whisperPrefix(sender) + $.lang.get('timesystem.set.timezone.usage', ($.inidb.exists('settings', 'timezone') ? $.inidb.get('settings', 'timezone') : "CET")));
                 return;
             }
 
             tzData = java.util.TimeZone.getTimeZone(action);
-            if (tzData.getID().equals("GMT") && !action.equals("GMT")) {
+            if (tzData.getID().equals("CET") && !action.equals("CET")) {
                 $.say($.whisperPrefix(sender) + $.lang.get('timesystem.set.timezone.invalid', action));
                 return;
             } else {

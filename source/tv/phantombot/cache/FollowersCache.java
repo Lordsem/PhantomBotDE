@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,21 +16,18 @@
  */
 package tv.phantombot.cache;
 
-import com.gmt2001.datastore.DataStore;
 import com.gmt2001.TwitchAPIv5;
-
+import com.gmt2001.datastore.DataStore;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
-
-import tv.phantombot.event.twitch.follower.TwitchFollowsInitializedEvent;
-import tv.phantombot.event.twitch.follower.TwitchFollowEvent;
-import tv.phantombot.event.EventBus;
-import tv.phantombot.PhantomBot;
-
-import org.json.JSONObject;
 import org.json.JSONArray;
+import org.json.JSONObject;
+import tv.phantombot.PhantomBot;
+import tv.phantombot.event.EventBus;
+import tv.phantombot.event.twitch.follower.TwitchFollowEvent;
+import tv.phantombot.event.twitch.follower.TwitchFollowsInitializedEvent;
 
 public class FollowersCache implements Runnable {
 
@@ -40,7 +37,6 @@ public class FollowersCache implements Runnable {
     private Date timeoutExpire = new Date();
     private Date lastFail = new Date();
     private Boolean firstUpdate = true;
-    private Boolean hasFail = false;
     private Boolean killed = false;
     private int numfail = 0;
 
@@ -65,6 +61,7 @@ public class FollowersCache implements Runnable {
      *
      * @param {String} channelName
      */
+    @SuppressWarnings("CallToThreadStartDuringObjectConstruction")
     private FollowersCache(String channelName) {
         this.updateThread = new Thread(this, "tv.phantombot.cache.FollowersCache");
         this.channelName = channelName;
@@ -93,6 +90,7 @@ public class FollowersCache implements Runnable {
                 } catch (Exception ex) {
                     checkLastFail();
                     com.gmt2001.Console.debug.println("FollowersCache.run: Die Follower konnten nicht aktualisiert werden: " + ex.getMessage());
+                    com.gmt2001.Console.debug.printStackTrace(ex);
                 }
             } catch (Exception ex) {
                 com.gmt2001.Console.err.println("FollowersCache.run: Die Follower konnten nicht aktualisiert werden [" + ex.getClass().getSimpleName() + "]: " + ex.getMessage());
@@ -111,29 +109,34 @@ public class FollowersCache implements Runnable {
      */
     private void updateCache() throws Exception {
         com.gmt2001.Console.debug.println("FollowersCache::updateCache");
-
-        JSONObject jsonObject = TwitchAPIv5.instance().GetChannelFollows(this.channelName, 100, 0, false);
-        Map<String, String> newCache = new HashMap<String, String>();
         DataStore datastore = PhantomBot.instance().getDataStore();
+
+        JSONObject jsonObject = TwitchAPIv5.instance().GetChannelFollows(this.channelName, 100, null);
 
         if (jsonObject.getBoolean("_success")) {
             if (jsonObject.getInt("_http") == 200) {
+
                 JSONArray jsonArray = jsonObject.getJSONArray("follows");
 
                 for (int i = 0; i < jsonArray.length(); i++) {
                     String follower = jsonArray.getJSONObject(i).getJSONObject("user").getString("name").toLowerCase();
+                    String followDate = jsonArray.getJSONObject(i).getString("created_at");
 
                     if (!datastore.exists("followed", follower)) {
-                        EventBus.instance().post(new TwitchFollowEvent(follower));
+                        EventBus.instance().post(new TwitchFollowEvent(follower, followDate));
                         datastore.set("followed", follower, "true");
+                    }
+
+                    if (!datastore.exists("followedDate", follower)) {
+                        datastore.set("followedDate", follower, followDate);
                     }
                 }
             } else {
                 throw new Exception("[HTTPErrorException] HTTP " + jsonObject.getInt("_http") + " " + jsonObject.getString("error") + ". req="
-                                    + jsonObject.getString("_type") + " " + jsonObject.getString("_url") + " " + jsonObject.getString("_post") + "  "
-                                    + (jsonObject.has("message") && !jsonObject.isNull("message") ? "message=" + jsonObject.getString("message") : "content=" + jsonObject.getString("_content")));
+                        + jsonObject.getString("_type") + " " + jsonObject.getString("_url") + " " + jsonObject.getString("_post") + "  "
+                        + (jsonObject.has("message") && !jsonObject.isNull("message") ? "message=" + jsonObject.getString("message") : "content=" + jsonObject.getString("_content")));
             }
-        } else {
+        } else if (!jsonObject.getString("_exception").isBlank()) {
             throw new Exception("[" + jsonObject.getString("_exception") + "] " + jsonObject.getString("_exceptionMessage"));
         }
 
@@ -169,8 +172,8 @@ public class FollowersCache implements Runnable {
      * @function killall
      */
     public static void killall() {
-        for (FollowersCache instance : instances.values()) {
+        instances.values().forEach(instance -> {
             instance.kill();
-        }
+        });
     }
 }

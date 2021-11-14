@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -90,6 +90,10 @@ public class H2Store extends DataStore {
 
     private String validateFname(String fName) {
         fName = fName.replaceAll("([^a-zA-Z0-9_])", "_");
+
+        if (fName.matches("^[0-9]+")) {
+            fName = "_" + fName;
+        }
 
         return fName;
     }
@@ -812,6 +816,10 @@ public class H2Store extends DataStore {
 
     @Override
     public void IncreaseBatchString(String fName, String section, String[] keys, String value) {
+        if (keys.length == 0) {
+            return;
+        }
+
         try (Connection connection = GetConnection()) {
             fName = validateFname(fName);
 
@@ -819,8 +827,20 @@ public class H2Store extends DataStore {
 
             connection.setAutoCommit(false);
 
-            try (Statement statement = connection.createStatement()) {
-                statement.execute("UPDATE phantombot_" + fName + " SET value = CAST(value AS INTEGER) + " + value + " WHERE section = '" + section + "' AND variable IN ('" + String.join("', '", keys) + "');");
+            StringBuilder sb = new StringBuilder(keys.length * 2);
+
+            for (String key : keys) {
+                sb.append("?,");
+            }
+
+            try (PreparedStatement statement = connection.prepareStatement("UPDATE phantombot_" + fName + " SET value = CAST(value AS INTEGER) + ? WHERE section = ? AND variable IN (" + sb.deleteCharAt(sb.length() - 1).toString() + ");")) {
+                statement.setInt(1, Integer.parseUnsignedInt(value));
+                statement.setString(2, section);
+                int i = 3;
+                for (String k : keys) {
+                    statement.setString(i++, k);
+                }
+                statement.execute();
             }
 
             try (PreparedStatement statement = connection.prepareStatement("MERGE INTO phantombot_" + fName + " USING DUAL ON section=? AND variable=? WHEN NOT MATCHED THEN INSERT VALUES (?, ?, ?);")) {
@@ -841,6 +861,39 @@ public class H2Store extends DataStore {
         } catch (SQLException ex) {
             com.gmt2001.Console.err.printStackTrace(ex);
         }
+    }
+
+    @Override
+    public String[][] executeSql(String sql, String[] replacements) {
+        ArrayList<ArrayList<String>> results = new ArrayList<>();
+
+        try (Connection connection = GetConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                int i = 1;
+                for (String k : replacements) {
+                    statement.setString(i++, k);
+                }
+
+                try (ResultSet rs = statement.executeQuery()) {
+                    int numcol = rs.getMetaData().getColumnCount();
+                    i = 0;
+
+                    while (rs.next()) {
+                        results.add(new ArrayList<>());
+
+                        for (int b = 1; b <= numcol; b++) {
+                            results.get(i).add(rs.getString(b));
+                        }
+
+                        i++;
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            com.gmt2001.Console.err.printStackTrace(ex);
+        }
+
+        return results.stream().map(al -> al.stream().toArray(String[]::new)).toArray(String[][]::new);
     }
 
     @Override

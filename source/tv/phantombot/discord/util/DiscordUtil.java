@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,13 +32,27 @@ import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.http.client.ClientException;
 import discord4j.rest.json.response.ErrorResponse;
 import discord4j.rest.util.Permission;
-import discord4j.rest.util.Snowflake;
-import java.awt.Color;
+import discord4j.common.util.Snowflake;
+import discord4j.core.object.entity.Guild;
+import discord4j.core.object.entity.channel.Category;
+import discord4j.core.object.entity.channel.GuildChannel;
+import discord4j.core.object.entity.channel.NewsChannel;
+import discord4j.core.object.entity.channel.StoreChannel;
+import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.object.entity.channel.VoiceChannel;
+import discord4j.rest.util.Color;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
@@ -57,6 +71,13 @@ import tv.phantombot.discord.DiscordAPI;
 public class DiscordUtil {
 
     private static final int MAX_ITERATION = 5;
+    private static final String[] VALID_PATHS = new String[]{
+        "./addons",
+        "./config/audio-hooks",
+        "./config/gif-alerts",
+        "./logs",
+        "./scripts"
+    };
 
     public DiscordUtil() {
     }
@@ -76,6 +97,19 @@ public class DiscordUtil {
         }
     }
 
+    public boolean isValidFilePath(String fileLocation) {
+        Path p = Paths.get(fileLocation);
+        String executionPath = PhantomBot.GetExecutionPath();
+
+        for (String vp : VALID_PATHS) {
+            if (p.toAbsolutePath().startsWith(Paths.get(executionPath, vp))) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     @Deprecated
     public Message sendMessage(MessageChannel channel, String message) {
         return sendMessageAsync(channel, message).block();
@@ -90,27 +124,33 @@ public class DiscordUtil {
      *
      * @param channel
      * @param message
+     * @param iteration
      * @return {Message}
      */
     public Mono<Message> sendMessageAsync(MessageChannel channel, String message, int iteration) {
+        if (iteration >= MAX_ITERATION) {
+            throw new IllegalStateException("Verbindung fehlgeschlagen");
+        }
+
+        if (iteration > 0) {
+            com.gmt2001.Console.err.println("Anfrage fehlgeschlagen, erneuter Versuch in " + (iteration * iteration) + " Sekunden...");
+            Mono.delay(Duration.ofSeconds(iteration * iteration));
+        }
+
         if (channel != null) {
-            if (channel.getType() == Channel.Type.DM) {
+            if (channel.getType() == Channel.Type.DM || channel.getType() == Channel.Type.GROUP_DM) {
                 sendPrivateMessage((PrivateChannel) channel, message);
                 return null;
             }
 
-            com.gmt2001.Console.out.println("[DISCORD] [#" + ((GuildMessageChannel) channel).getName() + "] [CHAT] " + message);
-
             return channel.createMessage(message).doOnError(e -> {
                 com.gmt2001.Console.err.printStackTrace(e);
-            }).onErrorReturn(null);
+            }).onErrorResume(e -> sendMessageAsync(channel, message, iteration + 1))
+                    .doOnSuccess(m -> com.gmt2001.Console.out.println("[DISCORD] [#" + DiscordUtil.channelName(channel) + "] [CHAT] " + message));
         } else if (DiscordAPI.instance().checkConnectionStatus() == DiscordAPI.ConnectionState.RECONNECTED) {
-            if (iteration >= MAX_ITERATION) {
-                throw new IllegalStateException("connection failing");
-            }
-            return sendMessageAsync(channel, message, ++iteration);
+            return sendMessageAsync(channel, message, iteration + 1);
         } else {
-            throw new IllegalArgumentException("channel object was null");
+            throw new IllegalArgumentException("Kanalobjekt war null");
         }
     }
 
@@ -142,7 +182,7 @@ public class DiscordUtil {
                 com.gmt2001.Console.err.printStackTrace(e);
             }).doOnSuccess(channel -> sendPrivateMessage(channel, message)).subscribe();
         } else {
-            throw new IllegalArgumentException("user object was null");
+            throw new IllegalArgumentException("Benutzerobjekt war null");
         }
     }
 
@@ -163,33 +203,44 @@ public class DiscordUtil {
     /**
      * Method to send private messages to a user.
      *
-     * @param userName
+     * @param channel
      * @param message
+     * @param iteration
      */
     public void sendPrivateMessage(PrivateChannel channel, String message, int iteration) {
+        if (iteration >= MAX_ITERATION) {
+            throw new IllegalStateException("Verbindung fehlgeschlagen");
+        }
+
+        if (iteration > 0) {
+            com.gmt2001.Console.err.println("Anfrage fehlgeschlagen, erneuter Versuch in " + (iteration * iteration) + " Sekunden...");
+            Mono.delay(Duration.ofSeconds(iteration * iteration));
+        }
+
         if (channel != null) {
             channel.getRecipients().take(1).singleOrEmpty().doOnSuccess(user -> {
-                String uname = "";
-                String udisc = "";
+                String uname;
+                String udisc;
 
                 if (user != null) {
                     uname = user.getUsername().toLowerCase();
                     udisc = user.getDiscriminator();
+                } else {
+                    uname = "";
+                    udisc = "";
                 }
-
-                com.gmt2001.Console.out.println("[DISCORD] [@" + uname + "#" + udisc + "] [DM] " + message);
 
                 channel.createMessage(message).doOnError(e -> {
                     com.gmt2001.Console.err.printStackTrace(e);
-                }).subscribe();
+                }).onErrorResume(e -> {
+                    sendPrivateMessage(channel, message, iteration + 1);
+                    return Mono.empty();
+                }).doOnSuccess(m -> com.gmt2001.Console.out.println("[DISCORD] [@" + uname + "#" + udisc + "] [DM] " + message)).subscribe();
             }).subscribe();
         } else if (DiscordAPI.instance().checkConnectionStatus() == DiscordAPI.ConnectionState.RECONNECTED) {
-            if (iteration >= MAX_ITERATION) {
-                throw new IllegalStateException("connection failing");
-            }
-            sendPrivateMessage(channel, message, ++iteration);
+            sendPrivateMessage(channel, message, iteration + 1);
         } else {
-            throw new IllegalArgumentException("channel object was null");
+            throw new IllegalArgumentException("Kanalobjekt war null");
         }
     }
 
@@ -207,21 +258,30 @@ public class DiscordUtil {
      *
      * @param channel
      * @param embed
+     * @param iteration
      * @return {Message}
      */
     public Mono<Message> sendMessageEmbedAsync(GuildMessageChannel channel, Consumer<? super EmbedCreateSpec> embed, int iteration) {
+        if (iteration >= MAX_ITERATION) {
+            throw new IllegalStateException("Verbindung fehlgeschlagen");
+        }
+
+        if (iteration > 0) {
+            com.gmt2001.Console.err.println("Anfrage fehlgeschlagen, erneuter Versuch in " + (iteration * iteration) + " Sekunden...");
+            Mono.delay(Duration.ofSeconds(iteration * iteration));
+        }
+
         if (channel != null) {
             return channel.createMessage(msg
                     -> msg.setEmbed(embed)
-            ).doOnError(com.gmt2001.Console.err::printStackTrace).onErrorReturn(null)
-                    .doOnSuccess(m -> com.gmt2001.Console.out.println("[DISCORD] [#" + channel.getName() + "] [EMBED] " + m.getEmbeds().get(0).getDescription().orElse(m.getEmbeds().get(0).getTitle().orElse(""))));
+            ).doOnError(e -> {
+                com.gmt2001.Console.err.printStackTrace(e);
+            }).onErrorResume(e -> sendMessageEmbedAsync(channel, embed, iteration + 1))
+                    .doOnSuccess(m -> com.gmt2001.Console.out.println("[DISCORD] [#" + DiscordUtil.channelName(channel) + "] [EMBED] " + m.getEmbeds().get(0).getDescription().orElse(m.getEmbeds().get(0).getTitle().orElse(""))));
         } else if (DiscordAPI.instance().checkConnectionStatus() == DiscordAPI.ConnectionState.RECONNECTED) {
-            if (iteration >= MAX_ITERATION) {
-                throw new IllegalStateException("connection failing");
-            }
-            return sendMessageEmbedAsync(channel, embed, ++iteration);
+            return sendMessageEmbedAsync(channel, embed, iteration + 1);
         } else {
-            throw new IllegalArgumentException("channel object was null");
+            throw new IllegalArgumentException("Kanalobjekt war null");
         }
     }
 
@@ -290,16 +350,24 @@ public class DiscordUtil {
      * @param channel
      * @param message
      * @param fileLocation
+     * @param iteration
      * @return {Message}
      */
     public Mono<Message> sendFileAsync(GuildMessageChannel channel, String message, String fileLocation, int iteration) {
+        if (iteration >= MAX_ITERATION) {
+            throw new IllegalStateException("Verbindung fehlgeschlagen");
+        }
+
+        if (iteration > 0) {
+            com.gmt2001.Console.err.println("Anfrage fehlgeschlagen, erneuter Versuch in " + (iteration * iteration) + " Sekunden...");
+            Mono.delay(Duration.ofSeconds(iteration * iteration));
+        }
+
         if (channel != null) {
-            if (fileLocation.contains("..")) {
-                com.gmt2001.Console.err.println("[DISCORD] [#" + channel.getName() + "] [UPLOAD] [" + fileLocation + "] Rejecting fileLocation that contains '..'");
+            if (!this.isValidFilePath(fileLocation)) {
+                com.gmt2001.Console.err.println("[DISCORD] [#" + DiscordUtil.channelName(channel) + "] [UPLOAD] [" + fileLocation + "] Ablehnen von fileLocation");
                 return null;
             } else {
-                com.gmt2001.Console.out.println("[DISCORD] [#" + channel.getName() + "] [UPLOAD] [" + fileLocation + "] " + message);
-
                 if (message.isEmpty()) {
                     return channel.createMessage(msg
                             -> {
@@ -311,7 +379,8 @@ public class DiscordUtil {
                     }
                     ).doOnError(e -> {
                         com.gmt2001.Console.err.printStackTrace(e);
-                    }).onErrorReturn(null);
+                    }).onErrorResume(e -> sendFileAsync(channel, message, fileLocation, iteration + 1))
+                            .doOnSuccess(m -> com.gmt2001.Console.out.println("[DISCORD] [#" + DiscordUtil.channelName(channel) + "] [UPLOAD] [" + fileLocation + "]"));
                 } else {
                     return channel.createMessage(msg
                             -> {
@@ -323,16 +392,14 @@ public class DiscordUtil {
                     }
                     ).doOnError(e -> {
                         com.gmt2001.Console.err.printStackTrace(e);
-                    }).onErrorReturn(null);
+                    }).onErrorResume(e -> sendFileAsync(channel, message, fileLocation, iteration + 1))
+                            .doOnSuccess(m -> com.gmt2001.Console.out.println("[DISCORD] [#" + DiscordUtil.channelName(channel) + "] [UPLOAD] [" + fileLocation + "] " + message));
                 }
             }
         } else if (DiscordAPI.instance().checkConnectionStatus() == DiscordAPI.ConnectionState.RECONNECTED) {
-            if (iteration >= MAX_ITERATION) {
-                throw new IllegalStateException("connection failing");
-            }
-            return sendFileAsync(channel, message, fileLocation, ++iteration);
+            return sendFileAsync(channel, message, fileLocation, iteration + 1);
         } else {
-            throw new IllegalArgumentException("channel object was null");
+            throw new IllegalArgumentException("Kanalobjekt war null");
         }
     }
 
@@ -390,7 +457,7 @@ public class DiscordUtil {
         } else if (DiscordAPI.instance().checkConnectionStatus() == DiscordAPI.ConnectionState.RECONNECTED) {
             addReaction(message, emoji);
         } else {
-            throw new IllegalArgumentException("message or emoji object was null");
+            throw new IllegalArgumentException("Nachricht oder Emoji-Objekt war null");
         }
     }
 
@@ -474,8 +541,86 @@ public class DiscordUtil {
 
     public Mono<GuildMessageChannel> getChannelAsync(String channelName) {
         String schannelName = sanitizeChannelName(channelName);
-        return DiscordAPI.getGuild().getChannels().filter(channel -> channel.getName().equalsIgnoreCase(schannelName)
-                || channel.getId().asString().equals(schannelName)).take(1).single().map(c -> (GuildMessageChannel) c);
+        try {
+            return DiscordAPI.getGuild().getChannels().filter(channel -> DiscordUtil.channelName(channel).equalsIgnoreCase(schannelName)
+                    || DiscordUtil.channelIdAsString(channel).equals(schannelName)).take(1).single().map(c -> (GuildMessageChannel) c);
+        } catch (NoSuchElementException ex) {
+            com.gmt2001.Console.err.println("Kann Kanalname nicht finden [" + channelName + "]");
+            throw ex;
+        }
+    }
+
+    @Deprecated
+    public Map<String, Map<String, String>> getAllChannelInfo() {
+        HashMap<String, Map<String, String>> data = new HashMap<>();
+        getAllChannelInfoAsync(data).blockLast(Duration.ofSeconds(5L));
+        return data;
+    }
+
+    public Flux<GuildChannel> getAllChannelInfoAsync(Map<String, Map<String, String>> data) {
+        return DiscordAPI.getGuild().getChannels().doOnNext(channel -> {
+            if (null != channel.getType()) {
+                switch (channel.getType()) {
+                    case GUILD_CATEGORY:
+                        Category rc = (Category) channel;
+                        data.putIfAbsent(rc.getId().asString(), new HashMap<>());
+                        data.get(rc.getId().asString()).putIfAbsent("name", rc.getName());
+                        break;
+                    case GUILD_NEWS:
+                        NewsChannel rn = (NewsChannel) channel;
+                        if (rn.getCategoryId().isPresent()) {
+                            if (!data.containsKey(rn.getCategoryId().get().asString())) {
+                                data.putIfAbsent(rn.getCategoryId().get().asString(), new HashMap<>());
+                            }
+
+                            data.get(rn.getCategoryId().get().asString()).putIfAbsent(rn.getId().asString(), rn.getType().name() + ":" + rn.getName());
+                        }
+                        break;
+                    case GUILD_STAGE_VOICE:
+                        VoiceChannel rsv = (VoiceChannel) channel;
+                        if (rsv.getCategoryId().isPresent()) {
+                            if (!data.containsKey(rsv.getCategoryId().get().asString())) {
+                                data.putIfAbsent(rsv.getCategoryId().get().asString(), new HashMap<>());
+                            }
+
+                            data.get(rsv.getCategoryId().get().asString()).putIfAbsent(rsv.getId().asString(), rsv.getType().name() + ":" + rsv.getName());
+                        }
+                        break;
+                    case GUILD_STORE:
+                        StoreChannel rs = (StoreChannel) channel;
+                        if (rs.getCategoryId().isPresent()) {
+                            if (!data.containsKey(rs.getCategoryId().get().asString())) {
+                                data.putIfAbsent(rs.getCategoryId().get().asString(), new HashMap<>());
+                            }
+
+                            data.get(rs.getCategoryId().get().asString()).putIfAbsent(rs.getId().asString(), rs.getType().name() + ":" + rs.getName());
+                        }
+                        break;
+                    case GUILD_TEXT:
+                        TextChannel rt = (TextChannel) channel;
+                        if (rt.getCategoryId().isPresent()) {
+                            if (!data.containsKey(rt.getCategoryId().get().asString())) {
+                                data.putIfAbsent(rt.getCategoryId().get().asString(), new HashMap<>());
+                            }
+
+                            data.get(rt.getCategoryId().get().asString()).putIfAbsent(rt.getId().asString(), rt.getType().name() + ":" + rt.getName());
+                        }
+                        break;
+                    case GUILD_VOICE:
+                        VoiceChannel rv = (VoiceChannel) channel;
+                        if (rv.getCategoryId().isPresent()) {
+                            if (!data.containsKey(rv.getCategoryId().get().asString())) {
+                                data.putIfAbsent(rv.getCategoryId().get().asString(), new HashMap<>());
+                            }
+
+                            data.get(rv.getCategoryId().get().asString()).putIfAbsent(rv.getId().asString(), rv.getType().name() + ":" + rv.getName());
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
 
     /**
@@ -490,7 +635,12 @@ public class DiscordUtil {
     }
 
     public Mono<GuildMessageChannel> getChannelByIDAsync(String channelId) {
-        return DiscordAPI.getGuild().getChannels().filter(channel -> channel.getId().asString().equals(channelId)).take(1).single().map(c -> (GuildMessageChannel) c);
+        try {
+            return DiscordAPI.getGuild().getChannels().filter(channel -> DiscordUtil.channelIdAsString(channel).equals(channelId)).take(1).single().map(c -> (GuildMessageChannel) c);
+        } catch (NoSuchElementException ex) {
+            com.gmt2001.Console.err.println("Kanal-ID kann nicht gefunden werden [" + channelId + "]");
+            throw ex;
+        }
     }
 
     @Deprecated
@@ -517,8 +667,12 @@ public class DiscordUtil {
         if (PhantomBot.getEnableDebugging()) {
             com.gmt2001.Console.debug.println(filteredMembers.count().block());
         }
-
-        return filteredMembers.take(1).single().map(m -> (User) m);
+        try {
+            return filteredMembers.take(1).single().map(m -> (User) m);
+        } catch (NoSuchElementException ex) {
+            com.gmt2001.Console.err.println("Benutzername kann nicht gefunden werden [" + userName + "]");
+            throw ex;
+        }
     }
 
     @Deprecated
@@ -533,7 +687,12 @@ public class DiscordUtil {
      * @return {User}
      */
     public Mono<User> getUserByIdAsync(long userId) {
-        return DiscordAPI.getGuild().getMembers().filter(user -> user.getId().asLong() == userId).take(1).single().map(m -> (User) m);
+        try {
+            return DiscordAPI.getGuild().getMembers().filter(user -> user.getId().asLong() == userId).take(1).single().map(m -> (User) m);
+        } catch (NoSuchElementException ex) {
+            com.gmt2001.Console.err.println("Benutzer-ID kann nicht gefunden werden [" + userId + "]");
+            throw ex;
+        }
     }
 
     @Deprecated
@@ -549,8 +708,13 @@ public class DiscordUtil {
      * @return {User}
      */
     public Mono<User> getUserWithDiscriminatorAsync(String userName, String discriminator) {
-        return DiscordAPI.getGuild().getMembers().filter(user -> user.getDisplayName().equalsIgnoreCase(userName)
-                && user.getDiscriminator().equalsIgnoreCase(discriminator)).take(1).single().map(m -> (User) m);
+        try {
+            return DiscordAPI.getGuild().getMembers().filter(user -> user.getDisplayName().equalsIgnoreCase(userName)
+                    && user.getDiscriminator().equalsIgnoreCase(discriminator)).take(1).single().map(m -> (User) m);
+        } catch (NoSuchElementException ex) {
+            com.gmt2001.Console.err.println("Kann userNameDiscriminator nicht finden [" + userName + "#" + discriminator + "]");
+            throw ex;
+        }
     }
 
     @Deprecated
@@ -578,7 +742,12 @@ public class DiscordUtil {
             com.gmt2001.Console.debug.println(filteredRoles.count().block());
         }
 
-        return filteredRoles.take(1).single();
+        try {
+            return filteredRoles.take(1).single();
+        } catch (NoSuchElementException ex) {
+            com.gmt2001.Console.err.println("Rollenname kann nicht gefunden werden [" + roleName + "]");
+            throw ex;
+        }
     }
 
     @Deprecated
@@ -593,7 +762,12 @@ public class DiscordUtil {
      * @return {Role}
      */
     public Mono<Role> getRoleByIDAsync(String id) {
-        return DiscordAPI.getGuild().getRoles().filter(role -> role.getId().asString().equalsIgnoreCase(id)).take(1).single();
+        try {
+            return DiscordAPI.getGuild().getRoles().filter(role -> role.getId().asString().equalsIgnoreCase(id)).take(1).single();
+        } catch (NoSuchElementException ex) {
+            com.gmt2001.Console.err.println("Rollen-ID kann nicht gefunden werden [" + id + "]");
+            throw ex;
+        }
     }
 
     /**
@@ -651,7 +825,7 @@ public class DiscordUtil {
      */
     public void editUserRoles(User user, Role... roles) {
         if (roles == null || user == null) {
-            throw new IllegalArgumentException("user or roles object was null");
+            throw new IllegalArgumentException("Benutzer- oder Rollenobjekt war null");
         }
 
         user.asMember(DiscordAPI.getGuild().getId()).doOnSuccess(m -> {
@@ -664,8 +838,12 @@ public class DiscordUtil {
             m.edit(eds
                     -> eds.setRoles(rolesSf)
             ).doOnError(e -> {
+                com.gmt2001.Console.err.println("Mitgliedsrollen können nicht bearbeitet werden" + user.getMention() + " (" + DiscordAPI.getGuild().getName() + ")");
                 com.gmt2001.Console.err.printStackTrace(e);
             }).subscribe();
+        }).doOnError(e -> {
+            com.gmt2001.Console.err.println("Benutzer kann nicht in Mitglied umgewandelt werden " + user.getMention() + " (" + DiscordAPI.getGuild().getName() + ")");
+            com.gmt2001.Console.err.printStackTrace(e);
         }).subscribe();
     }
 
@@ -687,13 +865,17 @@ public class DiscordUtil {
      */
     public void addRole(Role role, User user) {
         if (role == null || user == null) {
-            throw new IllegalArgumentException("user or role object was null");
+            throw new IllegalArgumentException("Benutzer- oder Rollenobjekt war null");
         }
 
         user.asMember(DiscordAPI.getGuild().getId()).doOnSuccess(m -> {
             m.addRole(role.getId()).doOnError(e -> {
+                com.gmt2001.Console.err.println("Mitgliedsrolle kann nicht hinzugefügt werden" + user.getMention() + " (" + DiscordAPI.getGuild().getName() + ")");
                 com.gmt2001.Console.err.printStackTrace(e);
             }).subscribe();
+        }).doOnError(e -> {
+            com.gmt2001.Console.err.println("Benutzer kann nicht in Mitglied umgewandelt werden " + user.getMention() + " (" + DiscordAPI.getGuild().getName() + ")");
+            com.gmt2001.Console.err.printStackTrace(e);
         }).subscribe();
     }
 
@@ -732,14 +914,18 @@ public class DiscordUtil {
      */
     public void removeRole(Role role, User user) {
         if (role == null || user == null) {
-            throw new IllegalArgumentException("user or role object was null");
+            throw new IllegalArgumentException("Benutzer- oder Rollenobjekt war null");
         }
 
         user.asMember(DiscordAPI.getGuild().getId()).doOnSuccess(m -> {
             m.removeRole(role.getId()).doOnError(e -> {
+                com.gmt2001.Console.err.println("Mitgliedsrolle kann nicht entfernt werden " + user.getMention() + " (" + DiscordAPI.getGuild().getName() + ")");
                 com.gmt2001.Console.err.printStackTrace(e);
             }).subscribe();
-        });
+        }).doOnError(e -> {
+            com.gmt2001.Console.err.println("Benutzer kann nicht in Mitglied umgewandelt werden " + user.getMention() + " (" + DiscordAPI.getGuild().getName() + ")");
+            com.gmt2001.Console.err.printStackTrace(e);
+        }).subscribe();
     }
 
     /**
@@ -761,6 +947,7 @@ public class DiscordUtil {
         DiscordAPI.getGuild().createRole(role
                 -> role.setName(roleName)
         ).doOnError(e -> {
+            com.gmt2001.Console.err.println("Rolle kann nicht erstellt werden " + roleName + " (" + DiscordAPI.getGuild().getName() + ")");
             com.gmt2001.Console.err.printStackTrace(e);
         }).subscribe();
     }
@@ -772,6 +959,7 @@ public class DiscordUtil {
      */
     public void deleteRole(Role role) {
         role.delete().doOnError(e -> {
+            com.gmt2001.Console.err.println("Rolle kann nicht erstellt werden " + role.getName() + " (" + DiscordAPI.getGuild().getName() + ")");
             com.gmt2001.Console.err.printStackTrace(e);
         }).subscribe();
     }
@@ -796,7 +984,9 @@ public class DiscordUtil {
     }
 
     public Mono<List<Role>> getGuildRolesAsync() {
-        return DiscordAPI.getGuild().getRoles().collectList();
+        return Optional.ofNullable(Optional.ofNullable(DiscordAPI.getGuild()).map(Guild::getRoles).orElseGet(() -> Flux.<Role>empty())).map(Flux<Role>::collectList).orElseGet(() -> {
+            return Flux.<Role>empty().collectList();
+        });
     }
 
     /**
@@ -812,7 +1002,7 @@ public class DiscordUtil {
 
     public Mono<Boolean> isAdministratorAsync(User user) {
         if (user == null) {
-            throw new IllegalArgumentException("user object was null");
+            throw new IllegalArgumentException("Benutzerobjekt war null");
         }
 
         return user.asMember(DiscordAPI.getGuild().getId()).onErrorReturn(null).flatMap(m -> m.getBasePermissions()).map(ps -> ps != null && ps.contains(Permission.ADMINISTRATOR));
@@ -844,15 +1034,15 @@ public class DiscordUtil {
         // So start this on a new thread to avoid that. Please note that you need to delete at least 2 messages.
 
         if (channel == null || amount < 2) {
-            throw new IllegalArgumentException("channel object was null or amount was less than 2");
+            throw new IllegalArgumentException("Kanalobjekt war null oder Betrag war kleiner als 2");
         }
 
-        com.gmt2001.Console.debug.println("Attempting to delete " + amount + " messages from " + channel.getName());
+        com.gmt2001.Console.debug.println("Versucht " + amount + " Nachrichten von " + DiscordUtil.channelName(channel) + " zu löschen");
         Thread thread;
         thread = new Thread(() -> {
             channel.getMessagesBefore(channel.getLastMessageId().orElseThrow()).take(amount).collectList().doOnSuccess(msgs -> {
-                com.gmt2001.Console.debug.println("Found " + msgs.size() + " messages to delete");
-                channel.bulkDelete(Flux.fromIterable(msgs).map(msg -> msg.getId())).doOnNext(s -> com.gmt2001.Console.err.println("Rejected message " + s.asString() + " from delete operation for being too old")).doOnError(e -> com.gmt2001.Console.debug.printStackTrace(e)).doOnComplete(() -> com.gmt2001.Console.debug.println("Bulk delete complete")).subscribe();
+                com.gmt2001.Console.debug.println( msgs.size() + " Nachrichten zum löschen gefunden");
+                channel.bulkDelete(Flux.fromIterable(msgs).map(msg -> msg.getId())).doOnNext(s -> com.gmt2001.Console.err.println("Abgelehnte Nachricht " + s.asString() + " vom Löschvorgang, weil zu alt")).doOnError(e -> com.gmt2001.Console.debug.printStackTrace(e)).doOnComplete(() -> com.gmt2001.Console.debug.println("Massenlöschung abgeschlossen")).subscribe();
             }).subscribe();
         }, "tv.phantombot.discord.util.DiscordUtil::bulkDelete");
 
@@ -877,7 +1067,7 @@ public class DiscordUtil {
      */
     public void bulkDeleteMessages(GuildMessageChannel channel, Message... list) {
         if (channel == null || list == null || list.length < 2) {
-            throw new IllegalArgumentException("channel object was null, list object was null, or amount was less than 2");
+            throw new IllegalArgumentException("Kanalobjekt war null, Listenobjekt war null oder Betrag war kleiner als 2");
         }
 
         Flux<Snowflake> msgSfs = Flux.empty();
@@ -906,10 +1096,10 @@ public class DiscordUtil {
      */
     public void deleteMessage(Message message) {
         if (message == null) {
-            throw new IllegalArgumentException("message object was null");
+            throw new IllegalArgumentException("Nachrichtenobjekt war null");
         }
 
-        com.gmt2001.Console.debug.println("Deleteing Discord message: " + message.getId().asString());
+        com.gmt2001.Console.debug.println("Discord-Nachricht löschen: " + message.getId().asString());
 
         message.delete().doOnError(e -> {
             if (e instanceof ClientException) {
@@ -917,7 +1107,7 @@ public class DiscordUtil {
                 if (er != null && er.getFields().containsKey("errorResponse")) {
                     ErrorResponse er2 = (ErrorResponse) er.getFields().get("errorResponse");
                     if (er2 != null && er2.getFields().containsKey("code") && (int) er2.getFields().get("code") == 10008) {
-                        com.gmt2001.Console.err.println("Delete message failed (Unknown Message): " + message.getId().asString());
+                        com.gmt2001.Console.err.println("Nachricht löschen fehlgeschlagen (Unbekannte Nachricht): " + message.getId().asString());
                         com.gmt2001.Console.debug.printStackTrace(e);
                         return;
                     }
@@ -983,34 +1173,163 @@ public class DiscordUtil {
         Matcher match = Pattern.compile("(\\d{1,3}),?\\s?(\\d{1,3}),?\\s?(\\d{1,3})").matcher(color);
 
         if (match.find()) {
-            return new Color(Integer.parseInt(match.group(1)), Integer.parseInt(match.group(2)), Integer.parseInt(match.group(3)));
+            return Color.of(Integer.parseInt(match.group(1)), Integer.parseInt(match.group(2)), Integer.parseInt(match.group(3)));
         } else {
             switch (color) {
                 case "black":
-                    return Color.black;
+                    return Color.BLACK;
                 case "blue":
-                    return Color.blue;
+                    return Color.BLUE;
                 case "cyan":
-                    return Color.cyan;
+                    return Color.CYAN;
                 case "gray":
-                    return Color.gray;
+                    return Color.GRAY;
                 case "green":
-                    return Color.green;
+                    return Color.GREEN;
                 case "magenta":
-                    return Color.magenta;
+                    return Color.MAGENTA;
                 case "orange":
-                    return Color.orange;
+                    return Color.ORANGE;
                 case "pink":
-                    return Color.pink;
+                    return Color.PINK;
                 case "red":
-                    return Color.red;
+                    return Color.RED;
                 case "white":
-                    return Color.white;
+                    return Color.WHITE;
                 case "yellow":
-                    return Color.yellow;
+                    return Color.YELLOW;
                 default:
-                    return Color.gray;
+                    return Color.GRAY;
             }
         }
+    }
+
+    /**
+     * Method to return a message by its id.
+     *
+     * @param channelName
+     * @param messageId
+     * @return {Message}
+     */
+    public Message getMessageById(String channelName, String messageId) {
+        GuildMessageChannel channel = getChannelAsync(channelName).block();
+        if (channel != null) {
+            return channel.getMessageById(Snowflake.of(messageId)).block();
+        }
+
+        return null;
+    }
+
+    /**
+     * Method to edit message content.
+     *
+     * @param message
+     * @param newMessage
+     */
+    public void editMessageContent(Message message, String newMessage) {
+        message.edit(spec -> spec.setContent(newMessage)).subscribe();
+    }
+
+    /**
+     * Method to edit message embeds.
+     *
+     * @param message
+     * @param newEmbed
+     */
+    public void editMessageEmbed(Message message, Consumer<? super EmbedCreateSpec> newEmbed) {
+        message.edit(spec -> spec.setEmbed(newEmbed)).subscribe();
+    }
+
+    /**
+     * Method to return a list of all messages before the given message.
+     *
+     * @param channelName
+     * @param messageId
+     * @return {List<Message>}
+     */
+    public List<Message> getMessagesBefore(String channelName, String messageId) {
+        GuildMessageChannel channel = getChannelAsync(channelName).block();
+        List<Message> messageList = new ArrayList<>();
+        if (channel != null) {
+            channel.getMessagesBefore(Snowflake.of(messageId)).toIterable().forEach(message -> messageList.add(message));
+        }
+        return messageList;
+    }
+
+    /**
+     * Method to return a the last message of a given channel.
+     *
+     * @param channelName
+     * @return {Message}
+     */
+    public Message getLastMessage(String channelName) {
+        GuildMessageChannel channel = getChannelAsync(channelName).block();
+        if (channel != null) {
+            return channel.getLastMessage().block();
+        }
+
+        return null;
+    }
+
+    public static Optional<Snowflake> channelId(Channel channel) {
+        if (null != channel.getType()) {
+            switch (channel.getType()) {
+                case DM:
+                case GROUP_DM:
+                    return Optional.of(((PrivateChannel) channel).getId());
+                case GUILD_CATEGORY:
+                    return Optional.of(((Category) channel).getId());
+                case GUILD_NEWS:
+                    return Optional.of(((NewsChannel) channel).getId());
+                case GUILD_STAGE_VOICE:
+                    return Optional.of(((VoiceChannel) channel).getId());
+                case GUILD_STORE:
+                    return Optional.of(((StoreChannel) channel).getId());
+                case GUILD_TEXT:
+                    return Optional.of(((TextChannel) channel).getId());
+                case GUILD_VOICE:
+                    return Optional.of(((VoiceChannel) channel).getId());
+                default:
+                    break;
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    public static String channelIdAsString(Channel channel) {
+        Optional<Snowflake> channelId = DiscordUtil.channelId(channel);
+
+        if (channelId.isPresent()) {
+            return channelId.get().asString();
+        }
+
+        return "";
+    }
+
+    public static String channelName(Channel channel) {
+        if (null != channel.getType()) {
+            switch (channel.getType()) {
+                case DM:
+                case GROUP_DM:
+                    return ((PrivateChannel) channel).getMention();
+                case GUILD_CATEGORY:
+                    return ((Category) channel).getName();
+                case GUILD_NEWS:
+                    return ((NewsChannel) channel).getName();
+                case GUILD_STAGE_VOICE:
+                    return ((VoiceChannel) channel).getName();
+                case GUILD_STORE:
+                    return ((StoreChannel) channel).getName();
+                case GUILD_TEXT:
+                    return ((TextChannel) channel).getName();
+                case GUILD_VOICE:
+                    return ((VoiceChannel) channel).getName();
+                default:
+                    break;
+            }
+        }
+
+        return "";
     }
 }

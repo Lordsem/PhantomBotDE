@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,9 +19,9 @@
  * Script  : clipHandler.js
  * Purpose : Configures the automatic display of clips in chat and captures the events from Twitch.
  */
-(function() {
+(function () {
     var toggle = $.getSetIniDbBoolean('clipsSettings', 'toggle', false),
-        message = $.getSetIniDbString('clipsSettings', 'message', '(name) hat einen Clip erstellt: (url)');
+            message = $.getSetIniDbString('clipsSettings', 'message', '(name) hat einen Clip erstellt: (url)');
 
     /*
      * @function reloadClips
@@ -34,11 +34,11 @@
     /*
      * @event twitchClip
      */
-    $.bind('twitchClip', function(event) {
+    $.bind('twitchClip', function (event) {
         var creator = event.getCreator(),
-            url = event.getClipURL(),
+                url = event.getClipURL(),
                 title = event.getClipTitle(),
-            s = message;
+                s = message;
 
         /* Even though the Core won't even query the API if this is false, we still check here. */
         if (toggle === false) {
@@ -59,7 +59,7 @@
 
         if (s.match(/\(alert [,.\w\W]+\)/g)) {
             var filename = s.match(/\(alert ([,.\w\W]+)\)/)[1];
-            $.panelsocketserver.alertImage(filename);
+            $.alertspollssocket.alertImage(filename);
             s = (s + '').replace(/\(alert [,.\w\W]+\)/, '');
             if (s == '') {
                 return null;
@@ -68,10 +68,10 @@
 
         if (s.match(/\(playsound\s([a-zA-Z1-9_]+)\)/g)) {
             if (!$.audioHookExists(s.match(/\(playsound\s([a-zA-Z1-9_]+)\)/)[1])) {
-                $.log.error('Could not play audio hook: Audio hook does not exist.');
+                $.log.error('Audio-Hook konnte nicht wiedergegeben werden: Audio-Hook existiert nicht.');
                 return null;
             }
-            $.panelsocketserver.triggerAudioPanel(s.match(/\(playsound\s([a-zA-Z1-9_]+)\)/)[1]);
+            $.alertspollssocket.triggerAudioPanel(s.match(/\(playsound\s([a-zA-Z1-9_]+)\)/)[1]);
             s = $.replace(s, s.match(/\(playsound\s([a-zA-Z1-9_]+)\)/)[0], '');
             if (s == '') {
                 return null;
@@ -84,12 +84,12 @@
     /*
      * @event command
      */
-    $.bind('command', function(event) {
+    $.bind('command', function (event) {
         var sender = event.getSender(),
-            command = event.getCommand(),
-            args = event.getArgs(),
-            argsString = event.getArguments(),
-            action = args[0];
+                command = event.getCommand(),
+                args = event.getArgs(),
+                argsString = event.getArguments(),
+                action = args[0];
 
         /*
          * @commandpath clipstoggle - Toggles the clips announcements.
@@ -134,7 +134,7 @@
     /*
      * @event initReady
      */
-    $.bind('initReady', function() {
+    $.bind('initReady', function () {
         $.registerChatCommand('./handlers/clipHandler.js', 'clipstoggle', 1);
         $.registerChatCommand('./handlers/clipHandler.js', 'clipsmessage', 1);
         $.registerChatCommand('./handlers/clipHandler.js', 'lastclip', 7);

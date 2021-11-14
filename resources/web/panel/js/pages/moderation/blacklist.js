@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,12 +75,12 @@ $(run = function() {
                 { 'width': '25%', 'targets': 4 }
             ],
             'columns': [
-                { 'title': 'Blacklist' },
+                { 'title': 'Verbotsliste' },
                 { 'title': 'Regex' },
                 { 'title': 'Timeout' },
                 { 'title': 'Nachricht' },
                 { 'title': 'Grund' },
-                { 'title': 'Aktion' }
+                { 'title': 'Aktionen' }
             ]
         });
 
@@ -90,8 +90,8 @@ $(run = function() {
                 row = $(this).parents('tr');
 
             // Ask the user if he wants to delete the blacklist.
-            helpers.getConfirmDeleteModal('blacklist_modal_remove', 'Bist du sicher, dass du diese Blacklist entfernen willst?', true,
-                'Die Blacklist wurde erfolgreich entfernt!', function() { // Callback if the user clicks delete.
+            helpers.getConfirmDeleteModal('blacklist_modal_remove', 'Bist du sicher, dass du dies von der Verbotsliste entfernen willst?', true,
+                'Das Verbot wurde erfolgreich entfernt!', function() { // Callback if the user clicks delete.
                 socket.removeDBValue('moderation_blacklist_rm', 'blackList', blacklist, function() {
                     socket.sendCommand('moderation_blacklist_rm_cmd', 'reloadmod', function() {
                         // Remove the table row.
@@ -108,13 +108,13 @@ $(run = function() {
             socket.getDBValue('moderation_blacklist_edit_get', 'blackList', blacklist, function(e) {
                 e = JSON.parse(e.blackList);
                 // Get advance modal from our util functions in /utils/helpers.js
-                helpers.getAdvanceModal('blacklist-edit-modal', 'Blacklist bearbeiten', 'Speichern', $('<form/>', {
+                helpers.getAdvanceModal('blacklist-edit-modal', 'Verbot bearbeiten', 'Speichern', $('<form/>', {
                     'role': 'form'
                 })
                 // Append a text area box for the phrase.
-                .append(helpers.getTextAreaGroup('ban-phrase', 'text', 'Blacklist Phrase', '', e.phrase, 'Phrase, Wort oder Regex, die auf die Blacklist gesetzt werden sollten.', true)
+                .append(helpers.getTextAreaGroup('ban-phrase', 'text', 'Verbotene Phrase', '', e.phrase, 'Phrase, Wort oder Regex, die auf die Verbotsliste gesetzt werden sollten.', true)
                 // Append checkbox for if this should be regex or not.
-                .append(helpers.getCheckBox('is-regex', e.isRegex, 'Regex', 'Wenn die Blacklist Phrase regex verwenden soll.')))
+                .append(helpers.getCheckBox('is-regex', e.isRegex, 'Regex', 'Wenn die Verbotene Phrase regex verwenden soll.')))
                 // Append ban reason. This is the message Twitch shows with the timeout.
                 .append(helpers.getInputGroup('timeout-banmsg', 'text', 'Timeout Nachricht', '', e.message, 'Nachricht, die in den Chat gesendet werden soll, wenn ein Benutzer einen Timeout erhält.')
                 // Append checkbox for if this should be regex or not.
@@ -140,7 +140,10 @@ $(run = function() {
                     .append(helpers.getCheckBox('exclude-regulars', e.excludeRegulars, 'Stammzuschauer ausschließen', 'Wenn Stammzuschauern erlaubt sein soll, diesen Filter zu umgehen.'))
                     // Tooltip to toggle for subs to bypass this filter.
                     .append(helpers.getCheckBox('exclude-subscribers', e.excludeSubscribers, 'Abonnenten ausschließen',
-                        'Wenn es den Abonnenten erlaubt sein soll, diesen Filter zu umgehen.')))
+                        'Wenn es den Abonnenten erlaubt sein soll, diesen Filter zu umgehen.'))
+                    // Tooltip to toggle for subs to bypass this filter.
+                    .append(helpers.getCheckBox('exclude-vips', e.excludeVips, 'Exclude VIPs',
+                        'Wenn es den Vips erlaubt sein soll, diesen Filter zu umgehen.')))
                 // Callback function to be called once we hit the save button on the modal.
                 })), function() {
                     let phrase = $('#ban-phrase'),
@@ -150,7 +153,8 @@ $(run = function() {
                         timeoutTime = $('#timeout-timeout-time'),
                         timeoutMsg = $('#timeout-reason'),
                         isReg = $('#exclude-regulars').is(':checked'),
-                        isSub = $('#exclude-subscribers').is(':checked');
+                        isSub = $('#exclude-subscribers').is(':checked'),
+                        isVip = $('#exclude-vips').is(':checked');
 
                     // Add regex prefix is regex.
                     if (isRegex && !phrase.val().startsWith('regex:')) {
@@ -176,6 +180,7 @@ $(run = function() {
                                     isSilent: isSilent,
                                     excludeRegulars: isReg,
                                     excludeSubscribers: isSub,
+                                    excludeVips: isVip,
                                     message: banMsg.val(),
                                     banReason: timeoutMsg.val()
                                 }), function() {
@@ -185,7 +190,7 @@ $(run = function() {
                                         // Close the modal.
                                         $('#blacklist-edit-modal').modal('hide');
                                         // Alert the user.
-                                        toastr.success('Blacklist erfolgreich bearbeitet!');
+                                        toastr.success('Verbotsliste erfolgreich bearbeitet!');
                                     });
                                 });
                             });
@@ -201,21 +206,21 @@ $(function() {
     // Add blacklist button
     $('#add-blacklist-button').on('click', function() {
         // Get advance modal from our util functions in /utils/helpers.js
-        helpers.getAdvanceModal('blacklist-add-modal', 'Blacklist hinzufügen', 'Speichern', $('<form/>', {
+        helpers.getAdvanceModal('blacklist-add-modal', 'Verbot hinzufügen', 'Speichern', $('<form/>', {
             'role': 'form'
         })
         // Append a text area box for the phrase.
-        .append(helpers.getTextAreaGroup('ban-phrase', 'text', 'Blacklist Phrase', 'Kappa 123', '', 'Phrase, Wort oder Regex, die auf die Blacklist gesetzt werden sollten.', true)
+        .append(helpers.getTextAreaGroup('ban-phrase', 'text', 'Verbotene Phrase', 'Kappa 123', '', 'Phrase, Wort oder Regex, die auf die Verbotsliste gesetzt werden sollten.', true)
         // Append checkbox for if this should be regex or not.
-        .append(helpers.getCheckBox('is-regex', false, 'Regex', 'Wenn die Blacklist Phrase regex verwenden soll.')))
+        .append(helpers.getCheckBox('is-regex', false, 'Regex', 'Wenn die Verbotene Phrase regex verwenden soll.')))
         // Append ban reason. This is the message Twitch shows with the timeout.
         .append(helpers.getInputGroup('timeout-banmsg', 'text', 'Timeout Nachricht', '',
-            'Sie wurden wegen der Verwendung einer auf der Blacklist stehenden Phrase gesperrt.', 'Nachricht, die im Chat angezeigt wird, wenn ein Benutzer einen Timeout erhält.')
+            'Du wurdest wegen der Verwendung einer auf der Verbotsliste stehenden Phrase gesperrt.', 'Nachricht, die im Chat angezeigt wird, wenn ein Benutzer einen Timeout erhält.')
         // Append checkbox for if this should be regex or not.
         .append(helpers.getCheckBox('timeout-message-toggle', false, 'Stumm', 'Ob die Warnmeldung gesendet werden soll oder nicht.')))
         // Append input box for the timeout time.
         .append(helpers.getInputGroup('timeout-timeout-time', 'number', 'Timeout Dauer', '0', '600',
-            'Wie lange in Sekunden wird der Benutzer beim Verwenden der Phrase im Chat getimedouted. -1 bannt den Benutzer und 0 löscht einfach die Nachricht.'))
+            'Wie viele Sekunden der Benutzer beim Verwenden der Phrase im Chat getimedouted wird. -1 bannt den Benutzer und 0 löscht einfach die Nachricht.'))
         // Add an advance section that can be opened with a button toggle.
         .append($('<div/>', {
             'class': 'collapse',
@@ -225,7 +230,7 @@ $(function() {
                 'role': 'form'
             })
             // Append ban reason. This is the message Twitch shows with the timeout.
-            .append(helpers.getInputGroup('timeout-reason', 'text', 'Timeout Grund', '', 'Verwendung einer Phrase die auf der Blacklist steht',
+            .append(helpers.getInputGroup('timeout-reason', 'text', 'Timeout Grund', '', 'Verwendung einer Phrase, die auf der Verbotsliste steht.',
                 'Nachricht, die allen Moderatoren angezeigt wird, wenn der Benutzer einen Timeout erhält.'))
             // Add group for toggles.
             .append($('<div/>', {
@@ -235,7 +240,10 @@ $(function() {
             .append(helpers.getCheckBox('exclude-regulars', false, 'Stammzuschauer ausschließen', 'Wenn Stammzuschauer erlaubt sein soll, diesen Filter zu umgehen.'))
             // Tooltip to toggle for subs to bypass this filter.
             .append(helpers.getCheckBox('exclude-subscribers', false, 'Abonnenten ausschließen',
-                'Wenn es den Abonnenten erlaubt sein soll, diesen Filter zu umgehen.')))
+                'Wenn es den Abonnenten erlaubt sein soll, diesen Filter zu umgehen.'))
+            // Tooltip to toggle for vips to bypass this filter.
+            .append(helpers.getCheckBox('exclude-vips', false, 'Exclude VIPs',
+                'Wenn es den Vips erlaubt sein soll, diesen Filter zu umgehen.')))
         })), function() {
             let phrase = $('#ban-phrase'),
                 isRegex = $('#is-regex').is(':checked'),
@@ -244,7 +252,8 @@ $(function() {
                 timeoutTime = $('#timeout-timeout-time'),
                 timeoutMsg = $('#timeout-reason'),
                 isReg = $('#exclude-regulars').is(':checked'),
-                isSub = $('#exclude-subscribers').is(':checked');
+                isSub = $('#exclude-subscribers').is(':checked'),
+                isVip = $('#exclude-vips').is(':checked');
 
             // Add regex prefix is regex.
             if (isRegex && !phrase.val().startsWith('regex:')) {
@@ -268,6 +277,7 @@ $(function() {
                         isSilent: isSilent,
                         excludeRegulars: isReg,
                         excludeSubscribers: isSub,
+                        excludeVips: isVip,
                         message: banMsg.val(),
                         banReason: timeoutMsg.val()
                     }), function() {
@@ -277,7 +287,7 @@ $(function() {
                             // Close the modal.
                             $('#blacklist-add-modal').modal('hide');
                             // Alert the user.
-                            toastr.success('Blacklist erfolgreich hinzugefügt!');
+                            toastr.success('Verbot erfolgreich hinzugefügt!');
                         });
                     });
             }

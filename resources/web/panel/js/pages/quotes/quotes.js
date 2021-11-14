@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -87,7 +87,7 @@ $(run = function() {
                     { 'title': 'ID' },
                     { 'title': 'Erstellt am', 'orderData': [1] },
                     { 'title': 'Benutzername' },
-                    { 'title': 'Spiel' },
+                    { 'title': 'Kategorie' },
                     { 'title': 'Zitat' },
                     { 'title': 'Aktion' }
                 ]
@@ -125,7 +125,7 @@ $(run = function() {
                     // Append quote creator
                     .append(helpers.getInputGroup('quote-user', 'text', 'Erstellt von', '', data[0], 'Der Benutzer, der das Zitat erstellt hat.'))
                     // Append quote game
-                    .append(helpers.getInputGroup('quote-game', 'text', 'Spiel', '', data[3], 'Das Spiel das gespielt wurde, als das Zitat verfasst wurde.'))
+                    .append(helpers.getInputGroup('quote-game', 'text', 'Kategorie', '', data[3], 'Die Kategorie, die gespielt wurde, als das Zitat verfasst wurde.'))
                     // Append quote
                     .append(helpers.getTextAreaGroup('quote-quote', 'text', 'Zitat', '', data[1], 'Zitattext.', false)), function() {// Callback once we click the save button.
                         let quoteDate = $('#quote-date'),
@@ -171,6 +171,10 @@ $(run = function() {
 
 // Function that handlers the loading of events.
 $(function() {
+    socket.addListener('quote_update', function() {
+       run();
+    });
+
     // Module toggle.
     $('#quotesModuleToggle').on('change', function() {
         // Enable the module then query the data.
@@ -193,8 +197,6 @@ $(function() {
                 default:
                     // Add quote.
                     socket.sendCommandSync('add_quote_cmd', 'addquotesilent ' + quoteQuote.val().replace(/"/g, '\'\''), function() {
-                        // Reload the table.
-                        run();
                         // Close the modal.
                         $('#add-quote').modal('hide');
                         // Alert the user.
@@ -210,15 +212,15 @@ $(function() {
             tables: ['settings', 'settings'],
             keys: ['quoteMessage', 'quoteTwitchNamesToggle']
         }, true, function(e) {
-            helpers.getModal('quote-settings', 'Zitier-Einstellungen', 'Speichern', $('<form/>', {
+            helpers.getModal('quote-settings', 'Zitat-Einstellungen', 'Speichern', $('<form/>', {
                 'role': 'form'
             })
             // Quote input.
             .append(helpers.getInputGroup('quote-msg', 'text', 'Zitat Antwort', '', helpers.getDefaultIfNullOrUndefined(e.settings, '[(id)] "(quote)" von (user) ((date))'),
                 'Nachricht, die in den Chat gesendet werden soll, wenn jemand den Zitat-Befehl verwendet. Tags: (id), (quote), (user), (game) und (date)'))
-                    .append(helpers.getDropdownGroup('quote-twitch-names-toggle', 'Twitch-Namen erzwingen', (e['quoteTwitchNamesToggle'] !== 'false' ? 'Ja' : 'Nein'), ['Ja', 'Nein'],
-                        'Wenn Namen für Zitate gegen Twitch-Benutzernamen validiert werden sollen. Wenn nicht, können Namen alles sein.')),
-                function() {// Callback once we click the save button.
+            .append(helpers.getDropdownGroup('quote-twitch-names-toggle', 'Twitch-Namen erzwingen', (e['quoteTwitchNamesToggle'] !== 'false' ? 'Ja' : 'Nein'), ['Ja', 'Nein'],
+                'Wenn Namen für Zitate gegen Twitch-Benutzernamen validiert werden sollen. Wenn nicht, können Namen alles sein.')),
+            function() {// Callback once we click the save button.
                 let quoteMsg = $('#quote-msg'),
                     quoteTwitchNamesToggle = $('#quote-twitch-names-toggle').find(':selected').text() === 'Ja';
 

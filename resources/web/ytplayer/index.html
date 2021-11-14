@@ -1,5 +1,5 @@
 <!--
-  Copyright (C) 2016-2020 phantom.bot
+  Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
   @author ScaniaTV
 -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 
 <head>
     <!-- Meta data -->
@@ -46,7 +46,7 @@
     <div id="main" style="display: none;">
         <!-- Header -->
         <div class="header">
-            <img class="logo-header" src="/common/images/logo.png">
+            <img class="logo-header" alt="Logo" src="/common/images/logo.png">
         </div>
         <!-- Container div -->
         <div class="container-fluid">
@@ -66,19 +66,19 @@
                                 <div class="play-pause-controls">
                                     <div class="btn-group btn-group-justified">
                                         <!-- Play and pause button handled in js -->
-                                        <button type="button" class="btn btn-secondary btn-sm" id="pause-button" data-toggle="tooltip" title="Play song">
+                                        <button type="button" class="btn btn-secondary btn-sm" id="pause-button" data-toggle="tooltip" title="Spiele Song">
                                             <i class="fas fa-play" id="play-pause-button"></i>
                                         </button>
                                         <!-- Next song button -->
-                                        <button type="button" class="btn btn-secondary btn-sm" id="skip-button" data-toggle="tooltip" title="Skip song">
+                                        <button type="button" class="btn btn-secondary btn-sm" id="skip-button" data-toggle="tooltip" title="Überspringe Song">
                                             <i class="fas fa-fast-forward"></i>
                                         </button>
                                         <!-- Add to playlist button -->
-                                        <button type="button" class="btn btn-secondary btn-sm" id="fav-button" data-toggle="tooltip" title="Add to playlist (steal song)">
+                                        <button type="button" class="btn btn-secondary btn-sm" id="fav-button" data-toggle="tooltip" title="Zur Playlist hinzufügen (steal song)">
                                             <i class="fas fa-star"></i>
                                         </button>
                                         <!-- delete from playlist button -->
-                                        <button type="button" class="btn btn-secondary btn-sm" id="del-cur-playlist-button" data-toggle="tooltip" title="Delete from playlist">
+                                        <button type="button" class="btn btn-secondary btn-sm" id="del-cur-playlist-button" data-toggle="tooltip" title="Von Playlist löschen">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -88,7 +88,7 @@
                                 <div class="progress-slider">
                                     <input type="text" id="progress-slider" />
                                     <!-- Progress slider value -->
-                                    <span id="progress-slider-value">0:00</span>
+                                    <label for="progress-slider" id="progress-slider-value">0:00</label>
                                 </div>
                             </div>
 
@@ -97,7 +97,7 @@
                                 <!-- Volume controls -->
                                 <div class="mute-control">
                                     <!-- Add to playlist button -->
-                                    <button type="button" class="btn btn-secondary btn-sm" id="mute-button" data-toggle="tooltip" title="Mute song">
+                                    <button type="button" class="btn btn-secondary btn-sm" id="mute-button" data-toggle="tooltip" title="Mute Song">
                                         <i class="fas fa-volume-down" id="mute-button-icon"></i>
                                     </button>
                                 </div>
@@ -105,7 +105,7 @@
                                 <div class="volume-slider">
                                     <input type="text" id="volume-slider" />
                                     <!-- Volume slider value -->
-                                    <span id="volume-slider-value">0%</span>
+                                    <label for="volume-slider" id="volume-slider-value">0%</label>
                                 </div>
                             </div>
                         </div>
@@ -127,11 +127,11 @@
                         <div class="queue-section-title">Queue
                             <div class="btn-group btn-group-justified header-button">
                                 <!-- Add song to queue button -->
-                                <button type="button" class="btn btn-secondary btn-sm" id="queue-add-song-button" data-toggle="tooltip" title="Add song">
+                                <button type="button" class="btn btn-secondary btn-sm" id="queue-add-song-button" data-toggle="tooltip" title="Song hinzufügen">
                                     <i class="fas fa-plus"></i>
                                 </button>
                                 <!-- Settings button -->
-                                <button type="button" class="btn btn-secondary btn-sm" id="settings-button" data-toggle="tooltip" title="Settings">
+                                <button type="button" class="btn btn-secondary btn-sm" id="settings-button" data-toggle="tooltip" title="Einstellungen">
                                     <i class="fas fa-cog"></i>
                                 </button>
                                 <!-- Clear queue button -->
@@ -162,15 +162,15 @@
                         <div class="queue-section-title">Playlist <span id="playlist-name"></span>
                             <div class="btn-group btn-group-justified header-button">
                                 <!-- Add song to playlist button -->
-                                <button type="button" class="btn btn-secondary btn-sm" id="playlist-add-song-button" data-toggle="tooltip" title="Add song">
+                                <button type="button" class="btn btn-secondary btn-sm" id="playlist-add-song-button" data-toggle="tooltip" title="Song hinzufügen">
                                     <i class="fas fa-plus"></i>
                                 </button>
                                 <!-- Shuffle button -->
-                                <button type="button" class="btn btn-secondary btn-sm" id="playlist-shuffle-button" data-toggle="tooltip" title="Shuffle songs">
+                                <button type="button" class="btn btn-secondary btn-sm" id="playlist-shuffle-button" data-toggle="tooltip" title="Shuffle Songs">
                                     <i class="fas fa-random"></i>
                                 </button>
                                 <!-- Load playlist button -->
-                                <button type="button" class="btn btn-secondary btn-sm" id="load-playlist-button" data-toggle="tooltip" title="Load playlist">
+                                <button type="button" class="btn btn-secondary btn-sm" id="load-playlist-button" data-toggle="tooltip" title="Lade Playlist">
                                     <i class="fas fa-upload"></i>
                                 </button>
                             </div>
@@ -197,10 +197,10 @@
 
         <!-- Copyright bar -->
         <footer class="copyright">
-            YouTube Player von:
-            <a href="https://phantombot.github.io/PhantomBot">phantom.bot</a>&emsp;|&emsp;
-            Deutsche Übersetzung von:
-            <a href="https://github.com/PhantomBotDE/PhantomBotDE" target="_blank">PhantomBotDE</a>
+            <a href="https://phantombot.github.io/PhantomBot">PhantomBot</a> &copy; 2016 -
+            <script>
+            	document.write(new Date().getFullYear());
+            </script>
         </footer>
     </div>
 

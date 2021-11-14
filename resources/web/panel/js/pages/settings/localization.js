@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,38 +19,27 @@ $(function() {
     var currentLang = '';
 
     // Load file button
-    $('#load-file-button').on('click', function() {
-        $.ajax({
-            'url': '/get-lang?webauth=' + getAuth(),
-            'type': 'GET',
-            'success': function(data) {
-                helpers.getModal('edit-lang', 'Lang-Datei laden', 'Bearbeiten', $('<form/>', {
-                    'role': 'form'
-                })
-                // Add select box.
-                .append(helpers.getDropdownGroup('file-to-load', 'Lang-Date: ', 'Datei auswählen', data.split('\n'))), function() {
-                    currentLang = $('#file-to-load').find(':selected').text();
-
-                    $.ajax({
-                        'url': '/lang?webauth=' + getAuth(),
-                        'type': 'GET',
-                        'headers': {
-                            'lang-path': $('#file-to-load').find(':selected').text()
-                        },
-                        'success': function(data) {
-                            // Load the file
-                            loadLang(JSON.parse(data));
-                            // Alert the user.
-                            toastr.success('Die Datei wurde erfolgreich geladen!');
-                            // Close the modal.
-                            $('#edit-lang').modal('toggle');
-                            // Enable the insert and save buttons.
-                            $('#save-button').prop('disabled', false);
-                            $('#add-line-button').prop('disabled', false);
-                        }
-                    })
-                }).modal('toggle');
-            }
+    $('#load-file-button').on('click', function () {
+        socket.doRemote('getLangList', 'getLangList', {}, function (e) {
+            helpers.getModal('edit-lang', 'Lang-Datei laden', 'Bearbeiten', $('<form/>', {
+                'role': 'form'
+            })
+                    // Add select box.
+                    .append(helpers.getDropdownGroup('file-to-load', 'Lang-Datei: ', 'Datei auswählen', e)), function () {
+                currentLang = $('#file-to-load').find(':selected').text();
+                socket.doRemote('loadLang', 'loadLang', {
+                    'lang-path': $('#file-to-load').find(':selected').text()
+                }, function (e) {
+                    loadLang(JSON.parse(e[0].langFile));
+                    // Alert the user.
+                    toastr.success('Datei erfolgreich geladen!');
+                    // Close the modal.
+                    $('#edit-lang').modal('toggle');
+                    // Enable the insert and save buttons.
+                    $('#save-button').prop('disabled', false);
+                    $('#add-line-button').prop('disabled', false);
+                });
+            }).modal('toggle');
         });
     });
 
@@ -62,7 +51,7 @@ $(function() {
         // ID for the lang.
         .append(helpers.getInputGroup('lang-id', 'text', 'Lang ID', 'module.name.id'))
         // Resonse for the lang.
-        .append(helpers.getTextAreaGroup('lang-response', 'text', 'Antwort', 'Antwort beispiel!')), function() {
+        .append(helpers.getTextAreaGroup('lang-response', 'text', 'Antwort', 'Antwort Beispiel!')), function() {
             const table = $('#langTable').DataTable({
                     "language": {
                         "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/German.json"
@@ -131,21 +120,14 @@ $(function() {
             }
         }
 
-        // Post the lang.
-        $.ajax({
-            'type': 'PUT',
-            'url': '/lang?webauth=' + getAuth(),
-            'contentType': 'application/json',
-            'headers': {
-                'lang-path': currentLang
-            },
-            'data': JSON.stringify(dataObj),
-            'success': function(data, text, xhr) {
-                if (xhr.status === 200) {
-                    toastr.success('Lang erfolgreich gespeichert!');
-                } else {
-                    toastr.success('Die lang konnte nicht gespeichert werden.');
-                }
+        socket.doRemote('saveLang', 'saveLang', {
+            'lang-path': $('#file-to-load').find(':selected').text(),
+            'content': JSON.stringify(dataObj)
+        }, function (e) {
+            if (!e[0].errors) {
+                toastr.success('Lang erfolgreich gespeichert!');
+            } else {
+                toaster.error(e[0].errors[0].status + ' ' + e[0].errors[0].title + '<br>' + e[0].errors[0].detail, 'Fehler beim speichern der Lang');
             }
         });
     });
@@ -275,7 +257,7 @@ $(function() {
                         ]).draw(false);
 
                         // Alert the user.
-                        toastr.success('lang Antwort erfolgreich aktualisiert!');
+                        toastr.success('Lang Antwort erfolgreich aktualisiert!');
 
                         // Close the modal.
                         $('#edit-lang').modal('toggle');

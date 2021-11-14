@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@
                 subAction = subAction.replace(action, '').toLowerCase();
                 $.inidb.set('wordCounter', subAction, 0);
                 $.say(subAction + $.lang.get('wordcounter.added'));
-                $.log.event(sender + ' added "' + subAction + '" to the word counter list');
+                $.log.event(sender + ' fügte "' + subAction + '" zu der Wortzählerliste hinzu');
             }
 
             /**
@@ -66,7 +66,7 @@
                 subAction = subAction.replace(action, '').toLowerCase();
                 $.inidb.del('wordCounter', subAction);
                 $.say(subAction + $.lang.get('wordcounter.removed'));
-                $.log.event(sender + ' removed "' + subAction + '" to the word counter list');
+                $.log.event(sender + ' entfernte "' + subAction + '" von der Wortzählerliste');
             }
         }
 

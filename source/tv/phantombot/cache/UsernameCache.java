@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -79,7 +79,7 @@ public class UsernameCache {
             com.gmt2001.Console.err.printStackTrace(e);
         }
     }
-
+    
     // This will be implemented later
     // For now it's just to keep another class from throwing errors.
     public JSONObject getUserData(String username) throws JSONException {

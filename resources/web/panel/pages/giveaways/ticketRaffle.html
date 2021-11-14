@@ -1,5 +1,5 @@
 <!--
-    Copyright (C) 2016-2020 phantom.bot
+    Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
         <!-- Page title and switch toggle. -->
         <h1>Ticketverlosung
             <label class="switch" data-toggle="tooltip" title="Modul umschalten">
-                <input type="checkbox" id="ticketRaffleModuleToggle" checked="true">
+                <input type="checkbox" id="ticketRaffleModuleToggle" checked>
                 <span class="slider round"></span>
             </label>
         </h1>
@@ -79,44 +79,44 @@
                         <div class="box-body" style="padding-bottom: 90px;">
                             <!-- Command -->
                             <div class="form-group">
-                                <lable>Befehl</lable>
-                                <input type="text" class="form-control" value="!tickets"
+                                <label for="ticket-raffle-cmd">Befehl</label>
+                                <input id="ticket-raffle-cmd" type="text" class="form-control" value="!tickets"
                                     data-toggle="tooltip" title="Befehl, mit dem Tickets gekauft werden können. Dieser kann nicht geändert werden." disabled/>
                             </div>
 
                             <!-- Eligibility -->
                             <div class="form-group">
-                                <lable>Berechtigung</lable>
+                                <label for="ticket-raffle-perm">Berechtigung</label>
                                 <select class="form-control" id="ticket-raffle-perm">
-                                    <option value="-followers">Followers</option>
-                                    <option selected="selected" value="">Everyone</option>
+                                    <option value="-followers">Follower</option>
+                                    <option selected="selected" value="">Jeder</option>
                                 </select>
                             </div>
 
                             <!-- Ticket cost -->
                             <div class="form-group">
-                                <lable>Ticket Kosten</lable>
+                                <label for="ticket-raffle-cost">Ticket Kosten</label>
                                 <input type="text" class="form-control" id="ticket-raffle-cost" value="1"
-                                    data-toggle="tooltip" title="Wie viel kostet jedes Ticket?"/>
+                                    data-toggle="tooltip" title="Wie viel jedes Ticket kostet."/>
                             </div>
 
                             <!-- Maximum tickets -->
                             <div class="form-group">
-                                <lable>Maximal zulässige Tickets</lable>
+                                <label for="ticket-raffle-max">Maximal zulässige Tickets</label>
                                 <input type="text" class="form-control" id="ticket-raffle-max" value="100"
-                                    data-toggle="tooltip" title="Wie viele Tickets dürfen Benutzer kaufen?"/>
+                                    data-toggle="tooltip" title="Wie viele Tickets Benutzer kaufen dürfen."/>
                             </div>
 
                             <!-- Regular luck -->
                             <div class="form-group">
-                                <lable>Stammzuschauer Ticket Multiplikator</lable>
+                                <label for="ticket-raffle-reg">Stammzuschauer Ticket Multiplikator</label>
                                 <input type="number" min="1" max="10" class="form-control" id="ticket-raffle-reg" value="1"
                                     data-toggle="tooltip" title="Ticket-Multiplikator für Stammzuschauer. Multipliziert die Anzahl der Tickets, die die Benutzer kaufen, mit dieser Nummer."/>
                             </div>
 
                             <!-- Subscriber luck -->
                             <div class="form-group">
-                                <lable>Abonnenten Ticket-Multiplikator</lable>
+                                <label for="ticket-raffle-sub">Abonnenten Ticket-Multiplikator</label>
                                 <input type="number" min="1" max="10" class="form-control" id="ticket-raffle-sub" value="1"
                                     data-toggle="tooltip" title="Ticket-Multiplikator für Abonnenten. Multipliziert die Anzahl der Tickets, die die Benutzer kaufen, mit dieser Nummer."/>
                             </div>
@@ -142,5 +142,5 @@
     </section>
 
     <!-- raffle -->
-    <script src="/panel/js/pages/giveaways/ticketRaffle.js"></script>
+    <script src="js/pages/giveaways/ticketRaffle.js"></script>
 </main>

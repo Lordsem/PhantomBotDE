@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,39 +21,33 @@
  * Register and announce (un)host events.
  * Optionally supports rewarding points for a host (Only every 6 hours!)
  */
-(function() {
+(function () {
     var hostReward = $.getSetIniDbNumber('settings', 'hostReward', 0),
-        autoHostReward = $.getSetIniDbNumber('settings', 'autoHostReward', 0),
-        hostMinViewerCount = $.getSetIniDbNumber('settings', 'hostMinViewerCount', 0),
-        hostMinCount = $.getSetIniDbNumber('settings', 'hostMinCount', 0),
-        hostMessage = $.getSetIniDbString('settings', 'hostMessage', $.lang.get('hosthandler.host.message')),
-        autoHostMessage = $.getSetIniDbString('settings', 'autoHostMessage', $.lang.get('hosthandler.autohost.message')),
-        hostHistory = $.getSetIniDbBoolean('settings', 'hostHistory', true),
-        hostToggle = $.getSetIniDbBoolean('settings', 'hostToggle', false),
-        autoHostToggle = $.getSetIniDbBoolean('settings', 'autoHostToggle', false),
-        hostTimeout = 216e5, // 6 hours = 6 * 60 * 60 * 1000
-        hostList = {},
-        announceHosts = false;
+            hostMinViewerCount = $.getSetIniDbNumber('settings', 'hostMinViewerCount', 0),
+            hostMinCount = $.getSetIniDbNumber('settings', 'hostMinCount', 0),
+            hostMessage = $.getSetIniDbString('settings', 'hostMessage', $.lang.get('hosthandler.host.message')),
+            hostHistory = $.getSetIniDbBoolean('settings', 'hostHistory', true),
+            hostToggle = $.getSetIniDbBoolean('settings', 'hostToggle', false),
+            hostTimeout = 216e5, // 6 hours = 6 * 60 * 60 * 1000
+            hostList = {},
+            announceHosts = false;
 
     /*
      * @function updateHost
      */
     function updateHost() {
         hostReward = $.getIniDbNumber('settings', 'hostReward');
-        autoHostReward = $.getIniDbNumber('settings', 'autoHostReward');
         hostMinViewerCont = $.getIniDbNumber('settings', 'hostMinViewerCount');
         hostMinCount = $.getIniDbNumber('settings', 'hostMinCount');
         hostMessage = $.getIniDbString('settings', 'hostMessage');
-        autoHostMessage = $.getIniDbString('settings', 'autoHostMessage');
         hostHistory = $.getIniDbBoolean('settings', 'hostHistory');
         hostToggle = $.getIniDbBoolean('settings', 'hostToggle');
-        autoHostToggle = $.getIniDbBoolean('settings', 'autoHostToggle');
     }
 
     /*
      * @event twitchHostsInitialized
      */
-    $.bind('twitchHostsInitialized', function(event) {
+    $.bind('twitchHostsInitialized', function (event) {
         if (!$.bot.isModuleEnabled('./handlers/hostHandler.js')) {
             return;
         }
@@ -63,88 +57,12 @@
     });
 
     /*
-     * @event twitchAutoHosted
-     */
-    $.bind('twitchAutoHosted', function(event) {
-        var hoster = event.getHoster().toLowerCase(),
-            viewers = parseInt(event.getUsers()),
-            s = autoHostMessage;
-
-        if (announceHosts === false) {
-            return;
-        }
-
-        if (hostList[hoster] !== undefined) {
-            if (hostList[hoster].hostTime < $.systemTime()) {
-                hostList[hoster] = {
-                    hostTime: ($.systemTime() + hostTimeout)
-                };
-            } else {
-                return;
-            }
-        } else {
-            hostList[hoster] = {
-                hostTime: ($.systemTime() + hostTimeout)
-            };
-        }
-
-        if (s.match(/\(name\)/)) {
-            s = $.replace(s, '(name)', $.username.resolve(hoster));
-        }
-
-        if (s.match(/\(reward\)/)) {
-            s = $.replace(s, '(reward)', autoHostReward.toString());
-        }
-
-        if (s.match(/\(viewers\)/)) {
-            s = $.replace(s, '(viewers)', viewers.toString());
-        }
-
-        if (s.match(/^\/w/)) {
-            s = s.replace('/w', ' /w');
-        }
-
-        if (autoHostToggle === true && viewers >= hostMinCount) {
-            if (s.match(/\(alert [,.\w\W]+\)/g)) {
-                var filename = s.match(/\(alert ([,.\w\W]+)\)/)[1];
-                $.panelsocketserver.alertImage(filename);
-                s = (s + '').replace(/\(alert [,.\w\W]+\)/, '');
-                if (s == '') {
-                    return null;
-                }
-            }
-
-            if (s.match(/\(playsound\s([a-zA-Z1-9_]+)\)/g)) {
-                if (!$.audioHookExists(s.match(/\(playsound\s([a-zA-Z1-9_]+)\)/)[1])) {
-                    $.log.error('Could not play audio hook: Audio hook does not exist.');
-                    return null;
-                }
-                $.panelsocketserver.triggerAudioPanel(s.match(/\(playsound\s([a-zA-Z1-9_]+)\)/)[1]);
-                s = $.replace(s, s.match(/\(playsound\s([a-zA-Z1-9_]+)\)/)[0], '');
-                if (s == '') {
-                    return null;
-                }
-            }
-
-            if (s != '') {
-            $.say(s);
-        }
-        }
-
-        $.writeToFile(hoster + ' ', './addons/hostHandler/latestAutoHost.txt', false);
-        $.writeToFile(hoster + ' ', './addons/hostHandler/latestHostOrAutoHost.txt', false);
-        if (autoHostReward > 0 && viewers >= hostMinViewerCount) {
-            $.inidb.incr('points', hoster.toLowerCase(), autoHostReward);
-        }
-    });
-
-    /*
      * @event twitchHosted
      */
-    $.bind('twitchHosted', function(event) {
+    $.bind('twitchHosted', function (event) {
         var hoster = event.getHoster().toLowerCase(),
-            viewers = parseInt(event.getUsers()),
-            s = hostMessage;
+                viewers = parseInt(event.getUsers()),
+                s = hostMessage;
 
         // Always update the Host History even if announcements are off or if they recently
         // hosted the channel and it would not be noted in chat.  This was the caster does
@@ -195,11 +113,32 @@
         }
 
         if (hostToggle === true && viewers >= hostMinCount) {
-            $.say(s);
+            if (s.match(/\(alert [,.\w\W]+\)/g)) {
+                var filename = s.match(/\(alert ([,.\w\W]+)\)/)[1];
+                $.alertspollssocket.alertImage(filename);
+                s = (s + '').replace(/\(alert [,.\w\W]+\)/, '');
+                if (s == '') {
+                    return null;
+                }
+            }
+
+            if (s.match(/\(playsound\s([a-zA-Z1-9_]+)\)/g)) {
+                if (!$.audioHookExists(s.match(/\(playsound\s([a-zA-Z1-9_]+)\)/)[1])) {
+                    $.log.error('Audio-Hook konnte nicht wiedergegeben werden: Audio-Hook existiert nicht.');
+                    return null;
+                }
+                $.alertspollssocket.triggerAudioPanel(s.match(/\(playsound\s([a-zA-Z1-9_]+)\)/)[1]);
+                s = $.replace(s, s.match(/\(playsound\s([a-zA-Z1-9_]+)\)/)[0], '');
+                if (s == '') {
+                    return null;
+                }
+            }
+            if (s != '') {
+                $.say(s);
+            }
         }
 
         $.writeToFile(hoster + ' ', './addons/hostHandler/latestHost.txt', false);
-        $.writeToFile(hoster + ' ', './addons/hostHandler/latestHostOrAutoHost.txt', false);
         if (hostReward > 0 && viewers >= hostMinViewerCount) {
             $.inidb.incr('points', hoster.toLowerCase(), hostReward);
         }
@@ -208,12 +147,12 @@
     /*
      * @event command
      */
-    $.bind('command', function(event) {
+    $.bind('command', function (event) {
         var sender = event.getSender(),
-            command = event.getCommand(),
-            argsString = event.getArguments(),
-            args = event.getArgs(),
-            action = args[0];
+                command = event.getCommand(),
+                argsString = event.getArguments(),
+                args = event.getArgs(),
+                action = args[0];
 
         /*
          * @commandpath hosttoggle - Toggles host announcements.
@@ -222,15 +161,6 @@
             hostToggle = !hostToggle;
             $.setIniDbBoolean('settings', 'hostToggle', hostToggle);
             $.say($.whisperPrefix(sender) + $.lang.get('hosthandler.host.toggle', (hostToggle === true ? $.lang.get('common.enabled') : $.lang.get('common.disabled'))));
-        }
-
-        /*
-         * @commandpath autohosttoggle - Toggles auto host announcements.
-         */
-        if (command.equalsIgnoreCase('autohosttoggle')) {
-            autoHostToggle = !autoHostToggle;
-            $.setIniDbBoolean('settings', 'autoHostToggle', autoHostToggle);
-            $.say($.whisperPrefix(sender) + $.lang.get('hosthandler.auto.host.toggle', (autoHostToggle === true ? $.lang.get('common.enabled') : $.lang.get('common.disabled'))));
         }
 
         /*
@@ -245,20 +175,6 @@
             hostReward = parseInt(action);
             $.setIniDbNumber('settings', 'hostReward', hostReward);
             $.say($.whisperPrefix(sender) + $.lang.get('hosthandler.set.hostreward.success', $.getPointsString(action)));
-        }
-
-        /*
-         * @commandpath autohostreward [amount] - Set the amount of points to reward when a channel starts autohosting
-         */
-        if (command.equalsIgnoreCase('autohostreward')) {
-            if (isNaN(parseInt(action))) {
-                $.say($.whisperPrefix(sender) + $.lang.get('hosthandler.set.autohostreward.usage', $.pointNameMultiple));
-                return;
-            }
-
-            autoHostReward = parseInt(action);
-            $.setIniDbNumber('settings', 'autoHostReward', autoHostReward);
-            $.say($.whisperPrefix(sender) + $.lang.get('hosthandler.set.autohostreward.success', $.getPointsString(action)));
         }
 
         /*
@@ -304,35 +220,21 @@
         }
 
         /*
-         * @commandpath autohostmessage [message] - Set a message given when a channel autohosts
-         */
-        if (command.equalsIgnoreCase('autohostmessage')) {
-            if (action === undefined) {
-                $.say($.whisperPrefix(sender) + $.lang.get('hosthandler.set.autohostmessage.usage'));
-                return;
-            }
-
-            autoHostMessage = argsString;
-            $.setIniDbString('settings', 'autoHostMessage', autoHostMessage);
-            $.say($.whisperPrefix(sender) + $.lang.get('hosthandler.set.autohostmessage.success'));
-        }
-
-        /*
          * @commandpath hosthistory [on/off] - Enable or disable collection of host history data for the Panel.
          */
         if (command.equalsIgnoreCase('hosthistory')) {
             if (args.length < 1) {
-                $.say($.whisperPrefix(sender) + $.lang.get('hosthistory.usage', $.getIniDbBoolean('settings', 'hostHistory') ? "on" : "off"));
+                $.say($.whisperPrefix(sender) + $.lang.get('hosthistory.usage', $.getIniDbBoolean('settings', 'hostHistory') ? "an" : "aus"));
                 return;
             }
             if (action.equalsIgnoreCase('on')) {
                 $.setIniDbBoolean('settings', 'hostHistory', true);
-                $.say($.whisperPrefix(sender) + $.lang.get('hosthistory.change', $.getIniDbBoolean('settings', 'hostHistory') ? "on" : "off"));
+                $.say($.whisperPrefix(sender) + $.lang.get('hosthistory.change', $.getIniDbBoolean('settings', 'hostHistory') ? "an" : "aus"));
             } else if (action.equalsIgnoreCase('off')) {
                 $.setIniDbBoolean('settings', 'hostHistory', false);
-                $.say($.whisperPrefix(sender) + $.lang.get('hosthistory.change', $.getIniDbBoolean('settings', 'hostHistory') ? "on" : "off"));
+                $.say($.whisperPrefix(sender) + $.lang.get('hosthistory.change', $.getIniDbBoolean('settings', 'hostHistory') ? "an" : "aus"));
             } else {
-                $.say($.whisperPrefix(sender) + $.lang.get('hosthistory.usage', $.getIniDbBoolean('settings', 'hostHistory') ? "on" : "off"));
+                $.say($.whisperPrefix(sender) + $.lang.get('hosthistory.usage', $.getIniDbBoolean('settings', 'hostHistory') ? "an" : "aus"));
             }
         }
 
@@ -356,15 +258,12 @@
     /*
      * @event initReady
      */
-    $.bind('initReady', function() {
+    $.bind('initReady', function () {
         $.registerChatCommand('./handlers/hostHandler.js', 'hostmessage', 1);
-        $.registerChatCommand('./handlers/hostHandler.js', 'autohostmessage', 1);
         $.registerChatCommand('./handlers/hostHandler.js', 'hostreward', 1);
-        $.registerChatCommand('./handlers/hostHandler.js', 'autohostreward', 1);
         $.registerChatCommand('./handlers/hostHandler.js', 'hostrewardminviewers', 1);
         $.registerChatCommand('./handlers/hostHandler.js', 'hosthistory', 1);
         $.registerChatCommand('./handlers/hostHandler.js', 'hosttoggle', 1);
-        $.registerChatCommand('./handlers/hostHandler.js', 'autohosttoggle', 1);
         $.registerChatCommand('./handlers/hostHandler.js', 'host', 1);
         $.registerChatCommand('./handlers/hostHandler.js', 'unhost', 1);
         $.registerChatCommand('./handlers/hostHandler.js', 'hostminviewers', 1);

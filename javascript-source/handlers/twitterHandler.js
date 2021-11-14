@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,9 +35,9 @@
         interval;
 
     /* Set default values for all configuration items. */
-    $.getSetIniDbString('twitter', 'message_online', 'Der Stream hat begonnen (twitchurl)');
-    $.getSetIniDbString('twitter', 'message_gamechange', 'Habe das Spiel zu (game) gewechselt. (twitchurl)');
-    $.getSetIniDbString('twitter', 'message_update', 'Streame immer noch (game) [(uptime)] (twitchurl)');
+    $.getSetIniDbString('twitter', 'message_online', 'Der Stream hat begonnen. -> (twitchurl)');
+    $.getSetIniDbString('twitter', 'message_gamechange', 'Die Kategorie wurde auf (game) gewechselt. (twitchurl)');
+    $.getSetIniDbString('twitter', 'message_update', 'Streame immer noch (game) und bin seit (uptime) online. (twitchurl)');
 
     $.getSetIniDbNumber('twitter', 'polldelay_mentions', 60);
     $.getSetIniDbNumber('twitter', 'polldelay_retweets', 60);
@@ -554,7 +554,7 @@
                 } else {
                     $.twitter.updateStatus(String(message).replace('(title)', $.twitchcache.getStreamStatus()).replace('(game)', $.twitchcache.getGameTitle()).replace('(twitchurl)', 'https://www.twitch.tv/' + $.ownerName + '?' + uptimeSec).replace('(uptime)', hrs + ':' + min).replace(/\(enter\)/g, '\r\n'));
                 }
-                $.log.event('Auto Update zu Twitter gesendet');
+                $.log.event('Automatisches Update an Twitter gesendet');
             }
         }
     }

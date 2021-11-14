@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,11 +20,9 @@ package com.scaniatv;
 
 import com.gmt2001.HttpRequest;
 import com.gmt2001.HttpResponse;
-
 import java.util.HashMap;
-
-import org.json.JSONObject;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 public class CustomAPI {
     private static CustomAPI instance;
@@ -64,7 +62,7 @@ public class CustomAPI {
                 throw new JSONException(data.httpCode + ": " + data.exception);
             }
         } catch (JSONException ex) {
-            com.gmt2001.Console.err.println("Failed to get JSON data from API: " + ex.getMessage());
+            com.gmt2001.Console.err.println("Fehler beim Abrufen der JSON-Daten von der API: " + ex.getMessage());
         }
         return new JSONObject("{}");
     }

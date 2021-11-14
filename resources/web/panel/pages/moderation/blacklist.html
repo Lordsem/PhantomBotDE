@@ -1,5 +1,5 @@
 <!--
-    Copyright (C) 2016-2020 phantom.bot
+    Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,11 +16,11 @@
 <main>
     <!-- Header -->
     <section class="content-header">
-        <h1>Blacklist</h1>
+        <h1>Moderation</h1>
         <ol class="breadcrumb">
             <li><a href="javascript:void(0);"><i class="fa fa-dashboard"></i> Startseite</a></li>
             <li>Moderation</li>
-            <li class="active">Blacklist</li>
+            <li class="active">Verbotsliste</li>
         </ol>
     </section>
 
@@ -28,18 +28,18 @@
     <section class="content">
     	<div class="box box-solid">
             <div class="box-header with-border">
-                <h3 class="box-title">Blacklist</h3>
+                <h3 class="box-title">Verbotsliste</h3>
             </div>
             <form role="form">
                 <!-- Box content -->
                 <div class="box-body">
-                    <button class="btn btn-primary btn-sm pull-right" type="button" id="add-blacklist-button"><i class="fa fa-plus"></i>&nbsp; Verbotsliste hinzufügen</button>
+                    <button class="btn btn-primary btn-sm pull-right" type="button" id="add-blacklist-button"><i class="fa fa-plus"></i>&nbsp; Verbot hinzufügen</button>
 
                     <div class="load-ajax">
                         <div class="spinner"></div>
                         <p class="load-ajax-text">Lade...</p>
                     </div>
-
+                    
                     <table id="blacklistTable" class="table table-bordered table-hover"></table>
                 </div>
             </form>
@@ -47,5 +47,5 @@
     </section>
 
     <!-- blacklist -->
-    <script src="/panel/js/pages/moderation/blacklist.js"></script>
+    <script src="js/pages/moderation/blacklist.js"></script>
 </main>

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -92,7 +92,7 @@
             try {
                 java.lang.Thread.sleep(1000);
             } catch (ex) {
-                $.log.error('Failed to set permission on Discord command as Discord is not connected. Please restart PhantomBot.');
+                $.log.error('Die Berechtigung für den Discord-Befehl konnte nicht festgelegt werden, da Discord nicht verbunden ist. Bitte starte den PhantomBot neu.');
                 return;
             }
         }

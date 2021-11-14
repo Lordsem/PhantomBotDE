@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,8 @@
         botList = [],
         lastJoinPart = $.systemTime(),
         firstRun = true,
-        isUpdatingUsers = false;
+        isUpdatingUsers = false,
+        _isSwappedSubscriberVIP = false;
 
     /**
      * @function cleanTwitchBots
@@ -217,7 +218,7 @@
      * @returns {boolean}
      */
     function isMod(username) {
-        return getUserGroupId(username.toLowerCase()) <= 2 || isOwner(username);
+        return isModeratorCache(username.toLowerCase()) || getUserGroupId(username.toLowerCase()) <= 2 || isOwner(username);
     }
 
     /**
@@ -228,7 +229,13 @@
      * @returns {boolean}
      */
     function isModv3(username, tags) {
-        return (tags != null && tags != '{}' && tags.get('user-type').length() > 0) || isModeratorCache(username.toLowerCase()) || isOwner(username);
+        if (tags != null && tags != '{}') {
+            if (tags.get('user-type').length() > 0) { // Broadcaster should be included here.
+                return true;
+            }
+        }
+        $.consoleDebug('Used isModv3 without tags::' + tags);
+        return isMod(username);
     }
 
     /**
@@ -238,7 +245,7 @@
      * @returns {boolean}
      */
     function isSub(username) {
-        return subUsers.contains(username.toLowerCase());
+        return subUsers.contains(java.util.Objects.toString(username.toLowerCase()));
     }
 
     /**
@@ -249,7 +256,13 @@
      * @returns {boolean}
      */
     function isSubv3(username, tags) {
-        return (tags != null && tags != '{}' && tags.get('subscriber').equals('1')) || isSub(username);
+        if (tags != null && tags != '{}') {
+            if (tags.containsKey('subscriber')) {
+                return tags.get('subscriber').equals('1');
+            }
+        }
+        $.consoleDebug('Verwendet isSubv3 ohne Tags::' + tags);
+        return isSub(username);
     }
 
     /**
@@ -279,7 +292,13 @@
      * @returns {boolean}
      */
     function isVIP(username, tags) {
-        return (tags != null && tags != '{}' && tags.get('vip').equals('1')) || getUserGroupId(username.toLowerCase()) == 5;
+        if (tags != null && tags != '{}') {
+            if (tags.containsKey('vip')) {
+                return tags.get('vip').equals('1');
+            }
+        }
+        $.consoleDebug('Verwendet isVIP ohne Tags::' + tags);
+        return getUserGroupId(username.toLowerCase()) == getVIPGroupID();
     }
 
     /**
@@ -417,6 +436,8 @@
         for (i in groupKeys) {
             userGroups[parseInt(groupKeys[i])] = $.inidb.get('groups', groupKeys[i]);
         }
+
+        _isSwappedSubscriberVIP = $.inidb.GetBoolean('settings', '', 'isSwappedSubscriberVIP');
     }
 
     /**
@@ -520,12 +541,12 @@
             $.setIniDbBoolean('subscribed', username, true);
         }
 
-        if (isTwitchSub(username) && getUserGroupId(username) != 3) {
+        if (isTwitchSub(username) && getUserGroupId(username) != getSubscriberGroupID()) {
             $.inidb.set('preSubGroup', username, getUserGroupId(username));
             setUserGroupByName(username, 'Subscriber');
         }
 
-        if (!isTwitchSub(username) && getUserGroupId(username) == 3) {
+        if (!isTwitchSub(username) && getUserGroupId(username) == getSubscriberGroupID()) {
             if ($.inidb.exists('preSubGroup', username)) {
                 $.inidb.set('group', username, $.inidb.get('preSubGroup', username));
                 $.inidb.del('preSubGroup', username);
@@ -549,7 +570,7 @@
         }
 
         for (i in groups) {
-            temp.push('Permission IDs: ' + groups[i].id + ' (' + groups[i].group + ')');
+            temp.push('Erlaubnis IDs: ' + groups[i].id + ' (' + groups[i].group + ')');
         }
         return temp.join(', ');
     }
@@ -564,16 +585,16 @@
         $.getSetIniDbString('grouppointsoffline', 'Administrator', '-1');
         $.getSetIniDbString('grouppoints', 'Moderator', '-1');
         $.getSetIniDbString('grouppointsoffline', 'Moderator', '-1');
-        $.getSetIniDbString('grouppoints', 'Subscriber', '-1');
-        $.getSetIniDbString('grouppointsoffline', 'Subscriber', '-1');
-        $.getSetIniDbString('grouppoints', 'Donator', '-1');
-        $.getSetIniDbString('grouppointsoffline', 'Donator', '-1');
+        $.getSetIniDbString('grouppoints', 'Abonnent', '-1');
+        $.getSetIniDbString('grouppointsoffline', 'Abonnent', '-1');
+        $.getSetIniDbString('grouppoints', 'Spender', '-1');
+        $.getSetIniDbString('grouppointsoffline', 'Spender', '-1');
         $.getSetIniDbString('grouppoints', 'VIP', '-1');
         $.getSetIniDbString('grouppointsoffline', 'VIP', '-1');
-        $.getSetIniDbString('grouppoints', 'Regular', '-1');
-        $.getSetIniDbString('grouppointsoffline', 'Regular', '-1');
-        $.getSetIniDbString('grouppoints', 'Viewer', '-1');
-        $.getSetIniDbString('grouppointsoffline', 'Viewer', '-1');
+        $.getSetIniDbString('grouppoints', 'Stammzuschauer', '-1');
+        $.getSetIniDbString('grouppointsoffline', 'Stammzuschauer', '-1');
+        $.getSetIniDbString('grouppoints', 'Zuschauer', '-1');
+        $.getSetIniDbString('grouppointsoffline', 'Zuschauer', '-1');
     }
 
     /**
@@ -592,28 +613,70 @@
             userGroups[2] = 'Moderator';
             $.inidb.set('groups', '2', 'Moderator');
         }
-        if (!userGroups[3] || userGroups[3] != 'Subscriber') {
-            userGroups[3] = 'Subscriber';
-            $.inidb.set('groups', '3', 'Subscriber');
+        if (!userGroups[3] || userGroups[3] != 'Abonnent') {
+            userGroups[3] = 'Abonnent';
+            $.inidb.set('groups', '3', 'Abonnent');
         }
-        if (!userGroups[4] || userGroups[4] != 'Donator') {
-            userGroups[4] = 'Donator';
-            $.inidb.set('groups', '4', 'Donator');
+        if (!userGroups[4] || userGroups[4] != 'Spender') {
+            userGroups[4] = 'Spender';
+            $.inidb.set('groups', '4', 'Spender');
         }
         if (!userGroups[5] || userGroups[5] != 'VIP') {
             userGroups[5] = 'VIP';
             $.inidb.set('groups', '5', 'VIP');
         }
-        if (!userGroups[6] || userGroups[6] != 'Regular') {
-            userGroups[6] = 'Regular';
-            $.inidb.set('groups', '6', 'Regular');
+        if (!userGroups[6] || userGroups[6] != 'Stammzuschauer') {
+            userGroups[6] = 'Stammzuschauer';
+            $.inidb.set('groups', '6', 'Stammzuschauer');
         }
-        if (!userGroups[7] || userGroups[7] != 'Viewer') {
-            userGroups[7] = 'Viewer';
-            $.inidb.set('groups', '7', 'Viewer');
+        if (!userGroups[7] || userGroups[7] != 'Zuschauer') {
+            userGroups[7] = 'Zuschauer';
+            $.inidb.set('groups', '7', 'Zuschauer');
         }
         $.inidb.set('group', $.ownerName.toLowerCase(), 0);
         $.inidb.set('group', $.botName.toLowerCase(), 0);
+    }
+
+    function swapSubscriberVIP() {
+        var old3L = userGroups[3];
+        var old3D = $.inidb.get('groups', '3');
+        var old3U = $.inidb.GetKeysByLikeValues('group', '', '3');
+        var new3U = [];
+        var old5L = userGroups[5];
+        var old5D = $.inidb.get('groups', '5');
+        var old5U = $.inidb.GetKeysByLikeValues('group', '', '5');
+        var new5U = [];
+        var i;
+
+        for (i in old3U) {
+            new3U[i] = '5';
+        }
+
+        for (i in old5U) {
+            new5U[i] = '3';
+        }
+
+        userGroups[3] = old5L;
+        userGroups[5] = old3L;
+        $.inidb.set('groups', '3', old5D);
+        $.inidb.set('groups', '5', old3D);
+        $.inidb.SetBatchString('group', '', old3U, new3U);
+        $.inidb.SetBatchString('group', '', old5U, new5U);
+
+        _isSwappedSubscriberVIP = !_isSwappedSubscriberVIP;
+        $.inidb.SetBoolean('settings', '', 'isSwappedSubscriberVIP', _isSwappedSubscriberVIP);
+    }
+
+    function isSwappedSubscriberVIP() {
+        return _isSwappedSubscriberVIP;
+    }
+
+    function getSubscriberGroupID() {
+        return _isSwappedSubscriberVIP ? 5 : 3;
+    }
+
+    function getVIPGroupID() {
+        return _isSwappedSubscriberVIP ? 3 : 5;
     }
 
     /**
@@ -771,12 +834,16 @@
             }
         } else if (event.getMode().equalsIgnoreCase('vip')) {
             if (event.getAdd().toString().equals('true')) {
-                if (getUserGroupId(username) < 5) {
-                    setUserGroupById(username, 5);
+                if (getUserGroupId(username) < getVIPGroupID()) {
+                    setUserGroupById(username, getVIPGroupID());
                 }
             } else {
                 if (isVIP(username)) {
-                    setUserGroupById(username, 7);
+                    if (isSub(username)) {
+                        $.inidb.set('group', username, '3'); // Subscriber, return to that group.
+                    } else {
+                        $.inidb.set('group', username, '7');
+                    }
                 }
             }
         }
@@ -813,7 +880,7 @@
                         $.inidb.set('group', spl[i], '2');
                     }
                 }
-                $.saveArray(modListUsers, 'addons/mods.txt', false);
+                $.saveArray(modListUsers, './addons/mods.txt', false);
             } else if (message.indexOf(vipMessageStart) > -1) {
                 spl = message.replace(vipMessageStart, '').split(', ');
                 vipUsers = [];
@@ -830,14 +897,14 @@
                         $.inidb.set('group', spl[i], '5');
                     }
                 }
-                $.saveArray(vipUsers, 'addons/vips.txt', false);
+                $.saveArray(vipUsers, './addons/vips.txt', false);
             } else if (message.indexOf(novipMessageStart) > -1) {
                 for (i in keys) {
                     if ($.inidb.get('group', keys[i]).equalsIgnoreCase('5')) {
                         $.inidb.del('group', keys[i]);
                     }
                 }
-                $.deleteFile('addons/vips.txt', true);
+                $.deleteFile('./addons/vips.txt', true);
             } else if (message.indexOf('specialuser') > -1) {
                 spl = message.split(' ');
                 if (spl[2].equalsIgnoreCase('subscriber')) {
@@ -848,7 +915,7 @@
                         for (var i = 0; i < subUsers.size(); i++) {
                             subsTxtList.push(subUsers.get(i));
                         }
-                        $.saveArray(subsTxtList, 'addons/subs.txt', false);
+                        $.saveArray(subsTxtList, './addons/subs.txt', false);
                     }
                 }
             }
@@ -978,7 +1045,7 @@
                 return;
             }
 
-            if (groupId == 3) {
+            if (groupId == getSubscriberGroupID()) {
                 $.say($.whisperPrefix(sender) + $.lang.get('permissions.grouppoints.set.sub.error'));
                 return;
             }
@@ -1064,6 +1131,18 @@
         }
 
         /**
+         * @commandpath swapsubscribervip - Swaps the Subscriber and VIP usergroups for the purposes of permcom
+         */
+        if (command.equalsIgnoreCase('swapsubscribervip')) {
+            swapSubscriberVIP();
+            if (isSwappedSubscriberVIP()){
+                $.say($.whisperPrefix(sender) + $.lang.get('permissions.swapsubscribervip.swapped'));
+            } else {
+                $.say($.whisperPrefix(sender) + $.lang.get('permissions.swapsubscribervip.normal'));
+            }
+        }
+
+        /**
          * @commandpath permission - Give's you all the ppermissions with there id's
          */
         if (command.equalsIgnoreCase('permissions') || command.equalsIgnoreCase('permissionlist')) {
@@ -1085,7 +1164,7 @@
         $.registerChatCommand('./core/permissions.js', 'ignorelist', 1);
         $.registerChatCommand('./core/permissions.js', 'ignoreadd', 1);
         $.registerChatCommand('./core/permissions.js', 'ignoreremove', 1);
-
+        $.registerChatCommand('./core/permissions.js', 'swapsubscribervip', 1);
 
         /** Load groups and generate default groups if they don't exist */
         reloadGroups();
@@ -1144,4 +1223,7 @@
     $.removeModeratorFromCache = removeModeratorFromCache;
     $.updateUsersObject = updateUsersObject;
     $.restoreSubscriberStatus = restoreSubscriberStatus;
+    $.isSwappedSubscriberVIP = isSwappedSubscriberVIP;
+    $.getSubscriberGroupID = getSubscriberGroupID;
+    $.getVIPGroupID = getVIPGroupID;
 })();

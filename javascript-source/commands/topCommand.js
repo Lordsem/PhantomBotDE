@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -108,7 +108,7 @@
                 top.push((parseInt(i) + 1) + '. ' + $.resolveRank(temp[i].username) + ' ' + $.getTimeString(temp[i].value, true));
             }
 
-            $.say($.lang.get('top5.default', amountTime, 'time', top.join(', ')));
+            $.say($.lang.get('top5.default', amountTime, 'Zeit', top.join(', ')));
             return;
         }
 

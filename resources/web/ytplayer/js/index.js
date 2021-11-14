@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ $(function() {
         $('#main').fadeIn(5e2);
 
         if (!hasPlaylistData && player.hasAPIKey() && !player.secondConnection) {
-            toastr.error('Failed to load a playlist with songs.');
+            toastr.error('Eine Playlist mit Songs konnte nicht geladen werden.');
 
             // Create a fake progress slider.
             player.progressSlider = $('#progress-slider').slider({
@@ -55,7 +55,7 @@ $(function() {
             });
 
             // Error the to user.
-            helpers.getErrorModal('Playlist Error', 'Failed to load a playlist with songs, please load a playlist.', () => {
+            helpers.getErrorModal('Playlist Error', 'Fehler beim Laden einer Playlist mit Songs, bitte laden Sie eine Playlist.', () => {
                 player.dbQuery('get_playlists', 'yt_playlists_registry', (results) => {
                     // Get the keys.
                     results = Object.keys(results);
@@ -67,15 +67,15 @@ $(function() {
                         }
                     }
 
-                    helpers.getPlaylistModal('Load Playlist', 'Playlist Name', 'Load', 'Playlist', playlists, () => {
+                    helpers.getPlaylistModal('Load Playlist', 'Playlist Name', 'Laden', 'Playlist', playlists, () => {
                         let playlist = $('#playlist-load').find(':selected').text();
 
                         if (playlist === 'Select a playlist') {
-                            toastr.error('Please select a valid playlist.');
+                            toastr.error('Bitte wählen Sie eine gültige Playlist aus.');
                         } else {
                             if (playlist.length > 0) {
                                 player.loadPlaylist(playlist);
-                                toastr.success('Loading playlist: ' + playlist);
+                                toastr.success('Playlist laden: ' + playlist);
 
                                 if (player.firstLoad === true) {
                                     player.ready();
@@ -84,7 +84,7 @@ $(function() {
                         }
                     }).modal('toggle');
                 });
-            }).modal('toggle');;
+            }).modal('toggle');
         }
     };
 
@@ -103,7 +103,7 @@ $(function() {
         // Check if the player is disabled right away.
         player.dbQuery('get_module_status', 'modules', (data) => {
             if (data['./systems/youtubePlayer.js'] == 'false') {
-                helpers.getErrorModal('Module Disabled', 'The YouTube player module is disabled, please go and enable it.', () => {
+                helpers.getErrorModal('Module Disabled', 'Das YouTube-Player-Modul ist deaktiviert. Bitte aktivieren Sie es.', () => {
                     window.location.reload();
                 }).modal('toggle');
 
@@ -261,7 +261,7 @@ $(function() {
                         'class': 'btn btn-secondary btn-sm',
                         'data-toggle': 'tooltip',
                         'data-song': songlist[i].song,
-                        'title': 'Play song',
+                        'title': 'Song abspielen',
                         'html': $('<i/>', {
                             'class': 'fas fa-play'
                         }),
@@ -277,7 +277,7 @@ $(function() {
                         'type': 'button',
                         'class': 'btn btn-secondary btn-sm',
                         'data-toggle': 'tooltip',
-                        'title': 'Delete song',
+                        'title': 'Song löschen',
                         'data-song': songlist[i].song,
                         'html': $('<i/>', {
                             'class': 'fas fa-trash'
@@ -354,10 +354,10 @@ $(function() {
                 // Remove loader.
                 openPlayer(true);
                 // Alert the user.
-                toastr.info('Song queued: ' + (e.title.length > 30 ? e.title.substring(0, 30) + '...' : e.title));
+                toastr.info('Song in der Warteschlange: ' + (e.title.length > 30 ? e.title.substring(0, 30) + '...' : e.title));
             } else {
                 player.API.loadVideoById(e.play, 0, 'medium');
-                toastr.success('Now playing: ' +  (e.title.length > 30 ? e.title.substring(0, 30) + '...' : e.title));
+                toastr.success('Läuft gerade: ' +  (e.title.length > 30 ? e.title.substring(0, 30) + '...' : e.title));
             }
 
             // Update the value under the slider.
@@ -460,13 +460,13 @@ $(function() {
     // Delete current song from playlist button.
     $('#del-cur-playlist-button').on('click', () => {
         player.deleteFromPlaylist();
-        toastr.success('Deleted from playlist: ' + (player.temp.title.length > 30 ? player.temp.title.substring(0, 30) + '...' : player.temp.title));
+        toastr.success('Aus Wiedergabeliste gelöscht: ' + (player.temp.title.length > 30 ? player.temp.title.substring(0, 30) + '...' : player.temp.title));
     });
 
     // Fav button to steal a song.
     $('#fav-button').on('click', () => {
         player.addSongToPlaylist();
-        toastr.success('Added to playlist: ' + (player.temp.title.length > 30 ? player.temp.title.substring(0, 30) + '...' : player.temp.title));
+        toastr.success('Zur Wiedergabeliste hinzugefügt: ' + (player.temp.title.length > 30 ? player.temp.title.substring(0, 30) + '...' : player.temp.title));
     });
 
     // Skip song button.
@@ -501,7 +501,7 @@ $(function() {
 
     // Add song to queue button.
     $('#queue-add-song-button').on('click', () => {
-        helpers.getSongModal('Add Song to Queue', 'Song Name or YouTube Url', 'Add', 'https://youtu.be/dQw4w9WgXcQ', () => {
+        helpers.getSongModal('Add Song to Queue', 'Songname oder YouTube Url', 'Hinzufügen', 'https://youtu.be/dQw4w9WgXcQ', () => {
             let song = $('#song-url').val();
 
             if (song.length > 0) {
@@ -512,7 +512,7 @@ $(function() {
 
     // Add song to playlist button.
     $('#playlist-add-song-button').on('click', () => {
-        helpers.getSongModal('Add Song to Playlist', 'Song Name or YouTube Url', 'Add', 'https://youtu.be/dQw4w9WgXcQ', () => {
+        helpers.getSongModal('Add Song to Playlist', 'Songname oder YouTube Url', 'Hinzufügen', 'https://youtu.be/dQw4w9WgXcQ', () => {
             let song = $('#song-url').val();
 
             if (song.length > 0) {
@@ -534,15 +534,15 @@ $(function() {
                 }
             }
 
-            helpers.getPlaylistModal('Load Playlist', 'Playlist Name', 'Load', 'Playlist', playlists, () => {
+            helpers.getPlaylistModal('Load Playlist', 'Playlistname', 'Laden', 'Playlist', playlists, () => {
                 let playlist = $('#playlist-load').find(':selected').text();
 
                 if (playlist === 'Select a playlist') {
-                    toastr.error('Please select a valid playlist.');
+                    toastr.error('Bitte wähle eine gültige Playlist aus.');
                 } else {
                     if (playlist.length > 0) {
                         player.loadPlaylist(playlist);
-                        toastr.success('Loading playlist: ' + playlist);
+                        toastr.success('Playlist laden: ' + playlist);
                     }
                 }
             }).modal('toggle');

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,17 +18,16 @@ package tv.phantombot.twitch.irc;
 
 import java.net.URI;
 import java.nio.channels.NotYetConnectedException;
-import org.java_websocket.exceptions.WebsocketNotConnectedException;
 import java.util.concurrent.locks.ReentrantLock;
+import org.java_websocket.exceptions.WebsocketNotConnectedException;
 import tv.phantombot.PhantomBot;
-
 import tv.phantombot.twitch.irc.chat.utils.MessageQueue;
 
 public class TwitchSession extends MessageQueue {
     private static TwitchSession instance;
     private final String botName;
     private final String channelName;
-    private final String oAuth;
+    private String oAuth;
     private TwitchWSIRC twitchWSIRC;
     private final ReentrantLock lock = new ReentrantLock();
     private final ReentrantLock lock2 = new ReentrantLock();
@@ -79,6 +78,11 @@ public class TwitchSession extends MessageQueue {
         return this.channelName;
     }
 
+    public void setOAuth(String oAuth) {
+        this.oAuth = oAuth;
+        twitchWSIRC.setOAuth(oAuth);
+    }
+
     /**
      * Method that returns the bot name.
      *
@@ -97,12 +101,12 @@ public class TwitchSession extends MessageQueue {
         try {
             this.twitchWSIRC.send(message);
         } catch (NotYetConnectedException  ex) {
-            com.gmt2001.Console.err.println("Failed to send message to Twitch [NotYetConnectedException]: " + ex.getMessage());
+            com.gmt2001.Console.err.println("Fehler beim Senden der Nachricht an Twitch [NotYetConnectedException]: " + ex.getMessage());
         } catch (WebsocketNotConnectedException ex) {
             reconnect();
-            com.gmt2001.Console.err.println("Failed to send message to Twitch [WebsocketNotConnectedException]: " + ex.getMessage());
+            com.gmt2001.Console.err.println("Fehler beim Senden der Nachricht an Twitch [WebsocketNotConnectedException]: " + ex.getMessage());
         } catch (Exception ex) {
-            com.gmt2001.Console.err.println("Failed to send message to Twitch [" + ex.getClass().getSimpleName() + "]: " + ex.getMessage());
+            com.gmt2001.Console.err.println("Fehler beim Senden der Nachricht an Twitch [" + ex.getClass().getSimpleName() + "]: " + ex.getMessage());
         }
     }
 
@@ -133,7 +137,7 @@ public class TwitchSession extends MessageQueue {
         try {
             this.twitchWSIRC = new TwitchWSIRC(new URI("wss://irc-ws.chat.twitch.tv"), channelName, botName, oAuth, this);
             if (!this.twitchWSIRC.connectWSS(false)) {
-                throw new Exception("Error when connecting to Twitch.");
+                throw new Exception("Fehler beim Verbinden mit Twitch.");
             }
         } catch (Exception ex) {
             com.gmt2001.Console.err.println("Fehler beim Erstellen einer neuen TwitchWSIRC-Instanz: " + ex.getMessage());
@@ -169,8 +173,8 @@ public class TwitchSession extends MessageQueue {
                 if (lastReconnect + (MAX_BACKOFF * 2) < now) {
                     nextBackoff = 1000L;
                 } else {
-                    com.gmt2001.Console.out.println("Delaying next connection attempt to prevent spam, " + (nextBackoff / 1000) + " seconds...");
-                    com.gmt2001.Console.warn.println("Delaying next reconnect " + (nextBackoff / 1000) + " seconds...", true);
+                    com.gmt2001.Console.out.println("Verzögern des nächsten Verbindungsversuchs, um Spam zu verhindern, " + (nextBackoff / 1000) + " Sekunden...");
+                    com.gmt2001.Console.warn.println("Verzögern der nächsten Wiederverbindung " + (nextBackoff / 1000) + " Sekunden...", true);
                     Thread.sleep(nextBackoff);
                 }
 

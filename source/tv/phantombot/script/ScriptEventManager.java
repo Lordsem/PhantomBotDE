@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,8 +22,9 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 import net.engio.mbassy.listener.Handler;
-import org.apache.commons.lang3.text.WordUtils;
+import org.apache.commons.text.WordUtils;
 import tv.phantombot.event.Event;
 import tv.phantombot.event.Listener;
 
@@ -31,7 +32,7 @@ public class ScriptEventManager implements Listener {
 
     private static final ScriptEventManager instance = new ScriptEventManager();
     private final ConcurrentHashMap<String, ScriptEventHandler> events = new ConcurrentHashMap<>();
-    private final List<String> classes = new ArrayList<String>();
+    private final List<String> classes = new ArrayList<>();
     private boolean isKilled = false;
 
     /**
@@ -56,7 +57,7 @@ public class ScriptEventManager implements Listener {
         Reflect.instance().loadPackageRecursive(Event.class.getName().substring(0, Event.class.getName().lastIndexOf('.')));
         Reflect.instance().getSubTypesOf(Event.class).stream().filter((c) -> (!this.classes.contains(c.getName().substring(0, c.getName().lastIndexOf('.'))))).forEachOrdered((c) -> {
             this.classes.add(c.getName().substring(0, c.getName().lastIndexOf('.')));
-            com.gmt2001.Console.debug.println("Registered event package " + c.getName().substring(0, c.getName().lastIndexOf('.')));
+            com.gmt2001.Console.debug.println("Registrierte Eventpaket " + c.getName().substring(0, c.getName().lastIndexOf('.')));
         });
     }
 
@@ -72,12 +73,14 @@ public class ScriptEventManager implements Listener {
                 String eventName = event.getClass().getSimpleName();
                 ScriptEventHandler e = events.get(eventName);
 
-                e.handle(event);
+                if (e != null) {
+                    e.handle(event);
+                }
 
-                com.gmt2001.Console.debug.println("Dispatched event " + eventName);
+                com.gmt2001.Console.debug.println("Versendete Event " + eventName);
             } catch (Exception ex) {
                 com.gmt2001.Console.err.println("Dispatchen des Events fehlgeschlagen " + event.getClass().getName());
-                com.gmt2001.Console.err.printStackTrace(ex);
+                com.gmt2001.Console.err.printStackTrace(ex, false, true);
             }
         }
     }
@@ -100,6 +103,15 @@ public class ScriptEventManager implements Listener {
      */
     public void register(String eventName, ScriptEventHandler handler) {
         register(eventName, handler, true);
+    }
+
+    protected String formatEventName(String input) {
+        return input.substring(0, 1).toLowerCase() + input.substring(1).replace("Event", "");
+    }
+
+    protected List<String> getEventNames() {
+        Reflect.instance().loadPackageRecursive(Event.class.getName().substring(0, Event.class.getName().lastIndexOf('.')));
+        return Reflect.instance().getSubTypesOf(Event.class).stream().map((c) -> this.formatEventName(c.getName().substring(c.getName().lastIndexOf('.') + 1))).collect(Collectors.toList());
     }
 
     private void register(String eventName, ScriptEventHandler handler, boolean recurse) {

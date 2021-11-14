@@ -1,16 +1,16 @@
-#
-# Copyright (C) 2016-2020 phantom.bot
-#
+#  
+# Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
+#  
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-#
+# 
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-#
+#  
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
@@ -37,7 +37,7 @@ RUN mkdir -p "${BUILDDIR}" \
 COPY . "${BUILDDIR}"
 
 RUN cd "${BUILDDIR}" \
-    && ant -noinput -buildfile build.xml ${ANT_ARGS} jar
+    && ant -noinput -buildfile build.xml -Disdocker=true ${ANT_ARGS} jar
 
 # Application container
 FROM adoptopenjdk:11-jre-hotspot-bionic
@@ -49,9 +49,19 @@ ARG BUILDDIR=${BASEDIR}_build
 ARG DATADIR=${BASEDIR}_data
 ARG TARGETPLATFORM
 
+USER root
+
+RUN groupadd -r phantombot -g 900 \
+    && useradd -u 901 -r -g phantombot -s /sbin/nologin -c "PhantomBot Daemon User" phantombot
+
 RUN mkdir -p "${BASEDIR}" "${DATADIR}" "${BASEDIR}/logs"
 
 COPY --from=builder "${BUILDDIR}/dist/${PROJECT_NAME}-${PROJECT_VERSION}/." "${BASEDIR}/"
+
+RUN chown -R -H -L phantombot:phantombot "${BASEDIR}" \
+    && chown -R -H -L phantombot:phantombot "${DATADIR}"
+
+USER phantombot:phantombot
 
 RUN cd "${BASEDIR}" \
     && rm -rf \
@@ -76,7 +86,8 @@ RUN cd "${BASEDIR}" \
     && ln -s "${DATADIR}/scripts/custom" "${BASEDIR}/scripts/custom" \
     && ln -s "${DATADIR}/scripts/discord" "${BASEDIR}/scripts/discord/custom" \
     && ln -s "${DATADIR}/scripts/lang" "${BASEDIR}/scripts/lang/custom" \
-    && if [ "${TARGETPLATFORM}" = "linux/amd64" ] ; then chmod u+x ./java-runtime-linux/bin/java ; fi
+    && chmod u+x ${BASEDIR}/launch-service.sh \
+    && if [ "${TARGETPLATFORM}" = "linux/amd64" ] ; then chmod u+x ${BASEDIR}/java-runtime-linux/bin/java ; fi
 
 VOLUME "${DATADIR}"
 

@@ -1,6 +1,6 @@
 
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,12 +28,11 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.regex.Pattern;
 import javax.net.ssl.HttpsURLConnection;
-
-import tv.phantombot.RepoVersion;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import tv.phantombot.PhantomBot;
+import tv.phantombot.RepoVersion;
 
 /*
  * Communicates with GitHub API v3
@@ -43,14 +42,14 @@ import org.json.JSONObject;
 public class GitHubAPIv3 {
 
     private static GitHubAPIv3 instance;
-    private static final String sAPIURL = "https://api.github.com/repos/PhantomBotDE/PhantomBotDE";
+    private static final String sAPIURL = "https://api.github.com/repos/PhantomBot/PhantomBot";
     private static final int iHTTPTimeout = 2 * 1000;
 
     public static synchronized GitHubAPIv3 instance() {
         if (instance == null) {
             instance = new GitHubAPIv3();
         }
-
+        
         return instance;
     }
 
@@ -180,20 +179,7 @@ public class GitHubAPIv3 {
             return null;
         }
 
-        String os = "";
-        String osname = System.getProperty("os.name").toLowerCase();
-
-        if (osname.contains("win")) {
-            os = "-win";
-        } else if (osname.contains("mac")) {
-            os = "-mac";
-        } else if (osname.contains("nix") || osname.contains("nux") || osname.contains("aix")) {
-            if (System.getProperty("os.arch").toLowerCase().contains("arm")) {
-                os = "-arm";
-            } else {
-                os = "-lin";
-            }
-        }
+        String os = PhantomBot.getOsSuffix();
 
         JSONArray assetsArray = jsonArray.getJSONObject(0).getJSONArray("assets");
         Pattern p = Pattern.compile(".*PhantomBot-[0-9]+\\.[0-9]+\\.[0-9]+" + os + "\\.zip", Pattern.CASE_INSENSITIVE);
@@ -212,7 +198,7 @@ public class GitHubAPIv3 {
                 if (assetsArray.getJSONObject(i).has("browser_download_url") && p.matcher(assetsArray.getJSONObject(i).getString("browser_download_url")).matches()) {
                     break;
                 }
-        }
+            }
         }
 
         return new String[] { tagName, assetsArray.getJSONObject(i).getString("browser_download_url") };

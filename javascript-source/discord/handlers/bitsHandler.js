@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
  */
 (function() {
     var toggle = $.getSetIniDbBoolean('discordSettings', 'bitsToggle', false),
-        message = $.getSetIniDbString('discordSettings', 'bitsMessage', '(name) just cheered (amount) bits!'),
+        message = $.getSetIniDbString('discordSettings', 'bitsMessage', '(name) hat (amount) Bits gecheert!'),
         channelName = $.getSetIniDbString('discordSettings', 'bitsChannel', ''),
         announce = false;
 
@@ -30,7 +30,7 @@
     $.bind('webPanelSocketUpdate', function(event) {
         if (event.getScript().equalsIgnoreCase('./discord/handlers/bitsHandler.js')) {
             toggle = $.getIniDbBoolean('discordSettings', 'bitsToggle', false);
-            message = $.getIniDbString('discordSettings', 'bitsMessage', '(name) just cheered (amount) bits!');
+            message = $.getIniDbString('discordSettings', 'bitsMessage', '(name) hat (amount) Bits gecheert!');
             channelName = $.getIniDbString('discordSettings', 'bitsChannel', '');
         }
     });

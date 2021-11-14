@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,13 +62,13 @@
 
         if (bttvLocalEmotes.has('channelEmotes')) {
             jsonArray = bttvLocalEmotes.getJSONArray('channelEmotes');
-        for (i = 0; i < jsonArray.length(); i++) {
+            for (i = 0; i < jsonArray.length(); i++) {
                 emote = jsonArray.getJSONObject(i).getString('code');
 
-            // Check for emote at the beginning, middle and end of a string.
-            emoteRegExp = '\\b' + emote + '\\b';
-            newEmotesRegExpList.push(emoteRegExp);
-        }
+                // Check for emote at the beginning, middle and end of a string.
+                emoteRegExp = '\\b' + emote + '\\b';
+                newEmotesRegExpList.push(emoteRegExp);
+            }
         }
 
         if (bttvLocalEmotes.has('sharedEmotes')) {
@@ -87,7 +87,7 @@
             currentSet = String(defaultSets.getInt(i));
             jsonArray = ffzEmotes.getJSONObject('sets').getJSONObject(currentSet).getJSONArray('emoticons');
             for (j = 0; j < jsonArray.length(); j++) {
-                emote = jsonArray.getJSONObject(j).getString('name').replace('(', '\\(').replace(')', '\\)').replace('\'', '\\\'').replace('[', '\\[').replace(']', '\\]');
+                emote = $.replace($.replace($.replace($.replace($.replace(jsonArray.getJSONObject(j).getString('name'), '(', '\\('), ')', '\\)'), '\'', '\\\''), '[', '\\['), ']', '\\]');
 
                 // Check for emote at the beginning, middle and end of a string.
                 emoteRegExp = '\\b' + emote + '\\b';
@@ -99,7 +99,7 @@
             currentSet = String(ffzLocalEmotes.getJSONObject('room').getInt('set'));
             jsonArray = ffzLocalEmotes.getJSONObject('sets').getJSONObject(currentSet).getJSONArray('emoticons');
             for (i = 0; i < jsonArray.length(); i++) {
-                emote = jsonArray.getJSONObject(i).getString('name').replace('(', '\\(').replace(')', '\\)').replace('\'', '\\\'').replace('[', '\\[').replace(']', '\\]');
+                emote = $.replace($.replace($.replace($.replace($.replace(jsonArray.getJSONObject(i).getString('name'), '(', '\\('), ')', '\\)'), '\'', '\\\''), '[', '\\['), ']', '\\]');
 
                 // Check for emote at the beginning, middle and end of a string.
                 emoteRegExp = '\\b' + emote + '\\b';
@@ -111,7 +111,7 @@
         $.inidb.set('emotecache', 'regexp_cache', newEmotesRegExpList.join(','));
 
         loaded = true;
-        $.consoleDebug("Baue " + newEmotesRegExpList.length + " regulären Ausdruck fürs Emote handling.");
+        $.consoleDebug("Erstellte " + newEmotesRegExpList.length + " reguläre Ausdrücke für das Emotes-Handling.");
         newEmotesRegExpList = [];
     }
 
@@ -133,7 +133,7 @@
         emotesRegExpList = new RegExp(newEmotesRegExpList.join('|'), 'g');
 
         loaded = true;
-        $.consoleDebug("Baue " + newEmotesRegExpList.length + " regulären Ausdruck fürs Emote handling im Cache.");
+        $.consoleDebug("Erstellte " + newEmotesRegExpList.length + " reguläre Ausdrücke für das Emotes-Handling vom Zwischenspeicher.");
         newEmotesRegExpList = [];
     }
 

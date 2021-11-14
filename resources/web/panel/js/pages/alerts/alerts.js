@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,10 +19,10 @@
 $(function() {
     // Get all module toggles.
     socket.getDBValues('alerts_get_modules', {
-        tables: ['modules', 'modules', 'modules', 'modules', 'modules', 'modules', 'modules', 'modules', 'modules', 'modules', 'modules'],
+        tables: ['modules', 'modules', 'modules', 'modules', 'modules', 'modules', 'modules', 'modules', 'modules', 'modules', 'modules', 'modules'],
         keys: ['./handlers/followHandler.js', './handlers/subscribeHandler.js', './handlers/hostHandler.js', './handlers/bitsHandler.js', './handlers/clipHandler.js',
-                './systems/greetingSystem.js', './handlers/donationHandler.js', './handlers/raidHandler.js', './handlers/tipeeeStreamHandler.js',
-                './handlers/streamElementsHandler.js', './handlers/twitterHandler.js']
+               './systems/greetingSystem.js', './systems/welcomeSystem.js', './handlers/donationHandler.js', './handlers/raidHandler.js', './handlers/tipeeeStreamHandler.js',
+               './handlers/streamElementsHandler.js', './handlers/twitterHandler.js']
     }, true, function(e) {
         // Handle the settings button.
         let keys = Object.keys(e),
@@ -55,7 +55,7 @@ $(function() {
             // Toggle the settings button.
             $('#' + name.replace('Toggle', 'Settings')).prop('disabled', !checked);
             // Alert the user.
-            toastr.success('Das Alarmmodul wurde erfolgreich ' + (checked ? 'aktiviert!' : 'deaktiviert!'));
+            toastr.success('Das Alarmmodul wurde erfolgreich ' + (checked ? 'aktiviert' : 'deaktiviert') + '!');
         });
     });
 
@@ -73,7 +73,7 @@ $(function() {
                 'Wenn eine Nachricht im Kanal gesendet werden soll, wenn jemand folgt. Dadurch wird auch die Belohnung umgeschaltet.'))
             // Add the the text area for the follow message.
             .append(helpers.getTextAreaGroup('follow-message', 'text', 'Follow Nachricht', '', e.followMessage,
-                'Die Nachricht wird gesendet, wenn jemand dem Kanal folgt. Tags: (name), (alert), (playsound), und (reward)', false))
+                'Die Nachricht wird gesendet, wenn jemand dem Kanal folgt. Tags: (name), (alert), (playsound) und (reward)', false))
             // Add the the box for the reward.
             .append(helpers.getInputGroup('follow-reward', 'number', 'Follow Belohnung', '', e.followReward,
                 'Belohnung für Benutzer, die dem Kanal folgen.'))
@@ -138,10 +138,10 @@ $(function() {
                     'Wenn eine Nachricht im Channel gesendet werden soll, wenn dich jemand abonniert. Dadurch wird auch die Belohnung umgeschaltet.'))
                 // Append message box for the message
                 .append(helpers.getTextAreaGroup('sub-msg', 'text', 'Abonnementnachricht', '', e.subscribeMessage,
-                    'Die Nachricht wird gesendet, wenn sich jemand den Kanal abonniert. Tags: (name), (alert), (playsound), (plan), und (reward)', false))
+                    'Die Nachricht wird gesendet, wenn sich jemand den Kanal abonniert. Tags: (name), (alert), (playsound), (plan) und (reward)', false))
                 // Appen the reward box
                 .append(helpers.getInputGroup('sub-reward', 'number', 'Abonnement Belohnung', '', e.subscribeReward,
-                    'Belohnung, die der Benutzer erhält, wenn er den Kanal abonnier, ein Geschenk-Abonnement erhält oder mit Twitch Prime abonniert.'))))
+                    'Belohnung, die der Benutzer erhält, wenn er den Kanal abonnier, ein Geschenk-Abonnement erhält oder mit Prime abonniert.'))))
             // Append second collapsible accordion.
             .append(helpers.getCollapsibleAccordion('main-2', 'Prime Abonnement-Einstellungen',  $('<form/>', {
                     'role': 'form'
@@ -151,7 +151,7 @@ $(function() {
                     'Wenn eine Nachricht im Kanal gesendet werden soll, wenn dich jemand über Twitch Prime abonniert. Dadurch wird auch die Belohnung umgeschaltet.'))
                 // Append message box for the message
                 .append(helpers.getTextAreaGroup('primesub-msg', 'text', 'Prime Abonnement Nachricht', '', e.primeSubscribeMessage,
-                    'Die Nachricht wird gesendet, wenn jemand den Kanal mit Twitch Prime abonniert. Tags: (name), (alert), (playsound), (plan), und (reward)', false))))
+                    'Die Nachricht wird gesendet, wenn jemand den Kanal mit Twitch Prime abonniert. Tags: (name), (alert), (playsound), (plan) und (reward)', false))))
             // Append third collapsible accordion.
             .append(helpers.getCollapsibleAccordion('main-3', 'Einstellungen für das erneute Abonnieren', $('<form/>', {
                     'role': 'form'
@@ -161,7 +161,7 @@ $(function() {
                     'Wenn eine Nachricht im Kanal gesendet werden soll, wenn dich jemand erneut abonniert. Dadurch wird auch die Belohnung umgeschaltet.'))
                 // Append message box for the message
                 .append(helpers.getTextAreaGroup('resub-msg', 'text', 'Wieder-Abonnement Nachricht', '', e.reSubscribeMessage,
-                    'Die Nachricht wird gesendet, wenn jemand den Kanal erneut abonniert. Tags: (name), (alert), (playsound), (plan), (months), (customemote), und (reward)', false))
+                    'Die Nachricht wird gesendet, wenn jemand den Kanal erneut abonniert. Tags: (name), (alert), (playsound), (plan), (months), (customemote) und (reward)', false))
                 // Appen the reward box
                 .append(helpers.getInputGroup('resub-reward', 'number', 'Wieder-Abonnement Belohnung', '', e.reSubscribeReward,
                     'Belohnung, die dem Benutzer gegeben wird, wenn er den Kanal erneut abonniert.'))
@@ -177,7 +177,7 @@ $(function() {
                     'Wenn eine Nachricht im Kanal gesendet werden soll, wenn jemand ein Abonnement verschenkt. Dadurch wird auch die Belohnung umgeschaltet.'))
                 // Append message box for the message
                 .append(helpers.getTextAreaGroup('gifsub-msg', 'text', 'Geschenk-Abonnement Nachricht', '', e.giftSubMessage,
-                    'Die Nachricht wird gesendet, wenn jemand ein Abonnement für den Kanal verschenkt. Tags: (name), (alert), (playsound), (recipient), (plan), (months), und (reward)', false))
+                    'Die Nachricht wird gesendet, wenn jemand ein Abonnement für den Kanal verschenkt. Tags: (name), (alert), (playsound), (recipient), (plan), (months) und (reward)', false))
                 // Appen the reward box
                 .append(helpers.getInputGroup('gifsub-reward', 'number', 'Geschenk-Abonnement Belohnung', '', e.giftSubReward,
                     'Belohnung für den Benutzer, der das Abonnement gekauft hat.'))))
@@ -190,7 +190,7 @@ $(function() {
                     'Wenn eine Nachricht im Channel gesendet werden soll, wenn jemand mehrere Abonnements verschenkt. Dadurch wird auch die Belohnung umgeschaltet.'))
                 // Append message box for the message
                 .append(helpers.getTextAreaGroup('mass-gifsub-msg', 'text', 'Mystery Geschenk-Abonnement Nachricht', '', e.massGiftSubMessage,
-                    'Die Nachricht wird gesendet, wenn jemand mehrere Abonnements für den Kanal verschenkt. Tags: (name), (alert), (playsound), (amount), und (reward)', false))
+                    'Die Nachricht wird gesendet, wenn jemand mehrere Abonnements für den Kanal verschenkt. Tags: (name), (alert), (playsound), (amount) und (reward)', false))
                 // Appen the reward box
                 .append(helpers.getInputGroup('mass-gifsub-reward', 'number', 'Mystery Geschenk-Abonnement Belohnung', '', e.massGiftSubReward,
                     'Belohnung für den Benutzer, der das Abonnement gekauft hat. Dies ist ein Multiplikator. (Belohnung * Anzahl Geschenke)'))))
@@ -203,7 +203,7 @@ $(function() {
                     'Wenn eine Nachricht im Kanal gesendet werden soll, wenn jemand ein anonymes Abonnement verschenkt. Dadurch wird auch die Belohnung umgeschaltet.'))
                 // Append message box for the message
                 .append(helpers.getTextAreaGroup('anon-gifsub-msg', 'text', 'Anonyme Geschenk-Abonnement Nachricht', '', e.giftAnonSubMessage,
-                    'Die Nachricht wird gesendet, wenn jemand mehrere Abonnements für den Kanal anonym verschenkt. Tags: (name), (alert), (playsound), (plan), (amount), und (reward)', false))
+                    'Die Nachricht wird gesendet, wenn jemand mehrere Abonnements für den Kanal anonym verschenkt. Tags: (name), (alert), (playsound), (plan), (amount) und (reward)', false))
                 // Appen the reward box
                 .append(helpers.getInputGroup('anon-gifsub-reward', 'number', 'Anonyme Geschenk-Abonnement Belohnung', '', e.subscribeReward,
                     'Belohnung für den Benutzer, an den das Abonnement vergeben wurde. Dies ist das Gleiche wie die normale Abonnement Belohnung.', true))))
@@ -216,7 +216,7 @@ $(function() {
                     'Wenn eine Nachricht im Channel gesendet werden soll, wenn ein anonymer Benutzer mehrere Abonnements verschenkt. Dadurch wird auch die Belohnung umgeschaltet.'))
                 // Append message box for the message
                 .append(helpers.getTextAreaGroup('anon-mass-gifsub-msg', 'text', 'Anonymes Mystery Geschenk Abonnement Nachricht', '', e.massAnonGiftSubMessage,
-                    'Die Nachricht wird gesendet, wenn jemand anonym Abonnements für den Kanal verschenkt. Tags: (name), (plan), und (amount)', false))))
+                    'Die Nachricht wird gesendet, wenn jemand anonym Abonnements für den Kanal verschenkt. Tags: (name), (plan) und (amount)', false))))
             // Tier settings
             .append(helpers.getCollapsibleAccordion('main-8', 'Tier Settings', $('<form/>', {
                     'role': 'form'
@@ -295,8 +295,8 @@ $(function() {
     // Host settings button.
     $('#hostHandlerSettings').on('click', function() {
         socket.getDBValues('alerts_get_host_settings', {
-            tables: ['settings', 'settings', 'settings', 'settings', 'settings', 'settings', 'settings', 'settings', 'settings'],
-            keys: ['hostReward', 'autoHostReward', 'hostMinViewerCount', 'hostMinCount', 'hostMessage', 'autoHostMessage', 'hostHistory', 'hostToggle', 'autoHostToggle']
+            tables: ['settings', 'settings', 'settings', 'settings', 'settings', 'settings'],
+            keys: ['hostReward', 'hostMinViewerCount', 'hostMinCount', 'hostMessage', 'hostHistory', 'hostToggle']
         }, true, function(e) {
             helpers.getModal('host-alert', 'Host-Alarmeinstellungen', 'Speichern', $('<form/>', {
                 'role': 'form'
@@ -314,24 +314,11 @@ $(function() {
                 .append(helpers.getDropdownGroup('host-toggle', 'Host-Alarme aktivieren', (e.hostToggle === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'],
                     'Wenn eine Nachricht im Kanal gesendet werden soll, wenn jemand den Kanal hostet.'))
                 // Append message box for the message
-                .append(helpers.getTextAreaGroup('host-msg', 'text', 'Host Nachricht', '', e.hostMessage,
-                    'Die Nachricht wird gesendet, wenn jemand den Kanal hostet. Tags: (name), (alert), (playsound), (reward), und (viewers)', false))
+                .append(helpers.getTextAreaGroup('host-msg', 'text', 'Host-Nachricht', '', e.hostMessage,
+                    'Die Nachricht wird gesendet, wenn jemand den Kanal hostet. Tags: (name), (alert), (playsound), (reward) und (viewers)', false))
                 // Appen the reward box
-                .append(helpers.getInputGroup('host-reward', 'number', 'Host Belohnung', '', e.hostReward,
+                .append(helpers.getInputGroup('host-reward', 'number', 'Host-Belohnung', '', e.hostReward,
                     'Belohnung, die dem Benutzer gezahlt wird, wenn er den Kanal hostet.'))))
-            // Append second collapsible accordion.
-            .append(helpers.getCollapsibleAccordion('main-2', 'Auto-Host Settings', $('<form/>', {
-                    'role': 'form'
-                })
-                // Add toggle for normal hosts
-                .append(helpers.getDropdownGroup('autohost-toggle', 'Auto-Host-Alarme aktivieren', (e.autoHostToggle === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'],
-                    'Wenn eine Nachricht im Channel gesendet werden soll, wenn jemand den Kanal automatisch hostet.'))
-                // Append message box for the message
-                .append(helpers.getTextAreaGroup('autohost-msg', 'text', 'Auto-Host-Nachricht', '', e.autoHostMessage,
-                    'Die Nachricht wird gesendet, wenn jemand den Kanal automatisch hostet. Tags: (name), (alert), (playsound), (reward), und (viewers)', false))
-                // Appen the reward box
-                .append(helpers.getInputGroup('autohost-reward', 'number', 'Auto-Host-Belohnung', '', e.autoHostReward,
-                    'Belohnung, die dem Benutzer gezahlt wird, wenn er den Kanal automatisch hostet.'))))
             // Append third collapsible accordion.
             .append(helpers.getCollapsibleAccordion('main-3', 'Zusätzliche Einstellungen', $('<form/>', {
                     'role': 'form'
@@ -349,9 +336,6 @@ $(function() {
                 let hostToggle = $('#host-toggle').find(':selected').text() === 'Ja',
                     hostMsg = $('#host-msg'),
                     hostReward = $('#host-reward'),
-                    autoHostToggle = $('#autohost-toggle').find(':selected').text() === 'Ja',
-                    autoHostMsg = $('#autohost-msg'),
-                    autoHostReward = $('#autohost-reward'),
                     hostHistory = $('#host-history').find(':selected').text() === 'Ja',
                     hostMinPoints = $('#host-minpoint'),
                     hostMinAlert = $('#host-minalert');
@@ -360,19 +344,16 @@ $(function() {
                 switch (false) {
                     case helpers.handleInputString(hostMsg):
                     case helpers.handleInputNumber(hostReward, 0):
-                    case helpers.handleInputString(autoHostMsg):
-                    case helpers.handleInputNumber(autoHostReward, 0):
                     case helpers.handleInputNumber(hostMinPoints, 0):
                     case helpers.handleInputNumber(hostMinAlert, 0):
                         break;
                     default:
                         socket.updateDBValues('alerts_update_host_settings', {
-                            tables: ['settings', 'settings', 'settings', 'settings', 'settings', 'settings', 'settings',
-                                'settings', 'settings'],
-                            keys: ['hostReward', 'autoHostReward', 'hostMinViewerCount', 'hostMinCount', 'hostMessage',
-                                'autoHostMessage', 'hostHistory', 'hostToggle', 'autoHostToggle'],
-                            values: [hostReward.val(), autoHostReward.val(), hostMinPoints.val(), hostMinAlert.val(),
-                                hostMsg.val(), autoHostMsg.val(), hostHistory, hostToggle, autoHostToggle]
+                            tables: ['settings', 'settings', 'settings', 'settings', 'settings', 'settings'],
+                            keys: ['hostReward', 'hostMinViewerCount', 'hostMinCount', 'hostMessage',
+                                'hostHistory', 'hostToggle'],
+                            values: [hostReward.val(), hostMinPoints.val(), hostMinAlert.val(),
+                                hostMsg.val(), hostHistory, hostToggle]
                         }, function() {
                             socket.sendCommand('alerts_update_host_settings_cmd', 'reloadhost', function() {
                                 // Close the modal.
@@ -401,7 +382,7 @@ $(function() {
                 'Wenn eine Nachricht im Kanal gesagt werden soll, wenn jemand cheert.'))
             // Add the the text area for the bits message.
             .append(helpers.getTextAreaGroup('bits-message', 'text', 'Bits Nachricht', '', e.message,
-                'Die Nachricht wird gesendet, wenn jemand im Kanal cheert. Tags: (name), (alert), (playsound), (message), und (amount)', false))
+                'Die Nachricht wird gesendet, wenn jemand im Kanal cheert. Tags: (name), (alert), (playsound), (message) und (amount)', false))
             // Add the box for the reward.
             .append(helpers.getInputGroup('bits-minimum', 'number', 'Bits Minimum', '', e.minimum, 'Anzahl der Bits, die benötigt werden, um den Alarm auszulösen.')),
             function() { // Callback once the user clicks save.
@@ -447,7 +428,7 @@ $(function() {
                 'Wenn eine Nachricht im Kanal gesendet werden soll, wenn jemand einen Clip erstellt.'))
             // Add the text area for the clips message.
             .append(helpers.getTextAreaGroup('clip-message', 'text', 'Clip-Nachricht', '', e.message,
-                'Die Nachricht wird gesendet, wenn jemand einen Clip erstellt. Tags: (name), (alert), (playsound), (title), und (url)', false)),
+                'Die Nachricht wird gesendet, wenn jemand einen Clip erstellt. Tags: (name), (alert), (playsound), (title) und (url)', false)),
             function() { // Callback once the user clicks save.
                 let clipToggle = $('#clip-toggle').find(':selected').text() === 'Ja',
                     clipMsg = $('#clip-message');
@@ -588,6 +569,145 @@ $(function() {
         });
     });
 
+    // Welcome esettings.
+    $('#welcomeSystemSettings').on('click', function() {
+        const updateDisabled = function(disabledUsers, welcomeDisabled, callback) {
+            let addTables = [],
+                addKeys = [],
+                addVals = [],
+                delTables = [],
+                delKeys = [];
+
+            let previouslyDisabled = {};
+            for (let row of disabledUsers) {
+                previouslyDisabled[row.key] = true;
+            }
+            let newDisabledUsers = welcomeDisabled.map(function (name) {
+                return name.replace(/[^a-zA-Z0-9_\n]/g, '').toLowerCase()
+            });
+            for (let newDisabledUser of newDisabledUsers) {
+                if (!newDisabledUser) {
+                    continue;
+                }
+                if (previouslyDisabled.hasOwnProperty(newDisabledUser)) {
+                    delete previouslyDisabled[newDisabledUser];
+                } else {
+                    addTables.push('welcome_disabled_users');
+                    addKeys.push(newDisabledUser);
+                    addVals.push('true');
+                }
+            }
+            for (let disabledUser in previouslyDisabled) {
+                if (previouslyDisabled.hasOwnProperty(disabledUser)) {
+                    delTables.push('welcome_disabled_users');
+                    delKeys.push(disabledUser)
+                }
+            }
+
+            const add = function (cb) {
+                if (addKeys.length) {
+                    socket.updateDBValues('alerts_add_welcome_disabled', {
+                        tables: addTables,
+                        keys: addKeys,
+                        values: addVals
+                    }, cb);
+                } else {
+                    cb();
+                }
+            };
+
+            const remove = function (cb) {
+                if (delKeys.length) {
+                    socket.removeDBValues('alerts_del_welcome_disabled', {
+                        tables: delTables,
+                        keys: delKeys,
+                    }, cb);
+                } else {
+                    cb();
+                }
+            };
+
+            add(function () { remove(callback) });
+        };
+
+        socket.getDBValues('alerts_get_welcome_settings', {
+            tables: ['welcome', 'welcome', 'welcome', 'welcome'],
+            keys: ['welcomeEnabled', 'welcomeMessage', 'welcomeMessageFirst', 'cooldown']
+        }, true, function(e) {
+            socket.getDBTableValues('alerts_get_welcome_disabled_users', 'welcome_disabled_users', function (disabledUsers) {
+                let disabledUserOptions = [];
+                for (let row of disabledUsers) {
+                    disabledUserOptions.push({
+                        'name': row.key,
+                        'selected': 'true'
+                    })
+                }
+                const modal = helpers.getModal('welcome-alert', 'Willkommen Alarm-Einstellungen', 'Speichern', $('<form/>', {
+                    'role': 'form'
+                })
+                // Add the toggle for welcome alerts.
+                .append(helpers.getDropdownGroup('welcome-toggle', 'Willkommen Nachrichten aktivieren', (e.welcomeEnabled === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'],
+                    'If users should be welcomed by the bot when the start chatting.'))
+                // Add the input for welcome message.
+                .append(helpers.getInputGroup('welcome-message', 'text', 'Willkommen Nachricht', '', e.welcomeMessage, 'Willkommensnachricht für neue Chatter. Lasse dieses Feld leer, um zurückkehrende Chatter nicht zu begrüßen. Tags: (names), (1 Text für einen Namen), (2 für zwei), (3 für drei oder mehr Namen)'))
+                // Add the input for first time welcome message.
+                .append(helpers.getInputGroup('welcome-message-first', 'text', 'Erstes Chatten Willkommensnachricht', '', e.welcomeMessageFirst, 'Willkommensnachricht für erstmalige Chatter. Lasse das Feld leer, um die Standard-Begrüßungsnachricht zu verwenden. Tags: (names), (1 Text für einen Namen), (2 für zwei), (3 für drei oder mehr Namen)'))
+                // Add the input for the welcome cooldown.
+                .append(helpers.getInputGroup('welcome-cooldown', 'number', 'Willkommen Abklingzeit (Stunden)', '', (parseInt(e.cooldown) / 36e5),
+                    'Wie viele Stunden muss ein Benutzer nicht chatten, um wieder begrüßt zu werden. Mindestens 1 Stunde.'))
+                // Add the input for excluded users.
+                .append(helpers.getFlatMultiDropdownGroup('welcome-disabled', 'Ausgeschlossene Benutzer', disabledUserOptions,
+                    'Benutzer, die der Bot nicht willkommen heißt. Kanalbesitzer und dieser Bot sind immer ausgeschlossen.')),
+                function() { // Callback once the user clicks save.
+                    let welcomeToggle = $('#welcome-toggle').find(':selected').text() === 'Ja',
+                        welcomeMessage = $('#welcome-message').val(),
+                        welcomeMessageFirst = $('#welcome-message-first').val(),
+                        $welcomeCooldown = $('#welcome-cooldown'),
+                        welcomeDisabled = $('#welcome-disabled').val();
+
+                    // Make sure the user has someone in each box.
+                    switch (false) {
+                        case helpers.handleInputNumber($welcomeCooldown, 1):
+                            break;
+                        default:
+                            socket.updateDBValues('alerts_update_welcome_settings', {
+                                tables: ['welcome', 'welcome', 'welcome', 'welcome'],
+                                keys: ['welcomeEnabled', 'welcomeMessage', 'welcomeMessageFirst', 'cooldown'],
+                                values: [welcomeToggle, welcomeMessage, welcomeMessageFirst, (parseInt($welcomeCooldown.val()) * 36e5)]
+                            }, function() {
+                                updateDisabled(disabledUsers, welcomeDisabled, function () {
+                                    socket.sendCommand('alerts_update_welcome_settings_cmd', 'welcomepanelupdate', function() {
+                                        // Close the modal.
+                                        $('#welcome-alert').modal('toggle');
+                                        // Alert the user.
+                                        toastr.success('Willkommensalarm Einstellungen erfolgreich aktualisiert!');
+                                    });
+                                });
+                            });
+                    }
+                }).modal('toggle');
+                modal.find('#welcome-disabled').select2({
+                    tags: true,
+                    tokenSeparators: [',', ' '],
+                    selectOnClose: true,
+                    createTag: function (params) {
+                        const term = params.term.replace(/[^a-zA-Z0-9_\n]/g, '').toLowerCase();
+                        // Don't offset to create a tag if there is no @ symbol
+                        if (!term) {
+                            // Return null to disable tag creation
+                            return null;
+                        }
+
+                        return {
+                            id: term,
+                            text: term
+                        }
+                    }
+                });
+            });
+        });
+    });
+
     // StreamLabs settings.
     $('#donationHandlerSettings').on('click', function() {
         socket.getDBValues('alerts_get_streamlabs_settings', {
@@ -602,7 +722,7 @@ $(function() {
                 'Wenn StreamLabs Spenden in den Chat senden soll.'))
             // Add the the text area for the tip message.
             .append(helpers.getTextAreaGroup('streamlabs-message', 'text', 'Spenden Nachricht', '', e.message,
-                'Die Nachricht wird in den Kanal gesendet, wenn jemand über StreamLabs spendet. Tags: (name), (amount), (points), (reward), (pointname), (currency) und (message)'))
+                'Die Nachricht wird in den Kanal gesendet, wenn jemand über StreamLabs spendet. Tags: (name), (amount), (amount.toFixed(0)), (points), (pointname), (currency) und (message)'))
             // Add the the box for the tip reward
             .append(helpers.getInputGroup('streamlabs-reward', 'number', 'Spenden Belohnungs-Multiplikator', '', e.reward, 'Belohnungsmultiplikator für die Belohnung.')),
             function() { // Callback once the user clicks save.
@@ -646,10 +766,10 @@ $(function() {
             .append(helpers.getDropdownGroup('tipeeestream-toggle', 'TipeeeStream-Alarme aktivieren', (e.toggle === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'],
                 'Wenn TipeeeStream Spenden in den Chat gesendet werden sollen.'))
             // Add the the text area for the tip message.
-            .append(helpers.getTextAreaGroup('tipeeestream-message', 'text', 'Spenden Nachrichte', '', e.message,
+            .append(helpers.getTextAreaGroup('tipeeestream-message', 'text', 'Spenden Nachricht', '', e.message,
                 'Die Nachricht wird in den Kanal gesendet, wenn jemand über TipeeStream spendet. Tags: (name), (amount), (reward), (formattedamount) und (message)'))
             // Add the the box for the tip reward
-            .append(helpers.getInputGroup('tipeeestream-reward', 'number', 'Spenden Belohnungs-Multiplier', '', e.reward, 'Belohnungsmultiplikator für die Belohnung.')),
+            .append(helpers.getInputGroup('tipeeestream-reward', 'number', 'Spenden Belohnungs-Multiplikator', '', e.reward, 'Belohnungsmultiplikator für die Belohnung.')),
             function() { // Callback once the user clicks save.
                 let tipToggle = $('#tipeeestream-toggle').find(':selected').text() === 'Ja',
                     tipMessage = $('#tipeeestream-message'),
@@ -750,7 +870,7 @@ $(function() {
                 .append(helpers.getDropdownGroup('poll-retweets', 'Suche Retweets', (e.poll_retweets === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'],
                     'Wenn PhantomBot nach Ihren Retweets suchen und diese im Chat posten soll.'))
                 // Add the toggle for home timeline
-                .append(helpers.getDropdownGroup('poll-home', 'Suche auf der Home Timeline', (e.poll_hometimeline === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'],
+                .append(helpers.getDropdownGroup('poll-home', 'Suche auf der Startseiten Timeline', (e.poll_hometimeline === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'],
                     'Wenn PhantomBot nach allem auf deiner Timeline suchen und es im Chat posten soll.'))
                 // Add the toggle for user timeline
                 .append(helpers.getDropdownGroup('poll-user', 'Suche auf der Benutzer-Timeline', (e.poll_usertimeline === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'],
@@ -768,7 +888,7 @@ $(function() {
                     'role': 'form'
                 })
                 // Add the toggle for mentions
-                .append(helpers.getDropdownGroup('retweet-toggle', 'Retweet-Belohnungen aktivieren', (e.reward_toggle === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'], 'Wenn PhantomBot Benutzer belohnen soll, die Ihre Tweets retweeten.'))
+                .append(helpers.getDropdownGroup('retweet-toggle', 'Retweet-Belohnungen aktivieren', (e.reward_toggle === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'], 'Wenn PhantomBot Benutzer belohnen soll, die Tweets retweeten.'))
                 // Add the toggle for retweets
                 .append(helpers.getDropdownGroup('retweet-toggle-msg', 'Retweet Belohnungensnachricht aktivieren', (e.reward_announce === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'],
                     'Wenn PhantomBot ankündigen soll, dass es einen Benutzer für das Reetweeten Ihrer Tweets belohnt hat.'))
@@ -781,11 +901,11 @@ $(function() {
                     'role': 'form'
                 })
                 // Add the toggle for the online Tweet.
-                .append(helpers.getDropdownGroup('online-toggle', 'Online-Tweet aktivieren', (e.post_online === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'], 'Lass den Bot für dich twittern, wenn du live gehst.'))
+                .append(helpers.getDropdownGroup('online-toggle', 'Online-Tweet aktivieren', (e.post_online === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'], 'Lasse den Bot twittern, wenn der Steamer live gehst.'))
                 // Add the toggle for the game Tweet.
-                .append(helpers.getDropdownGroup('game-toggle', 'Spielwechsel-Tweet aktivieren', (e.post_gamechange === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'], 'Lassen Sie den Bot für Sie twittern, wenn Sie das Spiel wechseln.'))
+                .append(helpers.getDropdownGroup('game-toggle', 'Spielwechsel-Tweet aktivieren', (e.post_gamechange === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'], 'Lasse den Bot twittern, wenn das Spiel gewechselt wird.'))
                 // Add the toggle for the timed Tweet.
-                .append(helpers.getDropdownGroup('timed-toggle', 'Zeitgesteuerten Online-Tweet aktivieren', (e.post_update === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'], 'Lass den Bot alle X Stunden für dich twittern und sagen, dass du noch live bist.'))
+                .append(helpers.getDropdownGroup('timed-toggle', 'Zeitgesteuerten Online-Tweet aktivieren', (e.post_update === 'true' ? 'Ja' : 'Nein'), ['Ja', 'Nein'], 'Lasse den Bot alle X Stunden twittern und sagen, dass der Steamer noch live ist.'))
                 // Add the the text area for online message
                 .append(helpers.getTextAreaGroup('online-msg', 'text', 'Online-Tweet', '', e.message_online, 'Nachricht, die getwittert wird, wenn Sie live gehen. Tags: (title), (game) und (twitchurl)', false))
                 // Add the the text area for online message

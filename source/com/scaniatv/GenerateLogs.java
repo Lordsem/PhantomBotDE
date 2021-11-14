@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,18 +17,15 @@
 
 package com.scaniatv;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.BufferedWriter;
-import java.io.BufferedReader;
-
-import java.util.Date;
 import java.text.SimpleDateFormat;
-
+import java.util.Date;
 import org.joda.time.DateTime;
-
 import tv.phantombot.PhantomBot;
 
 /*
@@ -53,7 +50,7 @@ public class GenerateLogs {
 
         String fileName = ("errors_" + getDate(false, false) + "@" + System.currentTimeMillis() + ".txt");
 
-        com.gmt2001.Console.out.println("Log file \"" + fileName + "\" was created in the main bot folder.");
+        com.gmt2001.Console.out.println("Logdatei \"" + fileName + "\" wurde im Hauptordner des Bots erstellt.");
 
         writeToFile(fileName, logData);
     }
@@ -62,7 +59,7 @@ public class GenerateLogs {
      * Method that will print the latest errors in the console.
      */
     public static void printLogs() {
-        com.gmt2001.Console.out.println("Generating latest error logs...");
+        com.gmt2001.Console.out.println("Aktuelle Fehlerprotokolle werden erstellt...");
 
         String logData = "";
 
@@ -96,7 +93,7 @@ public class GenerateLogs {
                 }
             }
         } catch (IOException ex) {
-            com.gmt2001.Console.err.println("Failed to read log file: [" + file + "] [IOException] " + ex.getMessage());
+            com.gmt2001.Console.err.println("Protokolldatei konnte nicht gelesen werden: [" + file + "] [IOException] " + ex.getMessage());
         } finally {
             if (bufferedReader != null) {
                 try {
@@ -125,7 +122,7 @@ public class GenerateLogs {
             bufferedWriter.write(data);
             bufferedWriter.flush();
         } catch (IOException ex) {
-            com.gmt2001.Console.err.println("Failed to write log file: [" + file + "] [IOException] " + ex.getMessage());
+            com.gmt2001.Console.err.println("Protokolldatei konnte nicht geschrieben werden: [" + file + "] [IOException] " + ex.getMessage());
         } finally {
             if (bufferedWriter != null) {
                 try {
@@ -147,7 +144,7 @@ public class GenerateLogs {
     private static String getDate(boolean isGMT, boolean minusDay) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
-        dateFormat.setTimeZone(java.util.TimeZone.getTimeZone((isGMT ? "GMT" : PhantomBot.getTimeZone())));
+        dateFormat.setTimeZone(java.util.TimeZone.getTimeZone((isGMT ? "CET" : PhantomBot.getTimeZone())));
         return (!minusDay ? dateFormat.format(new Date()) : dateFormat.format(new DateTime(new Date()).minusDays(1).toDate()));
     }
 }

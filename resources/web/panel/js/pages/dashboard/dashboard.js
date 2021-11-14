@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,12 +19,12 @@
 var canScroll = true;
 
 // Function that querys all of the data we need.
-$(function() {
+$(function () {
     // Query our panel settings first.
     socket.getDBValues('panel_get_settings', {
         tables: ['panelData', 'panelData', 'modules'],
         keys: ['isDark', 'isReverseSortEvents', './systems/commercialSystem.js']
-    }, true, function(e) {
+    }, true, function (e) {
         helpers.isDark = e.isDark === 'true';
         helpers.isReverseSortEvents = e.isReverseSortEvents === 'true';
 
@@ -40,13 +40,13 @@ $(function() {
             $('#grp-instant-commercial').addClass('hidden');
         } else {
             $('#instant-commercial-length').select2({
-                placeholder: 'Commercial length, in seconds.',
+                placeholder: 'Werbespotlänge in Sekunden.',
                 width: '100%'
             }).tooltip('disable');
         }
 
         // Query recent events.
-        socket.getDBValue('dashboard_get_events', 'panelData', 'data', function(e) {
+        socket.getDBValue('dashboard_get_events', 'panelData', 'data', function (e) {
             if (e.panelData !== null && e.panelData.length > 0) {
                 let events = JSON.parse(e.panelData);
 
@@ -55,11 +55,11 @@ $(function() {
 
                     // Sort events if needed.
                     if (helpers.isReverseSortEvents) {
-                        events.sort(function(a, b) {
+                        events.sort(function (a, b) {
                             return b.date - a.date;
                         });
                     } else {
-                        events.sort(function(a, b) {
+                        events.sort(function (a, b) {
                             return a.date - b.date;
                         });
                     }
@@ -68,28 +68,53 @@ $(function() {
                         'class': 'recent-events'
                     });
                     for (let i = 0; i < events.length; i++) {
-                        let p = $('<p/>');
+                        let tb = $('<table/>');
+                        let p = $('<tr/>');
 
                         // Append date.
-                        p.append($('<span/>', {
+                        p.append($('<td/>', {
                             'class': 'event-date',
-                            'html': helpers.getPaddedDateString(new Date(events[i].date).toLocaleString()) + ' '
+                            'html': helpers.getPaddedDateString(new Date(events[i].date).toLocaleString())
                         }));
 
                         // Append type.
-                        p.append($('<span/>', {
-                            'class': 'label',
+                        p.append($('<td/>', {
+                            'class': 'label event-type',
                             'style': helpers.getEventColor(events[i].type),
                             'html': events[i].type
-                        }))
-
-                        // Append message.
-                        p.append($('<span/>', {
-                            'html': ' ' + helpers.getEventMessage(events[i])
                         }));
 
+                        // Append message.
+                        p.append($('<td/>', {
+                            'html': helpers.getEventMessage(events[i])
+                        }));
+
+                        tb.append(p);
+
+                        if (typeof events[i].message === "string" && events[i].message.length > 0) {
+                            let p = $('<tr/>');
+
+                            // Append date.
+                            p.append($('<td/>', {
+                                'html': '&nbsp;'
+                            }));
+
+                            // Append type.
+                            p.append($('<td/>', {
+                                'html': '&nbsp;'
+                            }));
+
+                            // Append message.
+                            p.append($('<td/>', {
+                                'class': 'event-message',
+                                'html': events[i].message
+                            }));
+
+                            tb.append(p);
+                        }
+
                         // Append to list.
-                        htmlEvents.append(p);
+                        htmlEvents.append($('<li/>').append(tb));
                     }
 
                     // Append the information to the main div.
@@ -98,7 +123,7 @@ $(function() {
             }
 
             // Query panel information.
-            socket.getDBValue('dashboard_get_data', 'panelData', 'stream', function(e) {
+            socket.getDBValue('dashboard_get_data', 'panelData', 'stream', function (e) {
                 if (e.panelData === null) {
                     alert('Bitte erlaube dem Bot, die Daten zu generieren, die benötigt werden, um diese Seite zu laden. Versuche es in 60 Sekunden erneut...');
                     return;
@@ -122,9 +147,9 @@ $(function() {
                 }
 
                 // Query panel commands.
-                socket.getDBTableValues('dashboard_get_commands', 'command', function(e) {
+                socket.getDBTableValues('dashboard_get_commands', 'command', function (e) {
                     // Sort commands.
-                    e.sort(function(a, b) {
+                    e.sort(function (a, b) {
                         return a.key.localeCompare(b.key);
                     });
 
@@ -144,7 +169,7 @@ $(function() {
                     // Twitch prints a bunch of errors in the iframe, so it gets confusing.
                     if (helpers.DEBUG_STATE === helpers.DEBUG_STATES.DEBUG) {
                         // This will be called once the css and everything is loaded.
-                        $(document).ready(function() {
+                        $(document).ready(function () {
                             // Done loading, show main page.
                             $.showPage();
                             // Scroll to bottom of event log.
@@ -163,7 +188,7 @@ $(function() {
                         socket.getDBValues('dashboard_get_panel_toggles', {
                             tables: ['panelData', 'panelData'],
                             keys: ['hasChat', 'hasPlayer']
-                        }, true, function(e) {
+                        }, true, function (e) {
                             e.hasChat = (e.hasChat === 'true' || e.hasChat === null);
                             e.hasPlayer = (e.hasPlayer === 'true' || e.hasPlayer === null);
 
@@ -176,7 +201,7 @@ $(function() {
                                     'src': 'https://www.twitch.tv/embed/' + getChannelName() + '/chat' + (helpers.isDark ? '?darkpopout&' : '?') + 'parent=' + location.hostname
                                 }));
                             } else if (e.hasChat) {
-                                $('#twitch-chat-iframe').html('Aufgrund von Änderungen durch Twitch kann das Chat-Panel nicht mehr angezeigt werden, es sei denn, du aktivierst SSL im PhantomBot-Panel und ändest den Baseport auf 443. Dies funktioniert möglicherweise nicht ohne Root-Privilegien.<br /><br />Alternativ können Sie sich mit der GitHub-Version des Panels bei <a href="https://phantombot.github.io/PhantomBot/">PhantomBot - GitHub.io</a> anmelden, die dieses Problem umgeht.<br /><br />Hilfe beim Einrichten von SSL findest du in <a href="https://phantombot.github.io/PhantomBot/guides/#guide=content/twitchembeds">diesem Handbuch</a>.');
+                                $('#twitch-chat-iframe').html('Aufgrund von Änderungen durch Twitch kann das Chat-Panel nicht mehr angezeigt werden, es sei denn, du aktivierst SSL im PhantomBot-Panel und ändest den Baseport auf 443. Dies funktioniert möglicherweise nicht ohne Root-Privilegien.<br /><br />Alternativ können Sie sich mit der GitHub-Version des Panels bei <a href="https://phantombot.github.io/PhantomBot/">PhantomBot - GitHub.io</a> anmelden, die dieses Problem umgeht.<br /><br />Hilfe beim Einrichten von SSL findest du in <a href="https://phantombot.github.io/PhantomBot/guides/#guide=content/integrations/twitchembeds">diesem Handbuch</a>.');
                                 $('#twitch-chat-iframe').addClass('box-body');
                             } else {
                                 $('#twitch-chat-box').addClass('off');
@@ -192,7 +217,7 @@ $(function() {
                                     'src': 'https://player.twitch.tv/?channel=' + getChannelName() + '&muted=true&autoplay=false' + '&parent=' + location.hostname
                                 }));
                             } else if (e.hasPlayer) {
-                                $('#twitch-player-iframe').html('Aufgrund von Änderungen durch Twitch kann das Live-Feed-Panel nicht mehr angezeigt werden, es sei denn, du aktivierst SSL im PhantomBotDE-Panel und änderst den Baseport auf 443. Dies funktioniert möglicherweise nicht ohne Root-Privilegien.<br /><br />Alternativ können Sie sich mit der GitHub-Version des Panels bei <a href="https://phantombot.github.io/PhantomBot/">PhantomBot - GitHub.io</a> anmelden, die dieses Problem umgeht.<br /><br />Hilfe beim Einrichten von SSL findest du in <a href="https://phantombot.github.io/PhantomBot/guides/#guide=content/twitchembeds">diesem Handbuch</a>.');
+                                $('#twitch-player-iframe').html('Aufgrund von Änderungen durch Twitch kann das Live-Feed-Panel nicht mehr angezeigt werden, es sei denn, du aktivierst SSL im PhantomBotDE-Panel und änderst den Baseport auf 443. Dies funktioniert möglicherweise nicht ohne Root-Privilegien.<br /><br />Alternativ können Sie sich mit der GitHub-Version des Panels bei <a href="https://phantombot.github.io/PhantomBot/">PhantomBot - GitHub.io</a> anmelden, die dieses Problem umgeht.<br /><br />Hilfe beim Einrichten von SSL findest du in <a href="https://phantombot.github.io/PhantomBot/guides/#guide=content/integrations/twitchembeds">diesem Handbuch</a>.');
                                 $('#twitch-player-iframe').addClass('box-body');
                             } else {
                                 $('#twitch-player-box').addClass('off');
@@ -207,7 +232,7 @@ $(function() {
                             $('#toggle-player').prop('checked', e.hasPlayer);
 
                             // This will be called once the css and everything is loaded.
-                            $(document).ready(function() {
+                            $(document).ready(function () {
                                 // Done loading, show main page.
                                 $.showPage();
                                 // Scroll to bottom of event log.
@@ -229,13 +254,42 @@ $(function() {
 
 
 // Function that handlers the loading of events.
-$(function() {
+$(function () {
     // handle auto complete.
+    var gameSearch = '';
+    var games = [];
     $('#stream-game').easyAutocomplete({
         'url': function (game) {
-            return '/games?webauth=' + getAuth() + '&search=' + game;
+            gameSearch = game;
+            return window.location;
         },
-        'getValue': 'game',
+        'ajaxSettings': {
+            'dataType': 'text',
+            'dataFilter': async() => {
+                var isDone = false;
+                socket.doRemote('games', 'games', {
+                    'search': gameSearch
+                }, function (e) {
+                    if (e.length > 0 && !e[0].errors) {
+                        games = e;
+                    } else {
+                        games = [];
+                    }
+                    isDone = true;
+                });
+
+                var checkIfGamesDoneAsync = async () => {
+                    return isDone;
+                };
+
+                await helpers.promisePoll(() => checkIfGamesDoneAsync(), {pollIntervalMs: 250});
+
+                return games;
+            }
+        },
+        'listLocation': function (data) {
+            return games;
+        },
         'requestDelay': 300,
         'list': {
             'match': {
@@ -245,50 +299,50 @@ $(function() {
     });
 
     // Input check for strings.
-    $('input[data-str="text"]').on('input', function() {
+    $('input[data-str="text"]').on('input', function () {
         helpers.handleInputString($(this));
     });
 
     // Handle the hidding of the dashboard panels.
-    $('#dashboard-views, #dashboard-followers, #dashboard-viewers').on('click', function(e) {
+    $('#dashboard-views, #dashboard-followers, #dashboard-viewers').on('click', function (e) {
         helpers.handlePanelToggleInfo($(this), e.target.id);
     });
 
-    $(window).resize(function() {
+    $(window).resize(function () {
         let isSmall = $('.small-box').width() < 230;
 
-        $('.small-box').each(function() {
+        $('.small-box').each(function () {
             const h3 = $(this).find('h3');
 
             if (h3.attr('id') != 'dashboard-uptime') {
-            	helpers.handlePanelSetInfo(h3, h3.attr('id'), h3.data('parsed'));
+                helpers.handlePanelSetInfo(h3, h3.attr('id'), h3.data('parsed'));
             }
         });
     });
 
     // Handle updating the title, game.
-    $('#dashboard-btn-update').on('click', function() {
+    $('#dashboard-btn-update').on('click', function () {
         // Update title.
-        socket.sendCommand('update_title', 'settitlesilent ' + $('#stream-title').val(), function() {
+        socket.sendCommand('update_title', 'settitlesilent ' + $('#stream-title').val(), function () {
             // Update game.
-            socket.sendCommand('update_game', 'setgamesilent ' + $('#stream-game').val(), function() {
+            socket.sendCommand('update_game', 'setgamesilent ' + $('#stream-game').val(), function () {
                 toastr.success('Streaminformationen wurden erfolgreich aktualisiert!');
             });
         });
     });
 
     // Handle user action button.
-    $('.user-action').on('click', function() {
+    $('.user-action').on('click', function () {
         let action = $(this).find('a').html().toLowerCase(),
-            username = $('#user-action-user').val(),
-            command;
+                username = $('#user-action-user').val(),
+                command;
 
         if (username.length < 1) {
             return;
         }
 
         switch (action) {
-            case 'permit':
+            case 'erlaubnis':
                 command = 'permit ' + username;
                 break;
             case 'shoutout':
@@ -303,7 +357,7 @@ $(function() {
         }
 
         // Run the command.
-        socket.sendCommand('user_action_cmd', command, function() {
+        socket.sendCommand('user_action_cmd', command, function () {
             // Clear the input.
             $('#user-action-user').val('');
             // Let the user know.
@@ -312,8 +366,8 @@ $(function() {
     });
 
     // Handle custom command run.
-    $('#custom-command-run').on('select2:select', function(e) {
-        socket.sendCommand('send_command', e.params.data.text.substr(1), function() {
+    $('#custom-command-run').on('select2:select', function (e) {
+        socket.sendCommand('send_command', e.params.data.text.substr(1), function () {
             // Alert user.
             toastr.success('Erfolgreich ausgeführter Befehl ' + e.params.data.text);
             // Clear input.
@@ -322,38 +376,38 @@ $(function() {
     });
 
     // Handle running a commercial.
-    $('#dashboard-btn-instant-commercial').on('click', function() {
+    $('#dashboard-btn-instant-commercial').on('click', function () {
         if ($('#instant-commercial-length').val() === "") {
-            toastr.error('Bitte wählen Sie eine Werbespot Länge');
+            toastr.error('Bitte wähle eine Werbespotlänge');
             return;
         }
-        socket.sendCommand('instant_commercial', 'commercial ' + $('#instant-commercial-length').val() + ($('#instant-commercial-silent').is(':checked') ? ' silent' : ''), function() {
-            toastr.success('Successfully ran a commercial!');
+        socket.sendCommand('instant_commercial', 'commercial ' + $('#instant-commercial-length').val() + ($('#instant-commercial-silent').is(':checked') ? ' silent' : ''), function () {
+            toastr.success('Erfolgreich einen Werbespot geschaltet!');
         });
     });
 
     // Handle sending as bot.
-    $('#dashboard-btn-msg-bot').on('click', function() {
+    $('#dashboard-btn-msg-bot').on('click', function () {
         if ($('#msg-bot').val() === "") {
-            toastr.error('Please enter a message');
+            toastr.error('Bitte gebe eine Nachricht ein');
             return;
         }
-        socket.sendCommand('msg-bot', 'echo ' + $('#msg-bot').val(), function() {
-            toastr.success('Successfully sent a message as the bot!');
+        socket.sendCommand('msg-bot', 'echo ' + $('#msg-bot').val(), function () {
+            toastr.success('Erfolgreich eine Nachricht als Bot gesendet!');
         });
     });
 
     // Mouse hover/leave event log.
-    $('.event-log').on('mouseenter mouseleave', function(event) {
+    $('.event-log').on('mouseenter mouseleave', function (event) {
         canScroll = event.type === 'mouseleave';
     });
 
     // Handle player toggle
-    $('#toggle-player').off().on('click', function() {
+    $('#toggle-player').off().on('click', function () {
         let checked = $(this).is(':checked');
 
         // Update the toggle.
-        socket.updateDBValue('panel_chat_toggle', 'panelData', 'hasPlayer', checked, function() {
+        socket.updateDBValue('panel_chat_toggle', 'panelData', 'hasPlayer', checked, function () {
             if (checked && location.protocol.toLowerCase().startsWith('https') && !(location.port > 0 && location.port !== 443)) {
                 $('#twitch-player-iframe').html($('<iframe/>', {
                     'frameborder': '0',
@@ -369,7 +423,7 @@ $(function() {
                     $('#twitch-player-box').prop('class', 'col-md-12');
                 }
             } else if (checked) {
-                $('#twitch-player-iframe').html('Aufgrund von Änderungen durch Twitch kann das Live-Feed-Panel nicht mehr angezeigt werden, es sei denn, du aktivierst SSL im PhantomBotDE-Panel und änderst den Baseport auf 443. Dies funktioniert möglicherweise nicht ohne Root-Privilegien.<br /><br />Alternativ können Sie sich mit der GitHub-Version des Panels bei <a href="https://phantombot.github.io/PhantomBot/">PhantomBot - GitHub.io</a> anmelden, die dieses Problem umgeht.<br /><br />Hilfe beim Einrichten von SSL findest du in <a href="https://phantombot.github.io/PhantomBot/guides/#guide=content/twitchembeds">diesem Handbuch</a>.');
+                $('#twitch-player-iframe').html('Aufgrund von Änderungen durch Twitch kann das Live-Feed-Panel nicht mehr angezeigt werden, es sei denn, du aktivierst SSL im PhantomBotDE-Panel und änderst den Baseport auf 443. Dies funktioniert möglicherweise nicht ohne Root-Privilegien.<br /><br />Alternativ können Sie sich mit der GitHub-Version des Panels bei <a href="https://phantombot.github.io/PhantomBot/">PhantomBot - GitHub.io</a> anmelden, die dieses Problem umgeht.<br /><br />Hilfe beim Einrichten von SSL findest du in <a href="https://phantombot.github.io/PhantomBot/guides/#guide=content/integrations/twitchembeds">diesem Handbuch</a>.');
                 $('#twitch-player-iframe').addClass('box-body');
                 // Handle the box size.
                 if ($('#twitch-chat-iframe').html().length > 0) {
@@ -387,11 +441,11 @@ $(function() {
     });
 
     // Handle chat toggle.
-    $('#toggle-chat').off().on('click', function() {
+    $('#toggle-chat').off().on('click', function () {
         let checked = $(this).is(':checked');
 
         // Update the toggle.
-        socket.updateDBValue('panel_chat_toggle', 'panelData', 'hasChat', checked, function() {
+        socket.updateDBValue('panel_chat_toggle', 'panelData', 'hasChat', checked, function () {
             if (checked && location.protocol.toLowerCase().startsWith('https') && !(location.port > 0 && location.port !== 443)) {
                 $('#twitch-chat-iframe').html($('<iframe/>', {
                     'frameborder': '0',
@@ -408,7 +462,7 @@ $(function() {
                     $('#twitch-chat-box').prop('class', 'col-md-12');
                 }
             } else if (checked) {
-                $('#twitch-chat-iframe').html('Aufgrund von Änderungen durch Twitch kann das Chat-Panel nicht mehr angezeigt werden, es sei denn, du aktivierst SSL im PhantomBot-Panel und ändest den Baseport auf 443. Dies funktioniert möglicherweise nicht ohne Root-Privilegien.<br /><br />Alternativ können Sie sich mit der GitHub-Version des Panels bei <a href="https://phantombot.github.io/PhantomBot/">PhantomBot - GitHub.io</a> anmelden, die dieses Problem umgeht.<br /><br />Hilfe beim Einrichten von SSL findest du in <a href="https://phantombot.github.io/PhantomBot/guides/#guide=content/twitchembeds">diesem Handbuch</a>.');
+                $('#twitch-chat-iframe').html('Aufgrund von Änderungen durch Twitch kann das Chat-Panel nicht mehr angezeigt werden, es sei denn, du aktivierst SSL im PhantomBot-Panel und ändest den Baseport auf 443. Dies funktioniert möglicherweise nicht ohne Root-Privilegien.<br /><br />Alternativ können Sie sich mit der GitHub-Version des Panels bei <a href="https://phantombot.github.io/PhantomBot/">PhantomBot - GitHub.io</a> anmelden, die dieses Problem umgeht.<br /><br />Hilfe beim Einrichten von SSL findest du in <a href="https://phantombot.github.io/PhantomBot/guides/#guide=content/integrations/twitchembeds">diesem Handbuch</a>.');
                 $('#twitch-chat-iframe').addClass('box-body');
                 // Handle the box size.
                 if ($('#twitch-player-iframe').html().length > 0) {
@@ -426,17 +480,17 @@ $(function() {
     });
 
     // Event sorting toggle.
-    $('#toggle-reverse-events').off().on('click', function() {
-        socket.updateDBValue('event_sort_update', 'panelData', 'isReverseSortEvents', $(this).is(':checked'), function() {
+    $('#toggle-reverse-events').off().on('click', function () {
+        socket.updateDBValue('event_sort_update', 'panelData', 'isReverseSortEvents', $(this).is(':checked'), function () {
             window.location.reload();
         });
     });
 
     // Set an interval that updates basic panel info every 10 seconds.
-    helpers.setInterval(function() {
+    helpers.setInterval(function () {
         helpers.log('Refreshing dashboard data.', helpers.LOG_TYPE.INFO);
         // Query stream data.
-        socket.getDBValue('dashboard_get_data_refresh', 'panelData', 'stream', function(e) {
+        socket.getDBValue('dashboard_get_data_refresh', 'panelData', 'stream', function (e) {
             // Parse our object.
             e = JSON.parse(e.panelData);
             // Set views if not hidden.
@@ -456,7 +510,7 @@ $(function() {
         });
 
         // Query event log.
-        socket.getDBValue('dashboard_get_events_refresh', 'panelData', 'data', function(e) {
+        socket.getDBValue('dashboard_get_events_refresh', 'panelData', 'data', function (e) {
             if (e.panelData !== null && e.panelData.length > 0) {
                 let events = JSON.parse(e.panelData);
 
@@ -465,11 +519,11 @@ $(function() {
 
                     // Sort events if needed.
                     if (helpers.isReverseSortEvents) {
-                        events.sort(function(a, b) {
+                        events.sort(function (a, b) {
                             return b.date - a.date;
                         });
                     } else {
-                        events.sort(function(a, b) {
+                        events.sort(function (a, b) {
                             return a.date - b.date;
                         });
                     }
@@ -478,28 +532,53 @@ $(function() {
                         'class': 'recent-events'
                     });
                     for (let i = 0; i < events.length; i++) {
-                        let p = $('<p/>');
+                        let tb = $('<table/>');
+                        let p = $('<tr/>');
 
                         // Append date.
-                        p.append($('<span/>', {
+                        p.append($('<td/>', {
                             'class': 'event-date',
-                            'html': helpers.getPaddedDateString(new Date(events[i].date).toLocaleString()) + ' '
+                            'html': helpers.getPaddedDateString(new Date(events[i].date).toLocaleString())
                         }));
 
                         // Append type.
-                        p.append($('<span/>', {
-                            'class': 'label',
+                        p.append($('<td/>', {
+                            'class': 'label event-type',
                             'style': helpers.getEventColor(events[i].type),
                             'html': events[i].type
-                        }))
-
-                        // Append message.
-                        p.append($('<span/>', {
-                            'html': ' ' + helpers.getEventMessage(events[i])
                         }));
 
+                        // Append message.
+                        p.append($('<td/>', {
+                            'html': helpers.getEventMessage(events[i])
+                        }));
+
+                        tb.append(p);
+
+                        if (typeof events[i].message === "string" && events[i].message.length > 0) {
+                            let p = $('<tr/>');
+
+                            // Append date.
+                            p.append($('<td/>', {
+                                'html': '&nbsp;'
+                            }));
+
+                            // Append type.
+                            p.append($('<td/>', {
+                                'html': '&nbsp;'
+                            }));
+
+                            // Append message.
+                            p.append($('<td/>', {
+                                'class': 'event-message',
+                                'html': events[i].message
+                            }));
+
+                            tb.append(p);
+                        }
+
                         // Append to list.
-                        htmlEvents.append(p);
+                        htmlEvents.append($('<li/>').append(tb));
                     }
 
                     // Append the information to the main div.

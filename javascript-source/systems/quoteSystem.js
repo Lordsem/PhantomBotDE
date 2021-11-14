@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@
         quote[3] = String(quote[3]).replace(/"/g, '\'\'');
 
         $.inidb.set('quotes', quoteid, JSON.stringify([String(quote[0]), String(quote[1]), String(quote[2]), String(quote[3])]));
+        $.panelsocketserver.sendJSONToAll(JSON.stringify({"query_id": "quote_update", "results": "update"}));
     }
 
     /**
@@ -47,13 +48,14 @@
      */
     function saveQuote(username, quote) {
         var newKey = $.inidb.GetKeyList('quotes', '').length,
-            game = ($.getGame($.channelName) != '' ? $.getGame($.channelName) : "Some Game");
+            game = ($.getGame($.channelName) != '' ? $.getGame($.channelName) : "Irgendeine Kategorie");
 
         if ($.inidb.exists('quotes', newKey)) {
             newKey++;
         }
         quote = String(quote).replace(/"/g, '\'\'');
         $.inidb.set('quotes', newKey, JSON.stringify([username, quote, $.systemTime(), game + '']));
+        $.panelsocketserver.sendJSONToAll(JSON.stringify({"query_id": "quote_update", "results": "update"}));
         return newKey;
     }
 
@@ -87,6 +89,7 @@
             }
 
             isDeleting = false;
+            $.panelsocketserver.sendJSONToAll(JSON.stringify({"query_id": "quote_update", "results": "update"}));
             return (quotes.length ? quotes.length : 0);
         } else {
             return -1;
@@ -164,7 +167,7 @@
                 $.say($.whisperPrefix(sender) + $.lang.get('quotesystem.edit.404'));
             }
 
-            $.log.event(sender + ' edited quote #' + quote);
+            $.log.event(sender + ' bearbeitete Zitat #' + quote);
         }
 
         /**
@@ -195,7 +198,7 @@
                 }
                 quote = args.splice(0).join(' ');
                 $.say($.lang.get('quotesystem.add.success', $.username.resolve(sender), saveQuote(String($.username.resolve(sender)), quote)));
-                $.log.event(sender + ' added a quote "' + quote + '".');
+                $.log.event(sender + ' hat Zitat "' + quote + '" hinzugefügt.');
                 return;
             } else {
                 if (args.length < 2) {
@@ -211,7 +214,7 @@
                 quote = args.splice(1).join(' ');
                 var username = useTwitchNames ? $.username.resolve(target) : target;
                 $.say($.lang.get('quotesystem.add.success', username, saveQuote(String(username), quote)));
-                $.log.event(sender + ' added a quote "' + quote + '".');
+                $.log.event(sender + ' hat Zitat "' + quote + '" hinzugefügt.');
                 return;
             }
         }
@@ -248,7 +251,7 @@
                 $.say($.whisperPrefix(sender) + $.lang.get('quotesystem.del.404', args[0]));
             }
 
-            $.log.event(sender + ' removed quote with id: ' + args[0]);
+            $.log.event(sender + ' entfernte Zitat mit der ID: ' + args[0]);
         }
 
         /**
@@ -274,7 +277,7 @@
                 quoteStr = quoteStr.replace('(id)', (quote.length == 5 ? quote[4].toString() : quote[3].toString())).
                 replace('(quote)', quote[1]).
                 replace('(user)', $.resolveRank(quote[0])).
-                replace('(game)', (quote.length == 5 ? quote[3] : "Some Game")).
+                replace('(game)', (quote.length == 5 ? quote[3] : "Irgendeine Kategorie")).
                 replace('(date)', $.getLocalTimeString('dd-MM-yyyy', parseInt(quote[2])));
                 $.say(quoteStr);
             } else {
@@ -294,7 +297,7 @@
             quoteStr = args.splice(0).join(' ');
             $.inidb.set('settings', 'quoteMessage', quoteStr);
             $.say($.whisperPrefix(sender) + $.lang.get('quotesystem.quotemessage.success'));
-            $.log.event(sender + ' changed the quote message to: ' + quoteStr);
+            $.log.event(sender + ' änderte die Zitat-Nachricht zu: ' + quoteStr);
         }
 
         /**

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,9 +42,7 @@
      * @return number
      */
     function getCooldown(keyword) {
-        if ($.inidb.exists('coolkey', keyword.toLowerCase())) {
-            return parseInt($.inidb.get('coolkey', keyword.toLowerCase()));
-        } else if ($.inidb.exists('coolkey', keyword)) { // ignore case
+        if ($.inidb.exists('coolkey', keyword)) {
             return parseInt($.inidb.get('coolkey', keyword));
         } else {
             return 0;
@@ -64,13 +62,12 @@
         }
 
         time = ((time * 1000) + $.systemTime());
-        keyword = keyword.toLowerCase();
 
         cooldown.push({
             keyword: keyword,
             time: time
         });
-        $.consoleDebug('Das Keyword ' + keyword + ' wurde in die Abklingzeit gesetzt.');
+        $.consoleDebug('Das Schlüsselwort ' + keyword + ' wurde in die Abklingzeit gesetzt.');
     };
 
     /**
@@ -81,7 +78,7 @@
      * @return number
      */
     function get(keyword, username) {
-        var hasCooldown = $.inidb.exists('coolkey', keyword.toLowerCase()) || $.inidb.exists('coolkey', keyword), // ignore case.
+        var hasCooldown = $.inidb.exists('coolkey', keyword),
             i;
 
         if (!hasCooldown)

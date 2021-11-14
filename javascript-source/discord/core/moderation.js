@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -232,7 +232,7 @@
             creator = event.getCreator(),
             message = event.getMessage();
 
-        if (modLogs === false || modLogChannel === '' || $.getIniDbBoolean('chatModerator', 'moderationLogs', false) === false) {
+        if (modLogs === false || modLogChannel === '') {
             return;
         }
 
@@ -249,7 +249,7 @@
             reason = event.getReason(),
             time = parseInt(event.getTime());
 
-        if (modLogs === false || modLogChannel === '' || $.getIniDbBoolean('chatModerator', 'moderationLogs', false) === false) {
+        if (modLogs === false || modLogChannel === '') {
             return;
         }
 
@@ -263,7 +263,7 @@
         var username = event.getUsername(),
             creator = event.getCreator();
 
-        if (modLogs === false || modLogChannel === '' || $.getIniDbBoolean('chatModerator', 'moderationLogs', false) === false) {
+        if (modLogs === false || modLogChannel === '') {
             return;
         }
 
@@ -277,7 +277,7 @@
         var username = event.getUsername(),
             creator = event.getCreator();
 
-        if (modLogs === false || modLogChannel === '' || $.getIniDbBoolean('chatModerator', 'moderationLogs', false) === false) {
+        if (modLogs === false || modLogChannel === '') {
             return;
         }
 
@@ -293,7 +293,7 @@
             message = event.getMessage(),
             reason = event.getReason();
 
-        if (modLogs === false || modLogChannel === '' || $.getIniDbBoolean('chatModerator', 'moderationLogs', false) === false) {
+        if (modLogs === false || modLogChannel === '') {
             return;
         }
 
@@ -642,8 +642,8 @@
                 }
                 if (resolvedChannel == null) {
                     $.discord.say(channel, $.discord.userPrefix(mention) + $.lang.get('moderation.cleanup.err.unknownchannel', subAction));
-                        return;
-                    }
+                    return;
+                }
 
                 $.discordAPI.bulkDelete(resolvedChannel, parseInt(actionArgs));
 

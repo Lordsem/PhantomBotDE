@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,4 +41,4 @@ $.lang.register('queuesystem.queue.list.empty', 'No users are in the queue.');
 $.lang.register('queuesystem.queue.next', 'Users to be picked next are: $1.');
 $.lang.register('queuesystem.gamertag', '(GamerTag: $1)');
 $.lang.register('queuesystem.pick', 'Users picked: $1.');
-$.lang.register('queuesystem.usage', 'Usage: !queue [open / close / clear / next / list / pick / position / info]');
+$.lang.register('queuesystem.usage', 'Usage: !queue [open / close / clear / next / list / pick / random / position / info]');

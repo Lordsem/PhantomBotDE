@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@
                 try {
                     json.regexKey = new RegExp(json.keyword, json.isCaseSensitive ? '' : 'i');
                 } catch (ex) {
-                    $.log.error('Bad regex detected in keyword [' + keys[i] + ']: ' + ex.message);
+                    $.log.error('Fehlerhafte Regex im Schlüsselwort erkannt [' + keys[i] + ']: ' + ex.message);
                     continue;
                 }
             }
@@ -48,20 +48,21 @@
      */
     $.bind('ircChannelMessage', function(event) {
         function executeKeyword(json, event) {
-                    // Make sure the keyword isn't on cooldown.
-                    if ($.coolDownKeywords.get(json.keyword, sender) > 0) {
-                        return;
-                    }
-                    // If the keyword is a command, we need to send that command.
-                    else if (json.response.startsWith('command:')) {
-                        $.command.run(sender, json.response.substring(8), '', event.getTags());
-                    }
-                    // Keyword just has a normal response.
-                    else {
-                        json.response = $.replace(json.response, '.*\(keywordcount\s(.*)\).*', '');
-                        json.response = $.replace(json.response, '(keywordcount)', '(keywordcount ' + json.keyword + ')');
-                        $.say($.tags(event, json.response, false));
-                    }
+            // Make sure the keyword isn't on cooldown.
+            if ($.coolDownKeywords.get(json.keyword, sender) > 0) {
+                return;
+            }
+            // If the keyword is a command, we need to send that command.
+            else if (json.response.startsWith('command:')) {
+                $.command.run(sender, json.response.substring(8), '', event.getTags());
+            }
+            // Keyword just has a normal response.
+            else {
+                var CommandEvent = Packages.tv.phantombot.event.command.CommandEvent;
+                var cmdEvent = new CommandEvent(sender, "keyword_" + json.keyword, event.getMessage(), event.getTags());
+                json.response = $.replace(json.response, '(keywordcount)', '(keywordcount ' + $.escapeTags(json.keyword) + ')');
+                $.say($.tags(cmdEvent, json.response, false));
+            }
         }
 
         var message = event.getMessage(),
@@ -87,7 +88,6 @@
                 var str = '',
                   caseAdjustedMessageParts = messageParts;
                 if (!json.isCaseSensitive) {
-                    json.keyword = json.keyword.toLowerCase();
                     caseAdjustedMessageParts = messagePartsLower;
                 }
                 for (var idx = 0; idx < caseAdjustedMessageParts.length; idx++) {
@@ -140,10 +140,10 @@
                         } else if (args[i].equalsIgnoreCase('--case-sensitive')) {
                             isCaseSensitive = true;
                         } else {
-                            keyword = args[i] + '';
+                            keyword = $.jsString(args[i]);
                         }
                     } else {
-                        response = args.splice(i).join(' ');
+                        response = $.jsString(args.splice(i).join(' '));
                         break;
                     }
                 }
@@ -151,6 +151,10 @@
                 if (response == null) {
                     $.say($.whisperPrefix(sender) + $.lang.get('keywordhandler.add.usage'));
                     return;
+                }
+
+                if (!isCaseSensitive) {
+                    keyword = keyword.toLowerCase();
                 }
 
                 var json = JSON.stringify({
@@ -172,12 +176,10 @@
                 if (subAction === undefined) {
                     $.say($.whisperPrefix(sender) + $.lang.get('keywordhandler.remove.usage'));
                     return;
-                } else if (!$.inidb.exists('keywords', subAction.toLowerCase())) {
+                } else if (!$.inidb.exists('keywords', subAction)) {
                     $.say($.whisperPrefix(sender) + $.lang.get('keywordhandler.keyword.404'));
                     return;
                 }
-
-                subAction = args[1].toLowerCase();
 
                 $.inidb.del('keywords', subAction);
                 $.say($.whisperPrefix(sender) + $.lang.get('keywordhandler.keyword.removed', subAction));
@@ -191,21 +193,21 @@
                 if (subAction === undefined || isNaN(parseInt(args[2]))) {
                     $.say($.whisperPrefix(sender) + $.lang.get('keywordhandler.cooldown.usage'));
                     return;
-                } else if (!$.inidb.exists('keywords', subAction.toLowerCase())) {
+                } else if (!$.inidb.exists('keywords', subAction)) {
                     $.say($.whisperPrefix(sender) + $.lang.get('keywordhandler.keyword.404'));
                     return;
                 }
 
                 if (args[2] === -1) {
-                    $.inidb.del('coolkey', subAction.toLowerCase());
+                    $.inidb.del('coolkey', subAction);
                     $.say($.whisperPrefix(sender) + $.lang.get('keywordhandler.cooldown.removed', subAction));
-                    $.coolDownKeywords.clear(subAction.toLowerCase());
+                    $.coolDownKeywords.clear(subAction);
                     return;
                 }
 
-                $.inidb.set('coolkey', subAction.toLowerCase(), parseInt(args[2]));
+                $.inidb.set('coolkey', subAction, parseInt(args[2]));
                 $.say($.whisperPrefix(sender) + $.lang.get('keywordhandler.cooldown.set', subAction, args[2]));
-                $.coolDownKeywords.clear(subAction.toLowerCase());
+                $.coolDownKeywords.clear(subAction);
             }
         }
     });

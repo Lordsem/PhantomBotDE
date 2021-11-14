@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -232,8 +232,8 @@
 
                         say(channel, userPrefix(mention) + $.lang.get('discord.misc.module.enabled', module.getModuleName()));
                     } catch (ex) {
-                        $.log.error('[DISCORD] Unable to call initReady for enabled module (' + module.scriptName + '): ' + ex.message);
-                        $.consoleLn("Sending stack trace to error log...");
+                        $.log.error('[DISCORD] InitReady kann nicht für aktiviertes Modul aufgerufen werden (' + module.scriptName + '): ' + ex.message);
+                        $.consoleLn("Stack-Trace an Fehlerprotokoll senden...");
                         Packages.com.gmt2001.Console.err.printStackTrace(ex.javaException);
                     }
                 } else {

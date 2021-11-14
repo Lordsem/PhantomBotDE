@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -76,18 +76,6 @@
         }
 
         /*
-         * @commandpath setcommunities [communities] - Set your Twitch communities.
-         */
-        if (command.equalsIgnoreCase('setcommunities')) {
-            if (action === undefined) {
-                $.say($.whisperPrefix(sender) + $.lang.get('streamcommand.communities.set.usage', $.twitchcache.getCommunities().join(', ').replace(/\s,/g, '')));
-                return;
-            }
-            $.updateCommunity($.channelName, args.join('').replace(/\s/g, '').split(','), sender);
-            return;
-        }
-
-        /*
          * @commandpath vod - Displays stream uptime and current VOD or, if offline, the last VOD available.
          */
         if (command.equalsIgnoreCase('vod')) {
@@ -121,7 +109,6 @@
     $.bind('initReady', function() {
         $.registerChatCommand('./commands/streamCommand.js', 'setgame', 1);
         $.registerChatCommand('./commands/streamCommand.js', 'settitle', 1);
-        $.registerChatCommand('./commands/streamCommand.js', 'setcommunities', 1);
         $.registerChatCommand('./commands/streamCommand.js', 'vod', 7);
     });
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-$(function() {
+$(function () {
     const helpers = {};
 
     // Delay in ms for animations.
@@ -35,13 +35,15 @@ $(function() {
     // Example: MAJOR.MINOR.PATCH
     helpers.PANEL_VERSION = "NONE";
 
+    helpers.hashmap = [];
+
     /*
      * @function adds commas to thousands.
      *
      * @param  {String} number
      * @return {String}
      */
-    helpers.parseNumber = function(number) {
+    helpers.parseNumber = function (number) {
         return (number + '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     };
 
@@ -51,7 +53,7 @@ $(function() {
      * @param  {String} number
      * @return {JSON}
      */
-    helpers.fixNumber = function(number, force) {
+    helpers.fixNumber = function (number, force) {
         const newNumber = parseInt(number.toString().replace(/,/g, ''));
         const thousandReplace = 9999;
         const millionReplace = 999999;
@@ -73,7 +75,7 @@ $(function() {
      * @param  {Object} obj
      * @return {Boolean}
      */
-    helpers.isValidNumberOrString = function(obj) {
+    helpers.isValidNumberOrString = function (obj) {
         let value = (typeof obj === 'object' ? obj.val() : obj);
 
         if (isNaN(value)) {
@@ -95,7 +97,7 @@ $(function() {
      * @param  {String} def
      * @return {String}
      */
-    helpers.getDefaultIfNullOrUndefined = function(value, def) {
+    helpers.getDefaultIfNullOrUndefined = function (value, def) {
         if (value === null || value === undefined) {
             return def;
         } else {
@@ -109,28 +111,34 @@ $(function() {
      * @param  {Object} event
      * @return {String}
      */
-    helpers.getEventMessage = function(event) {
+    helpers.getEventMessage = function (event) {
         switch (event.type.toLowerCase()) {
             case 'subscriber':
-                return (event.username + ' hat dich gerade abonniert!');
+                return (event.username + ' hat gerade mit Stufe ' + event.tier + ' abonniert!');
             case 'prime subscriber':
-                return (event.username + ' hat dich gerade mit Twitch Prime abonniert!');
+                return (event.username + ' hat gerade mit Prime abonniert!');
+            case 'prime resubscriber':
+                return (event.username + ' reabonnierte mit Prime und das seit ' + event.months + ' Monaten!');
             case 'resubscriber':
-                return (event.username + ' hat dich den ' + event.months + 'ten Monate in Folge abboniert!');
+                return (event.username + ' reabonnierte mit Stufe ' + event.tier + ' und das seit ' + event.months + ' Monaten!');
             case 'follower':
-                return (event.username + ' folgt dir jetzt!');
+                return (event.username + ' folgt jetzt!');
             case 'bits':
                 return (event.username + ' hat ' + event.amount + ' Bits gecheered!');
             case 'host':
-                return (event.username + ' hostet dich derzeit mit' + event.viewers + ' Zuschauern!');
-            case 'auto-host':
-                return (event.username + ' hostet dich automatisch derzeit mit ' + event.viewers + ' Zuschauern!');
-            case 'tip': // To be added soon.
-                break;
+                return (event.username + ' hostete dich mit ' + event.viewers + ' Zuschauern!');
+            case 'tip':
+                return (event.username + ' spendete ' + event.amount + ' ' + event.currency + '!');
             case 'raid':
-                return (event.username + ' überfällt dich mit ' + event.viewers + ' Zuschauern!');
+                return (event.username + ' raidete mit ' + event.viewers + ' Zuschauern!');
             case 'gifted subscription':
-                return (event.username + ' hat ' + event.recipient + ' ein Abonnement geschenkt!');
+                return (event.username + ' hat ' + event.recipient + 'ein Abonnement geschenkt!');
+            case 'anonymous gifted subscription':
+                return ('Ein anonymer Zuschauer hat ein Stufe ' + event.tier + ' Abonnement an ' + event.recipient + ' geschenkt!');
+            case 'mass gifted subscription':
+                return (event.username + ' hat ' + event.amount + ' Stufe ' + event.tier + ' Abonnements an ' + event.amount + ' zufällige Zuschauer verschenkt!');
+            case 'anonymous mass gifted subscription':
+                return ('Ein anonymer Zuschauer hat ' + event.amount + ' Stufe ' + event.tier + ' Abonnements an ' + event.amount + ' zufällige Zuschauer verschenkt!');
         }
     };
 
@@ -141,59 +149,69 @@ $(function() {
      * @return {String}
      */
     // Use these colours for this function: https://mdbootstrap.com/css/colors/
-    helpers.getEventColor = function(event) {
+    helpers.getEventColor = function (event) {
         switch (event.toLowerCase()) {
             case 'subscriber':
-                return 'background-color: #16a7d9;';
+                return 'background-color: #16b7d9;';
             case 'prime subscriber':
-                return 'background-color: #1693bc;';
+                return 'background-color: #1667d9;';
+            case 'prime resubscriber':
+                return 'background-color: #1637d9;';
             case 'resubscriber':
-                return 'background-color: #ed961c;';
+                return 'background-color: #1697d9;';
             case 'follower':
                 return 'background-color: #c62828;';
             case 'bits':
                 return 'background-color: #6441a5;';
             case 'host':
                 return 'background-color: #ed4c1c;';
-            case 'auto-host':
-                return 'background-color: #ffff00; color: #000000;';
-            case 'tip': // To be added soon.
-                return 'background-color: #6441a5;';
+            case 'tip':
+                return 'background-color: #846195;';
             case 'raid':
                 return 'background-color: #4caf50;';
             case 'gifted subscription':
                 return 'background-color: #01579b;';
+            case 'anonymous gifted subscription':
+                return 'background-color: #666666;';
+            case 'mass gifted subscription':
+                return 'background-color: #01779b;';
+            case 'anonymous mass gifted subscription':
+                return 'background-color: #aaaaaa;';
         }
     };
 
     /*
-     * @function handles the string input checks.
+     * @function handle input validation
      *
      * @param {Object} obj
+     * @param {Function} validator
      * @return {Boolean}
+     *
+     * Validator takes obj as argument should return null if the input is valid or else an error message.
      */
-    helpers.handleInputString = function(obj) {
+    helpers.handleInput = function (obj, validator) {
         if (obj.length === 0) {
-            helpers.logError('Failed to handle string due to the object being null.', helpers.LOG_TYPE.FORCE);
+            helpers.logError('Fehler beim Verarbeiten der Zeichenfolge, da das Objekt null ist.', helpers.LOG_TYPE.FORCE);
             return;
         }
 
         // Make sure the input has a value in it.
-        if (obj.val().length < 1) {
+        const validationResult = validator(obj);
+        if (typeof validationResult === 'string') {
             if (!obj.parent().hasClass('has-error')) {
                 // Add the error class to the parent.
                 obj.parent().addClass('has-error');
                 // Append text saying the form cannot be empty.
                 obj.after($('<p/>', {
                     'class': 'help-block',
-                    'text': 'Du kannst dieses Feld nicht leer lassen.'
+                    'text': validationResult
                 }));
                 let btn = obj.closest('form').find('button');
                 if (btn.data('candisable') !== undefined) {
                     // Disable the button
                     obj.closest('form').find('button').prop('disabled', true).addClass('disabled');
                 }
-                toastr.error('Missing data in input field.');
+                toastr.error('Fehlende Daten im Eingabefeld.');
                 return false;
             }
         } else {
@@ -213,53 +231,36 @@ $(function() {
     };
 
     /*
+     * @function handles the string input checks.
+     *
+     * @param {Object} obj
+     * @return {Boolean}
+     */
+    helpers.handleInputString = function(obj) {
+        return helpers.handleInput(obj, function (obj) {
+            if (obj.val().length < 1) {
+                return 'Du kannst dieses Feld nicht leer lassen.';
+            }
+            return null;
+        });
+    };
+
+    /*
      * @function handles the number input checks.
      *
      * @param  {Object} obj
      * @return {Boolean}
      */
-    helpers.handleInputNumber = function(obj, min, max) {
-        if (obj.length === 0) {
-            helpers.logError('Failed to handle number due to the object being null.', helpers.LOG_TYPE.FORCE);
-            return;
-        }
+    helpers.handleInputNumber = function (obj, min, max) {
+        return helpers.handleInput(obj, function (obj) {
+            min = (min === undefined ? 0 : min);
+            let newMax = (max === undefined ? Number.MAX_SAFE_INTEGER : max);
 
-        min = (min === undefined ? 0 : min);
-        let newMax = (max === undefined ? Number.MAX_SAFE_INTEGER : max);
-
-        // Make sure the input has a value in it.
-        if (isNaN(parseInt(obj.val())) || isNaN(obj.val()) || parseInt(obj.val()) < min || parseInt(obj.val()) > newMax) {
-            if (!obj.parent().hasClass('has-error')) {
-                // Add the error class to the parent.
-                obj.parent().addClass('has-error');
-                // Append text saying the form cannot be empty.
-                obj.after($('<p/>', {
-                    'class': 'help-block',
-                    'text': 'Bitte geben Sie eine Zahl ein, die größer oder gleich ' + min + (max !== undefined ? 'und kleiner oder gleich ' + newMax + '' : '') + 'ist.'
-                }));
-                let btn = obj.closest('form').find('button');
-                if (btn.data('candisable') !== undefined) {
-                    // Disable the button
-                    obj.closest('form').find('button').prop('disabled', true).addClass('disabled');
-                }
-                toastr.error('Missing data in input field.');
-                return false;
+            if (isNaN(parseInt(obj.val())) || isNaN(obj.val()) || parseInt(obj.val()) < min || parseInt(obj.val()) > newMax) {
+                return 'Bitte geben Sie eine Zahl ein, die größer oder gleich ' + min + (max !== undefined ? 'und kleiner oder gleich ' + newMax + '' : '') + 'ist.';
             }
-        } else {
-            if (obj.parent().find('p').length > 0) {
-                if (obj.parent().hasClass('has-error')) {
-                    // Remove error class.
-                    obj.parent().removeClass('has-error');
-                    // Remove the help text.
-                    obj.parent().find('p').remove();
-                    // Enabled the button again.
-                    obj.closest('form').find('button').removeClass('disabled');
-                    return true;
-                }
-            }
-        }
-
-        return !obj.parent().hasClass('has-error');
+            return null;
+        });
     };
 
     /*
@@ -268,46 +269,15 @@ $(function() {
      * @param  {Object} obj
      * @return {Boolean}
      */
-    helpers.handleInputDate = function(obj) {
-        if (obj.length === 0) {
-            helpers.logError('Failed to handle date due to the object being null.', helpers.LOG_TYPE.FORCE);
-            return;
-        }
+    helpers.handleInputDate = function (obj) {
+        return helpers.handleInput(obj, function (obj) {
+            let matched = obj.val().match(/^((\d{2}|\d{4})(\\|\/|\.|-)(\d{2})(\\|\/|\.|-)(\d{4}|\d{2}))$/);
 
-        let matched = obj.val().match(/^((\d{2}|\d{4})(\\|\/|\.|-)(\d{2})(\\|\/|\.|-)(\d{4}|\d{2}))$/);
-
-        // Make sure the input has a value in it.
-        if (matched === null || ((matched[6].length < 4 && matched[2].length == 2) || (matched[6].length == 2 && matched[2].length < 4))) {
-            if (!obj.parent().hasClass('has-error')) {
-                // Add the error class to the parent.
-                obj.parent().addClass('has-error');
-                // Append text saying the form cannot be empty.
-                obj.after($('<p/>', {
-                    'class': 'help-block',
-                    'text': 'Bitte geben Sie ein gültiges Datum ein (mm/dd/yyyy oder dd/mm/yyyy).'
-                }));
-                let btn = obj.closest('form').find('button');
-                if (btn.data('candisable') !== undefined) {
-                    // Disable the button
-                    obj.closest('form').find('button').prop('disabled', true).addClass('disabled');
-                }
-                toastr.error('Bad date in field.');
-                return false;
+            if (matched === null || ((matched[6].length < 4 && matched[2].length == 2) || (matched[6].length == 2 && matched[2].length < 4))) {
+                return 'Bitte gebe ein gültiges Datum ein. (mm/dd/yyyy oder dd/mm/yyyy)';
             }
-        } else {
-            if (obj.parent().find('p').length > 0) {
-                if (obj.parent().hasClass('has-error')) {
-                    // Remove error class.
-                    obj.parent().removeClass('has-error');
-                    // Remove the help text.
-                    obj.parent().find('p').remove();
-                    // Enabled the button again.
-                    obj.closest('form').find('button').removeClass('disabled');
-                    return true;
-                }
-            }
-        }
-        return !obj.parent().hasClass('has-error');
+            return null;
+        });
     };
 
     /*
@@ -316,7 +286,7 @@ $(function() {
      * @param {Object} obj
      * @param {String} id
      */
-    helpers.handlePanelToggleInfo = function(obj, id) {
+    helpers.handlePanelToggleInfo = function (obj, id) {
         id = 'phantombot_' + id.substring(id.indexOf('-') + 1);
 
         if (localStorage.getItem(id) === 'false') {
@@ -338,9 +308,9 @@ $(function() {
      * @param {Object} obj
      * @param {String} id
      */
-    helpers.handlePanelSetInfo = function(obj, id, parsed) {
+    helpers.handlePanelSetInfo = function (obj, id, parsed) {
         let item = localStorage.getItem('phantombot_' + id.substring(id.indexOf('-') + 1)),
-            isSmall = $('.small-box').width() < 230;
+                isSmall = $('.small-box').width() < 230;
 
         if (item === 'true' || item === null) {
             if (parseInt(obj.data('number').replace(/,/g, '')) < 9999) {
@@ -349,7 +319,7 @@ $(function() {
                 obj.html(isSmall ? parsed : obj.data('number'));
             }
         } else {
-            obj.html('Hidden');
+            obj.html('Versteckt');
         }
         obj.data('parsed', parsed);
     };
@@ -360,7 +330,7 @@ $(function() {
      * @param  {String} dateString
      * @return {String}
      */
-    helpers.getPaddedDateString = function(dateString) {
+    helpers.getPaddedDateString = function (dateString) {
         let dateMatches = dateString.match(/((\d+)|([^\d]*))/g);
 
         for (let i = 0; i < dateMatches.length; i++) {
@@ -382,7 +352,7 @@ $(function() {
      * @param  {Function} onClose
      * @return {Object}
      */
-    helpers.getModal = function(id, title, btn, body, onClose) {
+    helpers.getModal = function (id, title, btn, body, onClose) {
         return $('<div/>', {
             'class': 'modal fade',
             'tabindex': '99',
@@ -392,7 +362,7 @@ $(function() {
         }).append($('<div/>', {
             'class': 'modal-content'
         }).append($('<div/>', {
-            'class': 'modal-header',
+            'class': 'modal-header'
         }).append($('<button/>', {
             'type': 'button',
             'class': 'close',
@@ -405,7 +375,7 @@ $(function() {
             'class': 'modal-body',
             'html': body
         })).append($('<div/>', {
-            'class': 'modal-footer',
+            'class': 'modal-footer'
         }).append($('<button/>', {
             'class': 'btn btn-primary',
             'type': 'button',
@@ -416,9 +386,9 @@ $(function() {
             'type': 'button',
             'text': 'Abbrechen',
             'data-dismiss': 'modal'
-        }))))).on('shown.bs.modal', function() {
+        }))))).on('shown.bs.modal', function () {
             $('#' + id).focus();
-        }).on('hidden.bs.modal', function() {
+        }).on('hidden.bs.modal', function () {
             $('#' + id).remove();
         });
     };
@@ -433,7 +403,7 @@ $(function() {
      * @param  {Function} onClose
      * @return {Object}
      */
-    helpers.getAdvanceModal = function(id, title, btn, body, onClose) {
+    helpers.getAdvanceModal = function (id, title, btn, body, onClose) {
         return $('<div/>', {
             'class': 'modal fade',
             'tabindex': '99',
@@ -443,7 +413,7 @@ $(function() {
         }).append($('<div/>', {
             'class': 'modal-content'
         }).append($('<div/>', {
-            'class': 'modal-header',
+            'class': 'modal-header'
         }).append($('<button/>', {
             'type': 'button',
             'class': 'close',
@@ -456,7 +426,7 @@ $(function() {
             'class': 'modal-body',
             'html': body
         })).append($('<div/>', {
-            'class': 'modal-footer',
+            'class': 'modal-footer'
         }).append($('<button/>', {
             'class': 'btn btn-default pull-left',
             'type': 'button',
@@ -479,14 +449,14 @@ $(function() {
             'type': 'button',
             'text': 'Abbrechen',
             'data-dismiss': 'modal'
-        }))))).on('shown.bs.modal', function() {
+        }))))).on('shown.bs.modal', function () {
             $('#' + id).focus();
-        }).on('hidden.bs.modal', function() {
+        }).on('hidden.bs.modal', function () {
             $('#' + id).remove();
-        }).on('show.bs.collapse', function() {
+        }).on('show.bs.collapse', function () {
             $(this).find('.glyphicon').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
             $(this).find('.collapse-btn').html('Erweitertes ausblenden');
-        }).on('hide.bs.collapse', function() {
+        }).on('hide.bs.collapse', function () {
             $(this).find('.glyphicon').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
             $(this).find('.collapse-btn').html('Erweitertes anzeigen');
         });
@@ -504,10 +474,10 @@ $(function() {
      * @param  {Boolean} disabled
      * @return {Object}
      */
-    helpers.getInputGroup = function(id, type, title, placeholder, value, toolTip, disabled) {
+    helpers.getInputGroup = function (id, type, title, placeholder, value, toolTip, disabled) {
         return $('<div/>', {
             'class': 'form-group'
-        }).append($('<lable/>', {
+        }).append($('<label/>', {
             'html': $('<b/>', {
                 'text': title
             })
@@ -536,10 +506,10 @@ $(function() {
      * @param  {Boolean} unlimited
      * @return {Object}
      */
-    helpers.getTextAreaGroup = function(id, type, title, placeholder, value, toolTip, unlimited) {
+    helpers.getTextAreaGroup = function (id, type, title, placeholder, value, toolTip, unlimited) {
         return $('<div/>', {
             'class': 'form-group'
-        }).append($('<lable/>', {
+        }).append($('<label/>', {
             'html': $('<b/>', {
                 'text': title
             })
@@ -568,10 +538,10 @@ $(function() {
      * @param  {String} toolTip
      * @return {Object}
      */
-    helpers.getDropdownGroup = function(id, title, def, options, toolTip) {
+    helpers.getDropdownGroup = function (id, title, def, options, toolTip) {
         return  $('<div/>', {
             'class': 'form-group'
-        }).append($('<lable/>', {
+        }).append($('<label/>', {
             'html': $('<b/>', {
                 'text': title
             })
@@ -590,10 +560,59 @@ $(function() {
             'selected': 'true',
             'disabled': 'true',
             'hidden': 'true'
-        })).append(options.map(function(option) {
+        })).append(options.map(function (option) {
             return $('<option/>', {
                 'html': option
             });
+        }))));
+    };
+
+    helpers.getDropdownGroupWithGrouping = function (id, title, options, toolTip) {
+        return  $('<div/>', {
+            'class': 'form-group'
+        }).append($('<label/>', {
+            'html': $('<b/>', {
+                'text': title
+            })
+        })).append($('<div/>', {
+            'class': 'dropdown',
+            'data-toggle': 'tooltip',
+            'title': toolTip
+        }).append($('<select/>', {
+            'class': 'form-control select2 select2-hidden-accessible',
+            'id': id,
+            'style': 'width: 100%; cursor: pointer;'
+        }).append(options.map(function (option) {
+            let selected = option.selected;
+            let roles = option.options;
+            let group = $('<optgroup/>', {
+                'label': option.title
+            });
+
+            for (let i = 0; i < roles.length; i++) {
+                let o = $('<option/>', {
+                    'html': roles[i].name,
+                    'id': roles[i]._id
+                });
+
+                if (roles[i].value !== undefined) {
+                    o.attr('value', roles[i].value);
+                }
+
+                if (roles[i].selected !== undefined && roles[i].selected === true) {
+                    o.attr('selected', 'selected');
+                } else if (selected !== undefined && selected.indexOf(roles[i]._id) > -1) {
+                    o.attr('selected', 'selected');
+                }
+
+                if (roles[i].disabled !== undefined && roles[i].disabled === true) {
+                    o.attr('disabled', 'disabled');
+                }
+
+                group.append(o);
+            }
+
+            return group;
         }))));
     };
 
@@ -602,27 +621,26 @@ $(function() {
      *
      * @param  {String} id
      * @param  {String} title
-     * @param  {String} def
      * @param  {Array}  options [
-        {
-            'title': 'Some title',
-            'options': [
-                {
-                    'name': 'option name',
-                    'selected': 'true'
-                },
-                ...
-            ]
-        },
-        ...
+     {
+     'title': 'Some title',
+     'options': [
+     {
+     'name': 'option name',
+     'selected': 'true'
+     },
+     ...
+     ]
+     },
+     ...
      ]
      * @param  {String} toolTip
      * @return {Object}
      */
-    helpers.getMultiDropdownGroup = function(id, title, options, toolTip) {
+    helpers.getMultiDropdownGroup = function (id, title, options, toolTip) {
         return  $('<div/>', {
             'class': 'form-group'
-        }).append($('<lable/>', {
+        }).append($('<label/>', {
             'html': $('<b/>', {
                 'text': title
             })
@@ -635,7 +653,7 @@ $(function() {
             'multiple': 'multiple',
             'id': id,
             'style': 'width: 100%; cursor: pointer;'
-        }).append(options.map(function(option) {
+        }).append(options.map(function (option) {
             let selected = option.selected;
             let roles = option.options;
             let group = $('<optgroup/>', {
@@ -662,6 +680,49 @@ $(function() {
     };
 
     /*
+     * @function Generates a multi-select dropdown.
+     *
+     * @param  {String} id
+     * @param  {String} title
+     * @param  {Array}  options [
+     {
+     'name': 'option name',
+     'selected': 'true'
+     },
+     ...
+     * ]
+     * @param  {String} toolTip
+     * @return {Object}
+     */
+    helpers.getFlatMultiDropdownGroup = function (id, title, options, toolTip) {
+        return  $('<div/>', {
+            'class': 'form-group'
+        }).append($('<label/>', {
+            'html': $('<b/>', {
+                'text': title
+            })
+        })).append($('<div/>', {
+            'class': 'dropdown',
+            'data-toggle': 'tooltip',
+            'title': toolTip
+        }).append($('<select/>', {
+            'class': 'form-control select2 select2-hidden-accessible',
+            'multiple': 'multiple',
+            'id': id,
+            'style': 'width: 100%; cursor: pointer;'
+        }).append(options.map(function (option) {
+            let o = $('<option/>', {
+                'html': option.name,
+                'id': option._id
+            });
+            if (option.selected !== undefined && option.selected === 'true') {
+                o.attr('selected', 'selected');
+            }
+            return o;
+        }))));
+    };
+
+    /*
      * @function gets a checkbox
      *
      * @param  {String}  id
@@ -670,7 +731,7 @@ $(function() {
      * @param  {String}  tooltip
      * @return {Object}
      */
-    helpers.getCheckBox = function(id, value, text, tooltip) {
+    helpers.getCheckBox = function (id, value, text, tooltip) {
         return $('<div/>', {
             'class': 'pretty p-icon'
         }).append($('<input/>', {
@@ -711,7 +772,7 @@ $(function() {
      * @param  {String} body
      * @return {Object}
      */
-    helpers.getCollapsibleAccordion = function(id, title, body) {
+    helpers.getCollapsibleAccordion = function (id, title, body) {
         return $('<div/>', {
             'class': 'panel panel-default'
         }).append($('<div/>', {
@@ -744,7 +805,7 @@ $(function() {
      * @param  {Function} onClose
      * @return {Object}
      */
-    helpers.getConfirmDeleteModal = function(id, title, hasBodyMsg, closeMessage, onClose) {
+    helpers.getConfirmDeleteModal = function (id, title, hasBodyMsg, closeMessage, onClose) {
         swal({
             'title': title,
             'text': (hasBodyMsg ? 'Einmal entfernt, wird es für immer weg sein.' : ''),
@@ -761,11 +822,11 @@ $(function() {
                 }
             },
             'dangerMode': true
-        }).then(function(isRemoved) {
+        }).then(function (isRemoved) {
             if (isRemoved) {
                 onClose();
                 swal(closeMessage, {
-                    'icon': 'success',
+                    'icon': 'success'
                 });
             }
         });
@@ -777,9 +838,9 @@ $(function() {
      * @param  {Number} len
      * @return {String}
      */
-    helpers.getRandomString = function(len) {
+    helpers.getRandomString = function (len) {
         let randStr = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
-            str = '';
+                str = '';
 
         for (let i = 0; i < len; i++) {
             str += randStr.charAt(Math.floor(Math.random() * randStr.length));
@@ -794,7 +855,7 @@ $(function() {
      * @param {Function} func
      * @param {Number}   interval
      */
-    helpers.setInterval = function(func, interval) {
+    helpers.setInterval = function (func, interval) {
         timers.push(setInterval(func, interval));
     };
 
@@ -804,14 +865,14 @@ $(function() {
      * @param {Function} func
      * @param {Number}   timeout
      */
-    helpers.setTimeout = function(func, timeout) {
+    helpers.setTimeout = function (func, timeout) {
         timers.push(setTimeout(func, timeout));
     };
 
     /*
      * @function Clears all timers.
      */
-    helpers.clearTimers = function() {
+    helpers.clearTimers = function () {
         for (let i = 0; i < timers.length; i++) {
             clearInterval(timers[i]);
         }
@@ -823,7 +884,7 @@ $(function() {
      * @param  {String}|{Array} id
      * @return {Boolean}
      */
-    helpers.getModuleStatus = function(id, toggle, swit) {
+    helpers.getModuleStatus = function (id, toggle, swit) {
         if (typeof id === 'object') {
             for (let i = 0; i < id.length; i++) {
                 if (toggle === 'false') {
@@ -856,7 +917,7 @@ $(function() {
      * @param  {String}|{Array} id
      * @return {Boolean}
      */
-    helpers.handleModuleLoadUp = function(id, toggle, swit) {
+    helpers.handleModuleLoadUp = function (id, toggle, swit) {
         return helpers.getModuleStatus(id, toggle, swit);
     };
 
@@ -867,28 +928,28 @@ $(function() {
      * @param  {Boolean} asString
      * @return {Number}
      */
-    helpers.getGroupIdByName = function(name, asString) {
+    helpers.getGroupIdByName = function (name, asString) {
         switch (name.toLowerCase()) {
             case 'casters':
             case 'caster':
                 return (asString ? '0' : 0);
-            case 'administrators':
+            case 'aministratoren':
             case 'administrator':
                 return (asString ? '1' : 1);
-            case 'moderators':
+            case 'moderatoren':
             case 'moderator':
                 return (asString ? '2' : 2);
-            case 'subscribers':
-            case 'subscriber':
+            case 'abonnenten':
+            case 'abonnent':
                 return (asString ? '3' : 3);
-            case 'donators':
-            case 'donator':
+            case 'spender':
+            case 'spender':
                 return (asString ? '4' : 4);
             case 'vips':
             case 'vip':
                 return (asString ? '5' : 5);
-            case 'regulars':
-            case 'regular':
+            case 'stammzuschauer':
+            case 'stammzuschauer':
                 return (asString ? '6' : 6);
             default:
                 return (asString ? '7' : 7);
@@ -902,14 +963,14 @@ $(function() {
      * @param  {Boolean} asString
      * @return {Number}
      */
-    helpers.getDiscordGroupIdByName = function(name, asString) {
+    helpers.getDiscordGroupIdByName = function (name, asString) {
         /*switch (name.toLowerCase()) {
-            case 'administrators':
-            case 'administrator':
-                return (asString ? '1' : 1);
-            default:
-                return (asString ? '0' : 0);
-        }*/
+         case 'administrators':
+         case 'administrator':
+         return (asString ? '1' : 1);
+         default:
+         return (asString ? '0' : 0);
+         }*/
 
         return 'null';
     };
@@ -920,24 +981,24 @@ $(function() {
      * @param  {String} id
      * @return {Number}
      */
-    helpers.getGroupNameById = function(id) {
+    helpers.getGroupNameById = function (id) {
         switch (id.toString()) {
             case '0':
                 return 'Caster';
             case '1':
-                return 'Administrators';
+                return 'Administrator';
             case '2':
-                return 'Moderators';
+                return 'Moderator';
             case '3':
-                return 'Subscribers';
+                return 'Abonnent';
             case '4':
-                return 'Donators';
+                return 'Spender';
             case '5':
-                return 'vips';
+                return 'VIP';
             case '6':
-                return 'Regulars';
+                return 'Stammzuschauer';
             default:
-                return 'Viewers';
+                return 'Zuschauer';
         }
     };
 
@@ -947,7 +1008,7 @@ $(function() {
      * @param  {String} j
      * @return {Number}
      */
-    helpers.getDiscordGroupNameById = function(j) {
+    helpers.getDiscordGroupNameById = function (j) {
         let json = JSON.parse(j);
         let roles = [];
         let perms = [];
@@ -982,7 +1043,7 @@ $(function() {
      * @param {Boolean} isDark
      * @param {Boolean} isAtLoadUp
      */
-    helpers.handleDarkMode = function(isDark, isAtLoadUp) {
+    helpers.handleDarkMode = function (isDark, isAtLoadUp) {
         // Only load styles once.
         if (helpers.isStylesLoaded !== undefined) {
             return;
@@ -995,51 +1056,63 @@ $(function() {
             // select2.
             head.append($('<link/>', {
                 'rel': 'stylesheet',
-                'href': '/panel/vendors/select2/select2.dark.min.css'
+                'href': 'vendors/select2/select2.dark.min.css'
             }));
 
             // AdminLTE.
             head.append($('<link/>', {
                 'rel': 'stylesheet',
-                'href': '/panel/vendors/adminlte/css/AdminLTE.dark.min.css'
+                'href': 'vendors/adminlte/css/AdminLTE.dark.min.css'
             }));
 
             // skins.
             head.append($('<link/>', {
                 'rel': 'stylesheet',
-                'href': '/panel/vendors/adminlte/css/skins/skin-purple.dark.min.css'
+                'href': 'vendors/adminlte/css/skins/skin-purple.dark.min.css'
             }));
 
             // AdminLTE.
             head.append($('<link/>', {
                 'rel': 'stylesheet',
-                'href': '/panel/css/style.dark.min.css'
+                'href': 'css/style.dark.min.css'
             }));
         } else {
             // select2.
             head.append($('<link/>', {
                 'rel': 'stylesheet',
-                'href': '/panel/vendors/select2/select2.min.css'
+                'href': 'vendors/select2/select2.min.css'
             }));
 
             // AdminLTE.
             head.append($('<link/>', {
                 'rel': 'stylesheet',
-                'href': '/panel/vendors/adminlte/css/AdminLTE.min.css'
+                'href': 'vendors/adminlte/css/AdminLTE.min.css'
             }));
 
             // skins.
             head.append($('<link/>', {
                 'rel': 'stylesheet',
-                'href': '/panel/vendors/adminlte/css/skins/skin-purple.min.css'
+                'href': 'vendors/adminlte/css/skins/skin-purple.min.css'
             }));
 
             // AdminLTE.
             head.append($('<link/>', {
                 'rel': 'stylesheet',
-                'href': '/panel/css/style.min.css'
+                'href': 'css/style.min.css'
             }));
         }
+    };
+
+    helpers.addNotification = function (html) {
+        if ($('#notifications-total').data('notification-amount') === undefined) {
+            $('#notifications-total').data('notification-amount', 0);
+        }
+        let newval = $('#notifications-total').data('notification-amount') + 1;
+
+        $('#notifications-total').data('notification-amount', newval);
+        $('#notifications-total').html(newval);
+        $('#notifications-amount').html(newval).prop('style', 'display: inline;');
+        $('#notifications-menu-ul').append($('<li/>').append(html));
     };
 
     /*
@@ -1048,41 +1121,51 @@ $(function() {
      * @param {String} version
      * @param {String} downloadLink
      */
-    helpers.handleNewBotUpdate = function(version, downloadLink) {
+    helpers.handleNewBotUpdate = function (version, downloadLink) {
         if (version !== null) {
-            if ($('#notifications-total').data('isset') === false) {
+            if ($('#notifications-total').data('updateisset') === undefined) {
                 // Send a warning to the user.
                 toastr.warning('Neues Update für PhantomBotDE verfügbar!', {
                     'timeOut': 2000
                 });
 
+                let html = '';
+                if (version.startsWith("nightly-")) {
+                    html = 'Nightly build ' + version.substr(8) + ' von PhantomBotDE ist jetzt zum Download verfügbar! <br>' +
+                            'Hole dir deine eigene Kopie der nightly build ' + version.substr(8) + ' von PhantomBot ' +
+                            $('<a/>', {'target': '_blank', 'rel': 'noopener noreferrer'}).prop('href', downloadLink).append('hier.')[0].outerHTML + ' <br>' +
+                            '<b>Bitte prüfe ' +
+                            $('<a/>', {'target': '_blank', 'rel': 'noopener noreferrer'}).prop('href', 'https://phantombot.github.io/PhantomBot/guides/#guide=content/setupbot/updatebot').append('diesen Guide')[0].outerHTML +
+                            ', wie man PhantomBot richtig aktualisiert.</b>';
+                } else {
+                    html = 'Version ' + version + ' des PhantomBotDE ist jetzt zum Download verfügbar! <br>' +
+                            'Du siehst die Änderungen dieser Version ' +
+                            $('<a/>', {'target': '_blank', 'rel': 'noopener noreferrer'}).prop('href', 'https://github.com/PhantomBotDE/PhantomBotDE/releases/' + version).append('hier')[0].outerHTML + '. <br>' +
+                            'Hole dir deine eigene Kopie der Version ' + version + ' des PhantomBotDE ' +
+                            $('<a/>', {'target': '_blank', 'rel': 'noopener noreferrer'}).prop('href', downloadLink).append('hier.')[0].outerHTML + ' <br>' +
+                            '<b>Bitte prüfe ' +
+                            $('<a/>', {'target': '_blank', 'rel': 'noopener noreferrer'}).prop('href', 'https://phantombot.github.io/PhantomBot/guides/#guide=content/setupbot/updatebot').append('diesen Guide')[0].outerHTML +
+                            ', wie man PhantomBotDE richtig aktualisiert.</b>';
+                }
+
                 // Set the total notifications.
-                $('#notifications-total').html('1').data('isset', 'true');
-                // Show the notification.
-                $('#notifications-amount').prop('style', 'display: inline;');
+                $('#notifications-total').data('updateisset', 'true');
                 // Add a new notfication.
-                $('#notifications-menu-ul').append($('<li/>').append($('<a/>', {
+                helpers.addNotification($('<a/>', {
                     'href': 'javascript:void(0);',
-                    'click': function() {
-                        helpers.getModal('pb-update', 'PhantomBot Update', 'Ok', $('<form/>', {
+                    'click': function () {
+                        helpers.getModal('pb-update', 'PhantomBotDE Update', 'Ok', $('<form/>', {
                             'role': 'form'
                         })
-                        .append($('<p/>', {
-                            'html': 'Die Version ' + version + ' von PhantomBotDE ist ab sofort zum Download verfügbar! <br>' +
-                            'Die Änderungen dieser Version können Sie ' +
-                                $('<a/>', { 'target': '_blank' }).prop('href', 'https://github.com/PhantomBotDE/PhantomBotDE/releases/' + version).append('hier einsehen.')[0].outerHTML + ' <br>' +
-                            'Du kannst dir ' +
-                                $('<a/>', { 'target': '_blank' }).prop('href', downloadLink).append('hier')[0].outerHTML + ' deine eigene Kopie der Version ' + version + '\' von PhantomBot besorgen. \<br>' +
-                            '<b>Bitte lesen Sie in ' +
-                                $('<a/>', { 'target': '_blank' }).prop('href', 'https://phantombot.github.io/PhantomBot/guides/#guide=content/setupbot/updatebot').append('dieser Anleitung')[0].outerHTML +
-                                ' nach, wie Sie PhantomBotDE richtig aktualisieren können.</b>'
-                        })), function() {
+                                .append($('<p/>', {
+                                    'html': html
+                                })), function () {
                             $('#pb-update').modal('toggle');
                         }).modal('toggle');
                     }
                 }).append($('<i/>', {
                     'class': 'fa fa-warning text-yellow'
-                })).append('Update verfügbar')))
+                })).append('Update verfügbar'));
             }
         }
     };
@@ -1092,7 +1175,7 @@ $(function() {
      *
      * @return {String}
      */
-    helpers.getRandomRgbColor = function() {
+    helpers.getRandomRgbColor = function () {
         return 'rgb(' + Math.floor(Math.random() * 256) + ', ' + Math.floor(Math.random() * 256) + ', ' + Math.floor(Math.random() * 256) + ')';
     };
 
@@ -1102,7 +1185,7 @@ $(function() {
      * @param {String}  message
      * @param {Number} type
      */
-    helpers.log = function(message, type) {
+    helpers.log = function (message, type) {
         if (helpers.DEBUG_STATE === helpers.DEBUG_STATES.DEBUG || type === helpers.DEBUG_STATE || type === helpers.LOG_TYPE.FORCE) {
             console.log('%c[PhantomBot Log]', 'color: #6441a5; font-weight: 900;', message);
         }
@@ -1114,7 +1197,7 @@ $(function() {
      * @param {String}  message
      * @param {Number} type
      */
-    helpers.logError = function(message, type) {
+    helpers.logError = function (message, type) {
         console.log('%c[PhantomBot Error]', 'color: red; font-weight: 900;', message);
     };
 
@@ -1125,9 +1208,9 @@ $(function() {
      * @param  {Boolean} force - If you know the format is wrong, force.
      * @return {Number}
      */
-    helpers.getEpochFromDate = function(date, force) {
+    helpers.getEpochFromDate = function (date, force) {
         let parsedDate = Date.parse(date),
-            now = Date.now();
+                now = Date.now();
 
         if (isNaN(parsedDate) || force) {
             let matcher = date.match(/((\d{1,2})(\\|\/|\.|-)(\d{1,2})(\\|\/|\.|-)(\d{2,4}))/);
@@ -1137,16 +1220,84 @@ $(function() {
                 parsedDate = Date.parse(matcher[4] + '.' + matcher[2] + '.' + matcher[6]);
 
                 if (isNaN(parsedDate)) {
-                    helpers.logError('Failed to parse date from "' + date + '". Returning current date.', true);
+                    helpers.logError('Fehler beim analysieren des Datums von "' + date + '". Rückgabe des aktuellen Datums.', true);
                     parsedDate = now;
                 }
             } else {
-                helpers.logError('Failed to parse date from "' + date + '". Returning current date.', true);
+                helpers.logError('Fehler beim analysieren des Datums von "' + date + '". Rückgabe des aktuellen Datums.', true);
                 parsedDate = now;
             }
         }
 
         return parsedDate;
+    };
+
+    helpers.parseHashmap = function () {
+        var hash = window.location.hash.substr(1);
+        var kvs = hash.split('&');
+        var hashmap = [];
+        var spl;
+
+        for (var i = 0; i < kvs.length; i++) {
+            spl = kvs[i].split('=', 2);
+            hashmap[spl[0]] = spl[1];
+        }
+
+        helpers.hashmap = hashmap;
+    };
+
+    helpers.setupAuth = function () {
+        if (window.localStorage.getItem('remember') && window.localStorage.getItem('expires')) {
+            if (window.localStorage.getItem('expires') > Date.now()) {
+                window.localStorage.setItem('expires', Date.now() + (parseInt(window.localStorage.getItem('remember')) * 3600000));
+            } else {
+                window.sessionStorage.removeItem('webauth');
+            }
+        }
+        window.panelSettings.auth = window.sessionStorage.getItem('webauth') || '!missing';
+    };
+
+    helpers.getBotHost = function () {
+        var bothostname = window.localStorage.getItem('bothostname') || 'localhost';
+        var botport = window.localStorage.getItem('botport') || 25000;
+
+        return bothostname.length > 0 ? bothostname + (botport !== 80 && botport !== 443 ? ':' + botport : '') : '!missing';
+    };
+
+    helpers.getUserLogo = function () {
+        socket.doRemote('userLogo', 'userLogo', {}, function (e) {
+            if (!e[0].errors) {
+                $('#user-image1').attr('src', 'data:image/jpeg;base64, ' + e[0].logo);
+                $('#user-image2').attr('src', 'data:image/jpeg;base64, ' + e[0].logo);
+            }
+        });
+    };
+
+    //https://stackoverflow.com/a/57380742
+    helpers.promisePoll = (promiseFunction, { pollIntervalMs = 2000 } = {}) => {
+        const startPoll = async resolve => {
+            const startTime = new Date();
+            const result = await promiseFunction();
+
+            if (result) {
+                return resolve();
+            }
+
+            const timeUntilNext = Math.max(pollIntervalMs - (new Date() - startTime), 0);
+            setTimeout(() => startPoll(resolve), timeUntilNext);
+        };
+
+        return new Promise(startPoll);
+    };
+
+    helpers.toggleDebug = function () {
+        localStorage.setItem('phantombot_debug_state', localStorage.getItem('phantombot_debug_state') !== '1' ? '1' : '0');
+        helpers.DEBUG_STATE = (localStorage.getItem('phantombot_debug_state') !== null ? parseInt(localStorage.getItem('phantombot_debug_state')) : helpers.DEBUG_STATES.NONE);
+        helpers.log('Debug-Ausgabe gesetzt auf ' + helpers.DEBUG_STATE, helpers.LOG_TYPE.FORCE);
+    };
+
+    helpers.isLocalPanel = function () {
+        return helpers.getBotHost() === window.location.host;
     };
 
     // Export.

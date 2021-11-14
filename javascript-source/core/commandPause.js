@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -76,7 +76,7 @@
 
         /**
          * @commandpath pausecommands [seconds] - Pause all command usage for the given amount of time. If [seconds] is not present, uses a default value
-         * @commandpath pausecommands clear - Unpause commands 
+         * @commandpath pausecommands clear - Unpause commands
          */
         if (command.equalsIgnoreCase('pausecommands')) {
             if (args[0] != undefined || args[0] != null) {

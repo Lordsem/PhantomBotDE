@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -144,7 +144,7 @@ public class HttpBasicAuthenticationHandler implements HttpAuthenticationHandler
 
             if (host == null) {
                 host = "";
-            } else if (HTTPWSServer.instance().sslEnabled) {
+            } else if (HTTPWSServer.instance().isSsl()) {
                 host = "https://" + host;
             } else {
                 host = "http://" + host;
@@ -167,6 +167,6 @@ public class HttpBasicAuthenticationHandler implements HttpAuthenticationHandler
 
     @Override
     public void invalidateAuthorization(ChannelHandlerContext ctx, FullHttpRequest req) {
-        throw new UnsupportedOperationException("Not supported by this authentication handler.");
+        throw new UnsupportedOperationException("Wird von diesem Authentifizierungs-Handler nicht unterstützt.");
     }
 }

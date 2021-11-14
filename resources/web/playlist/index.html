@@ -1,6 +1,6 @@
 <!--
 
-Copyright (C) 2016-2020 phantom.bot
+Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -20,14 +20,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 <!DOCTYPE html>
-<html>
+<html lang="de">
     <head>
         <title>PhantomBotDE YouTube Player Playlist Viewer</title>
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
         <link rel="stylesheet" href="/common/js/jquery-ui/jquery-ui.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-        <script src="/common/js/jquery-ui/external/jquery/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="/common/js/jquery-ui/jquery-ui.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
@@ -43,7 +43,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <body>
         <div class="header">
-            <img id="logo" src="common/images/logo.png"/>
+            <img id="logo" alt="Logo" src="/common/images/logo.png"/>
             <div id="newAlert" class="alert" style="display:none"></div>
         </div>
              
@@ -52,12 +52,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <td style="vertical-align: top">
             
                     <div id="currentsong">
-                        <div id="songTableTitle">Momentan spielt</div>
+                        <div class="songTableTitle">Momentan spielt</div>
                         <table id="currentSongTable"> </table>
                     </div>
 
                     <div id="songlist">
-                        <div id="songTableTitle">Song Request Warteschlange</div>
+                        <div class="songTableTitle">Song Request Warteschlange</div>
                         <table id="songTable"> </table>
                     </div>
             
@@ -68,9 +68,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         
                     <div id="copyright">
                         YouTube Player Playlist Viewer von:
-                        <a href="https://phantombot.github.io/PhantomBot">phantom.bot</a>&emsp;|&emsp;
-                        Deutsche Übersetzung von:
-                        <a href="https://github.com/PhantomBotDE/PhantomBotDE" target="_blank">PhantomBotDE</a>
+                        <a href="https://phantombot.github.io/PhantomBot">phantombot.github.io/PhantomBot</a>
                     </div>
                 </td>
             </tr>

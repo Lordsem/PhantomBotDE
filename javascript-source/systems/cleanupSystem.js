@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,17 +31,17 @@
                 count = 0,
                 i;
 
-            $.consoleLn('>>> Prozess startet, dies kann einige Minuten in Anspruch nehmen...');
+            $.consoleLn('>>> Prozess wird gestartet, dies kann einige Minuten dauern...');
             running = true;
             for (i in keys) {
                 if (parseInt($.inidb.get('time', keys[i])) <= time) {
-                    $.consoleLn('>> Entferne ' + keys[i] + ' von der Zeiten Tabelle mit ' + $.inidb.get('time', keys[i]) + ' Zeit.');
+                    $.consoleLn('>> Entferne ' + keys[i] + ' aus der Zeittabelle mit ' + $.inidb.get('time', keys[i]) + ' Zeiten.');
                     $.inidb.del('time', keys[i]);
                     count++;
                 }
             }
-            $.consoleLn('> Prozess beendet. ' + count + ' Nutzer wurden von der Zeit Tabelle entfernt.');
-            $.log.file(logName, '' + 'Bereinigung für die Zeit Tabelle wurde von ' + sender + ' ausgeführt. (' + count + ' Nutzer von der Zeit Tabelle entfernt)');
+            $.consoleLn('> Vorgang abgeschlossen. ' + count + ' Nutzer wurden aus der Zeittabelle entfernt.');
+            $.log.file(logName, '' + 'Die Aufräumarbeiten für die Zeittabelle liefen von ' + sender + '. (Entfernte ' + count + ' Nutzer aus der Zeittabelle.)');
             running = false;
             return;
         }
@@ -52,17 +52,17 @@
                 count = 0,
                 i;
 
-            $.consoleLn('>>> Prozess startet, dies kann einige Minuten in Anspruch nehmen...');
+            $.consoleLn('>>> Prozess wird gestartet dies kann einige Minuten dauern...');
             running = true;
             for (i in keys) {
                 if (parseInt($.inidb.get('points', keys[i])) <= points) {
-                    $.consoleLn('>> Entferne ' + keys[i] + ' von der Punkte Tabelle mit ' + $.inidb.get('points', keys[i]) + ' Punkten.');
+                    $.consoleLn('>> Entferne ' + keys[i] + ' von der Punktetabelle ' + $.inidb.get('points', keys[i]) + ' Punkten.');
                     $.inidb.del('points', keys[i]);
                     count++;
                 }
             }
-            $.consoleLn('> Prozess beendet. ' + count + ' Nutzer wurden von der Punkte Tabelle entfernt.');
-            $.log.file(logName, '' + 'Bereinigung für die Punkte Tabelle wurde von ' + sender + ' ausgeführt. (' + count + ' Nutzer von der Punkte Tabelle entfernt)');
+            $.consoleLn('> Vorgang abgeschlossen. ' + count + ' Nutzer wurden aus der Punktetabelle entfernt.');
+            $.log.file(logName, '' + 'Die Bereinigung der Punktetabelle lief von ' + sender + '. (Entfernte ' + count + ' Nutzer aus der Punktetabelle.)');
             running = false;
             return;
         }
@@ -74,7 +74,7 @@
                 t,
                 i;
 
-            $.consoleLn('>>> Prozess startet, dies kann einige Minuten in Anspruch nehmen...');
+            $.consoleLn('>>> Prozess wird gestartet dies kann einige Minuten dauern...');
             running = true;
             for (i in keys) {
                 t = ($.inidb.exists('time', keys[i]) ? parseInt($.inidb.get('time', keys[i])) : 0);
@@ -85,12 +85,12 @@
                     $.inidb.del('lastseen', keys[i]);
                     $.inidb.del('followed', keys[i]);
                     $.inidb.del('visited', keys[i]);
-                    $.consoleLn('>> Entferne ' + keys[i] + ' von der Datenbank.');
+                    $.consoleLn('>> Entferne ' + keys[i] + ' aus der Datenbank.');
                     count++;
                 }
             }
-            $.consoleLn('> Prozess beendet. ' + count + ' Nutzer wurden von der Punkte Tabelle entfernt.');
-            $.log.file(logName, '' + 'Bereinigung wurde von ' + sender + ' ausgeführt. (' + count + ' Nutzer aus der Datenbank entfernt)');
+            $.consoleLn('> Vorgang abgeschlossen. ' + count + ' Nutzer wurden aus der Datenbank entfernt.');
+            $.log.file(logName, '' + 'Bereinigung lief von ' + sender + '. (Entfernte ' + count + ' Nutzer aus der Datenbank)');
             running = false;
             return;
         }

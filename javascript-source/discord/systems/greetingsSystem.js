@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 (function() {
     var joinToggle = $.getSetIniDbBoolean('discordSettings', 'joinToggle', false),
         partToggle = $.getSetIniDbBoolean('discordSettings', 'partToggle', false),
-        joinMessage = $.getSetIniDbString('discordSettings', 'joinMessage', '(name) ist dem Server beigetreten'),
+        joinMessage = $.getSetIniDbString('discordSettings', 'joinMessage', '(name) ist dem Server beigetreten!'),
         partMessage = $.getSetIniDbString('discordSettings', 'partMessage', '(name) hat den Server verlassen!'),
         channelName = $.getSetIniDbString('discordSettings', 'greetingsChannel', ''),
         joinGroup = $.getSetIniDbString('discordSettings', 'greetingsDefaultGroup', '');
@@ -30,7 +30,7 @@
         if (event.getScript().equalsIgnoreCase('./discord/systems/greetingsSystem.js')) {
             joinToggle = $.getIniDbBoolean('discordSettings', 'joinToggle', false);
             partToggle = $.getIniDbBoolean('discordSettings', 'partToggle', false);
-            joinMessage = $.getIniDbString('discordSettings', 'joinMessage', '(name) ist dem Server beigetreten');
+            joinMessage = $.getIniDbString('discordSettings', 'joinMessage', '(name) ist dem Server beigetreten!');
             partMessage = $.getIniDbString('discordSettings', 'partMessage', '(name) hat den Server verlassen!');
             channelName = $.getIniDbString('discordSettings', 'greetingsChannel', '');
             joinGroup = $.getIniDbString('discordSettings', 'greetingsDefaultGroup', '');

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -133,8 +133,8 @@ public class WsYTHandler implements WsFrameHandler {
                 WebSocketFrameHandler.sendWsFrame(ctx, frame, WebSocketFrameHandler.prepareTextWebSocketResponse(jso.object().key("ytkeycheck").value(hasYTKey).endObject().toString()));
 
                 if (!hasYTKey) {
-                    com.gmt2001.Console.err.println("A YouTube API key has not been configured. Please review the instructions on the "
-                            + "PhantomBot Community Forum at: https://community.phantom.bot/t/acquire-youtube-api-key/222");
+                    com.gmt2001.Console.err.println("Es wurde kein YouTube-API-Schlüssel konfiguriert. Bitte lesen Sie die Anweisungen in den Anleitungen unter "
+                            + "https://phantombot.github.io/PhantomBot/");
                     return;
                 }
 
@@ -235,7 +235,7 @@ public class WsYTHandler implements WsFrameHandler {
                 EventBus.instance().postAsync(new YTPlayerVolumeEvent(dataInt));
             } else if (jsonStatus.has("errorcode")) {
                 dataInt = jsonStatus.getInt("errorcode");
-                com.gmt2001.Console.err.println("Skipping song, YouTube has thrown an error: " + dataInt);
+                com.gmt2001.Console.err.println("Beim Überspringen des Songs hat YouTube einen Fehler ausgegeben: " + dataInt);
                 EventBus.instance().postAsync(new YTPlayerSkipSongEvent());
             }
         } catch (JSONException ex) {

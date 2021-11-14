@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,8 +16,7 @@
  */
 package tv.phantombot.discord;
 
-import discord4j.common.close.CloseStatus;
-import discord4j.common.retry.ReconnectOptions;
+import discord4j.common.close.CloseException;
 import discord4j.core.DiscordClient;
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
@@ -41,10 +40,12 @@ import discord4j.core.object.entity.channel.GuildMessageChannel;
 import discord4j.core.object.entity.channel.PrivateChannel;
 import discord4j.gateway.intent.Intent;
 import discord4j.gateway.intent.IntentSet;
-import discord4j.rest.util.Snowflake;
+import discord4j.rest.request.RouterOptions;
+import discord4j.common.util.Snowflake;
+import discord4j.core.event.domain.lifecycle.DisconnectEvent;
+import discord4j.gateway.DefaultGatewayClient;
 import java.time.Duration;
 import java.util.List;
-import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -80,11 +81,10 @@ public class DiscordAPI extends DiscordUtil {
     private static GatewayDiscordClient gateway;
     private static Guild guild;
     private static ConnectionState reconnectState = ConnectionState.DISCONNECTED;
-    private static DiscordClientBuilder builder;
+    private static DiscordClientBuilder<DiscordClient, RouterOptions> builder;
     private boolean ready;
-    private static Optional<Snowflake> selfId = Optional.empty();
+    private static Snowflake selfId;
     private IntentSet connectIntents = IntentSet.of(Intent.GUILDS, Intent.GUILD_MEMBERS, Intent.GUILD_VOICE_STATES, Intent.GUILD_MESSAGES, Intent.GUILD_MESSAGE_REACTIONS, Intent.GUILD_PRESENCES, Intent.DIRECT_MESSAGES);
-    protected static CloseStatus lastCloseStatus = CloseStatus.NORMAL_CLOSE;
 
     /**
      * Method to return this class object.
@@ -125,36 +125,30 @@ public class DiscordAPI extends DiscordUtil {
     public void connect(String token) {
         if (DiscordAPI.builder == null) {
             DiscordAPI.builder = DiscordClientBuilder.create(token);
-            DiscordAPI.client = (DiscordClient) DiscordAPI.builder.build();
+            DiscordAPI.client = DiscordAPI.builder.build();
         }
 
         this.connect();
     }
 
     public void connect() {
+        DiscordAPI.selfId = null;
         com.gmt2001.Console.debug.println("IntentSet: " + this.connectIntents.toString());
-        DiscordAPI.client.gateway().setEnabledIntents(this.connectIntents).login(PBDiscordGatewayClient::new).timeout(Duration.ofSeconds(30)).doOnError(e -> {
-            com.gmt2001.Console.err.println("Failed to authenticate with Discord: [" + e.getClass().getSimpleName() + "] " + e.getMessage());
+        DiscordAPI.client.gateway().setEnabledIntents(this.connectIntents).login(DefaultGatewayClient::new).timeout(Duration.ofSeconds(30)).doOnError(e -> {
+            com.gmt2001.Console.err.println("Authentifizierung bei Discord fehlgeschlagen: [" + e.getClass().getSimpleName() + "] " + e.getMessage());
             com.gmt2001.Console.err.logStackTrace(e);
+            if (e.getClass().equals(CloseException.class) && ((CloseException) e).getCode() == 4014 && (this.connectIntents.contains(Intent.GUILD_MEMBERS) || this.connectIntents.contains(Intent.GUILD_PRESENCES))) {
+                com.gmt2001.Console.err.println("Discord lehnte privilegierte Absichten ab (" + ((CloseException) e).getCode() + (((CloseException) e).getReason().isPresent() ? " " + ((CloseException) e).getReason().get() : "") + "). Versuche es ohne sie...");
+                this.connectIntents = IntentSet.of(Intent.GUILDS, Intent.GUILD_VOICE_STATES, Intent.GUILD_MESSAGES, Intent.GUILD_MESSAGE_REACTIONS, Intent.DIRECT_MESSAGES);
+                Mono.delay(Duration.ofMillis(500)).doOnNext(l -> {
+                    this.connect();
+                }).subscribe();
+            }
         }).doOnSuccess(cgateway -> {
-            com.gmt2001.Console.out.println("Connected to Discord, finishing authentication...");
+            com.gmt2001.Console.out.println("Mit Discord verbunden, Authentifizierung wird abgeschlossen...");
             DiscordAPI.gateway = cgateway;
             subscribeToEvents();
-            cgateway.getSelfId().timeout(Duration.ofSeconds(5)).doOnSuccess(aselfId -> {
-                DiscordAPI.selfId = Optional.ofNullable(aselfId);
-            }).doOnError(e -> {
-                DiscordAPI.selfId = Optional.empty();
-            }).subscribe();
-        }).doFinally(sig -> {
-            if (lastCloseStatus.getCode() > 1000) {
-                if (lastCloseStatus.getCode() == 4014 && (this.connectIntents.contains(Intent.GUILD_MEMBERS) || this.connectIntents.contains(Intent.GUILD_PRESENCES))) {
-                    com.gmt2001.Console.err.println("Discord rejected privileged intents (" + lastCloseStatus.getCode() + (lastCloseStatus.getReason().isPresent() ? " " + lastCloseStatus.getReason().get() : "") + "). Trying without them...");
-                    this.connectIntents = IntentSet.of(Intent.GUILDS, Intent.GUILD_VOICE_STATES, Intent.GUILD_MESSAGES, Intent.GUILD_MESSAGE_REACTIONS, Intent.DIRECT_MESSAGES);
-                    this.reconnect();
-                } else {
-                    com.gmt2001.Console.err.println("Discord connection closed with status " + lastCloseStatus.getCode() + (lastCloseStatus.getReason().isPresent() ? " " + lastCloseStatus.getReason().get() : ""));
-                }
-            }
+            DiscordAPI.selfId = cgateway.getSelfId();
         }).subscribe();
     }
 
@@ -173,6 +167,8 @@ public class DiscordAPI extends DiscordUtil {
     }
 
     private void subscribeToEvents() {
+        DiscordAPI.gateway.getEventDispatcher().on(DisconnectEvent.class).subscribe(event -> DiscordEventListener.onDiscordDisconnectEvent(event));
+
         DiscordAPI.gateway.getEventDispatcher().on(ReadyEvent.class) // Listen for ReadyEvent(s)
                 .map(event -> event.getGuilds().size()) // Get how many guilds the bot is in
                 .flatMap(size -> DiscordAPI.gateway.getEventDispatcher()
@@ -198,7 +194,7 @@ public class DiscordAPI extends DiscordUtil {
      * @return
      */
     public boolean isLoggedIn() {
-        return DiscordAPI.selfId.isPresent();
+        return DiscordAPI.selfId != null;
     }
 
     /**
@@ -226,9 +222,9 @@ public class DiscordAPI extends DiscordUtil {
      */
     public ConnectionState checkConnectionStatus() {
         if (!isLoggedIn() || !isReady()) {
-            com.gmt2001.Console.warn.println("Connection lost with Discord, attempting to reconnect...");
+            com.gmt2001.Console.warn.println("Verbindung mit Discord verloren, versuche, die Verbindung wiederherzustellen...");
             if (reconnect()) {
-                com.gmt2001.Console.warn.println("Connection re-established with Discord.");
+                com.gmt2001.Console.warn.println("Verbindung mit Discord wieder hergestellt.");
                 // We were able to reconnect.
                 return ConnectionState.RECONNECTED;
             } else {
@@ -314,8 +310,20 @@ public class DiscordAPI extends DiscordUtil {
         private DiscordEventListener() {
         }
 
+        public static void onDiscordDisconnectEvent(DisconnectEvent event) {
+            if (event.getStatus().getCode() > 1000) {
+                if (event.getStatus().getCode() == 4014 && (DiscordAPI.instance().connectIntents.contains(Intent.GUILD_MEMBERS) || DiscordAPI.instance().connectIntents.contains(Intent.GUILD_PRESENCES))) {
+                    com.gmt2001.Console.err.println("Discord lehnte privilegierte Absichten ab (" + event.getStatus().getCode() + (event.getStatus().getReason().isPresent() ? " " + event.getStatus().getReason().get() : "") + "). Versuche es ohne sie...");
+                    DiscordAPI.instance().connectIntents = IntentSet.of(Intent.GUILDS, Intent.GUILD_VOICE_STATES, Intent.GUILD_MESSAGES, Intent.GUILD_MESSAGE_REACTIONS, Intent.DIRECT_MESSAGES);
+                    DiscordAPI.instance().reconnect();
+                } else {
+                    com.gmt2001.Console.err.println("Discord-Verbindung mit Status geschlossen " + event.getStatus().getCode() + (event.getStatus().getReason().isPresent() ? " " + event.getStatus().getReason().get() : ""));
+                }
+            }
+        }
+
         public static void onDiscordReadyEvent(List<GuildCreateEvent> events) {
-            com.gmt2001.Console.out.println("Successfully authenticated with Discord.");
+            com.gmt2001.Console.out.println("Erfolgreich mit Discord authentifiziert.");
 
             DiscordAPI.instance().ready = true;
 
@@ -328,8 +336,8 @@ public class DiscordAPI extends DiscordUtil {
             service.scheduleAtFixedRate(() -> {
                 if (reconnectState != ConnectionState.CANNOT_RECONNECT && !PhantomBot.instance().isExiting()
                         && DiscordAPI.instance().checkConnectionStatus() == ConnectionState.DISCONNECTED) {
-                    com.gmt2001.Console.err.println("Connection with Discord was lost.");
-                    com.gmt2001.Console.err.println("Reconnecting will be attempted in 60 seconds...");
+                    com.gmt2001.Console.err.println("Die Verbindung zu Discord wurde unterbrochen.");
+                    com.gmt2001.Console.err.println("In 60 Sekunden wird versucht, die Verbindung wiederherzustellen...");
                 }
             }, 0, 1, TimeUnit.MINUTES);
 
@@ -345,34 +353,38 @@ public class DiscordAPI extends DiscordUtil {
             iMessage.getChannel().timeout(Duration.ofMillis(500)).doOnSuccess(iChannel -> {
                 User iUser = event.getMember().isPresent() ? event.getMember().get() : ((PrivateChannel) iChannel).getRecipients().take(1).singleOrEmpty().block(Duration.ofMillis(500));
 
-                if (iUser == null || (DiscordAPI.selfId.isPresent() && iUser.getId().equals(DiscordAPI.selfId.get()))) {
-                return;
-            }
+                if (iUser == null || (DiscordAPI.selfId != null && iUser.getId().equals(DiscordAPI.selfId))) {
+                    return;
+                }
 
-            String username = iUser.getUsername().toLowerCase();
+                String username = iUser.getUsername().toLowerCase();
                 String message = iMessage.getContent();
-            String channel;
+                String channel;
                 Mono<Boolean> isAdmin = DiscordAPI.instance().isAdministratorAsync(iUser);
 
-            processedMessages.add(iMessage.getId().asLong());
-            listTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    processedMessages.remove(iMessage.getId().asLong());
+                processedMessages.add(iMessage.getId().asLong());
+                listTimer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        processedMessages.remove(iMessage.getId().asLong());
+                    }
+                }, 5000);
+
+                if (iChannel.getType() == Channel.Type.DM) {
+                    channel = "DM";
+                } else {
+                    channel = "#" + ((GuildMessageChannel) iChannel).getName();
                 }
-            }, 5000);
 
-            if (iChannel.getType() == Channel.Type.DM) {
-                channel = "DM";
-            } else {
-                channel = "#" + ((GuildMessageChannel) iChannel).getName();
-            }
+                if (message == null || message.isEmpty()) {
+                    return;
+                }
 
-            com.gmt2001.Console.out.println("[DISCORD] [" + channel + "] " + username + ": " + message);
+                com.gmt2001.Console.out.println("[DISCORD] [" + channel + "] " + username + ": " + message);
 
-            if (message.charAt(0) == '!') {
+                if (message.charAt(0) == '!') {
                     DiscordAPI.instance().parseCommand(iUser, iChannel, iMessage, isAdmin.block(Duration.ofMillis(500)));
-            }
+                }
 
                 EventBus.instance().postAsync(new DiscordChannelMessageEvent(iUser, iChannel, iMessage, isAdmin.block(Duration.ofMillis(500))));
             }).doOnError(e -> com.gmt2001.Console.debug.printStackTrace(e)).subscribe();

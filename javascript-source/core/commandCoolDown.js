@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -163,6 +163,10 @@
         }
 
         return 0;
+    }
+
+    function exists(command) {
+        return defaultCooldowns[command] !== undefined || cooldowns[command] !== undefined;
     }
 
     /*
@@ -351,6 +355,7 @@
         remove: remove,
         clear: clear,
         get: get,
+        exists: exists,
         set: set,
         add: add,
         getSecs: getSecs

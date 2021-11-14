@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,13 +15,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-(function() {
+(function () {
     var currentHostTarget = '',
-        respond = getSetIniDbBoolean('settings', 'response_@chat', true),
-        action = getSetIniDbBoolean('settings', 'response_action', false),
-        secureRandom = new java.security.SecureRandom(),
-        reg = new RegExp(/^@\w+,\s?$/),
-        timeout = 0;
+            respond = getSetIniDbBoolean('settings', 'response_@chat', true),
+            action = getSetIniDbBoolean('settings', 'response_action', false),
+            secureRandom = new java.security.SecureRandom(),
+            reg = new RegExp(/^@\w+,\s?$/),
+            timeout = 0;
 
     /*
      * @function reloadMisc
@@ -300,55 +300,55 @@
 
         try {
             var HttpRequest = Packages.com.gmt2001.HttpRequest,
-                HashMap = Packages.java.util.HashMap,
-                JSONObject = Packages.org.json.JSONObject,
-                json = new JSONObject('{}'),
-                parameters = new JSONObject('{}'),
-                header = new HashMap(1),
-                id = rand(65535),
-                request;
+                    HashMap = Packages.java.util.HashMap,
+                    JSONObject = Packages.org.json.JSONObject,
+                    json = new JSONObject('{}'),
+                    parameters = new JSONObject('{}'),
+                    header = new HashMap(1),
+                    id = rand(65535),
+                    request;
 
             header.put('Content-Type', 'application/json-rpc');
 
             parameters
-                .put('apiKey', '0d710311-5840-45dd-be83-82904de87c5d')
-                .put('n', 1)
-                .put('min', min)
-                .put('max', max)
-                .put('replacement', true)
-                .put('base', 10);
+                    .put('apiKey', '0d710311-5840-45dd-be83-82904de87c5d')
+                    .put('n', 1)
+                    .put('min', min)
+                    .put('max', max)
+                    .put('replacement', true)
+                    .put('base', 10);
 
             json
-                .put('jsonrpc', '2.0')
-                .put('method', 'generateIntegers')
-                .put('params', parameters)
-                .put('id', id);
+                    .put('jsonrpc', '2.0')
+                    .put('method', 'generateIntegers')
+                    .put('params', parameters)
+                    .put('id', id);
 
             request = HttpRequest.getData(
-                HttpRequest.RequestType.GET,
-                'https://api.random.org/json-rpc/1/invoke',
-                json.toString(),
-                header
-            );
+                    HttpRequest.RequestType.GET,
+                    'https://api.random.org/json-rpc/1/invoke',
+                    json.toString(),
+                    header
+                    );
 
             if (request.success) {
                 var data = new JSONObject(request.content)
-                    .getJSONObject('result')
-                    .getJSONObject('random')
-                    .getJSONArray('data');
+                        .getJSONObject('result')
+                        .getJSONObject('random')
+                        .getJSONArray('data');
 
                 if (data.length() > 0) {
                     return data.getInt(0);
                 }
             } else {
                 if (request.httpCode == 0) {
-                    $.log.error('Random.org konnte nicht verwendet werden: ' + request.exception);
+                    $.log.error('Fehler bei der Verwendung von random.org: ' + request.exception);
                 } else {
-                    $.log.error('Random.org konnte nicht verwendet werden: HTTP' + request.httpCode + ' ' + request.content);
+                    $.log.error('Fehler bei der Verwendung von random.org: HTTP' + request.httpCode + ' ' + request.content);
                 }
             }
         } catch (error) {
-            $.log.error('Random.org konnte nicht verwendet werden: ' + error);
+            $.log.error('Fehler bei der Verwendung von random.org: ' + error);
         }
 
         return randRange(min, max);
@@ -386,7 +386,7 @@
      * @returns {boolean}
      */
     function outOfRange(number, min, max) {
-        return (number < min && number > max);
+        return (number < min || number > max);
     }
 
     /**
@@ -397,7 +397,7 @@
      */
     function getOrdinal(number) {
         var s = ["th", "st", "nd", "rd"],
-            v = number % 100;
+                v = number % 100;
         return (number + (s[(v - 20) % 10] || s[v] || s[0]));
     }
 
@@ -597,10 +597,10 @@
      */
     function paginateArray(array, langKey, sep, whisper, sender, display_page) {
         var idx,
-            output = '',
-            maxlen,
-            hasNoLang = langKey.startsWith('NULL'),
-            pageCount = 0;
+                output = '',
+                maxlen,
+                hasNoLang = langKey.startsWith('NULL'),
+                pageCount = 0;
 
         if (display_page === undefined) {
             display_page = 0;
@@ -654,10 +654,10 @@
      */
     function paginateArrayDiscord(array, langKey, sep, channel, sender, display_page) {
         var idx,
-            output = '',
-            maxlen,
-            hasNoLang = langKey.startsWith('NULL'),
-            pageCount = 0;
+                output = '',
+                maxlen,
+                hasNoLang = langKey.startsWith('NULL'),
+                pageCount = 0;
 
         if (display_page === undefined) {
             display_page = 0;
@@ -707,7 +707,7 @@
         }
         parts.push(str.slice(prev));
         return parts.join('');
-        }
+    }
 
     /**
      * Taken from: https://github.com/tc39/proposal-string-matchall
@@ -721,6 +721,7 @@
      * @returns {Array}
      */
     function matchAll(str, regex) {
+        regex.lastIndex = 0;
         var matches = [];
         str.replace(regex, function () {
             var match = Array.prototype.slice.call(arguments, 0, -2);
@@ -730,6 +731,21 @@
         });
 
         return matches;
+    }
+
+    function match(str, regex) {
+        regex.lastIndex = 0;
+        return str.match(regex);
+    }
+
+    function test(str, regex) {
+        regex.lastIndex = 0;
+        return regex.test(str);
+    }
+
+    function regexExec(str, regex) {
+        regex.lastIndex = 0;
+        return regex.exec(str);
     }
 
     /**
@@ -742,6 +758,22 @@
             return '@' + $.username.resolve(username) + ' ';
         }
         return '@' + $.username.resolve(username) + ', ';
+    }
+
+    function javaString(str) {
+        if (str === null || str === undefined) {
+            return null;
+        }
+
+        return new Packages.java.lang.String(str);
+    }
+
+    function jsString(str) {
+        if (str === null || str === undefined) {
+            return null;
+        }
+
+        return String(str + '');
     }
 
     /** Export functions to API */
@@ -781,6 +813,9 @@
     $.paginateArray = paginateArray;
     $.replace = replace;
     $.matchAll = matchAll;
+    $.match = match;
+    $.test = test;
+    $.regexExec = regexExec;
     $.userPrefix = userPrefix;
     $.reloadMisc = reloadMisc;
     $.hasKey = hasKey;
@@ -789,4 +824,6 @@
     $.sayWithTimeout = sayWithTimeout;
     $.paginateArrayDiscord = paginateArrayDiscord;
     $.equalsIgnoreCase = equalsIgnoreCase;
+    $.javaString = javaString;
+    $.jsString = jsString;
 })();

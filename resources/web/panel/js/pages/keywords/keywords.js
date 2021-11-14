@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -79,7 +79,7 @@ $(run = function() {
                 'columns': [
                     { 'title': 'Schlüsselwort' },
                     { 'title': 'Antwort' },
-                    { 'title': 'Aktion' }
+                    { 'title': 'Aktionen' }
                 ]
             });
 
@@ -88,7 +88,7 @@ $(run = function() {
                 let keyword = $(this).data('keyword'),
                     row = $(this).parents('tr');
 
-                helpers.getConfirmDeleteModal('keyword_modal_remove', 'Sind Sie sicher, dass Sie das Schlüsselwort "' + keyword + '" entfernen möchten?', true,
+                helpers.getConfirmDeleteModal('keyword_modal_remove', 'Bist du sicher, dass du das Schlüsselwort "' + keyword + '" entfernen möchtest?', true,
                     'Du hast das Schlüsselwort "' + keyword + '" erfolgreich entfernt!', function() {
                     // Delete all of the info about the keyword.
                     socket.removeDBValues('rm_keyword', {

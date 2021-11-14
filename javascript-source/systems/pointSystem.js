@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@
         pointsBonusAmount = 0,
         pointNameSingle = $.getSetIniDbString('pointSettings', 'pointNameSingle', 'point'),
         pointNameMultiple = $.getSetIniDbString('pointSettings', 'pointNameMultiple', 'points'),
-        pointsMessage = $.getSetIniDbString('pointSettings', 'pointsMessage', '(userprefix) du hast momentan (pointsstring) und du warst im Chat für (time).'),
+        pointsMessage = $.getSetIniDbString('pointSettings', 'pointsMessage', '(userprefix) du hast im Moment (pointsstring) und du warst im Chat seit (time).'),
         userCache = {};
 
     /**

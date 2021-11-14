@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,8 @@ import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;
+import tv.phantombot.PhantomBot;
+import tv.phantombot.RepoVersion;
 
 /**
  *
@@ -85,18 +87,32 @@ public class WsPanelRemoteLoginHandler implements WsFrameHandler {
             }
 
             if (jso.has("remote") && jso.getString("query").equals("login")) {
+                jsonObject.object();
                 if (jso.getJSONObject("params").getString("type").equalsIgnoreCase("AuthRO")) {
-                    jsonObject.object().key("authtoken").value(this.panelAuthRO).key("authtype").value("read").endObject();
+                    jsonObject.key("authtoken").value(this.panelAuthRO).key("authtype").value("read");
                 } else if (jso.getJSONObject("params").getString("user").equals(this.panelUser) && jso.getJSONObject("params").getString("pass").equals(this.panelPassword)) {
-                    jsonObject.object().key("authtoken").value(this.panelAuth).key("authtype").value("read/write").endObject();
+                    jsonObject.key("authtoken").value(this.panelAuth).key("authtype").value("read/write");
+                } else if (jso.getJSONObject("params").getString("user").equals("broadcaster")
+                        && PhantomBot.instance().getHTTPOAuthHandler().validateBroadcasterToken(jso.getJSONObject("params").getString("pass"))) {
+                    jsonObject.key("authtoken").value(jso.getJSONObject("params").getString("pass")).key("authtype").value("oauth/broadcaster");
                 } else {
-                    jsonObject.object().key("errors").array().object()
+                    jsonObject.key("errors").array().object()
                             .key("status").value("401")
                             .key("title").value("Unauthorized")
                             .key("detail").value("Invalid Credentials")
-                            .endObject().endArray().endObject();
+                            .endObject().endArray();
                     isError = true;
                 }
+
+                if (!isError) {
+                    jsonObject.key("version-data").object().key("version").value(RepoVersion.getPhantomBotVersion()).key("commit").value(RepoVersion.getRepoVersion());
+                    jsonObject.key("build-type").value(RepoVersion.getBuildType()).key("panel-version").value(RepoVersion.getPanelVersion());
+                    jsonObject.key("java-version").value(System.getProperty("java.runtime.version"));
+                    jsonObject.key("os-version").value(System.getProperty("os.name"));
+                    jsonObject.endObject();
+                }
+
+                jsonObject.endObject();
             } else {
                 jsonObject.object().key("errors").array().object()
                         .key("status").value("406")

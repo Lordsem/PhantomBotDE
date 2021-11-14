@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@
                 $.say($.whisperPrefix(sender) + $.lang.get('highlightcommand.highlight.offline'));
                 return;
             } else if (args.length === 0) {
-                $.say($.whisperPrefix(sender) + $.lang.get('highlightcommand.highlight.usage', $.inidb.exists('settings', 'timezone') ? $.inidb.get('settings', 'timezone') : 'GMT'));
+                $.say($.whisperPrefix(sender) + $.lang.get('highlightcommand.highlight.usage', $.inidb.exists('settings', 'timezone') ? $.inidb.get('settings', 'timezone') : 'CET'));
                 return;
             }
 
@@ -64,7 +64,7 @@
                 hours = parseInt(streamUptimeMinutes / 60),
                 minutes = (parseInt(streamUptimeMinutes % 60) < 10 ? '0' + parseInt(streamUptimeMinutes % 60) : parseInt(streamUptimeMinutes % 60)),
                 timestamp = hours + ':' + minutes,
-                localDate = $.getCurLocalTimeString('dd-MM-yyyy hh:mm');
+                localDate = $.getCurLocalTimeString('dd-MM-yyyy HH:mm');
 
             $.say($.whisperPrefix(sender) + $.lang.get('highlightcommand.highlight.success', timestamp));
             $.inidb.set('highlights', localDate, vodURL + ' : ' + args.join(' '));

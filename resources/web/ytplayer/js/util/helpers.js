@@ -193,7 +193,7 @@ $(function() {
             })).append($('<input/>', {
                 'type': 'text',
                 'data-toggle': 'tooltip',
-                'title': 'Name of the default playlist user.',
+                'title': 'Name des standardmäßigen Playlist-Benutzers.',
                 'class': 'form-control',
                 'id': 'dj-name',
                 'value': e.playlistDJname
@@ -204,7 +204,7 @@ $(function() {
             })).append($('<input/>', {
                 'type': 'number',
                 'data-toggle': 'tooltip',
-                'title': 'How many songs one user can have in the queue.',
+                'title': 'Wie viele Songs ein Benutzer in der Warteschlange haben kann.',
                 'class': 'form-control',
                 'id': 'max-song-user',
                 'value': e.songRequestsMaxParallel
@@ -216,7 +216,7 @@ $(function() {
                 'type': 'number',
                 'data-toggle': 'tooltip',
                 'id': 'max-song-length',
-                'title': 'How long in seconds a song can be.',
+                'title': 'Wie lang in Sekunden ein Song sein kann.',
                 'class': 'form-control',
                 'value': e.songRequestsMaxSecondsforVideo
             }))).append($('<div/>', {
@@ -227,7 +227,7 @@ $(function() {
                 'type': 'number',
                 'data-toggle': 'tooltip',
                 'id': 'vote-count',
-                'title': 'How many votes it takes to Skip.',
+                'title': 'Wie viele Stimmen zum Überspringen benötigt werden.',
                 'class': 'form-control',
                 'value': e.voteCount
             }))),onClose).modal('toggle');

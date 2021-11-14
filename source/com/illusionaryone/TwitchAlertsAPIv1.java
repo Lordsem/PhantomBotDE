@@ -1,7 +1,7 @@
 /* astyle --style=java --indent=spaces=4 */
 
-/*
- * Copyright (C) 2016-2020 phantom.bot
+ /*
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,20 +18,17 @@
  */
 package com.illusionaryone;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.IOException;
 import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import javax.net.ssl.HttpsURLConnection;
-
-import org.apache.commons.io.IOUtils;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -54,7 +51,7 @@ public class TwitchAlertsAPIv1 {
         if (instance == null) {
             instance = new TwitchAlertsAPIv1();
         }
-        
+
         return instance;
     }
 
@@ -79,8 +76,8 @@ public class TwitchAlertsAPIv1 {
      * as needed.
      */
     private static void fillJSONObject(JSONObject jsonObject, boolean success, String type,
-                                       String url, int responseCode, String exception,
-                                       String exceptionMessage, String jsonContent) throws JSONException {
+            String url, int responseCode, String exception,
+            String exceptionMessage, String jsonContent) throws JSONException {
         jsonObject.put("_success", success);
         jsonObject.put("_type", type);
         jsonObject.put("_url", url);
@@ -110,8 +107,8 @@ public class TwitchAlertsAPIv1 {
             urlConn.setDoInput(true);
             urlConn.setRequestMethod(doPost ? "POST" : "GET");
             urlConn.addRequestProperty("Content-Type", doPost ? "application/x-www-form-urlencoded" : "application/json");
-            urlConn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 " +
-                                       "(KHTML, like Gecko) Chrome/44.0.2403.52 Safari/537.36 PhantomBotJ/2015");
+            urlConn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 "
+                    + "(KHTML, like Gecko) Chrome/44.0.2403.52 Safari/537.36 PhantomBotJ/2015");
             if (doPost) {
                 urlConn.setDoOutput(true);
             }
@@ -119,8 +116,9 @@ public class TwitchAlertsAPIv1 {
             urlConn.connect();
 
             if (doPost) {
-                try (OutputStream outputStream = urlConn.getOutputStream()) {
-                    IOUtils.write(postString, outputStream);
+                try (BufferedOutputStream stream = new BufferedOutputStream(urlConn.getOutputStream())) {
+                    stream.write(postString.getBytes());
+                    stream.flush();
                 }
             }
 
@@ -155,14 +153,14 @@ public class TwitchAlertsAPIv1 {
         } finally {
             if (inputStream != null)
                 try {
-                    inputStream.close();
-                } catch (IOException ex) {
-                    fillJSONObject(jsonResult, false, doPost ? "POST" : "GET", urlAddress, 0, "IOException", ex.getMessage(), "");
-                    com.gmt2001.Console.debug.println("TwitchAlertsAPIv1::readJsonFromUrl::Exception: " + ex.getMessage());
-                }
+                inputStream.close();
+            } catch (IOException ex) {
+                fillJSONObject(jsonResult, false, doPost ? "POST" : "GET", urlAddress, 0, "IOException", ex.getMessage(), "");
+                com.gmt2001.Console.debug.println("TwitchAlertsAPIv1::readJsonFromUrl::Exception: " + ex.getMessage());
+            }
         }
 
-        return(jsonResult);
+        return (jsonResult);
     }
 
     /*
@@ -197,8 +195,9 @@ public class TwitchAlertsAPIv1 {
      *
      * @return donationsObject
      */
-    public JSONObject GetDonations() throws JSONException {
-        return readJsonFromUrl(sAPIURL + "/donations?access_token=" + this.sAccessToken + "&limit=" + this.iDonationPullLimit + "&currency=" + this.sCurrencyCode);
+    public JSONObject GetDonations(int lastId) throws JSONException {
+        return readJsonFromUrl(sAPIURL + "/donations?access_token=" + this.sAccessToken + "&limit=" + this.iDonationPullLimit
+                + "&currency=" + this.sCurrencyCode + (lastId > 0 ? "&after=" + lastId : ""));
     }
 
     /*

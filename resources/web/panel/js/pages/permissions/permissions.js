@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -115,7 +115,7 @@ $(run = function() {
                 .append(helpers.getInputGroup('user-name', 'text', 'Benutzername', '', username, 'Name des Benutzers. Dieser kann nicht bearbeitet werden.', true))
                 // Append the group.
                 .append(helpers.getDropdownGroup('user-permission', 'Berechtigung', helpers.getGroupNameById(e.group),
-                    ['Caster', 'Administrators', 'Moderators', 'Subscribers', 'Donators', 'VIPs', 'Regulars'])),
+                    ['Caster', 'Administrator', 'Moderator', 'Abonnent', 'Spender', 'VIP', 'Stammzuschauer'])),
                 // callback once the user hits save.
                 function() {
                     let group = helpers.getGroupIdByName($('#user-permission').find(':selected').text());
@@ -146,7 +146,7 @@ $(function() {
         // Append user name.
         .append(helpers.getInputGroup('user-name', 'text', 'Benutzername', 'PhantomBotDE', '', 'Name des Benutzers, auf den die Berechtigung angewendet werden sollen.'))
         // Append the group.
-        .append(helpers.getDropdownGroup('user-permission', 'Berechtigung', 'Regulars', ['Caster', 'Administrators', 'Moderators', 'Subscribers', 'Donators', 'VIPs', 'Regulars'])),
+        .append(helpers.getDropdownGroup('user-permission', 'Berechtigung', 'Stammzuschauer', ['Caster', 'Administrator', 'Moderator', 'Abonnent', 'Spender', 'VIP', 'Stammzuschauer'])),
         // callback once the user hits save.
         function() {
             let group = helpers.getGroupIdByName($('#user-permission').find(':selected').text()),

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,7 +66,7 @@ $(run = function() {
                 { 'className': 'default-table', 'orderable': false, 'targets': 1 }
             ],
             'columns': [
-                { 'title': 'Whitelist' },
+                { 'title': 'Ausnahmeliste' },
                 { 'title': 'Aktionen' }
             ]
         });
@@ -77,8 +77,8 @@ $(run = function() {
                 row = $(this).parents('tr');
 
             // Ask the user if he wants to delete the blacklist.
-            helpers.getConfirmDeleteModal('blacklist_modal_remove', 'Sind Sie sicher, dass Sie dies von der Whitelist entfernen möchten?', true,
-                'Dies wurde von der Whitelist erfolgreich entfernt!', function() { // Callback if the user clicks delete.
+            helpers.getConfirmDeleteModal('blacklist_modal_remove', 'Bist du sicher, dass du diese Ausnahme entfernen möchtest?', true,
+                'Die Ausnahme wurde erfolgreich entfernt!', function() { // Callback if the user clicks delete.
                 // Delete all information about the alias.
                 socket.removeDBValue('whitelist_remove', 'whiteList', whitelist, function() {
                     socket.sendCommand('whitelist_remove_cmd', 'reloadmod', function() {
@@ -94,11 +94,11 @@ $(run = function() {
             let whitelist = $(this).data('whitelist'),
                 t = $(this);
 
-            helpers.getModal('edit-whitelist', 'Whitelist bearbeiten', 'Speichern', $('<form/>', {
+            helpers.getModal('edit-whitelist', 'Ausnahme bearbeiten', 'Speichern', $('<form/>', {
                 'role': 'form'
             })
             // Append box for the whitelist.
-            .append(helpers.getInputGroup('whitelist-name', 'text', 'URL', '', whitelist, 'URL, die auf der Whitelist stehen soll.')), function() {
+            .append(helpers.getInputGroup('whitelist-name', 'text', 'URL', '', whitelist, 'URL, die auf der Ausnahmeliste stehen soll.')), function() {
                 let w = $('#whitelist-name');
 
                 // Handle each input to make sure they have a value.
@@ -117,7 +117,7 @@ $(run = function() {
                                     // Close the modal.
                                     $('#edit-whitelist').modal('hide');
                                     // Alert the user.
-                                    toastr.success('Whitelist erfolgreich bearbeitet!');
+                                    toastr.success('Ausnahme erfolgreich bearbeitet!');
                                 });
                             });
                         });
@@ -131,11 +131,11 @@ $(run = function() {
 $(function() {
     // Add whitelist button.
     $('#add-whitelist-button').on('click', function() {
-        helpers.getModal('add-whitelist', 'Add Whitelist', 'Save', $('<form/>', {
+        helpers.getModal('add-whitelist', 'Ausnahme hinzufügen', 'Speichern', $('<form/>', {
             'role': 'form'
         })
         // Append box for the whitelist.
-        .append(helpers.getInputGroup('whitelist-name', 'text', 'URL', 'https://phantombot.dev', '', 'URL, die auf die Whitelist gesetzt werden soll.')), function() {
+        .append(helpers.getInputGroup('whitelist-name', 'text', 'URL', 'https://phantombot.github.io/PhantomBot', '', 'URL, die auf die Ausnahmelist gesetzt werden soll.')), function() {
             let whitelist = $('#whitelist-name');
 
             // Handle each input to make sure they have a value.
@@ -152,7 +152,7 @@ $(function() {
                             // Close the modal.
                             $('#add-whitelist').modal('hide');
                             // Alert the user.
-                            toastr.success('Whitelist erfolgreich hinzugefügt!');
+                            toastr.success('Ausnahme erfolgreich hinzugefügt!');
                         });
                     });
             }

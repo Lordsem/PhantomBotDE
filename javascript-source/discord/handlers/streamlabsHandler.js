@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
  */
 (function() {
     var toggle = $.getSetIniDbBoolean('discordSettings', 'streamlabsToggle', false),
-        message = $.getSetIniDbString('discordSettings', 'streamlabsMessage', 'Vielen Dank (name) für deine Spende von $(amount) (currency)!'),
+        message = $.getSetIniDbString('discordSettings', 'streamlabsMessage', 'Vielen Dank (name) für deine Spende von (amount) (currency)!'),
         channelName = $.getSetIniDbString('discordSettings', 'streamlabsChannel', ''),
         announce = false;
 
@@ -30,7 +30,7 @@
     $.bind('webPanelSocketUpdate', function(event) {
         if (event.getScript().equalsIgnoreCase('./discord/handlers/streamlabsHandler.js')) {
             toggle = $.getIniDbBoolean('discordSettings', 'streamlabsToggle', false);
-            message = $.getIniDbString('discordSettings', 'streamlabsMessage', 'Vielen Dank (name) für deine Spende von $(amount) (currency)!');
+            message = $.getIniDbString('discordSettings', 'streamlabsMessage', 'Vielen Dank (name) für deine Spende von (amount) (currency)!');
             channelName = $.getIniDbString('discordSettings', 'streamlabsChannel', '');
         }
     });
@@ -55,7 +55,7 @@
             donationJson = new JSONObject(donationJsonStr),
             donationID = donationJson.get("donation_id"),
             donationCurrency = donationJson.getString("currency"),
-            donationAmount = donationJson.getString("amount"),
+            donationAmount = parseFloat(donationJson.getString("amount")),
             donationUsername = donationJson.getString("name"),
             donationMsg = donationJson.getString("message"),
             s = message;
@@ -71,11 +71,11 @@
         }
 
         if (s.match(/\(amount\)/g)) {
-            s = $.replace(s, '(amount)', parseInt(donationAmount).toFixed(2).toString());
+            s = $.replace(s, '(amount)', donationAmount.toFixed(2).toString());
         }
 
         if (s.match(/\(amount\.toFixed\(0\)\)/)) {
-            s = $.replace(s, '(amount.toFixed(0))', parseInt(donationAmount).toFixed(0).toString());
+            s = $.replace(s, '(amount.toFixed(0))', donationAmount.toFixed(0).toString());
         }
 
         if (s.match(/\(currency\)/g)) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,18 +16,37 @@
  */
 
 // Main socket and functions.
-$(function() {
-    var webSocket = new ReconnectingWebSocket((getProtocol() === 'https://' || window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + '/ws/panel', null, { reconnectInterval: 500 }),
-        callbacks = [],
-        listeners = [],
-        socket = {};
+$(function () {
+    if (!helpers.isLocalPanel()) {
+        $.ajax(
+                {
+                    type: 'GET',
+                    url: 'https://' + helpers.getBotHost() + '/sslcheck',
+                    crossDomain: true,
+                    dataType: 'text',
+                    async: false,
+                    success: function (data) {
+                        if (data === 'false') {
+                            window.location = window.location.origin + window.location.pathname + 'login/#sslFail=true';
+                        }
+                    },
+                    error: function () {
+                        window.location = window.location.origin + window.location.pathname + 'login/#sslFail=true';
+                    }
+                }
+        );
+    }
+    var webSocket = new ReconnectingWebSocket((window.location.protocol === 'https:' ? 'wss://' : 'ws://') + helpers.getBotHost() + '/ws/panel?target=' + helpers.getBotHost(), null, {reconnectInterval: 500}),
+            callbacks = [],
+            listeners = [],
+            socket = {};
 
     /*
      * @function Used to send messages to the socket. This should be private to this script.
      *
      * @param {Object} message
      */
-    var sendToSocket = function(message) {
+    var sendToSocket = function (message) {
         try {
             let json = JSON.stringify(message);
 
@@ -40,7 +59,7 @@ $(function() {
                 helpers.log('sendToSocket:: ' + json, helpers.LOG_TYPE.DEBUG);
             }
         } catch (e) {
-            helpers.logError('Failed to send message to socket: ' + e.message, helpers.LOG_TYPE.DEBUG);
+            helpers.logError('Fehler beim Senden der Nachricht an Socket: ' + e.message, helpers.LOG_TYPE.DEBUG);
         }
     };
 
@@ -53,9 +72,9 @@ $(function() {
      * @param {Function} callback
      * @param {Boolean}  storeKey
      */
-    var generateCallBack = function(id, tables, isUpdate, isArray, callback, storeKey) {
+    var generateCallBack = function (id, tables, isUpdate, isArray, callback, storeKey) {
         if (callbacks[id] !== undefined) {
-            helpers.logError('Callback with id "' + id + '" exists already. Aborting update.', helpers.LOG_TYPE.FORCE);
+            helpers.logError('Callback mit der ID "' + id + '" existiert bereits. Aktualisierung abgebrochen.', helpers.LOG_TYPE.FORCE);
         } else {
             helpers.log('Callback mit der ID ' + id + ' erstellt', helpers.LOG_TYPE.DEBUG);
 
@@ -63,12 +82,12 @@ $(function() {
                 await: (tables.length === 0 ? 1 : tables.length),
                 isUpdate: isUpdate,
                 isArray: isArray,
-                func: function(e) {
+                func: function (e) {
                     try {
                         callback(e);
                     } catch (ex) {
                         // Line number won't be accurate, function will by anonymous, but we get the stack so it should be fine.
-                        helpers.logError('Failed to run callback: ' + ex.stack, helpers.LOG_TYPE.FORCE);
+                        helpers.logError('Fehler beim Ausführen des Callback: (' + ex.name + ') ' + ex.message + ' >> ' + ex.stack, helpers.LOG_TYPE.FORCE);
                     }
                 },
                 storeKey: storeKey,
@@ -83,15 +102,15 @@ $(function() {
      * @param {String}   listener_id
      * @param {Function} callback
      */
-    socket.addListener = function(listener_id, callback) {
+    socket.addListener = function (listener_id, callback) {
         if (listeners[listener_id] === undefined) {
-            helpers.log('Listener mit ID ' + id + ' hinzugefügt');
-            listeners[listener_id] = function(e) {
+            helpers.log('Listener mit ID ' + listener_id + ' hinzugefügt');
+            listeners[listener_id] = function (e) {
                 try {
                     callback(e);
                 } catch (ex) {
                     // Line number won't be accurate, function will by anonymous, but we get the stack so it should be fine.
-                    helpers.logError('Failed to run listener: ' + ex.stack, helpers.LOG_TYPE.FORCE);
+                    helpers.logError('Fehler beim Ausführen des Listeners: (' + ex.name + ') ' + ex.message + ' >> ' + ex.stack, helpers.LOG_TYPE.FORCE);
                 }
             };
         }
@@ -102,7 +121,7 @@ $(function() {
      *
      * @param {String}   listener_id
      */
-    socket.removeListener = function(listener_id) {
+    socket.removeListener = function (listener_id) {
         if (listeners[listener_id] !== undefined) {
             delete listeners[listener_id];
         }
@@ -115,7 +134,7 @@ $(function() {
      * @param {String}   command
      * @param {Function} callback
      */
-    socket.sendCommand = function(callback_id, command, callback) {
+    socket.sendCommand = function (callback_id, command, callback) {
         // Genetate a callback.
         generateCallBack(callback_id, [], true, false, callback);
 
@@ -132,7 +151,7 @@ $(function() {
      * @param {String}   callback_id
      * @param {Function} callback
      */
-    socket.getBotVersion = function(callback_id, callback) {
+    socket.getBotVersion = function (callback_id, callback) {
         // Genetate a callback.
         generateCallBack(callback_id, [], true, false, callback);
 
@@ -149,7 +168,7 @@ $(function() {
      * @param {String}   command
      * @param {Function} callback
      */
-    socket.sendCommandSync = function(callback_id, command, callback) {
+    socket.sendCommandSync = function (callback_id, command, callback) {
         // Genetate a callback.
         generateCallBack(callback_id, [], true, false, callback);
 
@@ -169,7 +188,7 @@ $(function() {
      * @param {Array}    args
      * @param {Function} callback
      */
-    socket.wsEvent = function(callback_id, script, argsString, args, callback) {
+    socket.wsEvent = function (callback_id, script, argsString, args, callback) {
         // Genetate a callback.
         generateCallBack(callback_id, [], true, false, callback);
 
@@ -184,6 +203,16 @@ $(function() {
         });
     };
 
+    socket.getDiscordChannelList = function (callback_id, callback) {
+        // Genetate a callback.
+        socket.addListener(callback_id, callback);
+
+        // Send event.
+        sendToSocket({
+            discordchannellist: callback_id
+        });
+    };
+
     /*
      * @function Updates a value in the database of the bot.
      *
@@ -193,7 +222,7 @@ $(function() {
      * @param {String}   value
      * @param {Function} callback
      */
-    socket.updateDBValue = function(callback_id, table, key, value, callback) {
+    socket.updateDBValue = function (callback_id, table, key, value, callback) {
         // Genetate a callback.
         generateCallBack(callback_id, [], true, false, callback);
 
@@ -215,7 +244,7 @@ $(function() {
      * @param {Object}   dataObj {tables: [], keys: [], values: }
      * @param {Function} callback
      */
-    socket.updateDBValues = function(callback_id, dataObj, callback) {
+    socket.updateDBValues = function (callback_id, dataObj, callback) {
         // Genetate a callback.
         generateCallBack(callback_id, dataObj.tables, true, false, callback);
 
@@ -241,7 +270,7 @@ $(function() {
      * @param {String}   value
      * @param {Function} callback
      */
-    socket.incrDBValue = function(callback_id, table, key, value, callback) {
+    socket.incrDBValue = function (callback_id, table, key, value, callback) {
         // Genetate a callback.
         generateCallBack(callback_id, [], true, false, callback);
 
@@ -265,7 +294,7 @@ $(function() {
      * @param {String}   value
      * @param {Function} callback
      */
-    socket.decrDBValue = function(callback_id, table, key, value, callback) {
+    socket.decrDBValue = function (callback_id, table, key, value, callback) {
         // Genetate a callback.
         generateCallBack(callback_id, [], true, false, callback);
 
@@ -288,7 +317,7 @@ $(function() {
      * @param {String}   key
      * @param {Function} callback
      */
-    socket.getDBValue = function(callback_id, table, key, callback) {
+    socket.getDBValue = function (callback_id, table, key, callback) {
         // Genetate a callback.
         generateCallBack(callback_id, [], false, false, callback);
 
@@ -310,11 +339,11 @@ $(function() {
      * @param {Function} callback
      * @param {Boolean}  storeKey - Store the value with the key name from the DB. Default stores it as the table, thus making it only possible to query the table once.
      */
-    socket.getDBValues = function(callback_id, dataObj, storeKey, callback) {
+    socket.getDBValues = function (callback_id, dataObj, storeKey, callback) {
         callback = (callback === undefined ? storeKey : callback);
 
         // Genetate a callback.
-        generateCallBack(callback_id, dataObj.tables, false, false, callback, (typeof storeKey === 'function' ? false : true));
+        generateCallBack(callback_id, dataObj.tables, false, false, callback, (typeof storeKey !== 'function'));
 
         // Start sending the updates to the socket.
         for (let i = 0; i < dataObj.tables.length; i++) {
@@ -338,7 +367,7 @@ $(function() {
      * @param {String}   order
      * @param {Function} callback
      */
-    socket.getDBTableValuesByOrder = function(callback_id, table, limit, offset, order, isNumber, callback) {
+    socket.getDBTableValuesByOrder = function (callback_id, table, limit, offset, order, isNumber, callback) {
         // Genetate a callback.
         generateCallBack(callback_id, [], false, true, callback);
 
@@ -362,7 +391,7 @@ $(function() {
      * @param {String}   table
      * @param {Function} callback
      */
-    socket.getDBTableValues = function(callback_id, table, callback) {
+    socket.getDBTableValues = function (callback_id, table, callback) {
         // Genetate a callback.
         generateCallBack(callback_id, [], false, true, callback);
 
@@ -382,7 +411,7 @@ $(function() {
      * @param {Array Object} tables [{table: 'a'}, {table: 'b'}]
      * @param {Function}     callback
      */
-    socket.getDBTablesValues = function(callback_id, tables, callback) {
+    socket.getDBTablesValues = function (callback_id, tables, callback) {
         // Genetate a callback.
         generateCallBack(callback_id, [], false, true, callback);
 
@@ -401,7 +430,7 @@ $(function() {
      * @param {String}   key
      * @param {Function} callback
      */
-    socket.removeDBValue = function(callback_id, table, key, callback) {
+    socket.removeDBValue = function (callback_id, table, key, callback) {
         // Genetate a callback.
         generateCallBack(callback_id, [], false, true, callback);
 
@@ -422,7 +451,7 @@ $(function() {
      * @param {Object}   dataObj {tables: [], keys: []}
      * @param {Function} callback
      */
-    socket.removeDBValues = function(callback_id, dataObj, callback) {
+    socket.removeDBValues = function (callback_id, dataObj, callback) {
         // Genetate a callback.
         generateCallBack(callback_id, dataObj.tables, false, true, callback);
 
@@ -438,12 +467,35 @@ $(function() {
         }
     };
 
+    /*
+     * @function Sends a remote panel query.
+     *
+     * @param {String}   query_id
+     * @param {String}   query
+     * @param {Object}   params
+     * @param {Function} callback
+     */
+    socket.doRemote = function (query_id, query, params, callback) {
+        generateCallBack(query_id, [], false, true, callback);
+
+        sendToSocket({
+            remote: true,
+            id: query_id,
+            query: query,
+            params: params
+        });
+    };
+
+    socket.close = function () {
+        webSocket.close(1000);
+    };
+
     // WebSocket events.
 
     /*
      * @function Called when the socket opens.
      */
-    webSocket.onopen = function() {
+    webSocket.onopen = function () {
         helpers.log('Verbindung mit dem Websocket hergestellt.', helpers.LOG_TYPE.FORCE);
         // Restart Pace.
         Pace.restart();
@@ -458,18 +510,18 @@ $(function() {
     /*
      * @function Socket calls when it closes
      */
-    webSocket.onclose = function() {
-        helpers.logError('Connection lost with the websocket.', helpers.LOG_TYPE.FORCE);
+    webSocket.onclose = function () {
+        helpers.logError('Verbindung mit dem Websocket verloren.', helpers.LOG_TYPE.FORCE);
         // Add error toast.
-        toastr.error('Connection lost with the websocket.', '', { timeOut: 0 });
+        toastr.error('Verbindung mit dem Websocket verloren.', '', {timeOut: 0});
     };
 
     /*
      * @function Socket calls when it gets message.
      */
-    webSocket.onmessage = function(e) {
+    webSocket.onmessage = function (e) {
         try {
-            helpers.log('Message from socket: ' + e.data, helpers.LOG_TYPE.DEBUG);
+            helpers.log('Nachricht vom Socket: ' + e.data, helpers.LOG_TYPE.DEBUG);
 
             if (e.data === 'PING') {
                 webSocket.send('PONG');
@@ -481,8 +533,8 @@ $(function() {
             // Check this message here before doing anything else.
             if (message.authresult !== undefined) {
                 if (message.authresult === 'false') {
-                    helpers.logError('Failed to auth with the socket.', helpers.LOG_TYPE.FORCE);
-                    toastr.error('Failed to auth with the socket.', '', { timeOut: 0 });
+                    helpers.logError('Fehler bei der Authentifizierung mit dem Socket.', helpers.LOG_TYPE.FORCE);
+                    toastr.error('Fehler bei der Authentifizierung mit dem Socket.', '', {timeOut: 0});
                 } else {
                     // This is to stop a reconnect loading the main page.
                     if (helpers.isAuth === true) {
@@ -491,10 +543,22 @@ $(function() {
                         helpers.isAuth = true;
                     }
 
-                    // Load the main page.
-                    $.loadPage('dashboard', 'dashboard.html');
+                    sendToSocket({
+                        remote: true,
+                        id: 'initLoad.panelSettings',
+                        query: 'panelSettings'
+                    });
                 }
                 return;
+            }
+
+            if (message.id !== undefined) {
+                if (message.id === 'initLoad.panelSettings') {
+                    window.panelSettings.channelName = message.channelName;
+                    window.panelSettings.displayName = message.displayName;
+                    $.loadPage('dashboard', 'dashboard.html');
+                    helpers.getUserLogo();
+                }
             }
 
             // Make sure this isn't a version request.
@@ -507,7 +571,7 @@ $(function() {
 
                 // Handle callbacks.
                 let callback = callbacks[message.query_id],
-                    listener = listeners[message.query_id];
+                        listener = listeners[message.query_id];
 
                 if (callback !== undefined) {
                     // Add our data to the callback array.
@@ -537,8 +601,8 @@ $(function() {
                         }
 
                         if (message.query_id.indexOf('module_toggle') !== -1 || message.query_id.indexOf('module_status') !== -1
-                            || message.query_id.endsWith('module')) {
-                            if (message.results.value == 'false') {
+                                || message.query_id.endsWith('module')) {
+                            if (message.results !== undefined && message.results.value == 'false') {
                                 $('.load-ajax').remove();
                             }
                         }
@@ -552,7 +616,7 @@ $(function() {
             }
         } catch (ex) {
             // Line number won't be accurate, function will by anonymous, but we get the stack so it should be fine.
-            helpers.logError('Failed to parse message from socket: ' + ex.stack + '\n\n' + e.data, helpers.LOG_TYPE.FORCE);
+            helpers.logError('Fehler beim analysieren der Nachricht vom Socket: ' + ex.stack + '\n\n' + e.data, helpers.LOG_TYPE.FORCE);
         }
     };
 

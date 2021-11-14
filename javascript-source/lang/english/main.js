@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,6 @@ $.lang.register('chatmoderator.colors.filter.enabled', 'Colour filter has been e
 $.lang.register('chatmoderator.colors.filter.disabled', 'Colour filter has been disabled.');
 $.lang.register('chatmoderator.fakepurge.filter.enabled', 'Fake purge filter has been enabled.');
 $.lang.register('chatmoderator.fakepurge.filter.disabled', 'fake purge filter has been disabled.');
-$.lang.register('chatmoderator.regulars.usage', 'Usage: !moderation regulars [links / caps / symbols / spam / emotes / colors / longmessages / spamtracker / fakepurge] [true / false]');
 $.lang.register('chatmoderator.subscribers.usage', 'Usage: !moderation subscribers [links / caps / symbols / spam / emotes / colors / longmessages / spamtracker / fakepurge] [true / false]');
 $.lang.register('chatmoderator.subscribers.links.allowed', 'subscribers will now be effected by the link filter.');
 $.lang.register('chatmoderator.subscribers.links.not.allowed', 'subscribers will no longer be effected by the link filter.');
@@ -84,6 +83,34 @@ $.lang.register('chatmoderator.subscribers.toggle.emotes', 'subscribers are curr
 $.lang.register('chatmoderator.subscribers.toggle.colors', 'subscribers are currently $1 to use /me for colored text');
 $.lang.register('chatmoderator.subscribers.toggle.fakepurge', 'subscribers are currently $1 to use fake purges.');
 $.lang.register('chatmoderator.subscribers.toggle.long.msg', 'subscribers are currently $1 to post long messages.');
+$.lang.register('chatmoderator.vips.usage', 'Usage: !moderation vips [links / caps / symbols / spam / emotes / colors / longmessages / spamtracker / fakepurge] [true / false]');
+$.lang.register('chatmoderator.vips.links.allowed', 'vips will now be effected by the link filter.');
+$.lang.register('chatmoderator.vips.links.not.allowed', 'vips will no longer be effected by the link filter.');
+$.lang.register('chatmoderator.vips.caps.allowed', 'vips will now be effected by the caps filter.');
+$.lang.register('chatmoderator.vips.caps.not.allowed', 'vips will no longer be effected by the caps filter.');
+$.lang.register('chatmoderator.vips.symbols.allowed', 'vips will now be effected by the symbols filter.');
+$.lang.register('chatmoderator.vips.symbols.not.allowed', 'vips will no longer be effected by the symbols filter.');
+$.lang.register('chatmoderator.vips.spam.allowed', 'vips will now be effected by the spam filter.');
+$.lang.register('chatmoderator.vips.spam.not.allowed', 'vips will no longer be effected by the spam filter.');
+$.lang.register('chatmoderator.vips.emotes.allowed', 'vips will now be effected by the emotes filter.');
+$.lang.register('chatmoderator.vips.emotes.not.allowed', 'vips will no longer be effected by the emotes filter.');
+$.lang.register('chatmoderator.vips.spamtracker.allowed', 'vips will now be effected by the spam tracker filter.');
+$.lang.register('chatmoderator.vips.spamtracker.not.allowed', 'vips will no longer be effected by the spam tracker filter.');
+$.lang.register('chatmoderator.vips.colors.allowed', 'vips will now be effected by the colors filter.');
+$.lang.register('chatmoderator.vips.colors.not.allowed', 'vips will no longer be effected by the colors filter.');
+$.lang.register('chatmoderator.vips.long.messages.allowed', 'vips will now be effected by the long message filter.');
+$.lang.register('chatmoderator.vips.long.messages.not.allowed', 'vips will no longer be effected by the long message filter.');
+$.lang.register('chatmoderator.vips.fakepurge.allowed', 'vips will now be effected by the fake purges filter.');
+$.lang.register('chatmoderator.vips.fakepurge.not.allowed', 'vips will no longer be effected by the fake purges filter.');
+$.lang.register('chatmoderator.vips.toggle.link', 'vips are currently $1 to post links.');
+$.lang.register('chatmoderator.vips.toggle.caps', 'vips are currently $1 to type all in caps.');
+$.lang.register('chatmoderator.vips.toggle.symbols', 'vips are currently $1 to spam symbols.');
+$.lang.register('chatmoderator.vips.toggle.spam', 'vips are currently $1 to spam repeating characters.');
+$.lang.register('chatmoderator.vips.toggle.emotes', 'vips are currently $1 to overuse emotes.');
+$.lang.register('chatmoderator.vips.toggle.colors', 'vips are currently $1 to use /me for colored text');
+$.lang.register('chatmoderator.vips.toggle.fakepurge', 'vips are currently $1 to use fake purges.');
+$.lang.register('chatmoderator.vips.toggle.long.msg', 'vips are currently $1 to post long messages.');
+$.lang.register('chatmoderator.regulars.usage', 'Usage: !moderation regulars [links / caps / symbols / spam / emotes / colors / longmessages / spamtracker / fakepurge] [true / false]');
 $.lang.register('chatmoderator.regulars.links.allowed', 'regulars will now be effected by the link filter.');
 $.lang.register('chatmoderator.regulars.links.not.allowed', 'regulars will no longer be effected by the link filter.');
 $.lang.register('chatmoderator.regulars.caps.allowed', 'regulars will now be effected by the caps filter.');
@@ -258,9 +285,9 @@ $.lang.register('common.disabled', 'disabled');
 $.lang.register('common.enabled', 'enabled');
 $.lang.register('common.user-error', 'You must specify a user to target with this command');
 $.lang.register('common.user.404', 'The user "$1" has not visited this channel yet.');
-$.lang.register('common.game.change', 'Changed the current game to: $1!');
+$.lang.register('common.game.change', 'Changed the current game to: $1');
 $.lang.register('common.communities.change', 'Communities have been updated!');
-$.lang.register('common.title.change', 'Changed the current title to: $1!');
+$.lang.register('common.title.change', 'Changed the current title to: $1');
 $.lang.register('common.twitch.no.status', 'not sure, neither is Twitch');
 $.lang.register('common.twitch.no.game', 'not sure, neither is Twitch');
 $.lang.register('console.channel.ishosting', '$1 is currently hosting $2.');
@@ -357,6 +384,8 @@ $.lang.register('permissions.grouppoints.showgroup.offline', '$1 gains $2 $3 off
 $.lang.register('permissions.grouppoints.set.online', 'Set permission $1 to gain $2 $3 online.');
 $.lang.register('permissions.grouppoints.set.offline', 'Set permission $1 to gain $2 $3 offline.');
 $.lang.register('permissions.grouppoints.set.sub.error', 'You cannot promote anyone to Subscriber, this status is from Twitch.'); 
+$.lang.register('permissions.swapsubscribervip.normal', 'Subscribers are now set as higher than VIPs (default).'); 
+$.lang.register('permissions.swapsubscribervip.swapped', 'VIPs are now set as higher than Subscribers.'); 
 $.lang.register('ignorelist', 'Current Ignored Bots: $1');
 $.lang.register('ignorelist.listtoolong', 'There are over $1 to list, I suggest checking the ./addons/ignorebots.txt');
 $.lang.register('ignoreadd.usage', 'Usage: !ignoreadd [username], to add a channel to the ignore list.');

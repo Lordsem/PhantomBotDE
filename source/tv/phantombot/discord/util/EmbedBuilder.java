@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
 package tv.phantombot.discord.util;
 
 import discord4j.core.spec.EmbedCreateSpec;
-import java.awt.Color;
+import discord4j.rest.util.Color;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,12 +69,16 @@ public class EmbedBuilder {
         return this;
     }
 
+    public EmbedBuilder withColor(java.awt.Color color) {
+        return this.withColor(color.getRGB());
+    }
+
     public EmbedBuilder withColor(int r, int g, int b) {
-        return this.withColor(new Color(r, g, b));
+        return this.withColor(Color.of(r, g, b));
     }
 
     public EmbedBuilder withColor(int color) {
-        return this.withColor(new Color(color));
+        return this.withColor(Color.of(color));
     }
 
     public EmbedBuilder withTimestamp(Instant instant) {
@@ -167,7 +171,7 @@ public class EmbedBuilder {
 
     public Consumer<? super EmbedCreateSpec> build() {
         if (this.doesExceedCharacterLimit()) {
-            throw new IllegalArgumentException("Embed exceeds character limit of " + TOTAL_MAX_CHAR + " (has " + this.getTotalVisibleCharacters() + " chars)");
+            throw new IllegalArgumentException("Einbetten überschreitet die Zeichenbeschränkung von " + TOTAL_MAX_CHAR + " (hat " + this.getTotalVisibleCharacters() + " Zeichen)");
         }
 
         return (EmbedCreateSpec t) -> {

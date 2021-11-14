@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -105,7 +105,7 @@ $(run = function() {
                         { 'title': 'Befehl' },
                         { 'title': 'Zulässige Rollen' },
                         { 'title': 'Zulässige Berechtigungen' },
-                        { 'title': 'Aktion' }
+                        { 'title': 'Aktionen' }
                     ]
                 });
 
@@ -116,7 +116,7 @@ $(run = function() {
                         t = $(this);
 
                     // Ask the user if he want to reset the command.
-                    helpers.getConfirmDeleteModal('discord_default_command_modal_remove', 'Sind Sie sicher, dass Sie die Berechtigung des Befehls zurücksetzen möchten?', false,
+                    helpers.getConfirmDeleteModal('discord_default_command_modal_remove', 'Bist du sicher, dass du die Berechtigung des Befehls zurücksetzen möchtest?', false,
                             'Die Berechtigung des Befehls wurde zurückgesetzt!', function() {
                         socket.removeDBValue('discord_permcom_temp_del', 'discordPermcom', command, function(e) {
                             // Hide tooltip.
@@ -244,7 +244,7 @@ $(run = function() {
                                         // Close the modal.
                                         $('#edit-command').modal('hide');
                                         // Tell the user the command was added.
-                                        toastr.success('Befehl erfolgreich bearbeitet !' + commandName.val());
+                                        toastr.success('Befehl !' + commandName.val() + 'erfolgreich bearbeitet!');
 
                                         // I hate doing this, but the logic is fucked anyways.
                                         helpers.setTimeout(function() {

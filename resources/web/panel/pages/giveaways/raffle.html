@@ -1,5 +1,5 @@
 <!--
-    Copyright (C) 2016-2020 phantom.bot
+    Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
         <!-- Page title and switch toggle. -->
         <h1>Verlosung
             <label class="switch" data-toggle="tooltip" title="Modul umschalten">
-                <input type="checkbox" id="raffleModuleToggle" checked="true">
+                <input type="checkbox" id="raffleModuleToggle" checked>
                 <span class="slider round"></span>
             </label>
         </h1>
@@ -78,7 +78,7 @@
                         <div class="box-body" style="padding-bottom: 90px;">
                         	<!-- Keyword -->
                             <div class="form-group">
-                                <lable>Schlüsselwort</lable>
+                                <label for="raffle-keyword">Schlüsselwort</label>
                                 <input type="text" class="form-control" id="raffle-keyword" placeholder="!enter"
                                     data-toggle="tooltip" title="Schlüsselwort, mit dem du an der Verlosung teilnehmen kannst. Dies ist nicht case-sensitiv."/>
                             </div>
@@ -87,14 +87,14 @@
                             <div class="row">
                             	<div class="col-md-8">
                             		<div class="form-group">
-                            		    <lable id="raffle-cost-title">Kosten</lable>
+                            		    <label for="raffle-cost" id="raffle-cost-title">Kosten</label>
                             		    <input type="text" class="form-control" id="raffle-cost" value="0"
                             		        data-toggle="tooltip" title="Kosten für die Teilnahme an der Verlosung. Bei der Nutzung der Zeit wird diese nicht vom Benutzer abgezogen."/>
                             		</div>
                             	</div>
                             	<div class="col-md-4">
                             		<div class="form-group">
-                            			<lable>Anforderung</lable>
+                            			<label for="raffle-req">Anforderung</label>
                             			<select class="form-control" id="raffle-req" data-toggle="tooltip" title="Ob das Verlosungssystem Punkte oder Zeit verwenden soll.">
   											<option selected="selected" value="-usepoints">Punkte</option>
   											<option value="-usetime">Zeit</option>
@@ -105,31 +105,31 @@
 
                             <!-- Eligibility -->
                             <div class="form-group">
-                            	<lable>Berechtigung</lable>
+                            	<label for="raffle-perm">Berechtigung</label>
                             	<select class="form-control" id="raffle-perm">
-  									<option value="-subscribers">Subscribers</option>
-  									<option value="-followers">Followers</option>
-  									<option selected="selected" value="">Everyone</option>
+  									<option value="-subscribers">Abonnent</option>
+  									<option value="-followers">Follower</option>
+  									<option selected="selected" value="">Jeder</option>
 								</select>
                             </div>
 
                             <!-- Timer -->
                             <div class="form-group">
-                                <lable>Timer (Minuten)</lable>
+                                <label for="raffle-timer">Timer (Minuten)</label>
                                 <input type="number" min="0" class="form-control" id="raffle-timer" value="0"
-                                    data-toggle="tooltip" title="Wie lange die Verlosung geöffnet werden soll. 0 ist bis zum manuellen Schließen."/>
+                                    data-toggle="tooltip" title="Wie lange die Verlosung geöffnet sein soll. 0 ist bis zum manuellen Schließen."/>
                             </div>
 
                             <!-- Regular luck -->
                             <div class="form-group">
-                                <lable>Stammzuschauer Glück</lable>
+                                <label for="raffle-reg">Stammzuschauer Glück</label>
                                 <input type="number" min="1" max="10" class="form-control" id="raffle-reg" value="1"
                                     data-toggle="tooltip" title="Wie oft kann ein Stammzuschauer mehr gewinnen."/>
                             </div>
 
                             <!-- Subscriber luck -->
                             <div class="form-group">
-                                <lable>Abonnenten Glück</lable>
+                                <label for="raffle-sub">Abonnenten Glück</label>
                                 <input type="number" min="1" max="10" class="form-control" id="raffle-sub" value="1"
                                     data-toggle="tooltip" title="Wie oft kann ein Abonnent mehr gewinnen."/>
                             </div>
@@ -155,5 +155,5 @@
     </section>
 
     <!-- raffle -->
-    <script src="/panel/js/pages/giveaways/raffle.js"></script>
+    <script src="js/pages/giveaways/raffle.js"></script>
 </main>

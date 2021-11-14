@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,8 +68,12 @@ public final class HTTPWSServer {
      * The server's listen {@link Channel}
      */
     private Channel ch;
+    /**
+     * The secondary channel, used for port 80 when the primary channel is port 443
+     */
+    private Channel ch2;
 
-    public boolean sslEnabled = false;
+    private boolean sslEnabled = false;
     private boolean autoSSL = false;
     private SslContext sslCtx;
     private KeyStore ks = null;
@@ -134,7 +138,7 @@ public final class HTTPWSServer {
 
                     if (!Files.exists(Paths.get(this.sslFile))) {
                         this.generateAutoSsl(botName);
-                }
+                    }
                 }
 
                 this.reloadSslContext();
@@ -154,10 +158,28 @@ public final class HTTPWSServer {
             } else {
                 ch = b.bind(ipOrHostname, port).sync().channel();
             }
+
+            if (port == 443) {
+                try {
+                    if (ipOrHostname == null || ipOrHostname.isBlank()) {
+                        ch2 = b.bind(80).sync().channel();
+                    } else {
+                        ch2 = b.bind(ipOrHostname, 80).sync().channel();
+                    }
+                } catch (InterruptedException ex2) {
+                    ch2 = null;
+                    com.gmt2001.Console.out.println("Unble to bind port 80, going with only 443...");
+                    com.gmt2001.Console.err.printStackTrace(ex2);
+                }
+            }
         } catch (IOException | NoSuchAlgorithmException | CertificateException | KeyStoreException | UnrecoverableKeyException | InterruptedException ex) {
             com.gmt2001.Console.err.printStackTrace(ex);
             group.shutdownGracefully();
         }
+    }
+
+    public boolean isSsl() {
+        return this.sslEnabled || PhantomBot.instance().getProperties().getPropertyAsBoolean("proxybypasshttps", false);
     }
 
     private void generateAutoSsl() {
@@ -288,6 +310,11 @@ public final class HTTPWSServer {
     public void close() {
         WebSocketFrameHandler.closeAllWsSessions();
         ch.close().awaitUninterruptibly(5, TimeUnit.SECONDS);
+
+        if (ch2 != null) {
+            ch2.close().awaitUninterruptibly(5, TimeUnit.SECONDS);
+        }
+
         group.shutdownGracefully(3, 5, TimeUnit.SECONDS);
     }
 }

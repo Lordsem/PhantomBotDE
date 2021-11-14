@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,37 +19,37 @@
  * This script is for announcing bits from Twitch, and rewarding the user with points if the caster wants too.
  *
  */
-(function() {
+(function () {
     var toggle = $.getSetIniDbBoolean('bitsSettings', 'toggle', false),
-        message = $.getSetIniDbString('bitsSettings', 'message', '(name) hat (amount) bits gecheert !'),
-        minimum = $.getSetIniDbNumber('bitsSettings', 'minimum', 0),
-        announceBits = false;
+            message = $.getSetIniDbString('bitsSettings', 'message', '(name) hat (amount) Bits gecheert!'),
+            minimum = $.getSetIniDbNumber('bitsSettings', 'minimum', 0),
+            announceBits = false;
 
     /*
      * @function reloadBits
      */
     function reloadBits() {
         toggle = $.getIniDbBoolean('bitsSettings', 'toggle', false);
-        message = $.getIniDbString('bitsSettings', 'message', '(name) hat (amount) bits gecheert !');
+        message = $.getIniDbString('bitsSettings', 'message', '(name) hat (amount) Bits gecheert!');
         minimum = $.getIniDbNumber('bitsSettings', 'minimum', 0);
     }
 
     /*
      * @event twitchBits
      */
-    $.bind('twitchBits', function(event) {
+    $.bind('twitchBits', function (event) {
         var username = event.getUsername(),
-            bits = event.getBits(),
-            ircMessage = event.getMessage(),
-            emoteRegexStr = $.twitch.GetCheerEmotesRegex(),
-            s = message;
+                bits = event.getBits(),
+                ircMessage = event.getMessage(),
+                emoteRegexStr = $.twitch.GetCheerEmotesRegex(),
+                s = message;
 
         if (announceBits === false || toggle === false) {
             return;
         }
 
         if (bits == 1) {
-            s = $.replace(s, 'bits', 'bit');
+            s = $.replace(s, 'Bits', 'Bit');
         }
 
         if (s.match(/\(name\)/g)) {
@@ -59,7 +59,7 @@
         if (s.match(/\(amount\)/g)) {
             s = $.replace(s, '(amount)', bits);
         }
- 
+
         if (s.match(/\(message\)/g)) {
             s = $.replace(s, '(message)', ircMessage);
             if (emoteRegexStr.length() > 0) {
@@ -72,7 +72,7 @@
         if (bits >= minimum) {
             if (s.match(/\(alert [,.\w\W]+\)/g)) {
                 var filename = s.match(/\(alert ([,.\w\W]+)\)/)[1];
-                $.panelsocketserver.alertImage(filename);
+                $.alertspollssocket.alertImage(filename);
                 s = (s + '').replace(/\(alert [,.\w\W]+\)/, '');
                 if (s == '') {
                     return null;
@@ -81,10 +81,10 @@
 
             if (s.match(/\(playsound\s([a-zA-Z1-9_]+)\)/g)) {
                 if (!$.audioHookExists(s.match(/\(playsound\s([a-zA-Z1-9_]+)\)/)[1])) {
-                    $.log.error('Could not play audio hook: Audio hook does not exist.');
+                    $.log.error('Audio-Hook konnte nicht wiedergegeben werden: Audio-Hook existiert nicht.');
                     return null;
                 }
-                $.panelsocketserver.triggerAudioPanel(s.match(/\(playsound\s([a-zA-Z1-9_]+)\)/)[1]);
+                $.alertspollssocket.triggerAudioPanel(s.match(/\(playsound\s([a-zA-Z1-9_]+)\)/)[1]);
                 s = $.replace(s, s.match(/\(playsound\s([a-zA-Z1-9_]+)\)/)[0], '');
                 if (s == '') {
                     return null;
@@ -101,12 +101,12 @@
     /*
      * @event command
      */
-    $.bind('command', function(event) {
+    $.bind('command', function (event) {
         var sender = event.getSender(),
-            command = event.getCommand(),
-            args = event.getArgs(),
-            argsString = event.getArguments(),
-            action = args[0];
+                command = event.getCommand(),
+                args = event.getArgs(),
+                argsString = event.getArguments(),
+                action = args[0];
 
         /*
          * @commandpath bitstoggle - Toggles the bits announcements.
@@ -144,14 +144,14 @@
             minimum = parseInt(action);
             $.setIniDbNumber('bitsSettings', 'minimum', minimum);
             $.say($.whisperPrefix(sender) + $.lang.get('bitshandler.minimum.set', minimum));
-            $.log.event(sender + ' änderte das Bits minimum zu: ' + minimum + ' Bits.');
+            $.log.event(sender + ' änderte das Bits Minimum zu: ' + minimum + ' Bits.');
         }
     });
 
     /*
      * @event initReady
      */
-    $.bind('initReady', function() {
+    $.bind('initReady', function () {
         $.registerChatCommand('./handlers/bitsHandler.js', 'bitstoggle', 1);
         $.registerChatCommand('./handlers/bitsHandler.js', 'bitsmessage', 1);
         $.registerChatCommand('./handlers/bitsHandler.js', 'bitsminimum', 1);

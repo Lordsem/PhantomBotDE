@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -179,7 +179,7 @@
             var lengthData = $.youtube.GetVideoLength(videoId);
 
             if (lengthData[0] == 123 && lengthData[1] == 456 && lengthData[2] === 7899) {
-                throw 'Live Stream Detected';
+                throw 'Livestream erkannt';
             }
             // only try 2 times.
             // No point in spamming the API, we'll hit the limit.
@@ -242,7 +242,7 @@
         /** START CONTRUCTOR YoutubeVideo() */
 
         if (!searchQuery) {
-            throw "No Search Query Given";
+            throw "Keine Suchanfrage angegeben";
         }
 
         searchQuery = searchQuery.trim();
@@ -289,7 +289,7 @@
 
             // Hit 5 trys and nothing was found
             if (data[0].length() < 11) {
-                throw 'No data returned.';
+                throw 'Keine Daten zurückgegeben.';
             }
 
             videoId = data[0];
@@ -310,10 +310,10 @@
 
         this.getVideoInfo();
         if (license == 0 && playCCOnly) {
-            throw 'Video is not licensed as Creative Commons (ID: ' + videoId + ')';
+            throw 'Video ist nicht als Creative Commons lizenziert (ID: ' + videoId + ')';
         }
         if (embeddable == 0) {
-            throw 'This video is not allowed to be embedded (ID: ' + videoId + ')';
+            throw 'Dieses Video darf nicht eingebettet werden (ID: ' + videoId + ')';
         }
 
         /** END CONTRUCTOR YoutubeVideo() */
@@ -892,7 +892,7 @@
             try {
                 writer.write(youtubeVideo.getVideoTitle());
             } catch (ex) {
-                $.log.error('Failed to update current song file: ' + ex.toString());
+                $.log.error('Fehler beim Aktualisieren der aktuellen Songdatei: ' + ex.toString());
             } finally {
                 writer.close();
             }
@@ -1036,7 +1036,7 @@
 
                             jsonList['playlist'].push({ "song": videoId, "title": videoTitle, "duration": videoLength });
                         } catch (ex) {
-                            $.log.error('YouTube API Failed Lookup: Playlist [' + jsonList['playlistname'] +
+                            $.log.error('YouTube API fehlgeschlagene Suche: Playlist [' + jsonList['playlistname'] +
                                 '] Index [' + playList[i] + '] YT ID [' + youTubeDbId + '] Error [' + ex + ']');
                         }
                     }
@@ -1150,7 +1150,7 @@
      */
     $.bind('yTPlayerStealSong', function(event) {
         var youTubeID = (event.getYouTubeID() + ''),
-            refundUser = (event.getRequester() + ''),
+            refundUser = $.jsString(event.getRequester()).toLowerCase(),
             retval;
 
         if (youTubeID.length > 1) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -148,6 +148,14 @@ public class SqliteStore extends DataStore {
 
     private String validateFname(String fName) {
         fName = fName.replaceAll("([^a-zA-Z0-9_])", "_");
+
+        if (fName.startsWith("sqlite_")) {
+            fName = fName.substring(7);
+        }
+
+        if (fName.matches("^[0-9]+")) {
+            fName = "_" + fName;
+        }
 
         return fName;
     }
@@ -912,6 +920,10 @@ public class SqliteStore extends DataStore {
 
     @Override
     public void IncreaseBatchString(String fName, String section, String[] keys, String value) {
+        if (keys.length == 0) {
+            return;
+        }
+
         try (Connection connection = GetConnection()) {
             fName = validateFname(fName);
 
@@ -919,35 +931,36 @@ public class SqliteStore extends DataStore {
 
             connection.setAutoCommit(false);
 
-            try (Statement statement = connection.createStatement()) {
-                statement.addBatch("UPDATE phantombot_" + fName + " SET value = CAST(value AS INTEGER) + " + value + " WHERE section = '" + section + "' AND variable IN ('" + String.join("', '", keys) + "');");
+            StringBuilder sb = new StringBuilder(keys.length * 2);
 
-                StringBuilder sb = new StringBuilder(69 + fName.length() + (keys.length * (keys[0].length() + 17 + section.length() + value.length())));
+            for (String key : keys) {
+                sb.append("?,");
+            }
 
-                sb.append("INSERT OR IGNORE INTO phantombot_")
-                        .append(fName)
-                        .append(" (section, variable, value) VALUES ");
-
-                boolean first = true;
+            try (PreparedStatement statement = connection.prepareStatement("UPDATE phantombot_" + fName + " SET value = CAST(value AS UNSIGNED) + ? WHERE section = ? AND variable IN (" + sb.deleteCharAt(sb.length() - 1).toString() + ");")) {
+                statement.setInt(1, Integer.parseUnsignedInt(value));
+                statement.setString(2, section);
+                int i = 3;
                 for (String k : keys) {
-                    if (!first) {
-                        sb.append(",");
-                    }
-
-                    first = false;
-                    sb.append("('")
-                            .append(section)
-                            .append("', '")
-                            .append(k)
-                            .append("', ")
-                            .append(value)
-                            .append(")");
+                    statement.setString(i++, k);
                 }
+                statement.execute();
+            }
 
-                sb.append(";");
+            sb = new StringBuilder(keys.length * 10);
 
-                statement.addBatch(sb.toString());
-                statement.executeBatch();
+            for (String key : keys) {
+                sb.append("(?, ?, ?),");
+            }
+
+            try (PreparedStatement statement = connection.prepareStatement("INSERT OR IGNORE INTO phantombot_" + fName + " (section, variable, value) VALUES " + sb.deleteCharAt(sb.length() - 1).toString() + ";")) {
+                int i = 1;
+                for (String k : keys) {
+                    statement.setString(i++, section);
+                    statement.setString(i++, k);
+                    statement.setString(i++, value);
+                }
+                statement.execute();
             }
 
             connection.commit();
@@ -958,6 +971,39 @@ public class SqliteStore extends DataStore {
     }
 
     @Override
+    public String[][] executeSql(String sql, String[] replacements) {
+        ArrayList<ArrayList<String>> results = new ArrayList<>();
+
+        try (Connection connection = GetConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                int i = 1;
+                for (String k : replacements) {
+                    statement.setString(i++, k);
+                }
+
+                try (ResultSet rs = statement.executeQuery()) {
+                    int numcol = rs.getMetaData().getColumnCount();
+                    i = 0;
+
+                    while (rs.next()) {
+                        results.add(new ArrayList<>());
+
+                        for (int b = 1; b <= numcol; b++) {
+                            results.get(i).add(rs.getString(b));
+                        }
+
+                        i++;
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            com.gmt2001.Console.err.printStackTrace(ex);
+        }
+
+        return results.stream().map(al -> al.stream().toArray(String[]::new)).toArray(String[][]::new);
+    }
+
+    @Override
     public void CreateIndexes() {
         try (Connection connection = GetConnection()) {
             String[] tableNames = GetFileList();
@@ -965,7 +1011,7 @@ public class SqliteStore extends DataStore {
                 for (String tableName : tableNames) {
                     tableName = validateFname(tableName);
                     try {
-                    statement.execute("CREATE UNIQUE INDEX IF NOT EXISTS " + tableName + "_idx on phantombot_" + tableName + " (section, variable);");
+                        statement.execute("CREATE UNIQUE INDEX IF NOT EXISTS " + tableName + "_idx on phantombot_" + tableName + " (section, variable);");
                     } catch (SQLiteException ex) {
                         if (ex.getResultCode() == SQLiteErrorCode.SQLITE_CONSTRAINT) {
                             statement.execute("DELETE FROM " + tableName + " WHERE rowid NOT IN (SELECT MIN(rowid) FROM " + tableName + " GROUP BY section, variable);");
@@ -1010,7 +1056,7 @@ public class SqliteStore extends DataStore {
 
             try (Statement statement = connection.createStatement()) {
                 statement.execute("backup to ./dbbackup/" + filename);
-                com.gmt2001.Console.debug.println("Backed up SQLite3 DB to ./dbbackup/" + filename);
+                com.gmt2001.Console.debug.println("Gesicherte SQLite3-Datenbank auf ./dbbackup/" + filename);
             }
         } catch (SQLException ex) {
             com.gmt2001.Console.err.printStackTrace(ex);

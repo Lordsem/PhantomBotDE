@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package tv.phantombot;
 
 import java.io.File;
@@ -7,8 +23,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.Map.Entry;
-import java.util.Properties;
 import java.util.TreeSet;
 import java.util.function.Supplier;
 
@@ -41,18 +55,19 @@ public class ConfigurationManager {
     public static final String PROP_YTAUTH_RO = "ytauthro";
     public static final String PROP_API_OAUTH = "apioauth";
     public static final String PROP_SILENTSCRIPTSLOAD = "silentscriptsload";
+    public static final String PROP_USEROLLBAR = "userollbar";
 
     private ConfigurationManager() {
         // private constructor to prevent users from instantiating a pure static class
     }
 
-    static Properties getConfiguration() {
+    static CaselessProperties getConfiguration() {
         /* List of properties that must exist. */
-        String[] requiredProperties = new String[] { PROP_OAUTH, PROP_CHANNEL, PROP_OWNER, PROP_USER };
-        String requiredPropertiesErrorMessage = "";
+        String[] requiredProperties = new String[]{PROP_OAUTH, PROP_CHANNEL, PROP_OWNER, PROP_USER};
+        String requiredPropertiesErrorMessage;
 
         /* Properties configuration */
-        Properties startProperties = new Properties();
+        CaselessProperties startProperties = new CaselessProperties();
 
         /* Indicates that the botlogin.txt file should be overwritten/created. */
         Boolean changed = false;
@@ -63,26 +78,26 @@ public class ConfigurationManager {
         /* Load up the bot info from the bot login file */
         try {
             if (new File(BOTLOGIN_TXT_LOCATION).exists()) {
-                FileInputStream inputStream = new FileInputStream(BOTLOGIN_TXT_LOCATION);
-                startProperties.load(inputStream);
-                inputStream.close();
+                try (FileInputStream inputStream = new FileInputStream(BOTLOGIN_TXT_LOCATION)) {
+                    startProperties.load(inputStream);
+                }
             } else {
                 /*
                  * Fill in the Properties object with some default values. Note that some values
                  * are left unset to be caught in the upcoming logic to enforce settings.
                  */
                 startProperties.setProperty(PROP_BASEPORT, "25000");
-                startProperties.setProperty(PROP_USEHTTPS, "false");
+                startProperties.setProperty(PROP_USEHTTPS, "true");
                 startProperties.setProperty(PROP_WEBENABLE, "true");
                 startProperties.setProperty(PROP_MSGLIMIT30, "19.0");
                 startProperties.setProperty(PROP_MUSICENABLE, "true");
                 startProperties.setProperty(PROP_WHISPERLIMIT60, "60.0");
             }
-        } catch (Exception ex) {
+        } catch (IOException ex) {
             com.gmt2001.Console.err.printStackTrace(ex);
         }
         /* Load up the bot info from the environment */
-        for (Entry<String, String> v : System.getenv().entrySet()) {
+        System.getenv().entrySet().forEach((v) -> {
             String prefix = "PHANTOMBOT_";
             String key = v.getKey().toUpperCase();
             String value = v.getValue();
@@ -90,7 +105,7 @@ public class ConfigurationManager {
                 key = key.substring(prefix.length()).toLowerCase();
                 startProperties.setProperty(key, value);
             }
-        }
+        });
 
         changed |= generateDefaultValues(startProperties);
 
@@ -107,9 +122,7 @@ public class ConfigurationManager {
          * Iterate the properties and delete entries for anything that does not have a
          * value.
          */
-        for (String propertyKey : startProperties.stringPropertyNames()) {
-            changed |= startProperties.remove(propertyKey, "");
-        }
+        changed = startProperties.stringPropertyNames().stream().map((propertyKey) -> startProperties.remove(propertyKey, "")).reduce(changed, (accumulator, _item) -> accumulator | _item);
 
         /*
          * Check for required settings.
@@ -119,11 +132,11 @@ public class ConfigurationManager {
         if (!requiredPropertiesErrorMessage.isEmpty()) {
             com.gmt2001.Console.err.println();
             com.gmt2001.Console.err.println("Fehlende erforderliche Eigenschaften: " + requiredPropertiesErrorMessage);
-            com.gmt2001.Console.err.println("Beende PhantomBotDE");
+            com.gmt2001.Console.err.println("Beende PhantomBot");
             PhantomBot.exitError();
         }
 
-        if (!startProperties.getProperty("allownonascii", "false").equalsIgnoreCase("true")) {
+        if (!startProperties.getPropertyAsBoolean("allownonascii", false)) {
             for (String propertyKey : startProperties.stringPropertyNames()) {
                 String olds = startProperties.getProperty(propertyKey);
                 String news = olds.codePoints().filter(x -> x >= 32 || x <= 126).collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
@@ -146,8 +159,10 @@ public class ConfigurationManager {
         return startProperties;
     }
 
-    private static Boolean generateDefaultValues(Properties startProperties) {
+    private static Boolean generateDefaultValues(CaselessProperties startProperties) {
         Boolean changed = false;
+
+        changed |= setDefaultIfMissing(startProperties, PROP_USEROLLBAR, "true", "Enabled Rollbar");
 
         /* Check to see if there's a webOauth set */
         changed |= setDefaultIfMissing(startProperties, PROP_WEBAUTH, ConfigurationManager::generateWebAuth, "Es wurde ein neuer Webauth-Schlüssel generiert für " + BOTLOGIN_TXT_LOCATION);
@@ -166,7 +181,7 @@ public class ConfigurationManager {
         return changed;
     }
 
-    private static Boolean correctCommonErrors(Properties startProperties) {
+    private static Boolean correctCommonErrors(CaselessProperties startProperties) {
         Boolean changed = false;
 
         /* Make sure the oauth has been set correctly */
@@ -198,8 +213,8 @@ public class ConfigurationManager {
         return changed;
     }
 
-    private static void saveChanges(Properties properties, String saveFileDestination) {
-        Properties outputProperties = new Properties() {
+    private static void saveChanges(CaselessProperties properties, String saveFileDestination) {
+        CaselessProperties outputProperties = new CaselessProperties() {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -211,7 +226,7 @@ public class ConfigurationManager {
         try {
             try (FileOutputStream outputStream = new FileOutputStream(saveFileDestination)) {
                 outputProperties.putAll(properties);
-                outputProperties.store(outputStream, "PhantomBot Configuration File");
+                outputProperties.store(outputStream, "PhantomBot Konfigurationsdatei");
             }
         } catch (IOException ex) {
             com.gmt2001.Console.err.printStackTrace(ex);
@@ -220,28 +235,28 @@ public class ConfigurationManager {
 
     /**
      * Sets a default value to a properties object if the requested property does not exist
-     * 
-     * @param properties   the properties object to be modified
+     *
+     * @param properties the properties object to be modified
      * @param propertyName the name of the property, which should be set if null
      * @param defaultValue the default value, to which the property is set, if the property is missing in the properties object
      * @param setMessage the message which will be printed if the value is set to the given default value
      * @return {@code true} if the value has been set to default, {@code false} if the value is already present in the properties object
      */
-    private static Boolean setDefaultIfMissing(Properties properties, String propertyName, String defaultValue, String generatedMessage) {
+    private static Boolean setDefaultIfMissing(CaselessProperties properties, String propertyName, String defaultValue, String generatedMessage) {
         return setDefaultIfMissing(properties, propertyName, () -> defaultValue, generatedMessage);
     }
 
     /**
      * Sets a default value to a properties object if the requested property does not exist
-     * 
-     * @param properties            the properties object to be modified
+     *
+     * @param properties the properties object to be modified
      * @param propertyName the name of the property, which should be generated if null
      * @param defaultValueGenerator the generating function, which generates the default value, if the property is missing in the properties object
      * @param generatedMessage the message which will be printed if the value is generated
      * @return {@code true} if the value has been generated, {@code false} if the value is already present in the properties object and does not have
-     *         to be generated
+     * to be generated
      */
-    private static Boolean setDefaultIfMissing(Properties properties, String propertyName, Supplier<String> defaultValueGenerator, String generatedMessage) {
+    private static Boolean setDefaultIfMissing(CaselessProperties properties, String propertyName, Supplier<String> defaultValueGenerator, String generatedMessage) {
         Boolean changed = false;
         if (properties.getProperty(propertyName) == null) {
             properties.setProperty(propertyName, defaultValueGenerator.get());
@@ -253,31 +268,21 @@ public class ConfigurationManager {
 
     /**
      * Gets a boolean value from the a properties object and prints a message according to the property name.
-     * 
-     * @param properties   the Properties object to get the boolean value from
+     *
+     * @param properties the Properties object to get the boolean value from
      * @param propertyName the name of the property to get
-     * @param defaulValue  the default value of the property
+     * @param defaulValue the default value of the property
      * @return the value of the property. If parsing the value to a Boolean fails, the default value is returned.
      */
-    public static Boolean getBoolean(Properties properties, String propertyName, Boolean defaulValue) {
-        Boolean result = defaulValue;
-        try {
-            result = Boolean.parseBoolean(properties.getProperty(propertyName));
-        } catch (Exception e) {
-            com.gmt2001.Console.err.printStackTrace(e);
-            com.gmt2001.Console.err.println("[Error] konnte die Eigenschaft'" + propertyName + "' nicht laden. Rückfall auf den Standardwert (" + defaulValue + ")");
-        }
-
-        return result;
+    public static Boolean getBoolean(CaselessProperties properties, String propertyName, Boolean defaulValue) {
+        return properties.getPropertyAsBoolean(propertyName, defaulValue);
     }
 
-    private static void doSetup(Properties startProperties) {
+    private static void doSetup(CaselessProperties startProperties) {
         try {
 
             com.gmt2001.Console.out.print("\r\n");
             com.gmt2001.Console.out.print("Willkommen beim PhantomBotDE Setup Prozess!\r\n");
-            com.gmt2001.Console.out.print("Wenn du irgendwelche Probleme hast, trete bitte unserer Discord bei!\r\n");
-            com.gmt2001.Console.out.print("Discord: https://discord.gg/hBJMXCe\r\n");
             com.gmt2001.Console.out.print("\r\n");
 
             final String os = System.getProperty("os.name").toLowerCase();
@@ -308,7 +313,7 @@ public class ConfigurationManager {
             do {
                 com.gmt2001.Console.out.print("\r\n");
                 com.gmt2001.Console.out.print("2. Du brauchst nun einen OAuth-Token, damit der Bot chatten kann.\r\n");
-                com.gmt2001.Console.out.print("Bitte beachten Sie, dass dieser OAuth-Token generiert werden muss, während Sie im Twitch-Konto des Bot angemeldet sind.\r\n");
+                com.gmt2001.Console.out.print("Bitte beachte, dass dieser OAuth-Token generiert werden muss, während du mit dem Twitch-Konto des Bot angemeldet bist.\r\n");
                 com.gmt2001.Console.out.print("Wenn du nicht als Bot angemeldet bist, gehe bitte auf https://twitch.tv/ und melde dich als Bot an.\r\n");
                 com.gmt2001.Console.out.print("Den OAuth-Token des Bot erhältst du hier: https://phantombot.github.io/PhantomBot/oauth/\r\n");
                 com.gmt2001.Console.out.print("Bitte gib den OAuth-Token des Bots ein: ");
@@ -319,11 +324,11 @@ public class ConfigurationManager {
             // api oauth.
             do {
                 com.gmt2001.Console.out.print("\r\n");
-                com.gmt2001.Console.out.print("3. Du brauchst nun deinen Channel OAuth-Token, damit der Bot deinen Titel und dein Spiel ändern kann.\r\n");
-                com.gmt2001.Console.out.print("Bitte beachten Sie, dass dieser OAuth-Token generiert werden muss, während Du in Deinem Caster-Konto angemeldet bist.\r\n");
+                com.gmt2001.Console.out.print("3. Du brauchst nun den Channel OAuth-Token, damit der Bot den Titel und die Kategorie ändern kann.\r\n");
+                com.gmt2001.Console.out.print("Bitte beachte, dass dieser OAuth-Token generiert werden muss, während du mit dem Caster-Konto angemeldet bist.\r\n");
                 com.gmt2001.Console.out.print("Wenn du nicht als Caster angemeldet bist, gehe bitte auf https://twitch.tv/ und melde dich als Caster an.\r\n");
                 com.gmt2001.Console.out.print("Hol dir deinen OAuth-Token hier: https://phantombot.github.io/PhantomBot/oauth/\r\n");
-                com.gmt2001.Console.out.print("Bitte gebe deinen OAuth-Token ein: ");
+                com.gmt2001.Console.out.print("Bitte gebe den OAuth-Token ein: ");
 
                 startProperties.setProperty(PROP_API_OAUTH, System.console().readLine().trim());
             } while (startProperties.getProperty(PROP_API_OAUTH, "").length() <= 0);
@@ -354,8 +359,8 @@ public class ConfigurationManager {
 
             com.gmt2001.Console.out.print("\r\n");
             com.gmt2001.Console.out.print("PhantomBot wird in 10 Sekunden gestartet.\r\n");
-            com.gmt2001.Console.out.print("Wenn Du den Bot lokal betreiben möchtest, kannst Du hier auf das Control Panel zugreifen: http://localhost:25000/panel \r\n");
-            com.gmt2001.Console.out.print("Wenn Du den Bot auf einem Server betreibst, stelle sicher, dass Du die folgenden Ports öffnest: \r\n");
+            com.gmt2001.Console.out.print("Wenn du den Bot lokal betreiben möchtest, kannst Du hier auf das Control Panel zugreifen: http://localhost:25000/panel \r\n");
+            com.gmt2001.Console.out.print("Wenn du den Bot auf einem Server betreibst, stelle sicher, dass du die folgenden Ports öffnest: \r\n");
             com.gmt2001.Console.out.print("25000, 25003 und 25004. Du musst 'localhost' auf deine Server-IP ändern, um auf das Panel zugreifen zu können. \r\n");
 
             Thread.sleep(10000);

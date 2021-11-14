@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -131,7 +131,7 @@
             } else if (channelData.isNull('status') && channelData.getInt('_http') == 200) {
                 return $.lang.get('common.twitch.no.status');
             }
-            $.log.error('Der aktuelle Status konnte nicht abgerufen werden: ' + channelData.getString('message'));
+            $.log.error('Der aktuelle Status konnte nicht abgerufen werden: ' + channelData.optString('message', 'no message'));
             return '';
         }
     }
@@ -155,7 +155,7 @@
             }
 
             if (!channelData.isNull('message')) {
-                $.log.error('Failed to get the current game: ' + channelData.getString('message'));
+                $.log.error('Die aktuelle Kategorie konnte nicht abgerufen werden: ' + channelData.getString('message'));
             }
             return '';
         }
@@ -278,7 +278,7 @@
     function getStreamStartedAt(channelName) {
         if ($.twitchCacheReady.equals('true') && channelName.equalsIgnoreCase($.channelName)) {
             if ($.twitchcache.getStreamOnlineString === 'false') {
-                return 'Stream is offline';
+                return 'Stream ist offline';
             }
             createdAtDate = new Date($.twitchcache.getStreamCreatedAt() + '');
             return $.dateToString(createdAtDate);
@@ -372,7 +372,7 @@
         }
 
         var date = new Date(user.getString('created_at')),
-            dateFormat = new java.text.SimpleDateFormat("MMMM dd', 'yyyy"),
+            dateFormat = new java.text.SimpleDateFormat("dd. MMMM yyyy"),
             dateFinal = dateFormat.format(date),
             days = Math.floor((($.systemTime() - date.getTime()) / 1000) / 86400);
 
@@ -391,13 +391,13 @@
     function getChannelAge(event) {
         var channelData = $.twitch.GetChannel((!event.getArgs()[0] ? event.getSender() : $.user.sanitize(event.getArgs()[0])));
 
-        if (channelData.getInt('_http') === 404) {
+        if (channelData.getInt('_http') === 404 || !channelData.getBoolean('_success')) {
             $.say($.userPrefix(event.getSender(), true) + $.lang.get('channel.age.user.404'));
             return;
         }
 
         var date = new Date(channelData.getString('created_at')),
-            dateFormat = new java.text.SimpleDateFormat("MMMM dd', 'yyyy"),
+            dateFormat = new java.text.SimpleDateFormat("dd. MMMM yyyy"),
             dateFinal = dateFormat.format(date),
             days = Math.floor((Math.abs((date.getTime() - $.systemTime()) / 1000)) / 86400);
 
@@ -442,16 +442,16 @@
 
                 $.twitchcache.setGameTitle(http.getString('game'));
                 $.inidb.set('streamInfo', 'game', http.getString('game'));
-                $.log.event($.username.resolve(sender) + ' changed the current game to ' + http.getString('game'));
+                $.log.event($.username.resolve(sender) + ' äanderte die aktuelle Kategorie zu ' + http.getString('game'));
                 if ($.bot.isModuleEnabled('./commands/deathctrCommand.js')) {
                     $.deathUpdateFile(game);
                 }
             } else {
-                $.log.error('Failed to change the game. The Twitch API might be having issues.');
+                $.log.error('Die Kategorie konnte nicht geändert werden. Die Twitch-API hat möglicherweise Probleme.');
                 $.log.error(http.getString('message'));
             }
         } else {
-            $.log.error('Das Spiel konnte nicht geändert werden. Stellen Sie sicher, dass Sie Ihren API OAuth-Code gesetzt haben. https://phantombot.github.io/PhantomBot/oauth/');
+            $.log.error('Die Kategorie konnte nicht geändert werden. Stellen Sie sicher, dass du den API-Oauth-Code festgelegt haben. https://phantombot.github.io/PhantomBot/oauth/');
             $.log.error(http.getString('_exception') + ' ' + http.getString('_exceptionMessage'));
         }
     }
@@ -474,36 +474,13 @@
                 }
                 $.twitchcache.setStreamStatus(http.getString('status'));
                 $.inidb.set('streamInfo', 'title', http.getString('status'));
-                $.log.event(sender + ' changed the current status to ' + http.getString('status'));
+                $.log.event(sender + ' änderte den aktuellen Titel zu ' + http.getString('status'));
             } else {
-                $.log.error('Fehler beim Ändern des Status. Die Twitch-API kann Probleme haben.');
+                $.log.error('Der Titel konnte nicht geändert werden. Die Twitch-API hat möglicherweise Probleme.');
                 $.log.error(http.getString('message'));
             }
         } else {
-            $.log.error('Fehler beim Ändern des Status. Stellen Sie sicher, dass Sie Ihren API OAuth-Code gesetzt haben. https://phantombot.github.io/PhantomBot/oauth/');
-            $.log.error(http.getString('_exception') + ' ' + http.getString('_exceptionMessage'));
-        }
-    }
-
-    /**
-     * @function updateStatus
-     * @export $
-     * @param {string} channelName
-     * @param {string} communities
-     * @param {string} sender
-     * @param {boolean} silent
-     */
-    function updateCommunity(channelName, communities, sender, silent) {
-        var http = $.twitch.UpdateCommunities(channelName, communities);
-
-        if (http.getBoolean('_success') && http.getInt('_http') == 204) {
-            if (!silent) {
-                $.say($.lang.get('common.communities.change'));
-            }
-            $.twitchcache.setCommunities(communities);
-            $.inidb.set('streamInfo', 'communities', communities.join(', '));
-        } else {
-            $.log.error('Fehler beim Ändern des Status. Stellen Sie sicher, dass Sie Ihren API OAuth-Code gesetzt haben. https://phantombot.github.io/PhantomBot/oauth/');
+            $.log.error('Der Titel konnte nicht geändert werden. Stellen Sie sicher, dass Sie Ihren API-Oauth-Code festgelegt haben. https://phantombot.github.io/PhantomBot/oauth/');
             $.log.error(http.getString('_exception') + ' ' + http.getString('_exceptionMessage'));
         }
     }
@@ -521,7 +498,6 @@
     $.isOnline = isOnline;
     $.updateGame = updateGame;
     $.updateStatus = updateStatus;
-    $.updateCommunity = updateCommunity;
     $.getFollowAge = getFollowAge;
     $.getFollowDate = getFollowDate;
     $.getChannelAge = getChannelAge;

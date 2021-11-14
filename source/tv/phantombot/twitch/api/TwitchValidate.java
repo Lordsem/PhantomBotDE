@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,8 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.net.ssl.HttpsURLConnection;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,18 +47,29 @@ public class TwitchValidate {
     private static final String CONTENT_TYPE = "application/json";
     // Timeout which to wait for a response before killing it (5 seconds).
     private static final int TIMEOUT_TIME = 5000;
+    private static final long REFRESH_INTERVAL = 3600000L;
     private final List<String> scopesC = new ArrayList<>();
     private String clientidC = "";
     private String loginC = "";
     private String useridC = "";
+    public boolean validC = false;
+    private Thread validateC = null;
+    private ValidateRunnable validaterC = null;
     private final List<String> scopesA = new ArrayList<>();
     private String clientidA = "";
     private String loginA = "";
     private String useridA = "";
+    public boolean validA = false;
+    private Thread validateA = null;
+    private ValidateRunnable validaterA = null;
     private final List<String> scopesT = new ArrayList<>();
     private String clientidT = "";
     private String loginT = "";
     private String useridT = "";
+    public boolean validT = false;
+    private Thread validateT = null;
+    private ValidateRunnable validaterT = null;
+    private final Timer t;
 
     /**
      * This class constructor.
@@ -64,6 +77,38 @@ public class TwitchValidate {
     private TwitchValidate() {
         // Set the default exception handler thread.
         Thread.setDefaultUncaughtExceptionHandler(com.gmt2001.UncaughtExceptionHandler.instance());
+        t = new Timer();
+        t.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (validaterA != null) {
+                    if (validateA != null && validateA.isAlive()) {
+                        validateA.interrupt();
+                        validateA = null;
+                    }
+
+                    validaterA.run();
+                }
+
+                if (validaterC != null) {
+                    if (validateC != null && validateC.isAlive()) {
+                        validateC.interrupt();
+                        validateC = null;
+                    }
+
+                    validaterC.run();
+                }
+
+                if (validaterT != null) {
+                    if (validateT != null && validateT.isAlive()) {
+                        validateT.interrupt();
+                        validateT = null;
+                    }
+
+                    validaterT.run();
+                }
+            }
+        }, REFRESH_INTERVAL, REFRESH_INTERVAL);
     }
 
     /**
@@ -119,7 +164,7 @@ public class TwitchValidate {
     }
 
     /**
-     * Method that handles data for Vaidation.
+     * Method that handles data for Validation.
      *
      * @param type
      * @param data
@@ -188,30 +233,33 @@ public class TwitchValidate {
     public void validateAPI(String oAuthToken, String type) {
         try {
             scopesA.clear();
-            ValidateRunnable validateRunnable = new ValidateRunnable(oAuthToken, type, 0);
-            new Thread(validateRunnable, "tv.phantombot.twitch.api.TwitchValidate::ValidateRunnable").start();
+            validaterA = new ValidateRunnable(oAuthToken, type, 0);
+            validateA = new Thread(validaterA, "tv.phantombot.twitch.api.TwitchValidate::ValidateRunnable");
+            validateA.start();
         } catch (Exception ex) {
-            com.gmt2001.Console.out.println("Unable to validate Twitch " + type + " OAUTH Token.");
+            com.gmt2001.Console.out.println("Kann nicht validiert werden: Twitch " + type + " OAUTH Token.");
         }
     }
 
     public void validateChat(String oAuthToken, String type) {
         try {
             scopesC.clear();
-            ValidateRunnable validateRunnable = new ValidateRunnable(oAuthToken, type, 1);
-            new Thread(validateRunnable, "tv.phantombot.twitch.api.TwitchValidate::ValidateRunnable").start();
+            validaterC = new ValidateRunnable(oAuthToken, type, 1);
+            validateC = new Thread(validaterC, "tv.phantombot.twitch.api.TwitchValidate::ValidateRunnable");
+            validateC.start();
         } catch (Exception ex) {
-            com.gmt2001.Console.out.println("Unable to validate Twitch " + type + " OAUTH Token.");
+            com.gmt2001.Console.out.println("Kann nicht validiert werden: Twitch " + type + " OAUTH Token.");
         }
     }
 
-    public void validateCustom(String oAuthToken, String type) {
+    public void validateApp(String oAuthToken, String type) {
         try {
             scopesT.clear();
-            ValidateRunnable validateRunnable = new ValidateRunnable(oAuthToken, type, 2);
-            new Thread(validateRunnable, "tv.phantombot.twitch.api.TwitchValidate::ValidateRunnable").start();
+            validaterT = new ValidateRunnable(oAuthToken, type, 2);
+            validateT = new Thread(validaterT, "tv.phantombot.twitch.api.TwitchValidate::ValidateRunnable");
+            validateT.start();
         } catch (Exception ex) {
-            com.gmt2001.Console.out.println("Unable to validate Twitch " + type + " OAUTH Token.");
+            com.gmt2001.Console.out.println("Kann nicht validiert werden: Twitch " + type + " OAUTH Token.");
         }
     }
 
@@ -235,6 +283,18 @@ public class TwitchValidate {
         return this.useridC;
     }
 
+    public boolean isChatValid() {
+        return this.validC;
+    }
+
+    public void updateChatToken(String token) {
+        if (this.validaterC == null) {
+            this.validateChat(token, "CHAT (oauth)");
+        } else {
+            this.validaterC.updateToken(token);
+        }
+    }
+
     public boolean hasAPIScope(String scope) {
         return scopesA.contains(scope);
     }
@@ -255,24 +315,101 @@ public class TwitchValidate {
         return this.useridA;
     }
 
-    public boolean hasCustomScope(String scope) {
+    public boolean isAPIValid() {
+        return this.validA;
+    }
+
+    public void updateAPIToken(String token) {
+        if (this.validaterA == null) {
+            this.validateAPI(token, "API (apioauth)");
+        } else {
+            this.validaterA.updateToken(token);
+        }
+    }
+
+    public boolean hasAppScope(String scope) {
         return scopesT.contains(scope);
     }
 
-    public List<String> getCustomScopes() {
+    public List<String> getAppScopes() {
         return new ArrayList<>(scopesT);
     }
 
-    public String getCustomClientID() {
+    public String getAppClientID() {
         return this.clientidT;
     }
 
-    public String getCustomLogin() {
+    public String getAppLogin() {
         return this.loginT;
     }
 
-    public String getCustomUserID() {
+    public String getAppUserID() {
         return this.useridT;
+    }
+
+    public boolean isAppValid() {
+        return this.validT;
+    }
+
+    public void updateAppToken(String token) {
+        if (this.validaterT == null) {
+            this.validateApp(token, "APP (EventSub)");
+        } else {
+            this.validaterT.updateToken(token);
+        }
+    }
+
+    public void checkOAuthInconsistencies(String botName) {
+        if (validateA != null && validateA.isAlive()) {
+            try {
+                validateA.join(TIMEOUT_TIME);
+            } catch (InterruptedException ex) {
+                com.gmt2001.Console.err.logStackTrace(ex);
+            }
+        }
+
+        if (validateC != null && validateC.isAlive()) {
+            try {
+                validateC.join(TIMEOUT_TIME);
+            } catch (InterruptedException ex) {
+                com.gmt2001.Console.err.logStackTrace(ex);
+            }
+        }
+
+        if (this.hasAPIScope("chat:edit") && !this.hasChatScope("chat:edit")) {
+            com.gmt2001.Console.warn.println("CHAT (oauth) hat keinen chat:edit. Aber API (apioauth) hat. OAuth-Token können rückgängig gemacht werden");
+        } else if (!this.hasChatScope("chat:edit")) {
+            com.gmt2001.Console.warn.println("CHAT (oauth) hat keinen chat:edit. Bot kann möglicherweise nicht antworten");
+        } else if (!this.hasChatScope("channel:moderate")) {
+            com.gmt2001.Console.warn.println("CHAT (oauth) hat keinen channel:moderate. Bot kann möglicherweise nicht löschen/timeouten/bannen");
+        }
+
+        if (this.getAPILogin().equalsIgnoreCase(botName) && !this.getChatLogin().equalsIgnoreCase(botName)) {
+            com.gmt2001.Console.warn.println("CHAT (oauth) ist nicht eingeloggt als " + botName + " aber API (apioauth) ist. OAuth-Token können rückgängig gemacht werden");
+        } else if (!this.getChatLogin().equalsIgnoreCase(botName)) {
+            com.gmt2001.Console.warn.println("CHAT (oauth) ist nicht eingeloggt als " + botName + ". OAuth-Token befindet sich möglicherweise unter der falschen Anmeldung");
+        }
+    }
+
+    public boolean hasOAuthInconsistencies(String botName) {
+        if (validateA != null && validateA.isAlive()) {
+            try {
+                validateA.join(TIMEOUT_TIME);
+            } catch (InterruptedException ex) {
+                com.gmt2001.Console.err.logStackTrace(ex);
+            }
+        }
+
+        if (validateC != null && validateC.isAlive()) {
+            try {
+                validateC.join(TIMEOUT_TIME);
+            } catch (InterruptedException ex) {
+                com.gmt2001.Console.err.logStackTrace(ex);
+            }
+        }
+
+        return this.hasAPIScope("chat:edit") && !this.hasChatScope("chat:edit") || !this.hasChatScope("chat:edit") || !this.hasChatScope("channel:moderate")
+                || this.getAPILogin().equalsIgnoreCase(botName) && !this.getChatLogin().equalsIgnoreCase(botName) || !this.getChatLogin().equalsIgnoreCase(botName);
     }
 
     /**
@@ -280,9 +417,10 @@ public class TwitchValidate {
      */
     private class ValidateRunnable implements Runnable {
 
-        private final String oAuthToken;
+        private String oAuthToken;
         private final String type;
         private final int tokenType;
+        private boolean firstRun = true;
 
         public ValidateRunnable(String oAuthToken, String type, int tokenType) {
             this.oAuthToken = oAuthToken.replace("oauth:", "");
@@ -290,43 +428,36 @@ public class TwitchValidate {
             this.tokenType = tokenType;
         }
 
+        public void updateToken(String token) {
+            this.oAuthToken = token.replace("oauth:", "");
+        }
+
         @Override
         public void run() {
             try {
+                if (this.oAuthToken == null || this.oAuthToken.isBlank()) {
+                    return;
+                }
+
                 JSONObject requestObj = handleRequest(oAuthToken);
-                com.gmt2001.Console.debug.println(requestObj.toString());
+                com.gmt2001.Console.debug.println(type + requestObj.toString(4));
 
                 if (requestObj.has("message") && requestObj.getString("message").equals("invalid access token")) {
-                    com.gmt2001.Console.err.println("Twitch reports your " + type + " OAUTH token as invalid. It may have expired, "
-                            + "been disabled, or the Twitch API is experiencing issues.");
+                    com.gmt2001.Console.err.println("Twitch meldet deinen " + type + " OAUTH Token als ungültig. Er könnte abgelaufen, "
+                            + "deaktiviert sein oder die Twitch-API hat Probleme.");
+                    com.gmt2001.Console.debug.println(requestObj.toString(4));
                     return;
                 }
 
                 if (!requestObj.getBoolean("_success")) {
-                    com.gmt2001.Console.err.println("Attempt to validate " + type + " OAUTH token failed.");
-                    com.gmt2001.Console.err.println("http=" + requestObj.getInt("_http") + "; exception=" + requestObj.getString("_exception") + "; exceptionMessage=" + requestObj.getString("_exceptionMessage"));
+                    com.gmt2001.Console.err.println("Validierungsversuch " + type + " OAUTH Token fehlgeschlagen.");
+                    com.gmt2001.Console.debug.println(requestObj.toString(4));
                     return;
                 }
 
                 if (requestObj.has("scopes")) {
                     JSONArray scopesa = requestObj.getJSONArray("scopes");
-                    switch (tokenType) {
-                        case 1:
-                            scopesa.iterator().forEachRemaining(obj -> {
-                                scopesC.add((String) obj);
-                            });
-                            break;
-                        case 2:
-                            scopesa.iterator().forEachRemaining(obj -> {
-                                scopesT.add((String) obj);
-                            });
-                            break;
-                        default:
-                            scopesa.iterator().forEachRemaining(obj -> {
-                                scopesA.add((String) obj);
-                            });
-                            break;
-                    }
+                    (tokenType == 1 ? scopesC : (tokenType == 2 ? scopesT : scopesA)).clear();
                     scopesa.iterator().forEachRemaining(obj -> {
                         (tokenType == 1 ? scopesC : (tokenType == 2 ? scopesT : scopesA)).add((String) obj);
                     });
@@ -374,7 +505,26 @@ public class TwitchValidate {
                     }
                 }
 
-                com.gmt2001.Console.out.println("Validated Twitch " + type + " OAUTH Token.");
+                if (requestObj.has("user_id")) {
+                    switch (tokenType) {
+                        case 1:
+                            validC = true;
+                            break;
+                        case 2:
+                            validT = true;
+                            break;
+                        default:
+                            validA = true;
+                            break;
+                    }
+                }
+
+                if (firstRun) {
+                    com.gmt2001.Console.out.println("Validierte Twitch " + type + " OAUTH Token.");
+                    firstRun = false;
+                } else {
+                    com.gmt2001.Console.debug.println("Validierte Twitch " + type + " OAUTH Token.");
+                }
             } catch (JSONException ex) {
                 com.gmt2001.Console.err.logStackTrace(ex);
             }

@@ -1,5 +1,5 @@
 <!--
-    Copyright (C) 2016-2020 phantom.bot
+    Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@
     	<div class="box box-solid">
             <div class="box-header with-border">
             	<label class="switch" data-toggle="tooltip" title="Modul umschalten">
-  					<input type="checkbox" id="commercialsModuleToggle" checked="true">
+  					<input type="checkbox" id="commercialsModuleToggle" checked>
   					<span class="slider round"></span>
 				</label>
 
@@ -45,7 +45,7 @@
                     </div>
                     <!-- Commercial Length -->
                     <div class="form-group">
-                        <label>Werbespot länge, in Sekunden</label>
+                        <label for="commercial-length">Werbespot länge, in Sekunden</label>
                         <select class="form-control" id="commercial-length">
                             <option selected="selected">30</option>
                             <option>60</option>
@@ -68,7 +68,7 @@
                 <div class="box-footer">
                     <div class="btn-toolbar pull-right">
                         <button class="btn btn-success" type="button" id="commercials-autotimer-on"><i class="fa fa-check"></i>&nbsp; Autotimer einstellen</button>
-                        <button class="btn btn-danger hidden" type="button" id="commercials-autotimer-off"><i class="fa fa-trash"></i>&nbsp; DAutotimer deaktivieren</button>
+                        <button class="btn btn-danger hidden" type="button" id="commercials-autotimer-off"><i class="fa fa-trash"></i>&nbsp; Autotimer deaktivieren</button>
                     </div>
                 </div>
             </form>
@@ -76,5 +76,5 @@
     </section>
 
     <!-- commercials -->
-    <script src="/panel/js/pages/extra/commercials.js"></script>
+    <script src="js/pages/extra/commercials.js"></script>
 </main>

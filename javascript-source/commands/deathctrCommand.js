@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@
             command = event.getCommand(),
             args = event.getArgs(),
             action = args[0],
-            game = ($.getGame($.channelName) != '' ? $.getGame($.channelName) : 'Some Game');
+            game = ($.getGame($.channelName) != '' ? $.getGame($.channelName) : 'Irgendein Spiel');
 
         /*
          * @commandpath deathctr - Display the current number of deaths in game being played.
@@ -139,7 +139,7 @@
         $.registerChatSubcommand('deathctr', '-', 2);
 
         setInterval(function() {
-            deathUpdateFile(($.getGame($.channelName) != '' ? $.getGame($.channelName) : 'Some Game'));
+            deathUpdateFile(($.getGame($.channelName) != '' ? $.getGame($.channelName) : 'Irgendein Spiel'));
         }, 10000);
     });
 

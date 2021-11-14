@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,14 +20,14 @@
  *
  * Detect and report donations from TwitchAlerts.
  */
-(function() {
+(function () {
     var announceDonations = $.getSetIniDbBoolean('donations', 'announce', false),
-        donationReward = $.getSetIniDbFloat('donations', 'reward', 0),
-        donationMessage = $.getSetIniDbString('donations', 'message', $.lang.get('donationhandler.donation.new')),
-        donationGroup = $.getSetIniDbBoolean('donations', 'donationGroup', false),
-        donationGroupMin = $.getSetIniDbNumber('donations', 'donationGroupMin', 5),
-        donationAddonDir = './addons/donationHandler',
-        announceDonationsAllowed = false;
+            donationReward = $.getSetIniDbFloat('donations', 'reward', 0),
+            donationMessage = $.getSetIniDbString('donations', 'message', $.lang.get('donationhandler.donation.new')),
+            donationGroup = $.getSetIniDbBoolean('donations', 'donationGroup', false),
+            donationGroupMin = $.getSetIniDbNumber('donations', 'donationGroupMin', 5),
+            donationAddonDir = './addons/donationHandler',
+            announceDonationsAllowed = false;
 
     /*
      * @function donationpanelupdate
@@ -43,47 +43,44 @@
     /*
      * @event streamLabsDonationInitialized
      */
-    $.bind('streamLabsDonationInitialized', function(event) {
+    $.bind('streamLabsDonationInitialized', function (event) {
         if (!$.bot.isModuleEnabled('./handlers/donationHandler.js')) {
             return;
         }
 
         if (!$.isDirectory(donationAddonDir)) {
-            $.consoleDebug('>> Erstelle Spenden Handler Ordner: ' + donationAddonDir);
+            $.consoleDebug('>> Erstelle Spenden-Handler Verzeichnis: ' + donationAddonDir);
             $.mkDir(donationAddonDir);
         }
 
         $.consoleLn('>> Aktiviere StreamLabs spenden Ankündigung');
-        $.log.event('Donation announcements enabled');
+        $.log.event('Spenden Ankündigung aktiviert');
         announceDonationsAllowed = true;
     });
 
     /*
      * @event streamLabsDonation
      */
-    $.bind('streamLabsDonation', function(event) {
+    $.bind('streamLabsDonation', function (event) {
         if (!$.bot.isModuleEnabled('./handlers/donationHandler.js')) {
             return;
         }
 
-        var donationJsonStr = event.getJsonString(),
-            JSONObject = Packages.org.json.JSONObject,
-            donationJson = new JSONObject(donationJsonStr);
+        var donationJson = event.getData();
 
-        var donationID = donationJson.get("donation_id"),
-            donationCreatedAt = donationJson.get("created_at"),
-            donationCurrency = donationJson.getString("currency"),
-            donationAmount = parseFloat(donationJson.getString("amount")),
-            donationUsername = donationJson.getString("name"),
-            donationMsg = donationJson.getString("message");
+        var donationID = donationJson.get("donation_id").toString(),
+                donationCurrency = donationJson.getString("currency"),
+                donationAmount = parseFloat(donationJson.getString("amount")),
+                donationUsername = donationJson.getString("name"),
+                donationMsg = donationJson.getString("message");
 
         if ($.inidb.exists('donations', donationID)) {
             return;
         }
 
-        $.inidb.set('streamInfo', 'lastDonator', $.username.resolve(donationUsername));
+        $.inidb.set('donations', donationID, event.getJsonString());
 
-        $.inidb.set('donations', donationID, donationJson);
+        $.inidb.set('streamInfo', 'lastDonator', $.username.resolve(donationUsername));
 
         $.inidb.set('donations', 'last_donation', donationID);
 
@@ -105,7 +102,7 @@
 
             if (donationSay.match(/\(alert [,.\w\W]+\)/g)) {
                 var filename = donationSay.match(/\(alert ([,.\w\W]+)\)/)[1];
-                $.panelsocketserver.alertImage(filename);
+                $.alertspollssocket.alertImage(filename);
                 donationSay = (donationSay + '').replace(/\(alert [,.\w\W]+\)/, '');
                 if (donationSay == '') {
                     return null;
@@ -114,10 +111,10 @@
 
             if (donationSay.match(/\(playsound\s([a-zA-Z1-9_]+)\)/g)) {
                 if (!$.audioHookExists(donationSay.match(/\(playsound\s([a-zA-Z1-9_]+)\)/)[1])) {
-                    $.log.error('Could not play audio hook: Audio hook does not exist.');
+                    $.log.error('Audio-Hook konnte nicht wiedergegeben werden: Audio-Hook existiert nicht.');
                     return null;
                 }
-                $.panelsocketserver.triggerAudioPanel(donationSay.match(/\(playsound\s([a-zA-Z1-9_]+)\)/)[1]);
+                $.alertspollssocket.triggerAudioPanel(donationSay.match(/\(playsound\s([a-zA-Z1-9_]+)\)/)[1]);
                 donationSay = $.replace(donationSay, donationSay.match(/\(playsound\s([a-zA-Z1-9_]+)\)/)[0], '');
                 if (donationSay == '') {
                     return null;
@@ -144,12 +141,12 @@
     /*
      * @event command
      */
-    $.bind('command', function(event) {
+    $.bind('command', function (event) {
         var sender = event.getSender().toLowerCase(),
-            command = event.getCommand(),
-            args = event.getArgs(),
-            action = args[0],
-            subAction = args[1];
+                command = event.getCommand(),
+                args = event.getArgs(),
+                action = args[0],
+                subAction = args[1];
 
         /*
          * @commandpath streamlabs - Controls various options for donation handling
@@ -258,7 +255,7 @@
      *
      * @event initReady
      */
-    $.bind('initReady', function() {
+    $.bind('initReady', function () {
         $.registerChatCommand('./handlers/donationHandler.js', 'streamlabs', 1);
     });
 

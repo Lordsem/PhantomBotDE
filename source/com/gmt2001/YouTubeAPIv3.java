@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,22 +16,22 @@
  */
 package com.gmt2001;
 
-import java.io.IOException;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.nio.charset.Charset;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.net.ssl.HttpsURLConnection;
-import org.apache.commons.io.IOUtils;
 import org.joda.time.Period;
 import org.joda.time.format.ISOPeriodFormat;
 import org.joda.time.format.PeriodFormatter;
@@ -59,7 +59,7 @@ public class YouTubeAPIv3 {
         if (instance == null) {
             instance = new YouTubeAPIv3();
         }
-
+        
         return instance;
     }
 
@@ -131,7 +131,7 @@ public class YouTubeAPIv3 {
                 if (jsonResult.getJSONObject("error").has("errors")) {
                     JSONArray jaerror = jsonResult.getJSONObject("error").getJSONArray("errors");
                     if (jaerror.getJSONObject(0).has("reason") && jaerror.getJSONObject(0).has("domain")) {
-                        com.gmt2001.Console.err.println("YouTubeAPIv3 Error: [Domain] " + jaerror.getJSONObject(0).getString("domain") +
+                        com.gmt2001.Console.err.println("YouTubeAPIv3 Error: [Domain] " + jaerror.getJSONObject(0).getString("domain") + 
                                                         " [Reason] " + jaerror.getJSONObject(0).getString("reason"));
                     }
                 }
@@ -165,6 +165,7 @@ public class YouTubeAPIv3 {
                     com.gmt2001.Console.err.println("Exception: " + ex.getMessage());
                 }
         }
+        com.gmt2001.Console.debug.logln(jsonResult.toString().replaceAll(apikey, "xxx"));
         return(jsonResult);
     }
 
@@ -206,8 +207,7 @@ public class YouTubeAPIv3 {
                 }
             }
         } else {
-            q = q.replaceAll("[^a-zA-Z0-9 ]", "");
-            q = q.replace(" ", "%20");
+            q = URLEncoder.encode(q, Charset.forName("UTF-8"));
 
             JSONObject j2 = GetData(request_type.GET, "https://www.googleapis.com/youtube/v3/search?q=" + q + "&key=" + apikey + "&type=video&part=snippet&maxResults=1");
             if (j2.getBoolean("_success")) {

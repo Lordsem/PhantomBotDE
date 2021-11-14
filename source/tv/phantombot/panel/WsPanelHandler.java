@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 phantom.bot
+ * Copyright (C) 2016-2021 phantombot.github.io/PhantomBot
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,14 +33,18 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;
 import tv.phantombot.PhantomBot;
+import tv.phantombot.RepoVersion;
 import tv.phantombot.cache.TwitchCache;
+import tv.phantombot.discord.DiscordAPI;
 import tv.phantombot.event.EventBus;
 import tv.phantombot.event.webpanel.websocket.WebPanelSocketUpdateEvent;
 
@@ -83,6 +87,10 @@ public class WsPanelHandler implements WsFrameHandler {
                 return;
             }
 
+            if (PhantomBot.instance().getProperties().getPropertyAsBoolean("wsdebug", false)) {
+                com.gmt2001.Console.debug.println(jso.toString());
+            }
+
             if (!ctx.channel().attr(WsSharedRWTokenAuthenticationHandler.ATTR_IS_READ_ONLY).get()) {
                 handleRestrictedCommands(ctx, frame, jso);
             }
@@ -104,6 +112,8 @@ public class WsPanelHandler implements WsFrameHandler {
             handleDBDelKey(ctx, frame, jso);
         } else if (jso.has("socket_event")) {
             handleSocketEvent(ctx, frame, jso);
+        } else if (jso.has("discordchannellist")) {
+            handleDiscordChannelList(ctx, frame, jso);
         }
     }
 
@@ -221,6 +231,41 @@ public class WsPanelHandler implements WsFrameHandler {
         WebSocketFrameHandler.sendWsFrame(ctx, frame, WebSocketFrameHandler.prepareTextWebSocketResponse(jsonObject.toString()));
     }
 
+    private void handleDiscordChannelList(ChannelHandlerContext ctx, WebSocketFrame frame, JSONObject jso) {
+        HashMap<String, Map<String, String>> data = new HashMap<>();
+        DiscordAPI.instance().getAllChannelInfoAsync(data).doOnComplete(() -> {
+            String uniqueID = jso.has("discordchannellist") ? jso.getString("discordchannellist") : "";
+
+            JSONStringer jsonObject = new JSONStringer();
+            jsonObject.object().key("query_id").value(uniqueID);
+            jsonObject.key("results").object().key("data").object();
+
+            data.forEach((category, channels) -> {
+                jsonObject.key(category).object();
+                channels.forEach((channel, info) -> {
+                    if (channel.equals("name")) {
+                        jsonObject.key(channel).value(info);
+                    } else {
+                        try {
+                            jsonObject.key(channel).object();
+                            String[] sinfo = info.split(":", 2);
+                            jsonObject.key("type").value(sinfo[0]);
+                            jsonObject.key("name").value(sinfo[1]);
+                        } catch (IndexOutOfBoundsException ex) {
+                            com.gmt2001.Console.err.printStackTrace(ex);
+                        } finally {
+                            jsonObject.endObject();
+                        }
+                    }
+                });
+                jsonObject.endObject();
+            });
+
+            jsonObject.endObject().endObject().endObject();
+            WebSocketFrameHandler.sendWsFrame(ctx, frame, WebSocketFrameHandler.prepareTextWebSocketResponse(jsonObject.toString()));
+        }).subscribe();
+    }
+
     private void handleUnrestrictedCommands(ChannelHandlerContext ctx, WebSocketFrame frame, JSONObject jso) {
         if (jso.has("version")) {
             handleVersion(ctx, frame, jso);
@@ -248,8 +293,11 @@ public class WsPanelHandler implements WsFrameHandler {
 
         jsonObject.object().key("versionresult").value(uniqueID);
         jsonObject.key("version").value(version);
+        jsonObject.key("version-data").object().key("version").value(RepoVersion.getPhantomBotVersion()).key("commit").value(RepoVersion.getRepoVersion());
+        jsonObject.key("build-type").value(RepoVersion.getBuildType()).key("panel-version").value(RepoVersion.getPanelVersion()).endObject();
         jsonObject.key("java-version").value(System.getProperty("java.runtime.version"));
         jsonObject.key("os-version").value(System.getProperty("os.name"));
+        jsonObject.key("autorefreshoauth").value(PhantomBot.instance().getProperties().getProperty("clientsecret") != null && !PhantomBot.instance().getProperties().getProperty("clientsecret").isBlank());
         jsonObject.endObject();
         WebSocketFrameHandler.sendWsFrame(ctx, frame, WebSocketFrameHandler.prepareTextWebSocketResponse(jsonObject.toString()));
     }
