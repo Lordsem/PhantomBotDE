@@ -119,6 +119,7 @@ $.lang.register('killcommand.other.40', '$1 schlug $2 zu Tode.');
 $.lang.register('killcommand.other.41', '$1 kräuselte $2\'s Flaum und starb!');
 $.lang.register('killcommand.other.42', '$1 umarmte $2 etwas zu fest.');
 $.lang.register('killcommand.other.43', '$1 schickte $2 zu einem tollen Bauernhof auf dem Land.');
+$.lang.register('killcommand.other.44', '$1 verarbeitete $2 zu Schildkrötensuppe.');
 
 $.lang.register('killcommand.jail.timeout.usage', 'Verwendung: !jailtimeouttime [Länge in Sekunden]');
 $.lang.register('killcommand.jail.timeout.set', 'Gefängnisstrafe wurde auf $1 Sekunden festgelegt.');
