@@ -11,9 +11,12 @@
 | PhantomBotDE | [![](https://img.shields.io/github/release-pre/PhantomBotDE/PhantomBotDE.svg?style=for-the-badge)](https://github.com/PhantomBotDE/PhantomBotDE/releases/latest) |
 
 ![Java CI](https://github.com/PhantomBot/PhantomBot/workflows/Java%20CI/badge.svg)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/e78b35af8f2442d7a8c5040c41164739)](https://www.codacy.com/gh/PhantomBot/PhantomBot/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=PhantomBot/PhantomBot&amp;utm_campaign=Badge_Grade)
+[![GitHub license](https://img.shields.io/github/license/PhantomBot/PhantomBot)](https://github.com/PhantomBot/PhantomBot/blob/master/LICENSE)
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/PhantomBot/PhantomBot?sort=semver)
 
 **PhantomBotDE** ist ein Twitch Chat-Bot powered by Java.
-PhantomBot hat viele moderne Eigenschaften standardmäßig, wie zum beispiel ein eingebautes Webpanel, verbesserte Moderation, Minispiele für den Chat, ein Punktesystem, Verlosungen, benutzerdefinierte Befehle, einen Musikpalyer mit Songrequest Funktion [und mehr](https://phantombot.tv/features)! PhantomBotDE kann mit vielen Services verbunden werden, wie  [Discord](https://discordapp.com/), [Twitter](https://twitter.com), [GameWisp](https://gamewisp.com), [TipeeeStream](https://tipeeestream.com), [StreamLabs](https://streamlabs.com) und [StreamElements](https://streamelements.com)!
+PhantomBot hat viele moderne Eigenschaften standardmäßig, wie zum Beispiel ein eingebautes Webpanel, verbesserte Moderation, Minispiele für den Chat, ein Punktesystem, Verlosungen, benutzerdefinierte Befehle, einen Musikpalyer mit Songrequest Funktion [und mehr](https://phantombot.tv/features)! PhantomBotDE kann mit vielen Services verbunden werden, wie  [Discord](https://discordapp.com/), [Twitter](https://twitter.com), [GameWisp](https://gamewisp.com), [TipeeeStream](https://tipeeestream.com), [StreamLabs](https://streamlabs.com) und [StreamElements](https://streamelements.com)!
 
 
 Dies ist der deutsche Fork von PhantomBotDE, wir übersetzten immer die neuste Version sobald die größten Bugs behoben sind.
@@ -70,7 +73,7 @@ OAuth-Token, Client-IDs und API-Secrets werden **NICHT** gesendet. Alle Informat
 
 Daten werden nur gesendet, wenn eine Ausnahme auftritt. Einige sehr häufige, sicher zu ignorierende Ausnahmen werden nicht gesendet, z. B. die, die beim Herunterfahren des Bots auftreten, während eine aktive Panel-Verbindung besteht.
 
-Ausnahmen werden über einen Server im Besitz von @gmt2001 zur zusätzlichen Filterung gesendet, bevor mit Rollbar fortgefahren wird. Außer den normalen Protokollen, die zur DDOS-Abwehr verwendet werden, werden auf diesem Server keine Daten gespeichert.
+Ausnahmen werden über einen Server im Besitz von @gmt2001 zur zusätzlichen Filterung gesendet, bevor mit Rollbar fortgefahren wird. Außer den normalen Protokollen, die zur DDOS-Abwehr verwendet werden, werden auf diesem Server keine Daten gespeichert. Diese Protokolle können IP-Adressen enthalten und werden nach 5 Wochen gelöscht. IP-Adressen werden **NICHT** an Rollbar gesendet.
 
 Die folgenden Werte werden von _botlogin.txt_ gesendet:
 - _allownonascii_ - Gibt an, ob andere Konfigurationswerte in _botlogin.txt_ Nicht-US-ASCII-Zeichen verwenden dürfen
