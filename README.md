@@ -36,7 +36,7 @@ Zusätzliche Funktionalität wird durch die Verwendung von [Community erstellten
 * Schau dir unsere [Versionshistorie](/releases) an.
 * Wenn du ein Entwickler bist, kannst dir den Quellcode ansehen und Pull-Requests einreichen. Wir stellen dir einen [Leitfaden](/development-resources/DEVSETUP.md) zur Einrichtung deiner Entwicklungsumgebung zur Verfügung.
 * Bitte vergesse nicht einen **watch** dazulassen, und unserem **Repo einen Stern zu geben**!
-* Ein großes Dankeschön geht raus an die Leute [die zu dem Projekt beigetragen haben](https://github.com/PhantomBot/PhantomBot/graphs/contributors).
+* Ein großes Dankeschön geht raus an die Leute [die zu dem Projekt beigetragen haben](https://github.com/PhantomBotDE/PhantomBotDE/graphs/contributors).
 
 ## Vorraussetzungen
 
