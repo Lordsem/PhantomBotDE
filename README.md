@@ -138,3 +138,7 @@ PHANTOMBOT_USEROLLBAR: "false"
 Du musst den Bot neu starten, nachdem du das Opt-out aktiviert hast, damit die Änderung wirksam wird. Das Bearbeiten eines Docker-Containers oder docker-compose erfordert möglicherweise weitere Schritte, um die Änderungen zu übernehmen. Konsultieren das Handbuch
 
 Wenn Sie glauben, dass Ihre Daten bereits gesendet wurden und eine GPDR-Löschanfrage stellen möchten, melden Sie sich bitte wie oben an und senden Sie dann Ihren Botnamen, Sendernamen und die _rollbarid_ von _botlogin.txt_ an: **gpdr** /A\T/ phantombot // hopto \\ org
+
+Wir akzeptieren auch Anfragen nach Kopien Ihrer Daten. GDPR-Anfragen werden von allen Benutzern akzeptiert, auch von denen, die nicht in einem Gebietsschema leben, das solche Gesetze hat.
+
+Bitte beachten Sie, dass die IP-Adressen in den DDOS-Logs nicht manuell abgerufen oder gelöscht werden können, sondern nach 5 Wochen durch Log-Rotation automatisch gelöscht werden.
