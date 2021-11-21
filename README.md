@@ -65,7 +65,7 @@ Detaillierte Upgrade-Anweisungen finden Sie in unserer [Dokumentation](https://p
 PhantomBotDE ist lizensiert unter der [**GNU General Public License v3 (GPL-3)**](https://www.gnu.org/copyleft/gpl.html).
 
 ## Rollbar-Ausnahmeberichte
-:information_source: ***Hinweis:*** Ab Phantombot Nightly Build 49687f9 (4. Juli 2021) verwenden wir nun [Rollbar](rollbar.com), um dem Entwicklerteam automatisch Ausnahmen zu melden.
+:information_source: ***Hinweis:*** Ab Phantombot Nightly Build 49687f9 (4. Juli 2021) und PhantomBot v3.5.0 verwenden wir nun [Rollbar](https://rollbar.com), um dem Entwicklerteam automatisch Ausnahmen zu melden.
 
 HINWEIS: Dies ist ***nicht*** in stabilen Builds bis v3.5.0 enthalten
 
