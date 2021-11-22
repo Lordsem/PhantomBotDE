@@ -32,7 +32,9 @@ $.lang.register('randomcommand.pg13.11', 'Richtig, ich habe etwas, wofür ich mi
 $.lang.register('randomcommand.pg13.12', 'Was will ich am meisten tun? Mal sehen.... Nur einmal, ich will wirklich loslassen und in meine Hose pinkeln.');
 $.lang.register('randomcommand.pg13.13', 'Eine junge blonde Frau ist verzweifelt, weil sie befürchtet, dass ihr Mann eine Affäre hat, also geht sie in einen Waffenladen und kauft eine Pistole. Am nächsten Tag kommt sie nach Hause, um ihren Mann im Bett mit einer schönen Rothaarigen zu finden. Sie nimmt die Waffe und hält sie sich selbst an den Kopf. Der Mann springt aus dem Bett, bettelt und fleht sie an, sich nicht selbst zu erschießen. Hysterisch reagiert die Blondine auf den Mann, "Halt die Klappe....du bist der Nächste!".');
 $.lang.register('randomcommand.pg13.14', '(random) gegen (random), wer gewinnt?! Nur derjenige mit dem kleinsten Penis wird dieses Match gewinnen! Kappa');
-$.lang.register('randomcommand.pg13.15', 'Hast du jemals Lust gehabt, jemanden mit einem Baseballschläger bis zur fast Bewusstlosigkeit zu schlagen und ihn dann in Brand zu setzen? Nein? Nur ich?');
+$.lang.register('randomcommand.pg13.15', 'Hast du jemals Lust gehabt, jemanden mit einem Baseballschläger bis zur Bewusstlosigkeit zu schlagen und ihn dann in Brand zu setzen? Nein? Nur ich?');
+$.lang.register('randomcommand.pg13.16', 'Eine Frau kommt in den Himmel und fragt Petrus: „Wie ist es denn hier so?“ Petrus antwortet: „Ja, also…“ – Plötzlich sind laute Schmerzensschreie zu hören. Erschrocken fragt die Frau: „Was war denn das?“ „Nun ja“, antwortet Petrus, „da werden die Löcher für die Engelsflügelchen gebohrt.“ Entsetzt sagt sie: „Da gehe ich lieber in die Hölle.“ - „Ja, aber warum das denn? Da wird doch nur rumgehurt!“ „Das kann schon sein“, erwidert die Frau, „aber die Löcher dafür habe ich wenigstens schon…“');
+
 
 $.lang.register('randomcommand.1', '(sender) wurde in eine tiefe Grube mit PJSalt geworfen!');
 $.lang.register('randomcommand.2', '(sender) wurde in eine Grube mit gentechnisch veränderten Superlöwen geworfen.');

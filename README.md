@@ -3,8 +3,6 @@
 
 # <img alt="PhantomBotDE" src="/.github/logo.png" width="600px"/>
 
-[![Build Status](https://img.shields.io/travis/PhantomBotDE/PhantomBotDE.svg?style=popout)](https://travis-ci.org/PhantomBotDE/PhantomBotDE)
-
 | Versionen | |
 |--------------|---|
 | PhantomBot   | [![](https://img.shields.io/github/release/phantombot/phantombot.svg?style=for-the-badge)](https://github.com/PhantomBot/PhantomBot/releases/latest) |
@@ -33,8 +31,8 @@ Zusätzliche Funktionalität wird durch die Verwendung von [Community erstellten
 
 ## Wie kann ich folgen/mitmachen?
 
-* Schau dir unsere [Versionshistorie](/releases) an.
-* Wenn du ein Entwickler bist, kannst dir den Quellcode ansehen und Pull-Requests einreichen. Wir stellen dir einen [Leitfaden](/development-resources/DEVSETUP.md) zur Einrichtung deiner Entwicklungsumgebung zur Verfügung.
+* Schau dir unsere [Versionshistorie](https://github.com/PhantomBotDE/PhantomBotDE/releases) an.
+* Wenn du ein Entwickler bist, kannst dir den Quellcode ansehen und Pull-Requests einreichen. Wir stellen dir einen [Leitfaden](https://github.com/PhantomBot/PhantomBot/blob/master/development-resources/DEVSETUP.md) zur Einrichtung deiner Entwicklungsumgebung zur Verfügung.
 * Bitte vergesse nicht einen **watch** dazulassen, und unserem **Repo einen Stern zu geben**!
 * Ein großes Dankeschön geht raus an die Leute [die zu dem Projekt beigetragen haben](https://github.com/PhantomBotDE/PhantomBotDE/graphs/contributors).
 
