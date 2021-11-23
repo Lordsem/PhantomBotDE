@@ -351,7 +351,7 @@ public class TwitterCache implements Runnable {
         }
 
         long twitterID = statuses.get(0).getId();
-        String tweet = statuses.get(0).getText() + " [" + TwitterAPI.instance().getTwitterURLFromId(twitterID) + "]";
+        String tweet = statuses.get(0).getText() + " [ " + TwitterAPI.instance().getTwitterURLFromId(twitterID) + " ]";
 
         updateDBLong("lastid_usertimeline", twitterID);
         updateDBString("last_usertimeline", tweet);

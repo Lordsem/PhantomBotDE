@@ -3,17 +3,18 @@
 
 # <img alt="PhantomBotDE" src="/.github/logo.png" width="600px"/>
 
-[![Build Status](https://img.shields.io/travis/PhantomBotDE/PhantomBotDE.svg?style=popout)](https://travis-ci.org/PhantomBotDE/PhantomBotDE)
-
 | Versionen | |
 |--------------|---|
 | PhantomBot   | [![](https://img.shields.io/github/release/phantombot/phantombot.svg?style=for-the-badge)](https://github.com/PhantomBot/PhantomBot/releases/latest) |
 | PhantomBotDE | [![](https://img.shields.io/github/release-pre/PhantomBotDE/PhantomBotDE.svg?style=for-the-badge)](https://github.com/PhantomBotDE/PhantomBotDE/releases/latest) |
 
-![Java CI](https://github.com/PhantomBot/PhantomBot/workflows/Java%20CI/badge.svg)
+![Java CI](https://github.com/PhantomBotDE/PhantomBotDE/workflows/Java%20CI/badge.svg)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/e78b35af8f2442d7a8c5040c41164739)](https://www.codacy.com/gh/PhantomBot/PhantomBot/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=PhantomBot/PhantomBot&amp;utm_campaign=Badge_Grade)
+[![GitHub license](https://img.shields.io/github/license/PhantomBotDE/PhantomBotDE)](https://github.com/PhantomBot/PhantomBot/blob/master/LICENSE)
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/PhantomBotDE/PhantomBotDE?sort=semver)
 
 **PhantomBotDE** ist ein Twitch Chat-Bot powered by Java.
-PhantomBot hat viele moderne Eigenschaften standardmäßig, wie zum beispiel ein eingebautes Webpanel, verbesserte Moderation, Minispiele für den Chat, ein Punktesystem, Verlosungen, benutzerdefinierte Befehle, einen Musikpalyer mit Songrequest Funktion [und mehr](https://phantombot.tv/features)! PhantomBotDE kann mit vielen Services verbunden werden, wie  [Discord](https://discordapp.com/), [Twitter](https://twitter.com), [GameWisp](https://gamewisp.com), [TipeeeStream](https://tipeeestream.com), [StreamLabs](https://streamlabs.com) und [StreamElements](https://streamelements.com)!
+PhantomBot hat viele moderne Eigenschaften standardmäßig, wie zum Beispiel ein eingebautes Webpanel, verbesserte Moderation, Minispiele für den Chat, ein Punktesystem, Verlosungen, benutzerdefinierte Befehle, einen Musikpalyer mit Songrequest Funktion [und mehr](https://phantombot.tv/features)! PhantomBotDE kann mit vielen Services verbunden werden, wie  [Discord](https://discordapp.com/), [Twitter](https://twitter.com), [GameWisp](https://gamewisp.com), [TipeeeStream](https://tipeeestream.com), [StreamLabs](https://streamlabs.com) und [StreamElements](https://streamelements.com)!
 
 
 Dies ist der deutsche Fork von PhantomBotDE, wir übersetzten immer die neuste Version sobald die größten Bugs behoben sind.
@@ -30,10 +31,10 @@ Zusätzliche Funktionalität wird durch die Verwendung von [Community erstellten
 
 ## Wie kann ich folgen/mitmachen?
 
-* Schau dir unsere [Versionshistorie](/releases) an.
-* Wenn du ein Entwickler bist, kannst dir den Quellcode ansehen und Pull-Requests einreichen. Wir stellen dir einen [Leitfaden](/development-resources/DEVSETUP.md) zur Einrichtung deiner Entwicklungsumgebung zur Verfügung.
+* Schau dir unsere [Versionshistorie](https://github.com/PhantomBotDE/PhantomBotDE/releases) an.
+* Wenn du ein Entwickler bist, kannst dir den Quellcode ansehen und Pull-Requests einreichen. Wir stellen dir einen [Leitfaden](https://github.com/PhantomBot/PhantomBot/blob/master/development-resources/DEVSETUP.md) zur Einrichtung deiner Entwicklungsumgebung zur Verfügung.
 * Bitte vergesse nicht einen **watch** dazulassen, und unserem **Repo einen Stern zu geben**!
-* Ein großes Dankeschön geht raus an die Leute [die zu dem Projekt beigetragen haben](https://github.com/PhantomBot/PhantomBot/graphs/contributors).
+* Ein großes Dankeschön geht raus an die Leute [die zu dem Projekt beigetragen haben](https://github.com/PhantomBotDE/PhantomBotDE/graphs/contributors).
 
 ## Vorraussetzungen
 
@@ -62,7 +63,7 @@ Detaillierte Upgrade-Anweisungen finden Sie in unserer [Dokumentation](https://p
 PhantomBotDE ist lizensiert unter der [**GNU General Public License v3 (GPL-3)**](https://www.gnu.org/copyleft/gpl.html).
 
 ## Rollbar-Ausnahmeberichte
-:information_source: ***Hinweis:*** Ab Phantombot Nightly Build 49687f9 (4. Juli 2021) verwenden wir nun [Rollbar](rollbar.com), um dem Entwicklerteam automatisch Ausnahmen zu melden.
+:information_source: ***Hinweis:*** Ab Phantombot Nightly Build 49687f9 (4. Juli 2021) und PhantomBot v3.5.0 verwenden wir nun [Rollbar](https://rollbar.com), um dem Entwicklerteam automatisch Ausnahmen zu melden.
 
 HINWEIS: Dies ist ***nicht*** in stabilen Builds bis v3.5.0 enthalten
 
@@ -70,7 +71,7 @@ OAuth-Token, Client-IDs und API-Secrets werden **NICHT** gesendet. Alle Informat
 
 Daten werden nur gesendet, wenn eine Ausnahme auftritt. Einige sehr häufige, sicher zu ignorierende Ausnahmen werden nicht gesendet, z. B. die, die beim Herunterfahren des Bots auftreten, während eine aktive Panel-Verbindung besteht.
 
-Ausnahmen werden über einen Server im Besitz von @gmt2001 zur zusätzlichen Filterung gesendet, bevor mit Rollbar fortgefahren wird. Außer den normalen Protokollen, die zur DDOS-Abwehr verwendet werden, werden auf diesem Server keine Daten gespeichert.
+Ausnahmen werden über einen Server im Besitz von @gmt2001 zur zusätzlichen Filterung gesendet, bevor mit Rollbar fortgefahren wird. Außer den normalen Protokollen, die zur DDOS-Abwehr verwendet werden, werden auf diesem Server keine Daten gespeichert. Diese Protokolle können IP-Adressen enthalten und werden nach 5 Wochen gelöscht. IP-Adressen werden **NICHT** an Rollbar gesendet.
 
 Die folgenden Werte werden von _botlogin.txt_ gesendet:
 - _allownonascii_ - Gibt an, ob andere Konfigurationswerte in _botlogin.txt_ Nicht-US-ASCII-Zeichen verwenden dürfen
@@ -135,3 +136,7 @@ PHANTOMBOT_USEROLLBAR: "false"
 Du musst den Bot neu starten, nachdem du das Opt-out aktiviert hast, damit die Änderung wirksam wird. Das Bearbeiten eines Docker-Containers oder docker-compose erfordert möglicherweise weitere Schritte, um die Änderungen zu übernehmen. Konsultieren das Handbuch
 
 Wenn Sie glauben, dass Ihre Daten bereits gesendet wurden und eine GPDR-Löschanfrage stellen möchten, melden Sie sich bitte wie oben an und senden Sie dann Ihren Botnamen, Sendernamen und die _rollbarid_ von _botlogin.txt_ an: **gpdr** /A\T/ phantombot // hopto \\ org
+
+Wir akzeptieren auch Anfragen nach Kopien Ihrer Daten. GDPR-Anfragen werden von allen Benutzern akzeptiert, auch von denen, die nicht in einem Gebietsschema leben, das solche Gesetze hat.
+
+Bitte beachten Sie, dass die IP-Adressen in den DDOS-Logs nicht manuell abgerufen oder gelöscht werden können, sondern nach 5 Wochen durch Log-Rotation automatisch gelöscht werden.
