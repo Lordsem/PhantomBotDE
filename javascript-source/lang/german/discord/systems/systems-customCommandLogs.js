@@ -34,3 +34,5 @@ $.lang.register('discord.customcommandlogs.disable.command', 'Befehl deaktiviert
 $.lang.register('discord.customcommandlogs.enable.command', 'Befehl aktiviert');
 $.lang.register('discord.customcommandlogs.reset.command', 'Zurücksetzen des Befehlszählers');
 $.lang.register('discord.customcommandlogs.reset.count', 'Neuer Wert');
+$.lang.register('discord.customcommandlogs.hide.command', 'Befehl ausgeblendet in !commands Liste');
+$.lang.register('discord.customcommandlogs.show.command', 'Befehl angezeigt in !commands Liste');
