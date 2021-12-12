@@ -290,7 +290,7 @@ public class TwitterAPI {
                 return statuses;
             }
         } catch (TwitterException ex) {
-            com.gmt2001.Console.err.println("Fehlgeschlagen: " + ex.getMessage());
+            com.gmt2001.Console.err.printStackTrace(ex);
             return null;
         }
     }
@@ -324,7 +324,7 @@ public class TwitterAPI {
                 return statuses;
             }
         } catch (TwitterException ex) {
-            com.gmt2001.Console.err.println("Fehlgeschlagen: " + ex.getMessage());
+            com.gmt2001.Console.err.printStackTrace(ex);
             return null;
         }
     }
@@ -349,7 +349,7 @@ public class TwitterAPI {
             }
             return statuses;
         } catch (TwitterException ex) {
-            com.gmt2001.Console.err.println("Fehlgeschlagen: " + ex.getMessage());
+            com.gmt2001.Console.err.printStackTrace(ex);
             return null;
         }
     }
@@ -383,7 +383,7 @@ public class TwitterAPI {
                 return statuses;
             }
         } catch (TwitterException ex) {
-            com.gmt2001.Console.err.println("Fehlgeschlagen: " + ex.getMessage());
+            com.gmt2001.Console.err.printStackTrace(ex);
             return null;
         }
     }

@@ -1295,7 +1295,7 @@ public class TwitchAPIv5 {
         } while (!jsonInput.getJSONArray("data").isEmpty());
 
         dataStore.RenameFile("followed_fixtable", "followed");
-        com.gmt2001.Console.out.println("FixFollowedTable: Follower in die Follower-Tabelle gezogen, geladen " + insertCtr + "/" + followerCount + " v.");
+        com.gmt2001.Console.out.println("FixFollowedTable: Follower in die Follower-Tabelle gezogen, geladen " + insertCtr + "/" + followerCount + " .");
     }
 
     /**

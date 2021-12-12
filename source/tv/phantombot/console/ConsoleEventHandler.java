@@ -668,7 +668,7 @@ public class ConsoleEventHandler implements Listener {
         }
 
         /**
-         * @consolecommand apioauth - Updates the API oauth.
+         * @consolecommand apioauth - Updates the API (Caster) oauth.
          */
         if (message.equalsIgnoreCase("apioauth")) {
             System.out.print("Bitte gib deinen oAuth-Token ein, den du auf https://phantombot.github.io/PhantomBot/oauth/ generiert hast, während du als Caster angemeldet bist: ");

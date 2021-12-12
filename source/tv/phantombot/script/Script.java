@@ -78,7 +78,7 @@ public class Script {
             }
             fileNotFoundCount = 0;
         } catch (IOException ex) {
-            if (ex.getMessage().contains("Dies könnte ein Caching-Problem sein")) {
+            if (ex.getMessage().contains("This could be a caching issue")) {
                 fileNotFoundCount++;
                 if (fileNotFoundCount == 1) {
                     return;
@@ -116,7 +116,7 @@ public class Script {
             }
             fileNotFoundCount = 0;
         } catch (IOException ex) {
-            if (ex.getMessage().contains("Dies könnte ein Caching-Problem sein")) {
+            if (ex.getMessage().contains("This could be a caching issue")) {
                 fileNotFoundCount++;
                 if (fileNotFoundCount == 1) {
                     return;
