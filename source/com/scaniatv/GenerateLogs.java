@@ -93,7 +93,7 @@ public class GenerateLogs {
                 }
             }
         } catch (IOException ex) {
-            com.gmt2001.Console.err.println("Protokolldatei konnte nicht gelesen werden: [" + file + "] [IOException] " + ex.getMessage());
+            com.gmt2001.Console.err.printStackTrace(ex);
         } finally {
             if (bufferedReader != null) {
                 try {
@@ -122,7 +122,7 @@ public class GenerateLogs {
             bufferedWriter.write(data);
             bufferedWriter.flush();
         } catch (IOException ex) {
-            com.gmt2001.Console.err.println("Protokolldatei konnte nicht geschrieben werden: [" + file + "] [IOException] " + ex.getMessage());
+            com.gmt2001.Console.err.printStackTrace(ex);
         } finally {
             if (bufferedWriter != null) {
                 try {
@@ -137,8 +137,8 @@ public class GenerateLogs {
     /*
      * Method to get the current date of log files.
      *
-     * @param  {Boolean} isGMT
-     * @param  {Boolean} minusDay
+     * @param  {boolean} isGMT
+     * @param  {boolean} minusDay
      * @return {String}
      */
     private static String getDate(boolean isGMT, boolean minusDay) {

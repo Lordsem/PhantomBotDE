@@ -203,7 +203,7 @@
         var bonus = calcBonus(user, event, otimes);
         times = otimes + bonus;
 
-        if (times > maxEntries || times == 0 || times < 0) {
+        if (otimes > maxEntries || otimes === 0 || otimes < 0) {
             if (msgToggle) {
                 $.say($.whisperPrefix(user) + $.lang.get('ticketrafflesystem.only.buy.amount', maxEntries));
             }
@@ -276,7 +276,7 @@
             bonus = tickets * regTMulti;
         }
 
-        return Math.round(tickets - bonus);
+        return Math.round(bonus - tickets);
     }
 
     /**

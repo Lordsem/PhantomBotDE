@@ -39,13 +39,13 @@ public class ScriptManager {
         scripts.put(scriptFile.toPath().toString(), script);
         try {
             script.load();
-        } catch (Exception ex) {
+        } catch (IOException ex) {
             if (scriptFile.getPath().endsWith("init.js")) {
                 com.gmt2001.Console.err.println("Fehler beim Laden des Moduls: init.js: " + ex.getMessage());
             } else {
                 com.gmt2001.Console.err.println("Fehler beim Laden des Moduls: " + scriptFile.getPath().replace("./scripts/./", "") + ": " + ex.getMessage());
             }
-            com.gmt2001.Console.debug.printStackTrace(ex);
+            com.gmt2001.Console.err.printStackTrace(ex);
             if (!PhantomBot.getReloadScripts()) {
                 com.gmt2001.Console.err.println("Beenden von PhantomBot wegen schlechter JavaScript-Datei");
                 PhantomBot.exitError();

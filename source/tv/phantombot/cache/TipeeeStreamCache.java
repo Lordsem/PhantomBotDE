@@ -37,8 +37,8 @@ public class TipeeeStreamCache implements Runnable {
     private Map<String, String> cache = new ConcurrentHashMap<>();
     private Date timeoutExpire = new Date();
     private Date lastFail = new Date();
-    private Boolean firstUpdate = true;
-    private Boolean killed = false;
+    private boolean firstUpdate = true;
+    private boolean killed = false;
     private int numfail = 0;
 
     /**
@@ -74,9 +74,9 @@ public class TipeeeStreamCache implements Runnable {
     /**
      * Checks if the donation has been cached.
      *
-     * @return {Boolean}
+     * @return {boolean}
      */
-    public Boolean exists(String donationID) {
+    public boolean exists(String donationID) {
         return cache.containsKey(donationID);
     }
 
@@ -118,16 +118,12 @@ public class TipeeeStreamCache implements Runnable {
 
         while (!killed) {
             try {
-                try {
-                    if (new Date().after(timeoutExpire)) {
-                        this.updateCache();
-                    }
-                } catch (Exception ex) {
-                    checkLastFail();
-                    com.gmt2001.Console.debug.println("TipeeeStreamCache.run: Spenden konnten nicht aktualisiert werden: " + ex.getMessage());
+                if (new Date().after(timeoutExpire)) {
+                    this.updateCache();
                 }
             } catch (Exception ex) {
-                com.gmt2001.Console.err.println("TipeeeStreamCache.run: Spenden konnten nicht aktualisiert werden: " + ex.getMessage());
+                checkLastFail();
+                com.gmt2001.Console.err.printStackTrace(ex);
             }
 
             try {
@@ -174,7 +170,7 @@ public class TipeeeStreamCache implements Runnable {
                         com.gmt2001.Console.err.println("TipeeeStreamCache.updateCache: Falscher API-Schlüssel, deaktiviere das TipeeeStream-Modul.");
                         PhantomBot.instance().getDataStore().SetString("modules", "", "./handlers/tipeeestreamHandler.js", "false");
                     } else {
-                        com.gmt2001.Console.err.println("TipeeeStreamCache.updateCache: Spenden konnten nicht aktualisiert werden: " + ex.getMessage());
+                        com.gmt2001.Console.err.printStackTrace(ex);
                     }
                     this.kill();
                 }
@@ -185,7 +181,7 @@ public class TipeeeStreamCache implements Runnable {
             } catch (Exception ex) {
                 if (ex.getMessage().startsWith("[SocketTimeoutException]") || ex.getMessage().startsWith("[IOException]")) {
                     checkLastFail();
-                    com.gmt2001.Console.warn.println("TipeeeStreamCache.run: Spenden konnten nicht aktualisiert werden: " + ex.getMessage());
+                    com.gmt2001.Console.err.printStackTrace(ex);
                 }
             }
         }

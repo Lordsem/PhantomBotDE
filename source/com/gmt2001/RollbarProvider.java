@@ -26,7 +26,6 @@ import com.rollbar.api.payload.data.body.TraceChain;
 import com.rollbar.notifier.Rollbar;
 import com.rollbar.notifier.config.ConfigBuilder;
 import com.rollbar.notifier.filter.Filter;
-import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -41,8 +40,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.SystemUtils;
 import reactor.util.annotation.Nullable;
+import tv.phantombot.CaselessProperties.Transaction;
 import tv.phantombot.PhantomBot;
 import tv.phantombot.RepoVersion;
 import tv.phantombot.twitch.api.TwitchValidate;
@@ -156,6 +157,18 @@ public class RollbarProvider implements AutoCloseable {
                                     return true;
                                 }
 
+                                if (error.getClass().equals(com.mysql.jdbc.exceptions.jdbc4.MySQLQueryInterruptedException.class)) {
+                                    return true;
+                                }
+
+                                if (error.getClass().equals(com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException.class)) {
+                                    return true;
+                                }
+
+                                if (error.getMessage().contains("Timeout while waiting for a free database connection")) {
+                                    return true;
+                                }
+
                                 if (error.getMessage().contains("setAutoCommit")) {
                                     return true;
                                 }
@@ -165,6 +178,10 @@ public class RollbarProvider implements AutoCloseable {
                                 }
 
                                 if (error.getMessage().contains("attempt to write a readonly database")) {
+                                    return true;
+                                }
+
+                                if (error.getMessage().contains("Incorrect string value: '\\xF0*")) {
                                     return true;
                                 }
 
@@ -189,6 +206,10 @@ public class RollbarProvider implements AutoCloseable {
                                 }
 
                                 if (error.getMessage().startsWith("[SQLITE_PROTOCOL]")) {
+                                    return true;
+                                }
+
+                                if (error.getMessage().startsWith("[SQLITE_IOERROR]")) {
                                     return true;
                                 }
 
@@ -259,9 +280,13 @@ public class RollbarProvider implements AutoCloseable {
                                 if (error.getClass().equals(java.io.IOException.class) && error.getMessage().contains("Stream closed")) {
                                     return true;
                                 }
+
+                                if (error.getMessage().contains("Address already in use")) {
+                                    return true;
+                                }
                             }
 
-                            com.gmt2001.Console.debug.println("[ROLLBAR-PRE] " + level.name() + (custom != null && (Boolean) custom.getOrDefault("isUncaught", false)
+                            com.gmt2001.Console.debug.println("[ROLLBAR-PRE] " + level.name() + (custom != null && (boolean) custom.getOrDefault("isUncaught", false)
                                     ? "[Uncaught]" : "") + (description != null && !description.isBlank() ? " (" + description + ")" : "") + " " + (error != null ? error.toString() : "Null"));
 
                             return false;
@@ -306,13 +331,11 @@ public class RollbarProvider implements AutoCloseable {
                                         });
                                     }
 
-                                    byte[] bytes = md.digest();
-                                    BigInteger bi = new BigInteger(1, bytes);
-                                    String digest = String.format("%0" + (bytes.length << 1) + "X", bi);
+                                    String digest = Hex.encodeHexString(md.digest());
 
                                     Calendar c = Calendar.getInstance();
 
-                                    com.gmt2001.Console.debug.println("[ROLLBAR-POST] " + digest + " " + (reportsPassedFilters.containsKey(digest) ? "t" : "f") + (reportsPassedFilters.get(digest).after(c.getTime()) ? "t" : "f"));
+                                    com.gmt2001.Console.debug.println("[ROLLBAR-POST] " + digest + " " + (reportsPassedFilters.containsKey(digest) ? "t" : "f") + (reportsPassedFilters.containsKey(digest) && reportsPassedFilters.get(digest).after(c.getTime()) ? "t" : "f"));
 
                                     if (reportsPassedFilters.containsKey(digest) && reportsPassedFilters.get(digest).after(c.getTime())) {
                                         com.gmt2001.Console.debug.println("[ROLLBAR-POST] gefiltert");
@@ -372,9 +395,9 @@ public class RollbarProvider implements AutoCloseable {
                 && RollbarProvider.ACCESS_TOKEN.length() > 0 && !RollbarProvider.ACCESS_TOKEN.equals("@access.token@")) {
             this.enabled = true;
             com.gmt2001.Console.out.println();
-            com.gmt2001.Console.out.println("Sending exceptions to Rollbar");
-            com.gmt2001.Console.out.println("You can disable this by adding the following to a new line in botlogin.txt and restarting: userollbar=false");
-            com.gmt2001.Console.out.println("If you got this from the official PhantomBot GitHub, you can submit GPDR delete requests to gpdr@phantombot.hopto.org");
+            com.gmt2001.Console.out.println("Ausnahmen an Rollbar senden");
+            com.gmt2001.Console.out.println("Du kannst dies deaktivieren, indem du Folgendes in eine neue Zeile in botlogin.txt einfügst und neu startest: userollbar=false");
+            com.gmt2001.Console.out.println("Wenn du dies vom offiziellen PhantomBot GitHub erhalten haben, kannst du die GPDR-Löschanfragen an gpdr@phantombot.hopto.org senden");
             com.gmt2001.Console.out.println();
         }
     }
@@ -555,12 +578,10 @@ public class RollbarProvider implements AutoCloseable {
         }
 
         if (id == null || id.isBlank()) {
+            Transaction transaction = PhantomBot.instance().getProperties().startTransaction(Transaction.PRIORITY_NORMAL);
             id = RollbarProvider.generateId();
-
-            if (PhantomBot.instance() != null) {
-                PhantomBot.instance().getProperties().put("rollbarid", id);
-                PhantomBot.instance().saveProperties();
-            }
+            transaction.setProperty("rollbarid", id);
+            transaction.commit();
         }
 
         return id;

@@ -20,20 +20,11 @@
  *
  * Export general file management to th $ API
  */
-(function() {
+(function () {
     var JFile = java.io.File,
-        JFileInputStream = java.io.FileInputStream,
-        JFileOutputStream = java.io.FileOutputStream,
-        Paths = Packages.java.nio.file.Paths,
-        executionPath = Packages.tv.phantombot.PhantomBot.GetExecutionPath(),
-        fileHandles = [],
-        validPaths = [
-            './addons',
-            './config/audio-hooks',
-            './config/gif-alerts',
-            './logs',
-            './scripts'
-        ];
+            JFileInputStream = java.io.FileInputStream,
+            JFileOutputStream = java.io.FileOutputStream,
+            fileHandles = [];
 
     /**
      * @function readFile
@@ -55,7 +46,7 @@
 
         try {
             var fis = new JFileInputStream(path),
-                scan = new java.util.Scanner(fis);
+                    scan = new java.util.Scanner(fis);
             for (var i = 0; scan.hasNextLine(); ++i) {
                 lines[i] = scan.nextLine();
             }
@@ -73,7 +64,7 @@
      * @returns {boolean}
      */
     function mkDir(path) {
-        if (invalidLocation(path)){
+        if (invalidLocation(path)) {
             $.consoleLn('Blockiertes mkDir() Ziel außerhalb validPaths:' + path);
             return false;
         }
@@ -90,7 +81,7 @@
      */
     function moveFile(file, path) {
         var fileO = new JFile(file),
-            pathO = new JFile(path);
+                pathO = new JFile(path);
 
         if (invalidLocation(file) || invalidLocation(path)) {
             $.consoleLn('Blockierte moveFile() Quelle oder Ziel außerhalb validPaths:' + file + ' to ' + path);
@@ -121,8 +112,8 @@
 
         try {
             var fos = new JFileOutputStream(path, append),
-                ps = new java.io.PrintStream(fos),
-                l = array.length;
+                    ps = new java.io.PrintStream(fos),
+                    l = array.length;
             for (var i = 0; i < l; ++i) {
                 ps.println(array[i]);
             }
@@ -136,14 +127,23 @@
      * @function closeOpenFiles
      */
     function closeOpenFiles() {
-        var dateFormat = new java.text.SimpleDateFormat('dd-MM-yyyy'),
-            date = dateFormat.format(new java.util.Date());
+        var dateFormat = new java.text.SimpleDateFormat('MM-dd-yyyy'),
+                date = dateFormat.format(new java.util.Date());
+
+        var newFileHandles = [];
 
         for (var key in fileHandles) {
             if (!fileHandles[key].startDate.equals(date)) {
                 fileHandles[key].fos.close();
-                delete fileHandles[key];
+            } else {
+                newFileHandles[key] = fileHandles[key];
             }
+        }
+
+        fileHandles = [];
+
+        for (var key in newFileHandles) {
+            fileHandles.push(newFileHandles[key]);
         }
     }
 
@@ -156,11 +156,11 @@
      */
     function writeToFile(line, path, append) {
         var dateFormat = new java.text.SimpleDateFormat('dd-MM-yyyy'),
-            date = dateFormat.format(new java.util.Date()),
-            fos,
-            ps;
+                date = dateFormat.format(new java.util.Date()),
+                fos,
+                ps;
 
-        if (invalidLocation(path)){
+        if (invalidLocation(path)) {
             $.consoleLn('Blockiertes writeToFile() Ziel außerhalb validPaths:' + path);
             return;
         }
@@ -266,7 +266,7 @@
 
         try {
             var f = new JFile(directory),
-                ret = [];
+                    ret = [];
             if (f.isDirectory()) {
                 var files = f.list();
                 for (var i = 0; i < files.length; i++) {
@@ -319,15 +319,7 @@
     }
 
     function invalidLocation(path) {
-        var p = Paths.get(path);
-
-        for (var x in validPaths) {
-            if (p.toAbsolutePath().startsWith(Paths.get(executionPath, validPaths[x]))) {
-                return false;
-            }
-        }
-
-       return true;
+        return !Packages.com.gmt2001.PathValidator.isValidPathScript($.javaString(path));
     }
 
     /** Export functions to API */

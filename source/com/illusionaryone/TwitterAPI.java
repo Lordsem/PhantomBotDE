@@ -132,9 +132,9 @@ public class TwitterAPI {
      * captured and reported to the error logs.  If an error does occur, accessToken is set to null
      * so that other methods know not to try to interact with Twitter.
      *
-     * @return  Boolean  Returns true if authentication was successful else false.
+     * @return  boolean  Returns true if authentication was successful else false.
      */
-    public Boolean authenticate() {
+    public boolean authenticate() {
         com.gmt2001.Console.debug.println("Authentifizierungsversuch");
         try {
             ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
@@ -150,7 +150,7 @@ public class TwitterAPI {
             com.gmt2001.Console.out.println("Authentifiziert mit Twitter API");
             return true;
         } catch (TwitterException ex) {
-            com.gmt2001.Console.err.println("Twitter-Authentifizierung fehlgeschlagen: " + ex.getMessage());
+            com.gmt2001.Console.err.printStackTrace(ex);
             accessToken = null;
             return false;
         }
@@ -173,7 +173,7 @@ public class TwitterAPI {
             com.gmt2001.Console.debug.println("Erfolg");
             return "true";
         } catch (TwitterException ex) {
-            com.gmt2001.Console.err.println("Fehlgeschlagen: " + ex.getMessage());
+            com.gmt2001.Console.err.printStackTrace(ex);
             return "false";
         }
     }
@@ -197,7 +197,7 @@ public class TwitterAPI {
             com.gmt2001.Console.debug.println("Erfolg");
             return "true";
         } catch (TwitterException ex) {
-            com.gmt2001.Console.err.println("Fehlgeschlagen: " + ex.getMessage());
+            com.gmt2001.Console.err.printStackTrace(ex);
             return "false";
         }
     }
@@ -230,7 +230,7 @@ public class TwitterAPI {
                 return statuses;
             }
         } catch (TwitterException ex) {
-            com.gmt2001.Console.err.println("Fehlgeschlagen: " + ex.getMessage());
+            com.gmt2001.Console.err.printStackTrace(ex);
             return null;
         }
     }
@@ -255,7 +255,7 @@ public class TwitterAPI {
             }
             return statuses.get(0).getText();
         } catch (TwitterException ex) {
-            com.gmt2001.Console.err.println("Fehlgeschlagen: " + ex.getMessage());
+            com.gmt2001.Console.err.printStackTrace(ex);
             return null;
         }
     }

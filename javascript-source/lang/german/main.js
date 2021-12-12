@@ -110,7 +110,7 @@ $.lang.register('chatmoderator.vips.toggle.emotes', 'Vips ist es derzeit $1 übe
 $.lang.register('chatmoderator.vips.toggle.colors', 'Vips ist es derzeit $1 "/me" für farbigen Text zu benutzen.');
 $.lang.register('chatmoderator.vips.toggle.fakepurge', 'v ist es derzeit $1 Fakepurge zu benutzen.');
 $.lang.register('chatmoderator.vips.toggle.long.msg', 'Vips ist es derzeit $1 lange Nachrichten zu schreiben.');
-$.lang.register('chatmoderator.regulars.usage', 'Verwendung: !moderation regulars [links / caps / symbols / spam / emotes / colors / longmessages / spamtracker / fakepurge] [true / false]');$.lang.register('chatmoderator.regulars.links.allowed', 'Stammzuschauer betrifft der Filter für Links nun auch.');
+$.lang.register('chatmoderator.regulars.usage', 'Verwendung: !moderation regulars [links / caps / symbols / spam / emotes / colors / longmessages / spamtracker / fakepurge] [true / false]');
 $.lang.register('chatmoderator.regulars.links.allowed', 'Stammzuschauer betrifft der Filter für Links nun auch.');
 $.lang.register('chatmoderator.regulars.links.not.allowed', 'Stammzuschauer betrifft der Filter für Links jetzt nicht mehr.');
 $.lang.register('chatmoderator.regulars.caps.allowed', 'Stammzuschauer betrifft der Filter für Links nun auch.');

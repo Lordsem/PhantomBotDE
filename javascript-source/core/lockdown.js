@@ -28,7 +28,7 @@
      */
     $.bind('ircChannelMessage', function(event) {
         if (state.alphaFilter && $.test(event.getMessage(), alphaFilter)) {
-            $.session.sayNow('.timeout ' + event.getSender() + '\'s Nachricht wurde durch den Lockdown-Alphafilter blockiert.');
+            Packages.tv.phantombot.PhantomBot.instance().getSession().sayNow('.timeout ' + event.getSender() + '\'s Nachricht wurde durch den Lockdown-Alphafilter blockiert.');
         }
     });
 
@@ -41,23 +41,23 @@
 
         if (command.equalsIgnoreCase('lockdown')) {
             if (args.length === 0 && !state.lockdown) {
-                /**$.session.sayNow('.clear');*/
-                $.session.sayNow('.emoteonly');
+                Packages.tv.phantombot.PhantomBot.instance().getSession().sayNow('.clear');
+                Packages.tv.phantombot.PhantomBot.instance().getSession().sayNow('.subscribers');
                 state.lockdown = true;
-                $.session.sayNow('/me === LOCKDOWN AKTIVIERT === Der Chat wurde in den Emoteonly-Modus versetzt, da ein Moderator den Chat-Lockdown initiiert hat. Um den Lockdown zu beenden, muss ein Moderator folgendes schreiben: !lockdown end');
+                Packages.tv.phantombot.PhantomBot.instance().getSession().sayNow('/me === LOCKDOWN AKTIVIERT === Der Chat wurde in den Emoteonly-Modus versetzt, da ein Moderator den Chat-Lockdown initiiert hat. Um den Lockdown zu beenden, muss ein Moderator folgendes schreiben: !lockdown end');
 
                 /** setTimeout(function() {
-                    $.session.sayNow('/me === LOCKDOWN AKTIVIERT === Der Chat wurde in den Emoteonly-Modus versetzt, da ein Moderator den Chat-Lockdown initiiert hat. Um den Lockdown zu beenden, muss ein Moderator folgendes schreiben: !lockdown end');
+                    Packages.tv.phantombot.PhantomBot.instance().getSession().sayNow('/me === LOCKDOWN AKTIVIERT === Der Chat wurde in den Emoteonly-Modus versetzt, da ein Moderator den Chat-Lockdown initiiert hat. Um den Lockdown zu beenden, muss ein Moderator folgendes schreiben: !lockdown end');
                 }, 5e3);*/
                 
                 state.timer = setInterval(function() {
-                    $.session.sayNow('/me === LOCKDOWN AKTIVIERT === Der Chat wurde in den Emoteonly-Modus versetzt, da ein Moderator den Chat-Lockdown initiiert hat. Um den Lockdown zu beenden, muss ein Moderator folgendes schreiben: !lockdown end');
+                    Packages.tv.phantombot.PhantomBot.instance().getSession().sayNow('/me === LOCKDOWN AKTIVIERT === Der Chat wurde in den Emoteonly-Modus versetzt, da ein Moderator den Chat-Lockdown initiiert hat. Um den Lockdown zu beenden, muss ein Moderator folgendes schreiben: !lockdown end');
                 }, 300e3);
             } else if(args.length > 0 && args[0].equalsIgnoreCase('help')) {
                 $.say('Lockdown Modul >> !lockdown - Sperrt den Chat mit dem Emoteonly-Modus. Laufende Nachricht alle 5 Minuten >> !lockdown end - Beendet einen Lockdown >> !lockdown alphafilter - Schaltet die Beschränkung der erlaubten Zeichen im Chat um');
             } else if(args.length > 0 && args[0].equalsIgnoreCase('end') && state.lockdown) {
-                $.session.sayNow('/me === LOCKDOWN BEENDET === Der Lockdown wird jetzt aufgehoben. Bitte benehmt euch alle. Ein Moderator kann einen weiteren Lockdown starten, indem er folgendes schreibt: !lockdown');
-                $.session.sayNow('.emoteonlyoff');
+                Packages.tv.phantombot.PhantomBot.instance().getSession().sayNow('/me === LOCKDOWN BEENDET === Der Lockdown wird jetzt aufgehoben. Bitte benehmt euch alle. Ein Moderator kann einen weiteren Lockdown starten, indem er folgendes schreibt: !lockdown');
+                Packages.tv.phantombot.PhantomBot.instance().getSession().sayNow('.emoteonlyoff');
                 state.lockdown = false;
                 clearInterval(state.timer);
             } else if(args.length > 0 && args[0].equalsIgnoreCase('alphafilter')) {

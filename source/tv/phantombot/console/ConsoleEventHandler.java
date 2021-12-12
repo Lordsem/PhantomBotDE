@@ -22,21 +22,16 @@ import com.gmt2001.TwitchAPIv5;
 import com.gmt2001.datastore.DataStore;
 import com.scaniatv.BotImporter;
 import com.scaniatv.GenerateLogs;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
-import java.util.TreeSet;
 import net.engio.mbassy.listener.Handler;
 import org.json.JSONException;
 import org.json.JSONObject;
-import tv.phantombot.CaselessProperties;
+import tv.phantombot.CaselessProperties.Transaction;
 import tv.phantombot.PhantomBot;
 import tv.phantombot.discord.DiscordAPI;
 import tv.phantombot.event.EventBus;
@@ -63,6 +58,7 @@ import tv.phantombot.script.Script;
 public class ConsoleEventHandler implements Listener {
 
     private static final ConsoleEventHandler instance = new ConsoleEventHandler();
+    private Transaction transaction = null;
 
     /**
      * Method that returns this instance.
@@ -101,6 +97,12 @@ public class ConsoleEventHandler implements Listener {
         // If the message is null, or empty ignore everything below.
         if (message == null || message.isEmpty()) {
             return;
+        }
+
+        if (transaction == null || transaction.isCommitted()) {
+            if (PhantomBot.instance() != null) {
+                transaction = PhantomBot.instance().getProperties().startTransaction(Transaction.PRIORITY_MAX);
+            }
         }
 
         message = message.replaceAll("!", "").trim();
@@ -150,7 +152,7 @@ public class ConsoleEventHandler implements Listener {
          * @consolecommand exportpoints - This command exports points and time to a CSV file.
          */
         if (message.equalsIgnoreCase("exportpoints")) {
-            com.gmt2001.Console.out.println("[CONSOLE] Executing exportpoints.");
+            com.gmt2001.Console.out.println("[CONSOLE] Exportpunkte ausführen.");
 
             // Top headers of the CSV file.
             String[] headers = new String[]{"Username", "Seconds", "Points"};
@@ -300,6 +302,9 @@ public class ConsoleEventHandler implements Listener {
             }
         }
 
+        /**
+         * @consolecommand channelpointstest - Sends a fake Channel Points redemption for testing.
+         */
         if (message.equalsIgnoreCase("channelpointstest")) {
             EventBus.instance().postAsync(new PubSubChannelPointsEvent(
                     "id1", "rewardid2", "12345",
@@ -583,6 +588,16 @@ public class ConsoleEventHandler implements Listener {
         }
 
         /**
+         * @consolecommand reconnect - Reconnects to RMI, Host TMI, and PubSub.
+         */
+        if (message.equalsIgnoreCase("reconnect")) {
+            com.gmt2001.Console.out.println("[CONSOLE] Führung TMI, Host TMI und PubSub wieder verbinden aus");
+
+            PhantomBot.instance().reconnect();
+            return;
+        }
+
+        /**
          * @consolecommand debugon - Enables debug mode.
          */
         if (message.equalsIgnoreCase("debugon")) {
@@ -660,7 +675,19 @@ public class ConsoleEventHandler implements Listener {
 
             String apiOAuth = System.console().readLine().trim();
 
-            PhantomBot.instance().getProperties().setProperty("apioauth", apiOAuth);
+            transaction.setProperty("apioauth", apiOAuth);
+            changed = true;
+        }
+
+        /**
+         * @consolecommand oauth - Updates the Chat (Bot) oauth.
+         */
+        if (message.equalsIgnoreCase("oauth")) {
+            System.out.print("Bitte gib deinen oAuth-Token ein, den du auf https://phantombot.github.io/PhantomBot/oauth/ generiert hast, während du als Bot angemeldet bist: ");
+
+            String apiOAuth = System.console().readLine().trim();
+
+            transaction.setProperty("oauth", apiOAuth);
             changed = true;
         }
 
@@ -675,26 +702,26 @@ public class ConsoleEventHandler implements Listener {
 
                 System.out.print("Bitte gebe den MySQL-Hostnamen ein: ");
                 String mySqlHost = System.console().readLine().trim();
-                PhantomBot.instance().getProperties().setProperty("mysqlhost", mySqlHost);
+                transaction.setProperty("mysqlhost", mySqlHost);
 
                 System.out.print("Bitte gebe den MySQL-Port ein: ");
                 String mySqlPort = System.console().readLine().trim();
-                PhantomBot.instance().getProperties().setProperty("mysqlport", mySqlPort);
+                transaction.setProperty("mysqlport", mySqlPort);
 
                 System.out.print("Bitte gebe den MySQL-Datenbanknamen ein: ");
                 String mySqlName = System.console().readLine().trim();
-                PhantomBot.instance().getProperties().setProperty("mysqlname", mySqlName);
+                transaction.setProperty("mysqlname", mySqlName);
 
-                System.out.print("Bitte gebe den Username für MySQL ein: ");
+                System.out.print("Bitte gebe den Benutzername für MySQL ein: ");
                 String mySqlUser = System.console().readLine().trim();
-                PhantomBot.instance().getProperties().setProperty("mysqluser", mySqlUser);
+                transaction.setProperty("mysqluser", mySqlUser);
 
                 System.out.print("Bitte gebe das Passwort für MySQL ein: ");
                 String mySqlPass = System.console().readLine().trim();
-                PhantomBot.instance().getProperties().setProperty("mysqlpass", mySqlPass);
+                transaction.setProperty("mysqlpass", mySqlPass);
 
                 String dataStoreType = "MySQLStore";
-                PhantomBot.instance().getProperties().setProperty("datastore", dataStoreType);
+                transaction.setProperty("datastore", dataStoreType);
 
                 com.gmt2001.Console.out.println("PhantomBot MySQL-Setup abgeschlossen, PhantomBot wird beendet.");
                 changed = true;
@@ -754,7 +781,7 @@ public class ConsoleEventHandler implements Listener {
                 if (res.success) {
                     JSONObject j = new JSONObject(res.content);
                     String twitchAlertsKey = j.getString("access_token");
-                    PhantomBot.instance().getProperties().setProperty("twitchalertskey", twitchAlertsKey);
+                    transaction.setProperty("twitchalertskey", twitchAlertsKey);
 
                     System.out.println("PhantomBot StreamLabs-Setup abgeschlossen, PhantomBot wird beendet.");
                     changed = true;
@@ -785,7 +812,7 @@ public class ConsoleEventHandler implements Listener {
 
                 System.out.print("Bitte gebe deinen TipeeeStream API OAuth-Key ein: ");
                 String tipeeeStreamOAuth = System.console().readLine().trim();
-                PhantomBot.instance().getProperties().setProperty("tipeeestreamkey", tipeeeStreamOAuth);
+                transaction.setProperty("tipeeestreamkey", tipeeeStreamOAuth);
 
                 System.out.println("PhantomBot TipeeeStream-Setup abgeschlossen, PhantomBot wird beendet.");
                 changed = true;
@@ -806,11 +833,11 @@ public class ConsoleEventHandler implements Listener {
 
                 System.out.print("Bitte gebe einen Username deiner Wahl ein: ");
                 String panelUsername = System.console().readLine().trim();
-                PhantomBot.instance().getProperties().setProperty("paneluser", panelUsername);
+                transaction.setProperty("paneluser", panelUsername);
 
                 System.out.print("Bitte gebe ein Passwort deiner Wahl ein: ");
                 String panelPassword = System.console().readLine().trim();
-                PhantomBot.instance().getProperties().setProperty("panelpassword", panelPassword);
+                transaction.setProperty("panelpassword", panelPassword);
 
                 System.out.println("PhantomBot Web-Panel-Setup abgeschlossen, PhantomBot wird beendet.");
                 changed = true;
@@ -830,25 +857,25 @@ public class ConsoleEventHandler implements Listener {
 
                 System.out.print("Bitte gebe deinen Twitter Username ein: ");
                 String twitterUsername = System.console().readLine().trim();
-                PhantomBot.instance().getProperties().setProperty("twitterUser", twitterUsername);
+                transaction.setProperty("twitterUser", twitterUsername);
 
                 System.out.print("Bitte gebe deinen Consumer Key ein: ");
                 String twitterConsumerToken = System.console().readLine().trim();
-                PhantomBot.instance().getProperties().setProperty("twitter_consumer_key", twitterConsumerToken);
+                transaction.setProperty("twitter_consumer_key", twitterConsumerToken);
 
                 System.out.print("Bitte gebe dein Consumer Secret ein: ");
                 String twitterConsumerSecret = System.console().readLine().trim();
-                PhantomBot.instance().getProperties().setProperty("twitter_consumer_secret", twitterConsumerSecret);
+                transaction.setProperty("twitter_consumer_secret", twitterConsumerSecret);
 
                 System.out.print("Bitte gebe den Access token ein: ");
                 String twitterAccessToken = System.console().readLine().trim();
-                PhantomBot.instance().getProperties().setProperty("twitter_access_token", twitterAccessToken);
+                transaction.setProperty("twitter_access_token", twitterAccessToken);
 
                 System.out.print("Bitte gebe den Access token secret ein: ");
                 String twitterSecretToken = System.console().readLine().trim();
-                PhantomBot.instance().getProperties().setProperty("twitter_secret_token", twitterSecretToken);
+                transaction.setProperty("twitter_secret_token", twitterSecretToken);
 
-                com.gmt2001.Console.out.println("PhantomBot Twitter-Setup abgeschlossen, PhantomBot wird beendet.");
+                System.out.println("PhantomBot Twitter-Setup abgeschlossen, PhantomBot wird beendet.");
                 changed = true;
             } catch (NullPointerException ex) {
                 com.gmt2001.Console.err.printStackTrace(ex);
@@ -865,7 +892,7 @@ public class ConsoleEventHandler implements Listener {
                 System.out.println("");
                 System.out.println("Bitte geben Sie den von dir erhaltenen YouTube-API-Schlüssel ein: ");
                 String youtubeKey = System.console().readLine().trim();
-                PhantomBot.instance().getProperties().setProperty("youtubekey", youtubeKey);
+                transaction.setProperty("youtubekey", youtubeKey);
                 System.out.println("PhantomBot YouTube API-Schlüssel eingerichtet, PhantomBot wird beendet.");
                 changed = true;
             } catch (NullPointerException ex) {
@@ -875,28 +902,14 @@ public class ConsoleEventHandler implements Listener {
 
         // Check to see if any settings have been changed.
         if (changed) {
-            CaselessProperties outputProperties = new CaselessProperties() {
-                @Override
-                public synchronized Enumeration<Object> keys() {
-                    return Collections.enumeration(new TreeSet<>(super.keySet()));
-                }
-            };
+            transaction.commit();
 
-            try {
-                try (FileOutputStream outputStream = new FileOutputStream("./config/botlogin.txt")) {
-                    outputProperties.putAll(PhantomBot.instance().getProperties());
-                    outputProperties.store(outputStream, "PhantomBot Konfigurationsdatei");
-                }
+            dataStore.SaveAll(true);
 
-                dataStore.SaveAll(true);
-
-                com.gmt2001.Console.out.println("");
-                com.gmt2001.Console.out.println("Änderungen wurden gespeichert, PhantomBot wird nun beendet.");
-                com.gmt2001.Console.out.println("");
-                PhantomBot.exitOK();
-            } catch (IOException ex) {
-                com.gmt2001.Console.err.printStackTrace(ex);
-            }
+            com.gmt2001.Console.out.println("");
+            com.gmt2001.Console.out.println("Änderungen wurden gespeichert, PhantomBot wird nun beendet.");
+            com.gmt2001.Console.out.println("");
+            PhantomBot.exitOK();
             return;
         }
 
