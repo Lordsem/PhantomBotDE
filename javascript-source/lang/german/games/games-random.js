@@ -187,7 +187,7 @@ $.lang.register('randomcommand.148', 'Der Richter fragt die Zeugin: ". . . und w
 $.lang.register('randomcommand.149', 'Was sagt der Käse, wenn er fotografiert wird?');
 $.lang.register('randomcommand.150', 'Kin Hubbard: "In einer Kleinstadt gibt es nicht viel zu sehen, aber was man dort hört, macht das wett."');
 $.lang.register('randomcommand.151', 'Vater zu seinem Sohn: "Aber Junge, wo warst du denn die ganze Zeit?" Junge: "Ich habe Briefträger gespielt und den ganzen Häuserblock mit Post versorgt." Vater: "Ach so... ja, aber? Woher hattest du denn die vielen Briefe?" Sohn: "Aus deinem Nachttisch ... die mit den rosa Schleifchen..."');
-$.lang.register('randomcommand.152', 'Ich habe mir vorgenommen jeden Abend vorm dem Schlafen Sport zu machen, ich bin jetzt schon seit 3 Tagen wag.');
+$.lang.register('randomcommand.152', 'Ich habe mir vorgenommen jeden Abend vorm Schlafen Sport zu machen, ich bin jetzt schon seit 3 Tagen wach.');
 $.lang.register('randomcommand.153', '"Mami, Mami, ich will nicht immer im Kreis laufen!" - "Sei ruhig, sonst nagle ich dir den anderen Fuß auch noch fest!"');
 $.lang.register('randomcommand.154', '"Was ist ein Manta light?" - "Ein Ascona."');
 $.lang.register('randomcommand.155', 'Was macht eine Blondine vor einer Glaswand? Drüber klettern, um zu sehen, was dahinter ist!');

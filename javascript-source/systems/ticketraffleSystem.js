@@ -120,6 +120,7 @@
         raffleStatus = bools[1];
 
         if (raffleStatus === true) {
+            $.inidb.set('traffleSettings', 'isActive', 'true');
             if (followers) {
                 a = $.lang.get('ticketrafflesystem.msg.need.to.be.follwing');
             }
@@ -153,7 +154,11 @@
             return;
         }
 
-        clear();
+        raffleStatus = false;
+        clearInterval(interval);
+        clearInterval(saveStateInterval);
+        $.inidb.set('traffleSettings', 'isActive', 'false');
+        saveState();
 
         $.say($.lang.get('ticketrafflesystem.raffle.closed'));
         $.log.event(user + ' hat eine Ticketverlosung geschlossen.');
@@ -188,7 +193,7 @@
 
         $.say($.lang.get('ticketrafflesystem.winner', $.username.resolve(Winner), followMsg));
         $.inidb.set('traffleresults', 'winner', $.username.resolve(Winner) + ' ' + followMsg);
-        $.log.event('Gewinner:in der Ticketverlosung war ' + Winner);
+        $.log.event(Winner + ' gewann die Ticketverlosung.');
     }
 
     function enterRaffle(user, event, times) {
@@ -268,7 +273,7 @@
     }
 
     function calcBonus(user, event, tickets) {
-        var bonus = 0;
+        var bonus = 1;
 
         if (event.getTags().containsKey('subscriber') && event.getTags().get('subscriber').equals('1')) {
             bonus = tickets * subTMulti;
