@@ -41,7 +41,7 @@ Zusätzliche Funktionalität wird durch die Verwendung von [Community erstellten
 PhantomBotDE erfordert die Installation der folgenden Software:
 
 ARM (Raspberry Pi) oder x86 (32-bit) Architekturen
-* [Adoptium Temurin 11] (https://adoptium.net/) oder [OpenJDK 11](https://openjdk.java.net/)
+* [Adoptium Temurin 11](https://adoptium.net/) oder [OpenJDK 11](https://openjdk.java.net/)
 
 x86_64 (64-bit) Architekturen
 * Keine Voraussetzungen
