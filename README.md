@@ -24,6 +24,7 @@ Zusätzliche Funktionalität wird durch die Verwendung von [Community erstellten
 
 ## Links zum ursprünglichen englischen PhantomBot
 * [Get PhantomBot](https://phantom.bot/ "PhantomBot")
+*[Security Policy](https://github.com/PhantomBot/PhantomBot/blob/master/SECURITY.md)
 * [Documentation & Installation Instructions](https://phantom.bot/guides/ "Doumenation and Installation Instructions")
 * [Follow us on Twitter](https://www.twitter.com/PhantomBot "PhantomBot Twitter")
 * [Discord Server](https://discord.com/invite/YKvMd78 "PhantomBot Discord Server")
@@ -40,7 +41,7 @@ Zusätzliche Funktionalität wird durch die Verwendung von [Community erstellten
 PhantomBotDE erfordert die Installation der folgenden Software:
 
 ARM (Raspberry Pi) oder x86 (32-bit) Architekturen
-* [OpenJDK 11](https://openjdk.java.net/)
+* [Adoptium Temurin 11] (https://adoptium.net/) oder [OpenJDK 11](https://openjdk.java.net/)
 
 x86_64 (64-bit) Architekturen
 * Keine Voraussetzungen
@@ -53,8 +54,6 @@ Bitte lesen Sie die plattformspezifische Installationsdokumentation.
   * [CentOS 7](https://phantombot.github.io/PhantomBot/guides/#guide=content/setupbot/centos)
 * [macOS](https://phantombot.github.io/PhantomBot/guides/#guide=content/setupbot/macos)
 
-## PhantomBotDE aktualisieren
-
 Detaillierte Upgrade-Anweisungen finden Sie in unserer [Dokumentation](https://phantombot.github.io/PhantomBot/guides/#guide=content/setupbot/updatebot).
 
 ## License
@@ -63,8 +62,6 @@ PhantomBotDE ist lizensiert unter der [**GNU General Public License v3 (GPL-3)**
 
 ## Rollbar-Ausnahmeberichte
 :information_source: ***Hinweis:*** Ab Phantombot Nightly Build 49687f9 (4. Juli 2021) und PhantomBot v3.5.0 verwenden wir nun [Rollbar](https://rollbar.com), um dem Entwicklerteam automatisch Ausnahmen zu melden.
-
-HINWEIS: Dies ist ***nicht*** in stabilen Builds bis v3.5.0 enthalten
 
 OAuth-Token, Client-IDs und API-Secrets werden **NICHT** gesendet. Alle Informationen werden vertraulich behandelt.
 
