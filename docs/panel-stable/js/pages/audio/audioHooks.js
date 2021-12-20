@@ -85,7 +85,7 @@ $(run = function() {
             // On play button.
             table.on('click', '.btn-success', function() {
                 let audioHook = $(this).data('audio'),
-                    soundPath = 'http://' + helpers.getBotHost() + '/config/audio-hooks/';
+                    soundPath = helpers.getBotSchemePath() + '/config/audio-hooks/';
 
                 // Load the audio.
                 let audio = new Audio(soundPath + audioHook);

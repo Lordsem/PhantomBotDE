@@ -352,7 +352,7 @@ public class TwitchWSHostIRC {
                     com.gmt2001.Console.out.println("");
                     com.gmt2001.Console.out.println("Falscher API OAuth erkannt.");
                     com.gmt2001.Console.out.println("Der API OAuth gehört zu einem anderen Konto.");
-                    com.gmt2001.Console.out.println("Bitte beziehe den neuen API OAuth mit deinem Channel-Account: https://phantombot.github.io/PhantomBot/oauth/");
+                    com.gmt2001.Console.out.println("Bitte beziehe den neuen API OAuth mit deinem Kanal-Account über das Panel");
                     com.gmt2001.Console.out.println("Deaktiviere jetzt das Hostmodul.");
                     com.gmt2001.Console.out.println("");
                     PhantomBot.instance().getDataStore().set("modules", "./handlers/hostHandler.js", "false");
