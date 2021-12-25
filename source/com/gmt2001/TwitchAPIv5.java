@@ -1344,7 +1344,7 @@ public class TwitchAPIv5 {
      * @return String The name of the user or null to indicate that there was an error.
      */
     public String GetUserFromOauth(String userOauth) throws JSONException {
-        throw new UnsupportedOperationException("Der oAuth-Parameter in wird nicht mehr unterstützt");
+        throw new UnsupportedOperationException("The oauth parameter in is no longer supported");
     }
 
     /**

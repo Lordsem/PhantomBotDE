@@ -48,7 +48,7 @@ public class HMAC {
             mac.init(secretKeySpec);
             hmacSha256 = mac.doFinal(message);
         } catch (IllegalStateException | InvalidKeyException | NoSuchAlgorithmException e) {
-            throw new RuntimeException("Fehler beim Berechnen von  hmac-sha256", e);
+            throw new RuntimeException("Failed to calculate hmac-sha256", e);
         }
 
         return hmacSha256;

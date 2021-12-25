@@ -140,7 +140,7 @@ if (array_key_exists('trace_chain', $item['data']['body'])) {
                 }
             }
         }
-
+        
         if ($last >= 0) {
             hash_update($ctx, $v['frames'][$last]['class_name']);
             hash_update($ctx, $v['frames'][$last]['filename']);
@@ -165,7 +165,7 @@ if (array_key_exists('trace_chain', $item['data']['body'])) {
             }
         }
     }
-
+        
     if ($last >= 0) {
         hash_update($ctx, $item['data']['body']['trace']['frames'][$last]['class_name']);
         hash_update($ctx, $item['data']['body']['trace']['frames'][$last]['filename']);

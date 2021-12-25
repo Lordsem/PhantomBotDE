@@ -57,7 +57,7 @@ public class ScriptEventManager implements Listener {
         Reflect.instance().loadPackageRecursive(Event.class.getName().substring(0, Event.class.getName().lastIndexOf('.')));
         Reflect.instance().getSubTypesOf(Event.class).stream().filter((c) -> (!this.classes.contains(c.getName().substring(0, c.getName().lastIndexOf('.'))))).forEachOrdered((c) -> {
             this.classes.add(c.getName().substring(0, c.getName().lastIndexOf('.')));
-            com.gmt2001.Console.debug.println("Registrierte Eventpaket " + c.getName().substring(0, c.getName().lastIndexOf('.')));
+            com.gmt2001.Console.debug.println("Registriertes Eventpaket " + c.getName().substring(0, c.getName().lastIndexOf('.')));
         });
     }
 
