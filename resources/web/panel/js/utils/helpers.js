@@ -236,7 +236,7 @@ $(function () {
      * @param {Object} obj
      * @return {Boolean}
      */
-    helpers.handleInputString = function(obj) {
+    helpers.handleInputString = function (obj) {
         return helpers.handleInput(obj, function (obj) {
             if (obj.val().length < 1) {
                 return 'Du kannst dieses Feld nicht leer lassen.';
@@ -921,6 +921,17 @@ $(function () {
         return helpers.getModuleStatus(id, toggle, swit);
     };
 
+    helpers.isSwappedSubscriberVIP = async function () {
+        let done = false;
+        let result;
+        socket.getDBValue('helpers_isSwappedSubscriberVIP', 'settings', 'isSwappedSubscriberVIP', function (e) {
+            result = e.settings === '1';
+            done = true;
+        });
+        await helpers.promisePoll(() => done);
+        return result;
+    };
+
     /*
      * @function Gets the group ID by its name.
      *
@@ -929,6 +940,7 @@ $(function () {
      * @return {Number}
      */
     helpers.getGroupIdByName = function (name, asString) {
+        let swap = helpers.isSwappedSubscriberVIP();
         switch (name.toLowerCase()) {
             case 'casters':
             case 'caster':
@@ -941,13 +953,21 @@ $(function () {
                 return (asString ? '2' : 2);
             case 'abonnenten':
             case 'abonnent':
-                return (asString ? '3' : 3);
+                if (swap) {
+                    return (asString ? '5' : 5);
+                } else {
+                    return (asString ? '3' : 3);
+                }
             case 'spender':
             case 'spender':
                 return (asString ? '4' : 4);
             case 'vips':
             case 'vip':
-                return (asString ? '5' : 5);
+                if (!swap) {
+                    return (asString ? '5' : 5);
+                } else {
+                    return (asString ? '3' : 3);
+                }
             case 'stammzuschauer':
             case 'stammzuschauer':
                 return (asString ? '6' : 6);
@@ -982,6 +1002,7 @@ $(function () {
      * @return {Number}
      */
     helpers.getGroupNameById = function (id) {
+        let swap = helpers.isSwappedSubscriberVIP();
         switch (id.toString()) {
             case '0':
                 return 'Caster';
@@ -990,11 +1011,19 @@ $(function () {
             case '2':
                 return 'Moderator';
             case '3':
-                return 'Abonnent';
+                if (swap) {
+                    return 'VIP';
+                } else {
+                    return 'Abonnent';
+                }
             case '4':
                 return 'Spender';
             case '5':
-                return 'VIP';
+                if (!swap) {
+                    return 'VIP';
+                } else {
+                    return 'Abonnent';
+                }
             case '6':
                 return 'Stammzuschauer';
             default:
@@ -1143,7 +1172,7 @@ $(function () {
                             $('<a/>', {'target': '_blank', 'rel': 'noopener noreferrer'}).prop('href', 'https://github.com/PhantomBotDE/PhantomBotDE/releases/' + version).append('hier')[0].outerHTML + '. <br>' +
                             'Hole dir deine eigene Kopie der Version ' + version + ' des PhantomBotDE ' +
                             $('<a/>', {'target': '_blank', 'rel': 'noopener noreferrer'}).prop('href', downloadLink).append('hier.')[0].outerHTML + ' <br>' +
-                            '<b>Bitte prüfe ' +
+                            '<b>Bitte prüfen ' +
                             $('<a/>', {'target': '_blank', 'rel': 'noopener noreferrer'}).prop('href', 'https://phantombot.github.io/PhantomBot/guides/#guide=content/setupbot/updatebot').append('diesen Guide')[0].outerHTML +
                             ', wie man PhantomBotDE richtig aktualisiert.</b>';
                 }
