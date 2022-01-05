@@ -24,7 +24,7 @@ Zusätzliche Funktionalität wird durch die Verwendung von [Community erstellten
 
 ## Links zum ursprünglichen englischen PhantomBot
 * [Get PhantomBot](https://phantom.bot/ "PhantomBot")
-*[Security Policy](https://github.com/PhantomBot/PhantomBot/blob/master/SECURITY.md)
+* [Security Policy](https://github.com/PhantomBot/PhantomBot/blob/master/SECURITY.md)
 * [Documentation & Installation Instructions](https://phantom.bot/guides/ "Doumenation and Installation Instructions")
 * [Follow us on Twitter](https://www.twitter.com/PhantomBot "PhantomBot Twitter")
 * [Discord Server](https://discord.com/invite/YKvMd78 "PhantomBot Discord Server")

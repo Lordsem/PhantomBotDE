@@ -46,7 +46,7 @@
                 state.lockdown = true;
                 Packages.tv.phantombot.PhantomBot.instance().getSession().sayNow('/me === LOCKDOWN AKTIVIERT === Der Chat wurde in den Emoteonly-Modus versetzt, da ein Moderator den Chat-Lockdown initiiert hat. Um den Lockdown zu beenden, muss ein Moderator folgendes schreiben: !lockdown end');
 
-                /* setTimeout(function() {
+                /*setTimeout(function() {
                     Packages.tv.phantombot.PhantomBot.instance().getSession().sayNow('/me === LOCKDOWN AKTIVIERT === Der Chat wurde in den Emoteonly-Modus versetzt, da ein Moderator den Chat-Lockdown initiiert hat. Um den Lockdown zu beenden, muss ein Moderator folgendes schreiben: !lockdown end');
                 }, 5e3);*/
                 
