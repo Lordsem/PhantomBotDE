@@ -368,6 +368,7 @@ public final class PhantomBot implements Listener {
         print(botRevision());
         print(getBotCreator());
         print(botDevelopers());
+        print(botTranslators());
         print(getWebSite());
         print("");
 

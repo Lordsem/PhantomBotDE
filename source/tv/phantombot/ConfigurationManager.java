@@ -88,6 +88,7 @@ public class ConfigurationManager {
                 startProperties.setProperty(PROP_MSGLIMIT30, "19.0");
                 startProperties.setProperty(PROP_MUSICENABLE, "true");
                 startProperties.setProperty(PROP_WHISPERLIMIT60, "60.0");
+                startProperties.setProperty(PROP_USEROLLBAR, "false");
             }
         } catch (IOException ex) {
             com.gmt2001.Console.err.printStackTrace(ex);
