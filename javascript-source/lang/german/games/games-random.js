@@ -299,4 +299,5 @@ $.lang.register('randomcommand.260', 'Was ist der Unterschied zwischen einem Man
 $.lang.register('randomcommand.261', 'Ich habe das Herz eines Löwen ... und ein lebenslanges Verbot im Zoo.');
 $.lang.register('randomcommand.262', 'Ich habe einem Hipster ans Schienbein getreten. Jetzt hopster.');
 $.lang.register('randomcommand.263', 'Warum klaut Robin Hood Deo? Um es unter den Armen zu verteilen!');
+$.lang.register('randomcommand.264', 'Was ist 20 Zentimeter lang, 6 Zentimeter breit und macht Frauen wild? Ein Schokoriegel!');
 $.lang.register('randomcommand.console.loaded', 'Gefundene Random-Befehl Nachrichten: $1 ');
