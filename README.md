@@ -13,12 +13,11 @@
 [![GitHub license](https://img.shields.io/github/license/PhantomBotDE/PhantomBotDE)](https://github.com/PhantomBot/PhantomBot/blob/master/LICENSE)
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/PhantomBotDE/PhantomBotDE?sort=semver)](https://github.com/PhantomBotDE/PhantomBotDE/releases/latest)
 **PhantomBotDE** ist ein Twitch Chat-Bot powered by Java.
-PhantomBot hat viele moderne Eigenschaften standardmäßig, wie zum Beispiel ein eingebautes Webpanel, verbesserte Moderation, Minispiele für den Chat, ein Punktesystem, Verlosungen, benutzerdefinierte Befehle, einen Musikpalyer mit Songrequest Funktion [und mehr](https://phantombot.tv/features)! PhantomBotDE kann mit vielen Services verbunden werden, wie  [Discord](https://discordapp.com/), [Twitter](https://twitter.com), [GameWisp](https://gamewisp.com), [TipeeeStream](https://tipeeestream.com), [StreamLabs](https://streamlabs.com) und [StreamElements](https://streamelements.com)!
+PhantomBot hat viele moderne Eigenschaften standardmäßig, wie zum Beispiel ein eingebautes Webpanel, verbesserte Moderation, Minispiele für den Chat, ein Punktesystem, Verlosungen, benutzerdefinierte Befehle, einen Musikpalyer mit Songrequest Funktion [und mehr](https://phantombot.tv/features)! PhantomBotDE kann mit vielen Services verbunden werden, wie  [Discord](https://discordapp.com/), [Twitter](https://twitter.com), [TipeeeStream](https://tipeeestream.com), [StreamLabs](https://streamlabs.com) und [StreamElements](https://streamelements.com)!
 
+Zusätzliche Funktionen werden durch die Verwendung von Modulen von Drittanbietern ermöglicht.
 
 Dies ist der deutsche Fork von PhantomBotDE, wir übersetzten immer die neuste Version, sobald die größten Bugs behoben sind.
-
-Zusätzliche Funktionalität wird durch die Verwendung von [Community erstellten Modulen](https://community.phantombot.tv/c/custom-modules) ermöglicht.
 
 <u>**Bitte beachtet, dass die ursprünglichen Entwickler keinen Support für PhantomBotDE anbieten (können).**</u>
 
@@ -65,4 +64,4 @@ PhantomBotDE ist lizensiert unter der [**GNU General Public License v3 (GPL-3)**
 
 HINWEIS: Es wird eine Variable im botlogin.txt gesetzt (userrollbar=false), damit diese Version des Bot's keine Berichte sendet.
 
-  Genaueres zum Rollbar steht auf der [PhantomBot-Seite](https://github.com/PhantomBot/PhantomBot#rollbar-exception-reporting).
+Genaueres zum Rollbar steht auf der [PhantomBot-Seite](https://github.com/PhantomBot/PhantomBot#rollbar-exception-reporting).
