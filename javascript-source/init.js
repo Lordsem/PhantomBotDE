@@ -456,12 +456,12 @@
             if (event.getUser().equalsIgnoreCase($.botName) && event.getMode().equalsIgnoreCase('O')) {
                 if (event.getAdd().toString().equals('true')) {
                     if (isReady === false) {
+                        isReady = true;
                         // Bot is now ready.
                         consoleLn($.botName + ' bereit!');
                         // Call the initReady event.
                         callHook('initReady', null, false);
                     }
-                    isReady = true;
                 }
             }
         });
@@ -478,7 +478,7 @@
                     isMod = $.isModv3(sender, event.getTags());
 
             if (isReady === false && command.equalsIgnoreCase($.botName) && args[0].equalsIgnoreCase('moderate')) {
-                $.session.getModerationStatus();
+                Packages.tv.phantombot.PhantomBot.instance().getSession().getModerationStatus();
             }
 
             // Check if the command exists or if the module is disabled.

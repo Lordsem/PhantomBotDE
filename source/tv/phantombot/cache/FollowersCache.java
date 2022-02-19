@@ -36,8 +36,8 @@ public class FollowersCache implements Runnable {
     private final String channelName;
     private Date timeoutExpire = new Date();
     private Date lastFail = new Date();
-    private Boolean firstUpdate = true;
-    private Boolean killed = false;
+    private boolean firstUpdate = true;
+    private boolean killed = false;
     private int numfail = 0;
 
     /*
@@ -83,17 +83,12 @@ public class FollowersCache implements Runnable {
 
         while (!killed) {
             try {
-                try {
-                    if (new Date().after(timeoutExpire)) {
-                        updateCache();
-                    }
-                } catch (Exception ex) {
-                    checkLastFail();
-                    com.gmt2001.Console.debug.println("FollowersCache.run: Die Follower konnten nicht aktualisiert werden: " + ex.getMessage());
-                    com.gmt2001.Console.debug.printStackTrace(ex);
+                if (new Date().after(timeoutExpire)) {
+                    updateCache();
                 }
             } catch (Exception ex) {
-                com.gmt2001.Console.err.println("FollowersCache.run: Die Follower konnten nicht aktualisiert werden [" + ex.getClass().getSimpleName() + "]: " + ex.getMessage());
+                checkLastFail();
+                com.gmt2001.Console.err.printStackTrace(ex);
             }
 
             try {

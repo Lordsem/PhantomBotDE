@@ -236,7 +236,7 @@ $(function () {
      * @param {Object} obj
      * @return {Boolean}
      */
-    helpers.handleInputString = function(obj) {
+    helpers.handleInputString = function (obj) {
         return helpers.handleInput(obj, function (obj) {
             if (obj.val().length < 1) {
                 return 'You cannot leave this field empty.';
@@ -921,6 +921,17 @@ $(function () {
         return helpers.getModuleStatus(id, toggle, swit);
     };
 
+    helpers.isSwappedSubscriberVIP = async function () {
+        let done = false;
+        let result;
+        socket.getDBValue('helpers_isSwappedSubscriberVIP', 'settings', 'isSwappedSubscriberVIP', function (e) {
+            result = e.settings === '1';
+            done = true;
+        });
+        await helpers.promisePoll(() => done);
+        return result;
+    };
+
     /*
      * @function Gets the group ID by its name.
      *
@@ -929,6 +940,7 @@ $(function () {
      * @return {Number}
      */
     helpers.getGroupIdByName = function (name, asString) {
+        let swap = helpers.isSwappedSubscriberVIP();
         switch (name.toLowerCase()) {
             case 'casters':
             case 'caster':
@@ -941,13 +953,21 @@ $(function () {
                 return (asString ? '2' : 2);
             case 'subscribers':
             case 'subscriber':
-                return (asString ? '3' : 3);
+                if (swap) {
+                    return (asString ? '5' : 5);
+                } else {
+                    return (asString ? '3' : 3);
+                }
             case 'donators':
             case 'donator':
                 return (asString ? '4' : 4);
             case 'vips':
             case 'vip':
-                return (asString ? '5' : 5);
+                if (!swap) {
+                    return (asString ? '5' : 5);
+                } else {
+                    return (asString ? '3' : 3);
+                }
             case 'regulars':
             case 'regular':
                 return (asString ? '6' : 6);
@@ -982,6 +1002,7 @@ $(function () {
      * @return {Number}
      */
     helpers.getGroupNameById = function (id) {
+        let swap = helpers.isSwappedSubscriberVIP();
         switch (id.toString()) {
             case '0':
                 return 'Caster';
@@ -990,11 +1011,19 @@ $(function () {
             case '2':
                 return 'Moderators';
             case '3':
-                return 'Subscribers';
+                if (swap) {
+                    return 'VIPs';
+                } else {
+                    return 'Subscribers';
+                }
             case '4':
                 return 'Donators';
             case '5':
-                return 'vips';
+                if (!swap) {
+                    return 'VIPs';
+                } else {
+                    return 'Subscribers';
+                }
             case '6':
                 return 'Regulars';
             default:
@@ -1259,9 +1288,20 @@ $(function () {
 
     helpers.getBotHost = function () {
         var bothostname = window.localStorage.getItem('bothostname') || 'localhost';
-        var botport = window.localStorage.getItem('botport') || 25000;
+        var botport = window.localStorage.getItem('botport') || '25000';
 
-        return bothostname.length > 0 ? bothostname + (botport !== 80 && botport !== 443 ? ':' + botport : '') : '!missing';
+        return bothostname.length > 0 ? bothostname + (botport !== '80' && botport !== '443' ? ':' + botport : '') : '!missing';
+    };
+
+    helpers.shouldUseHttpsPrefix = function () {
+        var bothostname = window.localStorage.getItem('bothostname') || 'localhost';
+        var botport = window.localStorage.getItem('botport') || '25000';
+
+        return botport === '443' && bothostname.match(/(([0-9]{1,3})\.){3}([0-9]{1,3})/) === null;
+    };
+
+    helpers.getBotSchemePath = function () {
+        return 'http' + (helpers.shouldUseHttpsPrefix() ? 's' : '') + '://' + helpers.getBotHost();
     };
 
     helpers.getUserLogo = function () {

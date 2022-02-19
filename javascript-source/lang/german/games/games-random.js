@@ -187,7 +187,7 @@ $.lang.register('randomcommand.148', 'Der Richter fragt die Zeugin: ". . . und w
 $.lang.register('randomcommand.149', 'Was sagt der Käse, wenn er fotografiert wird?');
 $.lang.register('randomcommand.150', 'Kin Hubbard: "In einer Kleinstadt gibt es nicht viel zu sehen, aber was man dort hört, macht das wett."');
 $.lang.register('randomcommand.151', 'Vater zu seinem Sohn: "Aber Junge, wo warst du denn die ganze Zeit?" Junge: "Ich habe Briefträger gespielt und den ganzen Häuserblock mit Post versorgt." Vater: "Ach so... ja, aber? Woher hattest du denn die vielen Briefe?" Sohn: "Aus deinem Nachttisch ... die mit den rosa Schleifchen..."');
-$.lang.register('randomcommand.152', 'Ich habe mir vorgenommen jeden Abend vorm dem Schlafen Sport zu machen, ich bin jetzt schon seit 3 Tagen wag.');
+$.lang.register('randomcommand.152', 'Ich habe mir vorgenommen jeden Abend vorm Schlafen Sport zu machen, ich bin jetzt schon seit 3 Tagen wach.');
 $.lang.register('randomcommand.153', '"Mami, Mami, ich will nicht immer im Kreis laufen!" - "Sei ruhig, sonst nagle ich dir den anderen Fuß auch noch fest!"');
 $.lang.register('randomcommand.154', '"Was ist ein Manta light?" - "Ein Ascona."');
 $.lang.register('randomcommand.155', 'Was macht eine Blondine vor einer Glaswand? Drüber klettern, um zu sehen, was dahinter ist!');
@@ -299,4 +299,5 @@ $.lang.register('randomcommand.260', 'Was ist der Unterschied zwischen einem Man
 $.lang.register('randomcommand.261', 'Ich habe das Herz eines Löwen ... und ein lebenslanges Verbot im Zoo.');
 $.lang.register('randomcommand.262', 'Ich habe einem Hipster ans Schienbein getreten. Jetzt hopster.');
 $.lang.register('randomcommand.263', 'Warum klaut Robin Hood Deo? Um es unter den Armen zu verteilen!');
+$.lang.register('randomcommand.264', 'Was ist 20 Zentimeter lang, 6 Zentimeter breit und macht Frauen wild? Ein Schokoriegel!');
 $.lang.register('randomcommand.console.loaded', 'Gefundene Random-Befehl Nachrichten: $1 ');

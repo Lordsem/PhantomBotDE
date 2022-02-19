@@ -141,7 +141,7 @@ $(function () {
                     .append(helpers.getTextAreaGroup('follow-message', 'text', 'Follow Nachricht', '', e.followMessage,
                             'Die Nachricht wird gesendet, wenn jemand dem Kanal folgt. Tag: (name)', false))
                     // Add the the box for the reward.
-                    .append(helpers.getInputGroup('follow-channel', 'text', 'Alarmkanal', '#alarme', e.followChannel,
+                    .append(getChannelSelector('follow-channel', 'Alarmkanal', '#alarme', e.followChannel,
                             'Kanal, in dem auch alle Benachrichtigungen erfolgen sollen.', allowedChannelTypes)),
                     function () { // Callback once the user clicks save.
                         let followToggle = $('#follow-toggle').find(':selected').text() === 'Ja',
@@ -164,7 +164,7 @@ $(function () {
                                         // Close the modal.
                                         $('#follow-alert').modal('toggle');
                                         // Alert the user.
-                                        toastr.success('Follower-Aalarm-Einstellungen wurden erfolgreich aktualisiert!');
+                                        toastr.success('Follower-Alarm-Einstellungen wurden erfolgreich aktualisiert!');
                                     });
                                 });
                         }
@@ -237,7 +237,7 @@ $(function () {
                                 'role': 'form'
                             })
                                     // Add channel box.
-                                    .append(helpers.getInputGroup('channel-alert', 'Alarmkanal', '#alarme', e.subChannel,
+                                    .append(getChannelSelector('channel-alert', 'Alarmkanal', '#alarme', e.subChannel,
                                             'Kanal, in dem alle Alarme gesendet werden sollen.', allowedChannelTypes))))),
                     function () { // Callback once the user clicks save.
                         let subToggle = $('#sub-toggle').find(':selected').text() === 'Yes',
@@ -302,7 +302,7 @@ $(function () {
                             .append(helpers.getTextAreaGroup('host-message', 'text', 'Host Nachricht', '', e.hostMessage,
                                     'Die Nachricht wird gesendet, wenn jemand den Kanal hostet. Tag: (name) und (viewers)', false))
                             // Add the the box for the reward.
-                            .append(helpers.getInputGroup('host-channel', 'Alarmkanal', '#alarme', e.hostChannel,
+                            .append(getChannelSelector('host-channel', 'Alarmkanal', '#alarme', e.hostChannel,
                                     'Kanal, in dem alle Benachrichtigungen angezeigt werden sollen.', allowedChannelTypes))),
                     function () { // Callback once the user clicks save.
                         let hostToggle = $('#host-toggle').find(':selected').text() === 'Yes',
@@ -353,7 +353,7 @@ $(function () {
                     .append(helpers.getTextAreaGroup('bits-message', 'text', 'Bits Nachricht', '', e.bitsMessage,
                             'Die Nachricht wird gesendet, wenn jemand im Kanal cheert. Tags: (name), (message) und (amount)', false))
                     // Add the box for the reward.
-                    .append(helpers.getInputGroup('bits-channel', 'Alarmkanal', '#alarme', e.bitsChannel,
+                    .append(getChannelSelector('bits-channel', 'Alarmkanal', '#alarme', e.bitsChannel,
                             'Der Kanal, in dem die Bit-Nachricht gesendet wird.', allowedChannelTypes)),
                     function () { // Callback once the user clicks save.
                         let bitsToggle = $('#bits-toggle').find(':selected').text() === 'Yes',
@@ -641,7 +641,7 @@ $(function () {
                     .append(helpers.getTextAreaGroup('streamlabs-message', 'text', 'Spendennachricht', '', e.streamlabsMessage,
                             'Die Nachricht wird gesendet, wenn jemand dem Kanal spendet. Tag: (name), (amount), (currency)  und (message)', false))
                     // Add the the box for the reward.
-                    .append(helpers.getInputGroup('streamlabs-channel', 'Alarmkanal', '#alarme', e.streamlabsChannel,
+                    .append(getChannelSelector('streamlabs-channel', 'Alarmkanal', '#alarme', e.streamlabsChannel,
                             'Kanal, in den alle Alarme gesendet werden sollen.', allowedChannelTypes)),
                     function () { // Callback once the user clicks save.
                         let streamLabsToggle = $('#streamlabs-toggle').find(':selected').text() === 'Ja',
@@ -693,7 +693,7 @@ $(function () {
                     .append(helpers.getTextAreaGroup('tipeeestream-message', 'text', 'Spendennachricht', '', e.tipeeestreamMessage,
                             'Die Nachricht wird gesendet, wenn jemand dem Kanal spendet. Tag: (name), (amount), (currency) und (message)', false))
                     // Add the the box for the reward.
-                    .append(helpers.getInputGroup('tipeeestream-channel', 'Alarmkanal', '#alarme', e.tipeeestreamChannel,
+                    .append(getChannelSelector('tipeeestream-channel', 'Alarmkanal', '#alarme', e.tipeeestreamChannel,
                             'Kanal, in den alle Alarme gesendet werden sollen.', allowedChannelTypes)),
                     function () { // Callback once the user clicks save.
                         let tipeeeStreamToggle = $('#tipeeestream-toggle').find(':selected').text() === 'Ja',
@@ -745,7 +745,7 @@ $(function () {
                     .append(helpers.getTextAreaGroup('streamelements-message', 'text', 'Spendennachricht', '', e.streamelementsMessage,
                             'Die Nachricht wird gesendet, wenn jemand dem Kanal spendet. Tag: (name), (amount), (currency) und (message)', false))
                     // Add the the box for the reward.
-                    .append(helpers.getInputGroup('streamelements-channel', 'Alarmkanal', '#alarme', e.streamelementsChannel,
+                    .append(getChannelSelector('streamelements-channel', 'Alarmkanal', '#alarme', e.streamelementsChannel,
                             'Kanal, in den alle Alarme gesendet werden sollen.', allowedChannelTypes)),
                     function() { // Callback once the user clicks save.
                         let streamElementsToggle = $('#streamelements-toggle').find(':selected').text() === 'Ja',

@@ -57,7 +57,7 @@ public class ScriptEventManager implements Listener {
         Reflect.instance().loadPackageRecursive(Event.class.getName().substring(0, Event.class.getName().lastIndexOf('.')));
         Reflect.instance().getSubTypesOf(Event.class).stream().filter((c) -> (!this.classes.contains(c.getName().substring(0, c.getName().lastIndexOf('.'))))).forEachOrdered((c) -> {
             this.classes.add(c.getName().substring(0, c.getName().lastIndexOf('.')));
-            com.gmt2001.Console.debug.println("Registrierte Eventpaket " + c.getName().substring(0, c.getName().lastIndexOf('.')));
+            com.gmt2001.Console.debug.println("Registriertes Eventpaket " + c.getName().substring(0, c.getName().lastIndexOf('.')));
         });
     }
 
@@ -89,7 +89,7 @@ public class ScriptEventManager implements Listener {
      * Method to see if an event exists, this is used from init.js.
      *
      * @param {String} eventName
-     * @return {Boolean}
+     * @return {boolean}
      */
     public boolean hasEvent(String eventName) {
         return events.containsKey((WordUtils.capitalize(eventName) + "Event"));

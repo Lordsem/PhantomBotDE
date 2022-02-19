@@ -16,7 +16,6 @@
  */
 package tv.phantombot.cache;
 
-import com.gmt2001.datastore.DataStore;
 import com.scaniatv.StreamElementsAPIv2;
 import java.util.Calendar;
 import java.util.Date;
@@ -38,8 +37,8 @@ public class StreamElementsCache implements Runnable {
     private Map<String, JSONObject> cache = new ConcurrentHashMap<>();
     private Date timeoutExpire = new Date();
     private Date lastFail = new Date();
-    private Boolean firstUpdate = true;
-    private Boolean killed = false;
+    private boolean firstUpdate = true;
+    private boolean killed = false;
     private int numfail = 0;
 
     /**
@@ -75,7 +74,7 @@ public class StreamElementsCache implements Runnable {
     /**
      * Checks if the donation has been cached.
      *
-     * @return {Boolean}
+     * @return {boolean}
      */
     public boolean exists(String donationID) {
         return cache.containsKey(donationID);
@@ -119,16 +118,12 @@ public class StreamElementsCache implements Runnable {
 
         while (!killed) {
             try {
-                try {
-                    if (new Date().after(timeoutExpire)) {
-                        this.updateCache();
-                    }
-                } catch (Exception ex) {
-                    checkLastFail();
-                    com.gmt2001.Console.debug.println("StreamElementsCache.run: Spenden konnten nicht aktualisiert werden: " + ex.getMessage());
+                if (new Date().after(timeoutExpire)) {
+                    this.updateCache();
                 }
             } catch (Exception ex) {
-                com.gmt2001.Console.err.println("StreamElementsCache.run: Spenden konnten nicht aktualisiert werden: " + ex.getMessage());
+                checkLastFail();
+                com.gmt2001.Console.err.printStackTrace(ex);
             }
 
             try {
